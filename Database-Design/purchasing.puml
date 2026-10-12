@@ -1,0 +1,103 @@
+@startchen purchasing
+title Single-vendor Store - Shopping Cart and Orders
+
+left to right direction
+
+entity "Cart" as Cart {
+}
+
+entity "Order" as Order {
+  orderNumber
+  placedAt
+  currency
+  orderStatus
+  merchandiseTotal
+  discountTotal
+  shippingFee
+  payableTotal
+  recipientNameSnapshot
+  recipientPhoneSnapshot
+  deliveryAddressSnapshot
+}
+
+entity "OrderItem" as OrderItem <<associative>> {
+  productNameSnapshot
+  variantOptionsSnapshot
+  unitPriceSnapshot
+  quantity
+  discountAmount
+  lineTotal
+}
+
+entity "User" as User {
+}
+
+entity "ProductVariant" as Variant {
+}
+
+entity "Product" as Product {
+}
+
+entity "Voucher" as Voucher {
+}
+
+relationship "Owns cart" as OwnsCart {
+}
+User -(0,1)- OwnsCart
+OwnsCart =(1,1)= Cart
+
+relationship "Contains cart item" as ContainsCartItem {
+  quantity
+  addedAt
+  isSelected
+}
+Cart -(0,N)- ContainsCartItem
+Variant -(0,N)- ContainsCartItem
+
+relationship "Applies voucher" as AppliesVoucher {
+}
+Cart -(0,1)- AppliesVoucher
+Voucher -(0,N)- AppliesVoucher
+
+relationship "Places order" as PlacesOrder {
+}
+User -(0,N)- PlacesOrder
+PlacesOrder =(1,1)= Order
+
+relationship "Redeems voucher" as RedeemsVoucher {
+  appliedDiscount
+  redeemedAt
+  redemptionStatus
+}
+Voucher -(0,N)- RedeemsVoucher
+RedeemsVoucher -(0,1)- Order
+
+relationship "Contains order item" as ContainsOrderItem {
+}
+Order =(1,N)= ContainsOrderItem
+ContainsOrderItem =(1,1)= OrderItem
+
+relationship "Purchases variant" as PurchasesVariant {
+}
+Variant -(0,N)- PurchasesVariant
+PurchasesVariant =(1,1)= OrderItem
+
+relationship "Has variant" as HasVariant {
+}
+Product =(1,N)= HasVariant
+HasVariant =(1,1)= Variant
+
+' PlacesOrder:
+'  Checkout creates one Order from selected cart items.
+'  Cart items are not grouped or split by seller.
+'  Order retains totals and delivery snapshots after cart cleanup.
+
+' RedeemsVoucher:
+'  Voucher usage is retained on Order after cart cleanup.
+'  The voucher must be allocated to the ordering User.
+'  The server calculates the applied discount.
+
+' AppliesVoucher:
+'  The selected voucher must have an allocation for the Cart owner.
+
+@endchen

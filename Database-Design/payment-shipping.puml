@@ -1,0 +1,85 @@
+@startchen payment-shipping
+title Single-vendor Store - Payment Attempts and Shipping
+
+left to right direction
+
+entity "Payment" as Payment {
+  paymentMethod
+  providerReference
+  amount
+  paymentStatus
+  paidAt
+}
+
+entity "Carrier" as Carrier {
+  carrierName
+}
+
+entity "Shipment" as Shipment {
+  trackingNumber
+  shipmentStatus
+  estimatedDeliveryAt
+  shippedAt
+  deliveredAt
+}
+
+entity "ShipmentTrackingEvent" as ShipmentTrackingEvent {
+  status
+  title
+  description
+  location
+  occurredAt
+}
+
+entity "Order" as Order {
+}
+
+entity "OrderItem" as OrderItem <<associative>> {
+  productNameSnapshot
+  variantOptionsSnapshot
+  unitPriceSnapshot
+  quantity
+  discountAmount
+  lineTotal
+}
+
+entity "ProductVariant" as Variant {
+}
+
+relationship "Contains order item" as ContainsOrderItem {
+}
+Order =(1,N)= ContainsOrderItem
+ContainsOrderItem =(1,1)= OrderItem
+
+relationship "Purchases variant" as PurchasesVariant {
+}
+Variant -(0,N)- PurchasesVariant
+PurchasesVariant =(1,1)= OrderItem
+
+relationship "Records payment" as RecordsPayment {
+}
+Order -(0,N)- RecordsPayment
+RecordsPayment =(1,1)= Payment
+
+relationship "Ships in" as ShipsIn {
+}
+Order -(0,N)- ShipsIn
+ShipsIn =(1,1)= Shipment
+
+relationship "Delivers shipment" as DeliversShipment {
+}
+Carrier -(0,N)- DeliversShipment
+DeliversShipment =(1,1)= Shipment
+
+relationship "Packs item" as PacksItem {
+  quantity
+}
+Shipment =(1,N)= PacksItem
+PacksItem -(0,N)- OrderItem
+
+relationship "Records tracking event" as RecordsTrackingEvent {
+}
+Shipment -(0,N)- RecordsTrackingEvent
+RecordsTrackingEvent =(1,1)= ShipmentTrackingEvent
+
+@endchen

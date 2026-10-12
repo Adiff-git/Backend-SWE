@@ -1,0 +1,48 @@
+@startchen catalog
+title Single-vendor Store - Product Catalog and Inventory
+
+left to right direction
+
+entity "Category" as Category {
+  categoryName
+}
+
+entity "Product" as Product {
+  productName
+  description
+  productStatus
+}
+
+entity "ProductVariant" as Variant {
+  sku
+  optionCombination
+  sellingPrice
+  weight
+}
+
+entity "Inventory" as Inventory {
+  onHandQuantity
+  reservedQuantity
+}
+
+relationship "Parent of" as ParentCategory {
+}
+Category -(0,N)- ParentCategory
+ParentCategory -(0,1)- Category
+
+relationship "Classifies" as Classifies {
+}
+Category -(0,N)- Classifies
+Classifies =(1,1)= Product
+
+relationship "Has variant" as HasVariant {
+}
+Product =(1,N)= HasVariant
+HasVariant =(1,1)= Variant
+
+relationship "Tracks stock" as TracksStock {
+}
+Variant =(1,1)= TracksStock
+TracksStock =(1,1)= Inventory
+
+@endchen
