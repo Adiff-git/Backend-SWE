@@ -1,0 +1,60 @@
+@startchen accounts
+title Single-vendor Store - Accounts and Access Control
+
+left to right direction
+
+entity "User" as User {
+  displayName
+  username
+  password
+  email
+  phoneNumber
+  accountStatus
+  gender
+  dateOfBirth
+  joinedAt
+}
+
+entity "Role" as Role {
+  roleName
+}
+
+entity "Permission" as Permission {
+  permissionName
+}
+
+entity "MediaAsset" as MediaAsset {
+}
+
+entity "Address" as Address {
+  recipientName
+  recipientPhone
+  addressText
+  isDefault
+}
+
+relationship "Has role" as HasRole {
+}
+User -(0,N)- HasRole
+HasRole -(0,N)- Role
+
+relationship "Grants permission" as GrantsPermission {
+}
+Role -(0,N)- GrantsPermission
+GrantsPermission -(0,N)- Permission
+
+relationship "Saves address" as SavesAddress {
+}
+User -(0,N)- SavesAddress
+SavesAddress =(1,1)= Address
+
+relationship "Owns media" as OwnsMedia {
+}
+User -(0,N)- OwnsMedia
+OwnsMedia =(1,1)= MediaAsset
+
+' User:
+'  Accounts use local username/email and password authentication.
+'  Roles and permissions distinguish customers and administrators.
+
+@endchen

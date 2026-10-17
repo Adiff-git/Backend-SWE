@@ -1,0 +1,64 @@
+@startchen engagement
+title Single-vendor Store - Reviews and Wishlist
+
+left to right direction
+
+entity "Review" as Review {
+  rating
+  comment
+  createdAt
+}
+
+entity "User" as User {
+}
+
+entity "Product" as Product {
+}
+
+entity "ProductVariant" as Variant {
+}
+
+entity "Order" as Order {
+}
+
+entity "OrderItem" as OrderItem <<associative>> {
+  productNameSnapshot
+  variantOptionsSnapshot
+  unitPriceSnapshot
+  quantity
+  discountAmount
+  lineTotal
+}
+
+relationship "Adds to wishlist" as AddsToWishlist {
+  addedAt
+}
+User -(0,N)- AddsToWishlist
+AddsToWishlist -(0,N)- Product
+
+relationship "Has variant" as HasVariant {
+}
+Product =(1,N)= HasVariant
+HasVariant =(1,1)= Variant
+
+relationship "Contains order item" as ContainsOrderItem {
+}
+Order =(1,N)= ContainsOrderItem
+ContainsOrderItem =(1,1)= OrderItem
+
+relationship "Purchases variant" as PurchasesVariant {
+}
+Variant -(0,N)- PurchasesVariant
+PurchasesVariant =(1,1)= OrderItem
+
+relationship "Has review" as HasReview {
+}
+OrderItem -(0,1)- HasReview
+HasReview =(1,1)= Review
+
+relationship "Writes review" as WritesReview {
+}
+User -(0,N)- WritesReview
+WritesReview =(1,1)= Review
+
+@endchen

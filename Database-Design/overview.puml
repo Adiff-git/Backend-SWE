@@ -1,0 +1,144 @@
+@startchen overview
+title Single-vendor Store - Overview
+
+left to right direction
+
+entity "User" as User {
+}
+
+entity "Product" as Product {
+}
+
+entity "ProductVariant" as Variant {
+}
+
+entity "Cart" as Cart {
+}
+
+entity "Order" as Order {
+}
+
+entity "OrderItem" as OrderItem <<associative>> {
+  productNameSnapshot
+  variantOptionsSnapshot
+  unitPriceSnapshot
+  quantity
+  discountAmount
+  lineTotal
+}
+
+entity "Payment" as Payment {
+}
+
+entity "Shipment" as Shipment {
+}
+
+entity "ShipmentTrackingEvent" as ShipmentTrackingEvent {
+}
+
+entity "Voucher" as Voucher {
+}
+
+entity "Review" as Review {
+}
+
+relationship "Has variant" as HasVariant {
+}
+Product =(1,N)= HasVariant
+HasVariant =(1,1)= Variant
+
+relationship "Owns cart" as OwnsCart {
+}
+User -(0,1)- OwnsCart
+OwnsCart =(1,1)= Cart
+
+relationship "Contains cart item" as ContainsCartItem {
+  quantity
+  addedAt
+  isSelected
+}
+Cart -(0,N)- ContainsCartItem
+Variant -(0,N)- ContainsCartItem
+
+relationship "Places order" as PlacesOrder {
+}
+User -(0,N)- PlacesOrder
+PlacesOrder =(1,1)= Order
+
+relationship "Contains order item" as ContainsOrderItem {
+}
+Order =(1,N)= ContainsOrderItem
+ContainsOrderItem =(1,1)= OrderItem
+
+relationship "Purchases variant" as PurchasesVariant {
+}
+Variant -(0,N)- PurchasesVariant
+PurchasesVariant =(1,1)= OrderItem
+
+relationship "Records payment" as RecordsPayment {
+}
+Order -(0,N)- RecordsPayment
+RecordsPayment =(1,1)= Payment
+
+relationship "Ships in" as ShipsIn {
+}
+Order -(0,N)- ShipsIn
+ShipsIn =(1,1)= Shipment
+
+relationship "Records tracking event" as RecordsTrackingEvent {
+}
+Shipment -(0,N)- RecordsTrackingEvent
+RecordsTrackingEvent =(1,1)= ShipmentTrackingEvent
+
+relationship "Allocates voucher" as AllocatesVoucher {
+  quantity
+}
+User -(0,N)- AllocatesVoucher
+AllocatesVoucher -(0,N)- Voucher
+
+relationship "Applies voucher" as AppliesVoucher {
+}
+Cart -(0,1)- AppliesVoucher
+Voucher -(0,N)- AppliesVoucher
+
+' AppliesVoucher:
+'  The selected voucher must have an allocation for the Cart owner.
+
+relationship "Redeems voucher" as RedeemsVoucher {
+  appliedDiscount
+  redeemedAt
+  redemptionStatus
+}
+Voucher -(0,N)- RedeemsVoucher
+RedeemsVoucher -(0,1)- Order
+
+relationship "Has review" as HasReview {
+}
+OrderItem -(0,1)- HasReview
+HasReview =(1,1)= Review
+
+relationship "Writes review" as WritesReview {
+}
+User -(0,N)- WritesReview
+WritesReview =(1,1)= Review
+
+relationship "Adds to wishlist" as AddsToWishlist {
+  addedAt
+}
+User -(0,N)- AddsToWishlist
+AddsToWishlist -(0,N)- Product
+
+' PlacesOrder:
+'  Checkout creates one Order from selected cart items.
+'  Cart items are not grouped or split by seller.
+'  Order retains totals and delivery snapshots after cart cleanup.
+
+' RedeemsVoucher:
+'  Voucher usage is retained on Order after cart cleanup.
+'  The voucher must be allocated to the ordering User.
+'  The server calculates the applied discount.
+
+' AllocatesVoucher:
+'  quantity is the remaining number of uses for this User.
+
+@endchen

@@ -1,0 +1,68 @@
+@startchen promotion
+title Single-vendor Store - Vouchers
+
+left to right direction
+
+entity "Voucher" as Voucher {
+  title
+  description
+  voucherCode
+  discountType
+  discountValue
+  minimumSpend
+  maximumDiscount
+  validFrom
+  validUntil
+  usageLimit
+}
+
+entity "User" as User {
+}
+
+entity "Cart" as Cart {
+}
+
+entity "Order" as Order {
+}
+
+relationship "Allocates voucher" as AllocatesVoucher {
+  quantity
+}
+User -(0,N)- AllocatesVoucher
+AllocatesVoucher -(0,N)- Voucher
+
+relationship "Applies voucher" as AppliesVoucher {
+}
+Cart -(0,1)- AppliesVoucher
+Voucher -(0,N)- AppliesVoucher
+
+' AppliesVoucher:
+'  The selected voucher must have an allocation for the Cart owner.
+
+relationship "Redeems voucher" as RedeemsVoucher {
+  appliedDiscount
+  redeemedAt
+  redemptionStatus
+}
+Voucher -(0,N)- RedeemsVoucher
+RedeemsVoucher -(0,1)- Order
+
+relationship "Places order" as PlacesOrder {
+}
+User -(0,N)- PlacesOrder
+PlacesOrder =(1,1)= Order
+
+' PlacesOrder:
+'  Checkout creates one Order from selected cart items.
+'  Cart items are not grouped or split by seller.
+'  Order retains totals and delivery snapshots after cart cleanup.
+
+' RedeemsVoucher:
+'  Voucher usage is retained on Order after cart cleanup.
+'  The voucher must be allocated to the ordering User.
+'  The server calculates the applied discount.
+
+' AllocatesVoucher:
+'  quantity is the remaining number of uses for this User.
+
+@endchen
