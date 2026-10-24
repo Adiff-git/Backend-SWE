@@ -26,4 +26,5 @@ jobs:
                 java-version: 25
 
           - name: Run tests
+            working-directory: demo
             run: mvn -B -ntp clean verify
