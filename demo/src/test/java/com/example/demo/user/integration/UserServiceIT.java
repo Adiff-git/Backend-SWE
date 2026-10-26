@@ -14,6 +14,7 @@ class UserServiceIT extends PostgresTestSupport {
     @Autowired UserService service;
     @Autowired org.springframework.transaction.PlatformTransactionManager transactions;
     @AfterEach void cleanup() {
+        jdbc.update("DELETE FROM user_roles");
         users.deleteAll();
     }
     @Test void updateUser_shouldNormalizeEmailAndPreserveOmittedValuesAcrossTransactions() {
@@ -88,5 +89,16 @@ class UserServiceIT extends PostgresTestSupport {
         if(!start.await(5,java.util.concurrent.TimeUnit.SECONDS))throw new IllegalStateException("Barrier timeout");
         UpdateUserRequest request=new UpdateUserRequest();request.setUsername(name);
         try {service.updateUser(owner,request);return 200;}catch(RuntimeException failure){return new com.example.demo.common.exception.ApiErrorFactory().from(failure,"/api/me").getStatus();}
+    }
+    @Autowired org.springframework.jdbc.core.JdbcTemplate jdbc;
+    @Test void createAuthenticationUser_shouldRequireEncodedPasswordAndGrantCurrentDefaultAuthorities() {
+        org.assertj.core.api.Assertions.assertThatThrownBy(()->service.createAuthenticationUser("Alice","plaintext")).isInstanceOf(com.example.demo.user.exception.BusinessValidationException.class);
+        String encoded=new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder(10).encode("Password 123");
+        Long id=service.createAuthenticationUser(" \u00c9 Alice ",encoded);
+        var snapshot=service.getUserSecuritySnapshot(id);
+        assertThat(snapshot.getUsername()).isEqualTo("\u00c9 Alice");assertThat(snapshot.getEncodedPassword()).isEqualTo(encoded);
+        assertThat(snapshot.getAuthorities()).containsExactlyInAnyOrder("ROLE_USER","MANAGE_USER_PROFILE","MANAGE_ADDRESS");
+        assertThat(service.resolveSecurityIdentifier("\u00e9 ALICE")).contains(id);
+        assertThat(users.findById(id).orElseThrow().getJoinedAt()).isNotNull();
     }
 }

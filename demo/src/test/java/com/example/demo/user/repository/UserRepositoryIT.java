@@ -40,4 +40,13 @@ class UserRepositoryIT extends PostgresTestSupport {
         User user=UserTestData.user("Owner");user.setDisplayName(new String(Character.toChars(0x1F600)).repeat(101));
         assertThatThrownBy(()->users.saveAndFlush(user)).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
     }
+    @Test void save_shouldRejectAtSignInUsername() {
+        assertThatThrownBy(()->users.saveAndFlush(UserTestData.user("bad@name"))).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    }
+    @Test void securityLookup_shouldPreserveCaseAndReadCurrentGrants() {
+        User user=users.saveAndFlush(UserTestData.user("Alice"));users.assignDefaultRole(user.getId());
+        assertThat(users.findByUsernameIdentifier("ALICE").orElseThrow().getUsername()).isEqualTo("Alice");
+        assertThat(users.findAuthorities(user.getId())).containsExactlyInAnyOrder("ROLE_USER","MANAGE_USER_PROFILE","MANAGE_ADDRESS");
+        assertThat(users.findByEmailIdentifier("Alice")).isEmpty();
+    }
 }

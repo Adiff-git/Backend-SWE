@@ -32,4 +32,9 @@ class UserValidatorTest {
     @Test void validate_shouldRejectIdentityConflict() {
         assertThatThrownBy(()->validator.validate(new UpdateUserRequest(),true,false)).isInstanceOf(IdentityConflictException.class);
     }
+    @Test void validate_shouldRejectAtSignWithoutChangingOtherUsernameRules() {
+        UpdateUserRequest r=new UpdateUserRequest();r.setUsername("bad@name");
+        assertThatThrownBy(()->validator.validate(r,false,false)).isInstanceOf(BusinessValidationException.class);
+        r.setUsername(" A  B ");assertThatCode(()->validator.validate(r,false,false)).doesNotThrowAnyException();
+    }
 }

@@ -10,4 +10,8 @@ public interface UserService {
     PrivateUserResponse getCurrentUser(Long actorId);
     PublicUserResponse getUser(Long id);
     PrivateUserResponse updateUser(Long actorId,@Valid UpdateUserRequest request);
+    java.util.Optional<Long> resolveSecurityIdentifier(String identifier);
+    com.example.demo.user.dto.response.UserSecuritySnapshot getUserSecuritySnapshot(Long id);
+    Long createAuthenticationUser(String username,String encodedPassword);
+    void replaceEncodedPassword(Long id,String encodedPassword);
 }

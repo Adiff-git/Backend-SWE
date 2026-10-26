@@ -27,6 +27,13 @@ public class GlobalExceptionHandler {
     }
     )
     public ResponseEntity<ApiError> invalid(Exception failure,HttpServletRequest request) {
+        // Jackson wraps exceptions raised by domain-aware request setters.
+        // Preserve the safe domain status, particularly an unavailable Media dependency.
+        if(failure instanceof HttpMessageNotReadableException) {
+            for(Throwable cause=failure.getCause();cause!=null;cause=cause.getCause()) {
+                if(cause instanceof ApplicationException application) return response(factory.from(application,request.getRequestURI()));
+            }
+        }
         return response(factory.create(400,"Invalid input",request.getRequestURI(),Map.of()));
     }
     @ExceptionHandler(Exception.class)

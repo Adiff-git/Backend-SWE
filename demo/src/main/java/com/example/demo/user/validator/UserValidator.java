@@ -17,6 +17,7 @@ public class UserValidator {
     public void validate(UpdateUserRequest request,boolean usernameConflict,boolean emailConflict) {
         if((request.isUsernamePresent() && request.getUsername()==null) || (request.isEmailPresent() && request.getEmail()==null)) throw new BusinessValidationException("Username and email cannot be null when supplied");
         if(request.getDateOfBirth()!=null && request.getDateOfBirth().isAfter(LocalDate.now(clock))) throw new BusinessValidationException("Birth date must not be in the future");
+        if(request.getUsername()!=null && request.getUsername().contains("@")) throw new BusinessValidationException("Username must not contain @");
         if(usernameConflict || emailConflict) throw new IdentityConflictException();
     }
 }

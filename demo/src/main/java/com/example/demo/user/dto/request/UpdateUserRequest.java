@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 public class UpdateUserRequest {
     @CodePointLength(max=100) private String displayName;
-    @CodePointLength(max=50) private String username;
+    @jakarta.validation.constraints.Pattern(regexp="[^@]*") @CodePointLength(max=50) private String username;
     @Email @CodePointLength(max=254) private String email;
     @CodePointLength(max=20) private String phoneNumber;
     @Setter private Gender gender;

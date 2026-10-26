@@ -27,6 +27,9 @@ public class User {
     @Enumerated(EnumType.STRING) @Column(length=6) private Gender gender;
     private LocalDate dateOfBirth;
     @Column(nullable=false,updatable=false) private Instant joinedAt;
+    @jakarta.persistence.ManyToMany(fetch=jakarta.persistence.FetchType.LAZY)
+    @jakarta.persistence.JoinTable(name="user_roles",joinColumns=@jakarta.persistence.JoinColumn(name="user_id"),inverseJoinColumns=@jakarta.persistence.JoinColumn(name="role_id"))
+    private java.util.Set<Role> roles=new java.util.LinkedHashSet<>();
     @PrePersist protected void assignJoinedAt() {
         if (joinedAt == null) joinedAt=Instant.now();
     }
