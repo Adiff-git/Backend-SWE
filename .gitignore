@@ -1,0 +1,14 @@
+# Generated Java/build and local environment files
+**/target/
+*.class
+*.jar
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.idea/
+.vscode/
