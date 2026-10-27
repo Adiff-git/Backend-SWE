@@ -2,7 +2,6 @@ package com.example.demo.user.dto.request;
 import com.example.demo.user.enums.Gender;
 import com.example.demo.user.validator.CodePointLength;
 import com.example.demo.user.exception.BusinessValidationException;
-import com.example.demo.user.exception.MediaUnavailableException;
 import jakarta.validation.constraints.Email;
 import java.time.LocalDate;
 import lombok.Getter;
@@ -18,6 +17,7 @@ public class UpdateUserRequest {
     private boolean usernamePresent;
     private boolean emailPresent;
     private boolean profileImagePresent;
+    private Long profileImageId;
     private static String normalize(String value) {
         if(value==null) return null;
         String normalized=value.strip();
@@ -38,10 +38,12 @@ public class UpdateUserRequest {
     public void setPhoneNumber(String value) {
         phoneNumber=normalize(value);
     }
-    /** Null-only binding until the real Media ID contract exists; no placeholder ID type. */
     public void setProfileImageId(tools.jackson.databind.JsonNode value) {
         profileImagePresent=true;
-        if(value!=null && !value.isNull()) throw new MediaUnavailableException();
+        if(value==null || value.isNull()) { profileImageId=null; return; }
+        if(!value.isIntegralNumber() || !value.canConvertToLong() || value.asLong()<=0)
+            throw new BusinessValidationException("Image ID must be a positive integer");
+        profileImageId=value.asLong();
     }
     @com.fasterxml.jackson.annotation.JsonAnySetter
     public void rejectUnknownProperty(String property, tools.jackson.databind.JsonNode value) {

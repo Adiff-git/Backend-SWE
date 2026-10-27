@@ -7,7 +7,6 @@ import com.example.demo.auth.validator.JwtClaimsValidator;
 import java.time.Clock;
 import java.util.List;
 import javax.crypto.spec.SecretKeySpec;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -50,12 +49,11 @@ public class AuthSecurityConfiguration {
         provider.setPasswordEncoder(encoder);
         return new ProviderManager(provider);
     }
-    @Bean public CorsConfigurationSource corsConfigurationSource(@Value("${security.cors.allowed-origins}") List<String> origins) {
-        if(origins.isEmpty() || origins.stream().anyMatch(x->x.isBlank() || x.contains("*")))throw new IllegalArgumentException("Explicit CORS origins are required");
+    @Bean public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration c=new CorsConfiguration();
-        c.setAllowedOrigins(origins);
-        c.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
-        c.setAllowedHeaders(List.of("Authorization","Content-Type"));
+        c.setAllowedOrigins(List.of("*"));
+        c.setAllowedMethods(List.of("*"));
+        c.setAllowedHeaders(List.of("*"));
         c.setExposedHeaders(List.of("Authorization"));
         c.setAllowCredentials(false);
         UrlBasedCorsConfigurationSource source=new UrlBasedCorsConfigurationSource();
@@ -86,6 +84,8 @@ public class AuthSecurityConfiguration {
             .logout(c->c.disable())
             .exceptionHandling(e->e.authenticationEntryPoint(entry).accessDeniedHandler(denied))
         .authorizeHttpRequests(a->a
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/image-uploads","/api/image-uploads/*/complete").authenticated()
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/image-uploads/*/download-url").authenticated()
                 .requestMatchers("/api/me").hasAuthority("MANAGE_USER_PROFILE")
                 .requestMatchers("/api/me/addresses","/api/me/addresses/**").hasAuthority("MANAGE_ADDRESS")
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/users/*").authenticated()

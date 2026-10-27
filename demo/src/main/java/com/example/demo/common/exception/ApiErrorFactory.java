@@ -10,6 +10,9 @@ public class ApiErrorFactory {
     }
     public ApiError from(Throwable failure,String path) {
         if(failure instanceof ApplicationException app) return create(app.getStatus(),app.getMessage(),path,Map.of());
+        if(failure instanceof org.springframework.dao.OptimisticLockingFailureException
+                || failure instanceof jakarta.persistence.OptimisticLockException)
+            return create(409,"Concurrent update; you may retry",path,Map.of());
         for(Throwable cause=failure;cause!=null;cause=cause.getCause()) {
             if(cause instanceof SQLException sql) {
                 if("55P03".equals(sql.getSQLState())) return create(409,"Concurrent update; you may retry",path,Map.of());

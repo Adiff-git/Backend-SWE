@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class UserServiceImplTest {
     private final UserRepository repository=mock(UserRepository.class);
-    private final UserServiceImpl service=new UserServiceImpl(repository,new UserConverter(),new UserValidator(),mock(EntityManager.class),5000);
+    private final UserServiceImpl service=new UserServiceImpl(repository,new UserConverter(),new UserValidator(),mock(EntityManager.class),5000,mock(com.example.demo.media.service.MediaService.class));
     @Test void updateUser_shouldPreserveOmittedFieldsAndImmutableValues() {
         User u=UserTestData.user("Alice");
         u.setId(8L);

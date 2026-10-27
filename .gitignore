@@ -12,3 +12,8 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
+docs/
+
+# Local storage bootstrap is intentionally deferred.
+/docker/
+/demo/src/test/resources/media/README.md

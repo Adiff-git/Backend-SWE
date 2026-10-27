@@ -6,6 +6,7 @@ public class PublicUserResponse {
     private Long id;
     private String username;
     private String displayName;
-    private Void profileImageId;
+    private Long profileImageId;
+    private String profileImageUrl;
     private java.time.Instant joinedAt;
 }

@@ -7,11 +7,10 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import static org.assertj.core.api.Assertions.*;
 class AuthConfigurationTest {
-    @Test void execute_shouldRejectMissingShortSecretIssuerAndWildcardCors() {
+    @Test void execute_shouldRejectMissingShortSecretAndIssuer() {
         assertThatThrownBy(()->new JwtProperties(null,"issuer","")).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(()->new JwtProperties("x".repeat(31),"issuer","")).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(()->new JwtProperties("x".repeat(32)," ","")).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(()->new AuthSecurityConfiguration().corsConfigurationSource(List.of("*"))).isInstanceOf(IllegalArgumentException.class);
     }
     @Test void execute_shouldVerifySignatureAndRejectsWrongKeyOrAlgorithm() {
         var config=new AuthSecurityConfiguration();

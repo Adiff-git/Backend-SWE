@@ -12,6 +12,6 @@ class UserConverterTest {
         assertThat(new UserConverter().toPrivate(u).getProfileImageId()).isNull();
     }
     @Test void toPublic_shouldExposeOnlyPublicProperties() {
-        assertThat(com.example.demo.user.dto.response.PublicUserResponse.class.getDeclaredFields()).extracting(java.lang.reflect.Field::getName).containsExactlyInAnyOrder("id","username","displayName","joinedAt","profileImageId");
+        assertThat(com.example.demo.user.dto.response.PublicUserResponse.class.getDeclaredFields()).extracting(java.lang.reflect.Field::getName).containsExactlyInAnyOrder("id","username","displayName","joinedAt","profileImageId","profileImageUrl");
     }
 }

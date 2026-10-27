@@ -12,5 +12,6 @@ public class PrivateUserResponse {
     private com.example.demo.user.enums.Gender gender;
     private java.time.LocalDate dateOfBirth;
     private java.time.Instant joinedAt;
-    private Void profileImageId;
+    private Long profileImageId;
+    private String profileImageUrl;
 }

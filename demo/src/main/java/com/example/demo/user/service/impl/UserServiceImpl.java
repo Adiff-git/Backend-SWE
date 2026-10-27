@@ -21,13 +21,15 @@ public class UserServiceImpl implements UserService {
     private final UserValidator validator;
     private final EntityManager entityManager;
     private final long lockTimeoutMs;
-    public UserServiceImpl(UserRepository repository,UserConverter converter,UserValidator validator,EntityManager entityManager,@Value("${user.lock-timeout-ms:5000}") long lockTimeoutMs) {
+    private final com.example.demo.media.service.MediaService media;
+    public UserServiceImpl(UserRepository repository,UserConverter converter,UserValidator validator,EntityManager entityManager,@Value("${user.lock-timeout-ms:5000}") long lockTimeoutMs,com.example.demo.media.service.MediaService media) {
         if(lockTimeoutMs<=0) throw new IllegalArgumentException("Lock timeout must be positive");
         this.repository=repository;
         this.converter=converter;
         this.validator=validator;
         this.entityManager=entityManager;
         this.lockTimeoutMs=lockTimeoutMs;
+        this.media=media;
     }
     public User getUserEntity(Long id) {
         requireActor(id);
@@ -41,15 +43,22 @@ public class UserServiceImpl implements UserService {
         return user;
     }
     public PrivateUserResponse getCurrentUser(Long actorId) {
-        return converter.toPrivate(getUserEntity(actorId));
+        User user=getUserEntity(actorId);
+        return converter.toPrivate(user,attachedImage(user));
     }
     public PublicUserResponse getUser(Long id) {
-        return converter.toPublic(getUserEntity(id));
+        User user=getUserEntity(id);
+        return converter.toPublic(user,attachedImage(user));
     }
     @Transactional public PrivateUserResponse updateUser(Long actorId,UpdateUserRequest request) {
         // Transaction is established on this public entry point; self-call does not establish it.
         User user=getUserEntityForUpdate(actorId);
         validator.validate(request,request.getUsername()!=null && repository.usernameExists(request.getUsername(),actorId),request.getEmail()!=null && repository.emailExists(request.getEmail(),actorId));
+        com.example.demo.media.dto.response.ImageAccessResponse image;
+        if(request.isProfileImagePresent()) {
+            image=request.getProfileImageId()==null ? null : media.validateImageForAttachment(actorId,request.getProfileImageId());
+            user.setProfileImageId(request.getProfileImageId());
+        } else image=attachedImage(user);
         if(request.getUsername()!=null) user.setUsername(request.getUsername());
         if(request.getEmail()!=null) user.setEmail(repository.lowercase(request.getEmail()));
         if(request.getDisplayName()!=null) user.setDisplayName(request.getDisplayName());
@@ -57,7 +66,10 @@ public class UserServiceImpl implements UserService {
         if(request.getGender()!=null) user.setGender(request.getGender());
         if(request.getDateOfBirth()!=null) user.setDateOfBirth(request.getDateOfBirth());
         repository.flush();
-        return converter.toPrivate(user);
+        return converter.toPrivate(user,image);
+    }
+    private com.example.demo.media.dto.response.ImageAccessResponse attachedImage(User user) {
+        return user.getProfileImageId()==null ? null : media.getAttachedImage(user.getProfileImageId());
     }
     private static void requireActor(Long id) {
         if(id==null) throw new com.example.demo.common.identity.IdentityUnavailableException();

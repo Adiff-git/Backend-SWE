@@ -2,7 +2,7 @@ package com.example.demo.user.dto.request;
 import org.junit.jupiter.api.Test;
 import jakarta.validation.Validation;
 import jakarta.validation.ValidatorFactory;
-import com.example.demo.user.exception.MediaUnavailableException;
+
 import tools.jackson.databind.json.JsonMapper;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -16,9 +16,10 @@ class RequestValidationTest {
             assertThat(f.getValidator().validate(r)).hasSize(1);
         }
     }
-    @Test void request_shouldRejectNonNullMediaWithoutValidation() {
+    @Test void request_shouldBindPositiveImageIdForServiceValidation() {
         UpdateUserRequest r=new UpdateUserRequest();
-        assertThatThrownBy(()->r.setProfileImageId(JsonMapper.builder().build().readTree("123"))).isInstanceOf(MediaUnavailableException.class);
+        r.setProfileImageId(JsonMapper.builder().build().readTree("123"));
+        assertThat(r.getProfileImageId()).isEqualTo(123L);
     }
     @Test void request_shouldRejectInternalSpacesInPhone() {
         CreateAddressRequest r=new CreateAddressRequest();

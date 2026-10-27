@@ -15,13 +15,16 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
     private final UserService users;
     private final CurrentUserIdProvider identity;
-    @GetMapping("/api/me") public PrivateUserResponse getCurrentUser() {
+    @GetMapping("/api/me") public PrivateUserResponse getCurrentUser(jakarta.servlet.http.HttpServletResponse response) {
+        response.setHeader("Cache-Control","no-store");
         return users.getCurrentUser(identity.getCurrentUserId());
     }
-    @PutMapping("/api/me") public PrivateUserResponse update(@Valid @RequestBody UpdateUserRequest request) {
+    @PutMapping("/api/me") public PrivateUserResponse update(@Valid @RequestBody UpdateUserRequest request,jakarta.servlet.http.HttpServletResponse response) {
+        response.setHeader("Cache-Control","no-store");
         return users.updateUser(identity.getCurrentUserId(),request);
     }
-    @GetMapping("/api/users/{id}") public PublicUserResponse getUser(@PathVariable Long id) {
+    @GetMapping("/api/users/{id}") public PublicUserResponse getUser(@PathVariable Long id,jakarta.servlet.http.HttpServletResponse response) {
+        response.setHeader("Cache-Control","no-store");
         return users.getUser(id);
     }
 }
