@@ -6,7 +6,7 @@
   ],
   "integration_settings": {
     "codex": {
-      "script": "ps",
+      "script": "sh",
       "invoke_separator": "-"
     }
   },
