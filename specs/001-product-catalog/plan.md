@@ -1,3 +1,7 @@
+# Ownership cleanup note (2026-10-28)
+
+The current branch implements public Product Catalog reads, including five-minute signed image GET URLs. Upload-only Java code and tests were removed for teammate ownership; approved upload design and acceptance criteria below remain unchanged. Recover removed code and tests from `62980e03e86018a52731c405a5e5d32987a7096c` and reconcile with generic Media/S3 infrastructure before implementation. See [upload handoff](upload-handoff.md). Historical completion statements below refer to that pre-cleanup snapshot.
+
 # Implementation Plan: Backend Product Catalog
 
 **Branch**: `main` (actual checkout; Spec Kit feature `001-product-catalog`) | **Date**: 2026-10-27 | **Spec**: [spec.md](spec.md)

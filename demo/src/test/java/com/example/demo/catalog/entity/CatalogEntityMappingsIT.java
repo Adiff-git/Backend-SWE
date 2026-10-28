@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.UUID;
 import jakarta.persistence.EntityManager;
@@ -39,7 +38,6 @@ class CatalogEntityMappingsIT {
 	@Test
 	void entityMappings_shouldRoundTripAgainstFlywaySchema() {
 		Instant preparedAt = Instant.parse("2026-10-27T04:00:00Z");
-		UUID claimToken = UUID.randomUUID();
 		Ids ids = transactions.execute(status -> {
 			Category parent = new Category();
 			parent.setName("Parent category");
@@ -76,44 +74,13 @@ class CatalogEntityMappingsIT {
 			image.setCreatedAt(preparedAt);
 			entityManager.persist(image);
 
-			ProductImageUpload published = new ProductImageUpload("admin-subject");
-			published.setProduct(product);
-			published.setStagingKey("staging/" + UUID.randomUUID());
-			published.setDurableKey(image.getObjectKey());
-			published.setClaimToken(claimToken);
-			published.setClaimExpiresAt(preparedAt.plus(2, ChronoUnit.MINUTES));
-			published.setProposedContentType("image/webp");
-			published.setProposedByteSize(2048);
-			published.setAltText("Front view");
-			published.setState(ProductImageUploadState.PUBLISHED);
-			published.setPreparedAt(preparedAt);
-			published.setExpiresAt(preparedAt.plus(15, ChronoUnit.MINUTES));
-			published.setVerifiedAt(preparedAt.plus(30, ChronoUnit.SECONDS));
-			published.setPublishedAt(preparedAt.plus(1, ChronoUnit.MINUTES));
-			published.setProductImage(image);
-			entityManager.persist(published);
-
-			ProductImageUpload prepared = new ProductImageUpload("admin-subject");
-			prepared.setProduct(product);
-			prepared.setStagingKey("staging/" + UUID.randomUUID());
-			prepared.setProposedContentType("image/png");
-			prepared.setProposedByteSize(100);
-			prepared.setAltText("Side view");
-			prepared.setState(ProductImageUploadState.PREPARED);
-			prepared.setPreparedAt(preparedAt);
-			prepared.setExpiresAt(preparedAt.plus(15, ChronoUnit.MINUTES));
-			entityManager.persist(prepared);
-
 			entityManager.flush();
-			return new Ids(category.getId(), product.getId(), variant.getId(), image.getId(),
-					published.getId(), prepared.getId());
+			return new Ids(category.getId(), product.getId(), variant.getId(), image.getId());
 		});
 
 		assertThat(ids).isNotNull();
 		assertThat(jdbc.queryForObject("SELECT status FROM products WHERE id = ?", String.class, ids.productId()))
 				.isEqualTo("PUBLISHED");
-		assertThat(jdbc.queryForObject("SELECT state FROM product_image_uploads WHERE id = ?", String.class,
-				ids.publishedUploadId())).isEqualTo("PUBLISHED");
 		assertThat(jdbc.queryForObject("SELECT pg_typeof(option_combination)::text FROM product_variants "
 				+ "WHERE id = ?", String.class, ids.variantId())).isEqualTo("jsonb");
 
@@ -146,26 +113,9 @@ class CatalogEntityMappingsIT {
 			assertThat(image.isPrimary()).isTrue();
 			assertThat(image.getObjectKey()).startsWith("final/");
 
-			entityManager.clear();
-			ProductImageUpload published = entityManager.find(ProductImageUpload.class, ids.publishedUploadId());
-			assertThat(Persistence.getPersistenceUtil().isLoaded(published, "product")).isFalse();
-			assertThat(published.getProduct().getId()).isEqualTo(ids.productId());
-			assertThat(published.getProductImage().getId()).isEqualTo(ids.imageId());
-			assertThat(published.getState()).isEqualTo(ProductImageUploadState.PUBLISHED);
-			assertThat(published.getClaimToken()).isEqualTo(claimToken);
-			assertThat(published.getClaimExpiresAt()).isEqualTo(preparedAt.plus(2, ChronoUnit.MINUTES));
-			assertThat(published.getPublishedAt()).isEqualTo(preparedAt.plus(1, ChronoUnit.MINUTES));
-
-			entityManager.clear();
-			ProductImageUpload pending = entityManager.find(ProductImageUpload.class, ids.preparedUploadId());
-			assertThat(pending.getProductImage()).isNull();
-			assertThat(pending.getDurableKey()).isNull();
-			assertThat(pending.getClaimToken()).isNull();
-			assertThat(pending.getState()).isEqualTo(ProductImageUploadState.PREPARED);
 		});
 	}
 
-	private record Ids(UUID categoryId, UUID productId, UUID variantId, UUID imageId,
-			UUID publishedUploadId, UUID preparedUploadId) {
+	private record Ids(UUID categoryId, UUID productId, UUID variantId, UUID imageId) {
 	}
 }

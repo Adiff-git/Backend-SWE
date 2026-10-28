@@ -40,7 +40,4 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 	@Query(value = "SELECT status FROM products WHERE id = :id FOR SHARE", nativeQuery = true)
 	Optional<String> lockStatusForShare(@Param("id") UUID id);
 
-	/** Parent lock for variant/gallery writers; upload rows are locked afterward. */
-	@Query(value = "SELECT id FROM products WHERE id = :id FOR NO KEY UPDATE", nativeQuery = true)
-	Optional<UUID> lockIdForNoKeyUpdate(@Param("id") UUID id);
 }

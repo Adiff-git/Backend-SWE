@@ -10,8 +10,6 @@ import org.springframework.beans.BeanUtils;
 import com.example.demo.catalog.entity.Category;
 import com.example.demo.catalog.entity.Product;
 import com.example.demo.catalog.entity.ProductImage;
-import com.example.demo.catalog.entity.ProductImageUpload;
-import com.example.demo.catalog.entity.ProductImageUploadState;
 import com.example.demo.catalog.entity.ProductStatus;
 import com.example.demo.catalog.entity.ProductVariant;
 
@@ -87,20 +85,6 @@ public final class CatalogFixtures {
 		image.setPrimary(primary);
 		image.setCreatedAt(Instant.now().truncatedTo(ChronoUnit.MICROS));
 		return image;
-	}
-
-	public static ProductImageUpload upload(Product product) {
-		ProductImageUpload upload = new ProductImageUpload("test-admin-" + UUID.randomUUID());
-		Instant preparedAt = Instant.now().truncatedTo(ChronoUnit.MICROS);
-		upload.setProduct(product);
-		upload.setStagingKey("staging/" + UUID.randomUUID());
-		upload.setProposedContentType("image/png");
-		upload.setProposedByteSize(100);
-		upload.setAltText("Product image");
-		upload.setState(ProductImageUploadState.PREPARED);
-		upload.setPreparedAt(preparedAt);
-		upload.setExpiresAt(preparedAt.plus(15, ChronoUnit.MINUTES));
-		return upload;
 	}
 
 	public record ProductFixture(Category category, Product product, ProductVariant variant) {

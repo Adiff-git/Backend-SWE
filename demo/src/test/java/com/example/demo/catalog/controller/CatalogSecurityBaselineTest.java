@@ -9,9 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.demo.catalog.exception.CatalogConflictException;
-import com.example.demo.catalog.exception.InvalidProductImageException;
 import com.example.demo.catalog.exception.ProductNotFoundException;
-import com.example.demo.catalog.exception.UploadPreparerMismatchException;
 import com.example.demo.common.exception.ApiExceptionHandler;
 import com.example.demo.common.security.CatalogSecurityConfiguration;
 import com.example.demo.common.security.CatalogSecurityProblemHandler;
@@ -70,12 +68,6 @@ class CatalogSecurityBaselineTest {
 		mvc.perform(get("/api/products/conflict"))
 				.andExpect(status().isConflict())
 				.andExpect(jsonPath("$.status").value(409));
-		mvc.perform(get("/api/products/invalid-image"))
-				.andExpect(status().isUnprocessableContent())
-				.andExpect(jsonPath("$.status").value(422));
-		mvc.perform(get("/api/products/wrong-preparer"))
-				.andExpect(status().isForbidden())
-				.andExpect(jsonPath("$.status").value(403));
 	}
 
 	private void assertUploadDeniedForAnonymous(String path) throws Exception {
@@ -109,8 +101,6 @@ class CatalogSecurityBaselineTest {
 			return switch (id) {
 				case "missing" -> throw new ProductNotFoundException();
 				case "conflict" -> throw new CatalogConflictException();
-				case "invalid-image" -> throw new InvalidProductImageException();
-				case "wrong-preparer" -> throw new UploadPreparerMismatchException();
 				default -> "probe catalog read";
 			};
 		}

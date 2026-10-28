@@ -1,10 +1,18 @@
+## Refactor regression verification (2026-10-28)
+
+After upload-only removal, host-side `mvn -B -ntp clean verify` passed: Surefire 26 tests, zero skipped; Failsafe 52 tests, zero skipped. Previous snapshot had Surefire 51 tests with 13 intentionally skipped and Failsafe 64 tests. The drop reflects removed upload test classes and upload-only cases in shared test classes; deleted tests are not counted as passing. ProductListingApiIT (5), ProductDetailApiIT (4), CatalogContractIT (5), CatalogMigrationsIT (14), CatalogPublicReadPerformanceIT (1), CatalogSecurityBaselineTest (5), and S3ProductImageStorageTest public signer checks (2) passed. Flyway validated V1–V3 and Hibernate validated the mapped public-read schema. Public performance rerun: 1,000 published products, page-20 p95 14.417 ms, detail p95 11.059 ms, bounded queries 5 and 4. LocalStack public-read flow ran; this does not establish upload acceptance.
+
+# Current checkout status (2026-10-28 ownership cleanup)
+
+This branch contains the verified public Product Catalog read implementation and a five-minute private S3 GET signer. Product-specific upload implementation and upload-only tests were removed by explicit owner decision. Upload routes remain denied. Generic Media Upload on `origin/feature/user-address` does not implement the product-scoped upload contract. The approved specification and OpenAPI contract still require that work. See [upload handoff](upload-handoff.md). Earlier upload verification records below describe the pre-cleanup commit `62980e03e86018a52731c405a5e5d32987a7096c`, not the current checkout.
+
 # Quickstart: validate Backend Product Catalog after implementation
 
 This guide covers both implemented catalog reads and future secure upload validation. Existing public reads, Flyway catalog migrations, and the S3 storage adapter do not establish a verified JWT/ADMIN identity or complete upload-flow evidence. Use [API contract](contracts/openapi.yaml) and [data model](data-model.md) for exact expected fields and constraints; report each check as executed, pending, or blocked based on its actual test report.
 
 ## Product Catalog and Product Image Upload handoff
 
-The Product Catalog backend owner retains public listing/detail, category/variant/image-read projections, PostgreSQL catalog integrity and signed public image URL verification. The Product Image Upload teammate owns pending T051–T055 and T057–T062: upload services, secure S3 preparation/completion, lifecycle, recovery/cleanup, LocalStack infrastructure, upload-related security integration and storage tests. T059's 11 compiled but disabled scenarios are preserved for the teammate to enable against the real recovery service. T061 remains unchecked until executable test code and evidence are reviewed. Completed T001–T050, T056 and T064 remain completed; no existing upload or LocalStack tests are removed. Verified JWT/ADMIN identity is a separate authentication-owner dependency, and upload POST routes remain fail closed until integrated.
+The Product Catalog backend owner retains public listing/detail, category/variant/image-read projections, PostgreSQL catalog integrity, and five-minute signed public image URLs. Upload-only source and tests have been removed from this branch for teammate ownership; the approved upload feature remains incomplete. The teammate must restore product-specific upload implementation and evidence, including T059 recovery scenarios from the backup commit. T063, T065 and T066 remain open shared gates; upload POST routes remain fail closed.
 
 Before teammate-owned T062 and the shared T065/T066 integration gates, the upload teammate supplies:
 

@@ -32,7 +32,6 @@ import com.example.demo.catalog.CatalogFixtures;
 import com.example.demo.catalog.CatalogFixtures.ProductFixture;
 import com.example.demo.catalog.entity.Product;
 import com.example.demo.catalog.entity.ProductImage;
-import com.example.demo.catalog.entity.ProductImageUpload;
 import com.example.demo.catalog.entity.ProductStatus;
 import com.example.demo.catalog.entity.ProductVariant;
 
@@ -64,9 +63,6 @@ class CatalogConstraintsIT {
 	@Autowired
 	private ProductImageRepository images;
 
-	@Autowired
-	private ProductImageUploadRepository uploads;
-
 	@BeforeEach
 	void clearBeforeTest() {
 		clearCommittedData();
@@ -90,8 +86,6 @@ class CatalogConstraintsIT {
 			Product first = products.findById(firstId).orElseThrow();
 			ProductImage image = CatalogFixtures.image(first, 0, true);
 			entityManager.persist(image);
-			ProductImageUpload upload = CatalogFixtures.upload(first);
-			entityManager.persist(upload);
 			entityManager.flush();
 			return image.getId();
 		});
@@ -109,12 +103,7 @@ class CatalogConstraintsIT {
 					.extracting(ProductImage::getId).containsExactly(firstImageId);
 			assertThat(images.findByProduct_IdAndPrimaryTrue(firstId)).isPresent();
 			assertThat(images.countByProduct_Id(firstId)).isEqualTo(1);
-			UUID uploadId = uploads.findAll().getFirst().getId();
-			assertThat(uploads.findByIdAndProduct_Id(uploadId, firstId)).isPresent();
-			assertThat(uploads.findByIdAndProduct_Id(uploadId, secondId)).isEmpty();
 			assertThat(products.lockStatusForShare(firstId)).contains("PUBLISHED");
-			assertThat(products.lockIdForNoKeyUpdate(firstId)).contains(firstId);
-			assertThat(uploads.lockByIdAndProductId(uploadId, firstId)).isPresent();
 		});
 	}
 
@@ -176,7 +165,7 @@ class CatalogConstraintsIT {
 	}
 
 	@Test
-	void database_shouldEnforceImageGalleryAndUploadPublicationTime() {
+	void database_shouldEnforceImageGallery() {
 		UUID productId = persistProduct(ProductStatus.PUBLISHED);
 		UUID firstImageId = transactions.execute(status -> {
 			Product product = products.findById(productId).orElseThrow();
@@ -216,16 +205,6 @@ class CatalogConstraintsIT {
 		}), "23514", "ct_product_images_gallery_integrity");
 		assertThat(images.countByProduct_Id(productId)).isEqualTo(10);
 
-		UUID uploadId = transactions.execute(status -> {
-			Product product = products.findById(productId).orElseThrow();
-			ProductImageUpload upload = CatalogFixtures.upload(product);
-			entityManager.persist(upload);
-			entityManager.flush();
-			return upload.getId();
-		});
-		assertConstraint(() -> jdbc.update("UPDATE product_image_uploads SET state = 'PUBLISHED', "
-				+ "product_image_id = ?, published_at = expires_at WHERE id = ?", firstImageId, uploadId),
-				"23514", "ck_product_image_uploads_published");
 	}
 
 	@Test

@@ -20,11 +20,6 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, UUID
 
 	long countByProduct_Id(UUID productId);
 
-	boolean existsByProduct_IdAndDisplayOrder(UUID productId, int displayOrder);
-
-	@Query("SELECT MAX(i.displayOrder) FROM ProductImage i WHERE i.product.id = :productId")
-	Optional<Integer> findMaxDisplayOrder(@Param("productId") UUID productId);
-
 	@Query("SELECT i FROM ProductImage i WHERE i.product.id IN :productIds "
 			+ "ORDER BY i.product.id, i.displayOrder")
 	List<ProductImage> findAllByProductIds(@Param("productIds") Collection<UUID> productIds);
