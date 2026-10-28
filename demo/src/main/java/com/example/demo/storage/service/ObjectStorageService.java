@@ -14,5 +14,6 @@ public interface ObjectStorageService {
     void copyIfMatch(String source, String etag, String target, String approvedContentType);
     void verifyFinalExists(String key);
     String prepareDownload(String key, Duration lifetime);
+    PreparedDownloadSigner prepareDownloadSigner(Duration lifetime);
     void deleteStaging(String key);
 }

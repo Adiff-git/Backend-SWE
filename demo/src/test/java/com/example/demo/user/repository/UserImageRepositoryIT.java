@@ -37,7 +37,7 @@ class UserImageRepositoryIT extends PostgresTestSupport {
 
     @Test void save_shouldRejectMissingReferencedImage() {
         User user = users.saveAndFlush(UserTestData.user("AvatarOwner"));
-        user.setProfileImageId(Long.MAX_VALUE);
+        user.setProfileImageId(java.util.UUID.randomUUID());
         assertThatThrownBy(users::flush).isInstanceOf(DataIntegrityViolationException.class);
     }
 }

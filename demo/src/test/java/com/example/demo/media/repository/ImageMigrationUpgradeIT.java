@@ -18,7 +18,7 @@ class ImageMigrationUpgradeIT {
             Long id = jdbc.queryForObject("INSERT INTO users(username,password,account_status,joined_at) VALUES ('Existing','encoded','ACTIVE',NOW()) RETURNING id", Long.class);
             Flyway.configure().dataSource(data).load().migrate();
             assertThat(jdbc.queryForObject("SELECT username FROM users WHERE id=?", String.class, id)).isEqualTo("Existing");
-            assertThat(jdbc.queryForObject("SELECT profile_image_id FROM users WHERE id=?", Long.class, id)).isNull();
+            assertThat(jdbc.queryForObject("SELECT profile_image_id FROM users WHERE id=?", java.util.UUID.class, id)).isNull();
         }
     }
 }

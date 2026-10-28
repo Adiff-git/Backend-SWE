@@ -23,7 +23,7 @@ Before starting Compose, set LOCAL_DB_PASSWORD in an uncommitted environment or 
 .\mvnw.cmd spring-boot:run '-Dspring-boot.run.profiles=local'
 ```
 
-Expected: Flyway applies V5__image_uploads.sql and V6__user_profile_images.sql without losing existing users; startup validates schema/properties and all supported decoder providers are available.
+Expected: Flyway applies V8__image_uploads.sql and V9__user_profile_images.sql without losing existing users; startup validates schema/properties and all supported decoder providers are available.
 
 ## Browser flow
 

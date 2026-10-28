@@ -1,12 +1,14 @@
 package com.example.demo.media.service;
 
+import java.util.UUID;
+
 import com.example.demo.media.entity.ImageUpload;
 import lombok.Value;
 
 @Value
 public class ImageCompletionOutcome {
     boolean expired;
-    Long id;
+    UUID id;
     String finalKey;
 
     public static ImageCompletionOutcome expired(ImageUpload image) {

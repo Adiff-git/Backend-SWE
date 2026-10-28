@@ -48,8 +48,8 @@ class MediaCommandServiceTest {
 
     @Test void complete_shouldReturnExpiredOutcomeWithoutThrowingInsideTransaction_whenDeadlineReached() {
         ImageUpload image = ImageUpload.pending(8L, "staging/key", "image/png", now.minusSeconds(900), now);
-        when(repository.findByIdAndOwnerUserId(1L, 8L)).thenReturn(Optional.of(image));
-        assertThat(commands.complete(8L, 1L).isExpired()).isTrue();
+        when(repository.findByIdAndOwnerUserId(java.util.UUID.fromString("00000000-0000-4000-8000-000000000001"), 8L)).thenReturn(Optional.of(image));
+        assertThat(commands.complete(8L, java.util.UUID.fromString("00000000-0000-4000-8000-000000000001")).isExpired()).isTrue();
         assertThat(image.getStatus()).isEqualTo(ImageUploadStatus.EXPIRED);
         verify(repository).flush();
         verify(storage, never()).inspect(any());
@@ -58,8 +58,8 @@ class MediaCommandServiceTest {
     @Test void complete_shouldSkipStaging_whenAlreadyCompleted() {
         ImageUpload image = ImageUpload.pending(8L, "staging/key", "image/png", now.minusSeconds(900), now);
         image.complete("images/final");
-        when(repository.findByIdAndOwnerUserId(1L, 8L)).thenReturn(Optional.of(image));
-        assertThat(commands.complete(8L, 1L).getFinalKey()).isEqualTo("images/final");
+        when(repository.findByIdAndOwnerUserId(java.util.UUID.fromString("00000000-0000-4000-8000-000000000001"), 8L)).thenReturn(Optional.of(image));
+        assertThat(commands.complete(8L, java.util.UUID.fromString("00000000-0000-4000-8000-000000000001")).getFinalKey()).isEqualTo("images/final");
         verify(storage, never()).inspect(any());
     }
 }

@@ -37,3 +37,5 @@
 - Simultaneous-completion integration testing is deferred; object-replacement integration testing remains in scope. Concurrency safeguards remain required, without claiming deferred behavior has been tested.
 - User explicitly requested HTTP, entity, architecture and testing constraints; these remain separate from technology-agnostic outcomes.
 - Core spec-template was resolved through the installed resolver. No extensions.yml exists, so no before/after hooks apply. No application code, branch, commit or push changed.
+
+> Contract update (2026-10-28): the earlier review records below predate catalog alignment. Current spec.md requires UUID image IDs, 900-second upload URLs and 300-second download URLs. Existing checklist completion markers are retained as review history.

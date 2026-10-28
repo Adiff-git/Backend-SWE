@@ -1,6 +1,7 @@
 import hashlib
 import json
 import sqlite3
+from contextlib import closing
 import tempfile
 import unittest
 from pathlib import Path
@@ -89,7 +90,7 @@ class NormalizationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as root:
             root = Path(root)
             db = root / "source.sqlite"
-            with sqlite3.connect(db) as c:
+            with closing(sqlite3.connect(db)) as c, c:
                 c.execute("CREATE TABLE products (id TEXT PRIMARY KEY, site TEXT, url TEXT, payload TEXT)")
                 c.execute("INSERT INTO products VALUES (?,?,?,?)", row(payload()))
             before = hashlib.sha256(db.read_bytes()).hexdigest()

@@ -141,3 +141,7 @@ Use migrated PostgreSQL, not an in-memory database, to confirm required FKs and 
 6. Inject S3 HEAD/GET/COPY failure and DB publication failure after a durable copy. Confirm no gallery record or public URL appears, retries respect session state, and reconciliation removes expired/failed staging and all unreferenced upload-scoped attempt objects within 24 hours without deleting a referenced image. Race scheduled cleanup against a live claim and completion: it must leave the live claim alone, never assume ADMIN identity or create a ProductImage, and conditionally mark only abandoned work EXPIRED or recorded failed work FAILED. Crash and rerun cleanup with multiple workers; verify fencing, referenced-image protection, and the 24-hour deadline. Test an overwrite attempt on a reusable staging PUT and confirm the final object contains only bytes that were validated.
 
 Record test environment, test class discovery, latency data, and any unavailable dependency when reporting verification. This guide does not initiate implementation or create tasks.
+
+## Draft version 1 integration
+
+See [integration decisions](../draft-version-1.md) for the shared bucket, storage configuration, CORS and deferred product-upload scope that supersede the earlier handoff assumptions.

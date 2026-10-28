@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration(proxyBeanMethods = false)
+@org.springframework.context.annotation.Import(SharedCorsConfiguration.class)
 public class CatalogSecurityConfiguration {
 
 	@Bean
@@ -16,6 +17,7 @@ public class CatalogSecurityConfiguration {
 			CatalogSecurityProblemHandler problemHandler) throws Exception {
 		http
 			.securityMatcher("/api/products", "/api/products/**")
+			.cors(org.springframework.security.config.Customizer.withDefaults())
 			// The planned catalog API uses Bearer credentials, not cookie authentication.
 			.csrf(csrf -> csrf.ignoringRequestMatchers("/api/products/**"))
 			.authorizeHttpRequests(authorize -> authorize

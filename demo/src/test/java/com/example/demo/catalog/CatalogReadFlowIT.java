@@ -49,7 +49,7 @@ class CatalogReadFlowIT {
 	private static final String BUCKET = "catalog-private-images";
 	private static final byte[] IMAGE_BYTES = "private product image bytes".getBytes(StandardCharsets.UTF_8);
 	private static final LocalStackContainer LOCALSTACK = new LocalStackContainer(
-			DockerImageName.parse("localstack/localstack:4.12.0"))
+			DockerImageName.parse("localstack/localstack:4.14.0"))
 			.withServices("s3")
 			.withEnv("S3_SKIP_SIGNATURE_VALIDATION", "0");
 	private static final String PREVIOUS_ACCESS_KEY = System.getProperty("aws.accessKeyId");
@@ -63,9 +63,12 @@ class CatalogReadFlowIT {
 
 	@DynamicPropertySource
 	static void storageProperties(DynamicPropertyRegistry registry) {
-		registry.add("catalog.images.bucket", () -> BUCKET);
-		registry.add("catalog.images.region", LOCALSTACK::getRegion);
-		registry.add("catalog.images.endpoint", () -> LOCALSTACK.getEndpoint().toString());
+		registry.add("storage.s3.bucket", () -> BUCKET);
+		registry.add("storage.s3.local-access-key", LOCALSTACK::getAccessKey);
+		registry.add("storage.s3.local-secret-key", LOCALSTACK::getSecretKey);
+		registry.add("storage.s3.path-style-access", () -> true);
+		registry.add("storage.s3.region", LOCALSTACK::getRegion);
+		registry.add("storage.s3.endpoint", () -> LOCALSTACK.getEndpoint().toString());
 	}
 
 	@AfterAll

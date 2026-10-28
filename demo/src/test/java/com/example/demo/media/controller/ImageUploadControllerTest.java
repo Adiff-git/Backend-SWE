@@ -18,10 +18,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class ImageUploadControllerTest extends MediaControllerTestSupport {
     @Test void create_shouldReturnCreatedWithoutProfilePermission() throws Exception {
-        when(media.createImageUpload(eq(8L), any())).thenReturn(new ImageUploadResponse(1L, "capability", Instant.now().plusSeconds(900)));
+        when(media.createImageUpload(eq(8L), any())).thenReturn(new ImageUploadResponse(java.util.UUID.fromString("00000000-0000-4000-8000-000000000001"), "capability", Instant.now().plusSeconds(900)));
         mvc.perform(post("/api/image-uploads").with(jwt()).contentType("application/json").content("{\"contentType\":\"image/png\"}"))
                 .andExpect(status().isCreated()).andExpect(header().string("Cache-Control", "no-store"))
-                .andExpect(jsonPath("id").value(1)).andExpect(jsonPath("uploadUrl").value("capability"));
+                .andExpect(jsonPath("id").value("00000000-0000-4000-8000-000000000001")).andExpect(jsonPath("uploadUrl").value("capability"));
     }
     @ParameterizedTest
     @ValueSource(strings = {"{}", "{\"contentType\":null}", "{\"contentType\":\"text/plain\"}",
@@ -32,6 +32,13 @@ class ImageUploadControllerTest extends MediaControllerTestSupport {
     @Test void create_shouldRejectMissingAuthentication() throws Exception {
         mvc.perform(post("/api/image-uploads").contentType("application/json").content("{\"contentType\":\"image/png\"}"))
                 .andExpect(status().isUnauthorized());
+    }
+    @ParameterizedTest
+    @ValueSource(strings = {"123", "1-1-1-1-1", "00000000000040008000000000000001", "ABCDEF00-0000-4000-8000-000000000001"})
+    void media_shouldRejectNoncanonicalUuidOnBothRoutes(String id) throws Exception {
+        mvc.perform(get("/api/image-uploads/" + id + "/download-url").with(jwt())).andExpect(status().isBadRequest());
+        mvc.perform(post("/api/image-uploads/" + id + "/complete").with(jwt())).andExpect(status().isBadRequest());
+        org.mockito.Mockito.verifyNoInteractions(media);
     }
     @Test void download_shouldRejectMalformedIdAndUnmatchedRoutes() throws Exception {
         mvc.perform(get("/api/image-uploads/not-a-number/download-url").with(jwt())).andExpect(status().isBadRequest());

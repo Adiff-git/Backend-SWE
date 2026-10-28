@@ -48,6 +48,10 @@ public class S3StorageConfiguration {
 
     @Bean(destroyMethod = "close")
     public S3Presigner s3Presigner(S3StorageProperties properties, AwsCredentialsProvider storageCredentials) {
+        return createPresigner(properties, storageCredentials);
+    }
+
+    public S3Presigner createPresigner(S3StorageProperties properties, AwsCredentialsProvider storageCredentials) {
         S3Presigner.Builder builder = S3Presigner.builder().region(Region.of(properties.getRegion()))
                 .credentialsProvider(storageCredentials)
                 .serviceConfiguration(S3Configuration.builder()

@@ -30,3 +30,7 @@ Upload-only portions were also removed from `S3ProductImageStorageTest.java`, `C
 - Rebuild upload-specific tests and verify real LocalStack PUT/copy/delete, conditional copy, signature expiry, anonymous direct-object denial, failure recovery, races, and ADMIN authorization. T051–T062 remain teammate-owned or pending as shown in [tasks](tasks.md). T063, T065, and T066 remain shared final integration gates.
 
 This checkout intentionally has no product upload service or active upload controller. Existing security denies those POST routes until verified integration is complete.
+
+## Draft version 1 integration
+
+See [integration decisions](../draft-version-1.md) for the shared bucket, storage configuration, CORS and deferred product-upload scope that supersede the earlier handoff assumptions.

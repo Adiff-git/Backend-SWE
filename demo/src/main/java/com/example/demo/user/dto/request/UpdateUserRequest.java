@@ -1,4 +1,6 @@
 package com.example.demo.user.dto.request;
+
+import java.util.UUID;
 import com.example.demo.user.enums.Gender;
 import com.example.demo.user.validator.CodePointLength;
 import com.example.demo.user.exception.BusinessValidationException;
@@ -17,7 +19,7 @@ public class UpdateUserRequest {
     private boolean usernamePresent;
     private boolean emailPresent;
     private boolean profileImagePresent;
-    private Long profileImageId;
+    private UUID profileImageId;
     private static String normalize(String value) {
         if(value==null) return null;
         String normalized=value.strip();
@@ -41,9 +43,9 @@ public class UpdateUserRequest {
     public void setProfileImageId(tools.jackson.databind.JsonNode value) {
         profileImagePresent=true;
         if(value==null || value.isNull()) { profileImageId=null; return; }
-        if(!value.isIntegralNumber() || !value.canConvertToLong() || value.asLong()<=0)
-            throw new BusinessValidationException("Image ID must be a positive integer");
-        profileImageId=value.asLong();
+        if(!value.isString() || !value.asString().matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))
+            throw new BusinessValidationException("Image ID must be a canonical UUID string");
+        profileImageId=UUID.fromString(value.asString());
     }
     @com.fasterxml.jackson.annotation.JsonAnySetter
     public void rejectUnknownProperty(String property, tools.jackson.databind.JsonNode value) {

@@ -34,6 +34,20 @@ class CatalogSecurityBaselineTest {
 	@Autowired
 	private MockMvc mvc;
 
+    @Test void sharedCorsAllowsArbitraryOriginsAndPreflightMethods() throws Exception {
+        mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options("/api/products")
+                .header("Origin", "https://any.example")
+                .header("Access-Control-Request-Method", "PATCH")
+                .header("Access-Control-Request-Headers", "X-Custom"))
+                .andExpect(status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.header()
+                        .string("Access-Control-Allow-Origin", "*"));
+        mvc.perform(get("/api/products").header("Origin", "https://another.example"))
+                .andExpect(status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.header()
+                        .string("Access-Control-Allow-Origin", "*"));
+    }
+
 	@Test
 	void anonymousCatalogReadsArePermitted() throws Exception {
 		mvc.perform(get("/api/products")).andExpect(status().isOk());

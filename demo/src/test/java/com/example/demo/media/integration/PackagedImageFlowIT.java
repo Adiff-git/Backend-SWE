@@ -82,7 +82,7 @@ class PackagedImageFlowIT extends MediaInfrastructureTestSupport {
                         .header("Content-Type", type).PUT(HttpRequest.BodyPublishers.ofByteArray(bytes)).build(),
                         HttpResponse.BodyHandlers.discarding()).statusCode()).isEqualTo(200);
                 HttpResponse<String> complete = browser.send(HttpRequest.newBuilder(base.resolve("/api/image-uploads/"
-                        + upload.get("id").asLong() + "/complete")).header("Authorization", token)
+                        + upload.get("id").asString() + "/complete")).header("Authorization", token)
                         .POST(HttpRequest.BodyPublishers.noBody()).build(), HttpResponse.BodyHandlers.ofString());
                 assertThat(complete.statusCode()).isEqualTo(200);
                 URI download = URI.create(json.readTree(complete.body()).get("finalUrl").asString());

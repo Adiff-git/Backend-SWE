@@ -58,7 +58,7 @@ public class MediaCommandServiceImpl implements MediaCommandService {
     }
 
     @Override @Transactional
-    public ImageCompletionOutcome complete(Long actorId, Long imageId) {
+    public ImageCompletionOutcome complete(Long actorId, UUID imageId) {
         requireActor(actorId);
         validator.validateId(imageId);
         ImageUpload image = repository.findByIdAndOwnerUserId(imageId, actorId).orElseThrow(ImageUploadNotFoundException::new);

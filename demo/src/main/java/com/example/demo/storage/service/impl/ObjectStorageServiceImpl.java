@@ -39,6 +39,8 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
     private final S3Presigner presigner;
     private final S3StorageProperties properties;
     private final Clock clock;
+    private final software.amazon.awssdk.auth.credentials.AwsCredentialsProvider storageCredentials;
+    private final com.example.demo.storage.config.S3StorageConfiguration storageConfiguration;
 
     @Override public PreparedUpload prepareUpload(String key, String contentType, Instant deadline) {
         return available(() -> {
@@ -108,6 +110,22 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
                             .getObjectRequest(GetObjectRequest.builder().bucket(properties.getBucket()).key(key).build()).build());
             if (!signed.isBrowserExecutable()) throw new StorageUnavailableException();
             return signed.url().toString();
+        });
+    }
+
+    @Override public com.example.demo.storage.service.PreparedDownloadSigner prepareDownloadSigner(Duration lifetime) {
+        return available(() -> {
+            var credentials = software.amazon.awssdk.auth.credentials.StaticCredentialsProvider.create(
+                    storageCredentials.resolveCredentials());
+            S3Presigner prepared = storageConfiguration.createPresigner(properties, credentials);
+            return new com.example.demo.storage.service.PreparedDownloadSigner() {
+                @Override public String sign(String key) {
+                    return available(() -> prepared.presignGetObject(GetObjectPresignRequest.builder()
+                            .signatureDuration(lifetime).getObjectRequest(request -> request
+                                    .bucket(properties.getBucket()).key(key)).build()).url().toExternalForm());
+                }
+                @Override public void close() { prepared.close(); }
+            };
         });
     }
 

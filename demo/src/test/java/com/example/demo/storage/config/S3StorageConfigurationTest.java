@@ -32,11 +32,18 @@ class S3StorageConfigurationTest {
             com.example.demo.storage.service.impl.ObjectStorageServiceImpl storage =
                     new com.example.demo.storage.service.impl.ObjectStorageServiceImpl(
                             org.mockito.Mockito.mock(software.amazon.awssdk.services.s3.S3Client.class), presigner,
-                            properties, Clock.fixed(now, ZoneOffset.UTC));
+                            properties, Clock.fixed(now, ZoneOffset.UTC), configuration.storageCredentials(properties, environment), configuration);
             com.example.demo.storage.dto.response.PreparedUpload signed = storage.prepareUpload("staging/key", "image/png", now.plusSeconds(900));
             java.util.Map<String, String> query = java.util.Arrays.stream(URI.create(signed.getUrl()).getRawQuery().split("&"))
                     .map(value -> value.split("=", 2)).collect(java.util.stream.Collectors.toMap(value -> value[0], value -> value[1]));
             assertThat(query.get("X-Amz-Expires")).isEqualTo("900");
+            String download = storage.prepareDownload("images/final", properties.getDownloadUrlLifetime());
+            assertThat(URI.create(download).getRawQuery()).contains("X-Amz-Expires=300&");
+            try (var signer = storage.prepareDownloadSigner(properties.getDownloadUrlLifetime())) {
+                URI prepared = URI.create(signer.sign("images/catalog"));
+                assertThat(prepared.getPath()).isEqualTo("/test-images/images/catalog");
+                assertThat(prepared.getRawQuery()).contains("X-Amz-Expires=300&");
+            }
             Instant signingTime = java.time.LocalDateTime.parse(query.get("X-Amz-Date"),
                     java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'")).toInstant(ZoneOffset.UTC);
             assertThat(signed.getExpiresAt()).isEqualTo(signingTime.plusSeconds(900));

@@ -9,6 +9,7 @@ import html
 import json
 import re
 import sqlite3
+from contextlib import closing
 import sys
 import unicodedata
 import uuid
@@ -260,7 +261,7 @@ def write_jsonl(path, records):
 
 def run(input_db, output_dir, dry_run=False):
     uri = input_db.resolve().as_uri() + "?mode=ro"
-    with sqlite3.connect(uri, uri=True) as db:
+    with closing(sqlite3.connect(uri, uri=True)) as db:
         db.execute("PRAGMA query_only=ON")
         columns = {row[1] for row in db.execute("PRAGMA table_info(products)")}
         if not EXPECTED_COLUMNS <= columns:

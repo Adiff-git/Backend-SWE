@@ -41,7 +41,7 @@ import tools.jackson.databind.ObjectMapper;
 		"spring.jpa.properties.hibernate.generate_statistics=true",
 		"logging.level.org.hibernate.stat=OFF"
 })
-@Import(CatalogPublicReadPerformanceIT.PerformanceStorageConfiguration.class)
+
 class CatalogPublicReadPerformanceIT {
 
 	private static final int PUBLISHED_COUNT = 1_000;
@@ -219,13 +219,4 @@ class CatalogPublicReadPerformanceIT {
 	private record SeededCatalog(List<UUID> publishedIds, List<UUID> imageBearingIds) {
 	}
 
-	@TestConfiguration(proxyBeanMethods = false)
-	static class PerformanceStorageConfiguration {
-		@Bean
-		@Primary
-		ProductImageStorage performanceImageStorage() {
-			return new S3ProductImageStorage("catalog-images", "us-east-1", "http://localhost:4566",
-					StaticCredentialsProvider.create(AwsBasicCredentials.create("performance-test", "performance-test")));
-		}
-	}
 }

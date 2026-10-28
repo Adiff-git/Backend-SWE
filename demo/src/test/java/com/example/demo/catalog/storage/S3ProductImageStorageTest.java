@@ -1,37 +1,30 @@
 package com.example.demo.catalog.storage;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.example.demo.catalog.exception.CatalogStorageUnavailableException;
-import com.example.demo.catalog.storage.ProductImageStorage.PreparedReadSigner;
-import java.net.URI;
+import com.example.demo.storage.config.S3StorageProperties;
+import com.example.demo.storage.exception.StorageUnavailableException;
+import com.example.demo.storage.service.ObjectStorageService;
+import com.example.demo.storage.service.PreparedDownloadSigner;
+import java.time.Duration;
 import org.junit.jupiter.api.Test;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class S3ProductImageStorageTest {
-
-	@Test
-	void signsPrivateLocalStackObjectForExactlyFiveMinutesWithoutStorageRequest() {
-		S3ProductImageStorage storage = new S3ProductImageStorage("catalog-images", "us-east-1",
-				"http://localhost:4566", StaticCredentialsProvider.create(
-						AwsBasicCredentials.create("test-key", "test-secret")));
-		try (PreparedReadSigner signer = storage.prepareReadSigner()) {
-			URI url = URI.create(signer.signReadUrl("final/private-object"));
-			assertThat(url.getHost()).isEqualTo("localhost");
-			assertThat(url.getPath()).isEqualTo("/catalog-images/final/private-object");
-			assertThat(url.getRawQuery()).contains("X-Amz-Expires=300", "X-Amz-Signature=");
-		}
-	}
-
-	@Test
-	void missingPrivateBucketFailsClosed() {
-		S3ProductImageStorage storage = new S3ProductImageStorage("", "us-east-1", "",
-				StaticCredentialsProvider.create(AwsBasicCredentials.create("test", "test")));
-		assertThatThrownBy(storage::prepareReadSigner)
-				.isInstanceOf(CatalogStorageUnavailableException.class);
-	}
-
+    @Test void delegatesToSharedStorageWithFiveMinuteLifetimeAndClosesPreparedSigner() {
+        ObjectStorageService shared = mock(ObjectStorageService.class);
+        PreparedDownloadSigner prepared = mock(PreparedDownloadSigner.class);
+        when(shared.prepareDownloadSigner(Duration.ofSeconds(300))).thenReturn(prepared);
+        when(prepared.sign("images/final")).thenReturn("signed-url");
+        try (var signer = new S3ProductImageStorage(shared, new S3StorageProperties()).prepareReadSigner()) {
+            assertThat(signer.signReadUrl("images/final")).isEqualTo("signed-url");
+        }
+        verify(prepared).close();
+    }
+    @Test void translatesSharedStorageFailureWithoutLeakingDetails() {
+        ObjectStorageService shared = mock(ObjectStorageService.class);
+        when(shared.prepareDownloadSigner(any())).thenThrow(new StorageUnavailableException());
+        assertThatThrownBy(() -> new S3ProductImageStorage(shared, new S3StorageProperties()).prepareReadSigner())
+                .isInstanceOf(CatalogStorageUnavailableException.class);
+    }
 }

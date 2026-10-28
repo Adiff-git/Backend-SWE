@@ -91,8 +91,8 @@ Developers can reproduce the browser workflow without production credentials.
 - **FR-011**: Delete staging only after database commit. Cleanup failure cannot turn committed success into failure. Repeated completed operations return the original ID and newly generated viewing access without processing/copying staging again.
 - **FR-012**: Store stable IDs/keys, never presigned URLs. Owner renewal and authorized profile reads generate temporary viewing access without reuploading.
 - **FR-013**: Attach only caller-owned COMPLETED images with valid nonempty finalKey and available final content. Reject the whole profile update on invalid selection.
-- **FR-014**: Preserve existing profileImageId presence rules: omitted preserves, null clears, valid positive Long replaces. Preserve all unrelated profile update semantics. Reference removal/replacement does not delete objects.
-- **FR-015**: Private and limited-public profile responses expose profileImageId as Long/null and add profileImageUrl as temporary URL/null; both null when absent. Existing authenticated public-profile visibility permits viewing the attached avatar, never generic foreign-image renewal or attachment.
+- **FR-014**: Preserve existing profileImageId presence rules: omitted preserves, null clears, valid canonical UUID replaces. Preserve all unrelated profile update semantics. Reference removal/replacement does not delete objects.
+- **FR-015**: Private and limited-public profile responses expose profileImageId as UUID/null and add profileImageUrl as temporary URL/null; both null when absent. Existing authenticated public-profile visibility permits viewing the attached avatar, never generic foreign-image renewal or attachment.
 - **FR-016**: Use domain-specific exceptions under the common application base and existing ApiError/ProblemDetail format and security handlers. Preserve timestamp/message/path/fieldErrors extensions and safe errors.
 - **FR-017**: Enforce failure/retry behavior below. Database rollback never implies reversal of storage copies; failures must not falsely report publication.
 - **FR-018**: Preserve header-only authentication. No cookie-specific CSRF token workflow applies under this transport; do not introduce global CSRF changes. Reassess protection if transport changes. Signed storage requests require no application JWT.
@@ -106,7 +106,7 @@ Developers can reproduce the browser workflow without production credentials.
 
 | Field | Contract |
 | --- | --- |
-| id | Generated immutable Long identifier |
+| id | Generated immutable UUID identifier |
 | ownerUserId | Required immutable trusted reference to existing user |
 | stagingKey | Required unique, maximum 512 characters |
 | finalKey | Nullable before completion; unique when present, maximum 512 characters |
@@ -123,14 +123,14 @@ Developers can reproduce the browser workflow without production credentials.
 
 | Operation | Request | Success |
 | --- | --- | --- |
-| POST /api/image-uploads | JSON {"contentType":"image/jpeg"} | 201 {"id":123,"uploadUrl":"temporary capability","expiresAt":"2026-10-27T10:00:00Z"} |
+| POST /api/image-uploads | JSON {"contentType":"image/jpeg"} | 201 {"id":"00000000-0000-4000-8000-000000000001","uploadUrl":"temporary capability","expiresAt":"2026-10-27T10:00:00Z"} |
 | Direct storage PUT | Raw bytes to uploadUrl with required Content-Type, no multipart wrapper or application JWT | Storage success permits completion; does not complete the record |
-| POST /api/image-uploads/{imageId}/complete | No body; identity from Bearer token | 200 {"id":123,"finalUrl":"temporary capability"} |
-| GET /api/image-uploads/{imageId}/download-url | No body; owned completed image | 200 {"id":123,"finalUrl":"temporary capability"} |
-| Existing PUT /api/me | Existing contract plus omitted/null/positive Long profileImageId | Existing 200 response plus image ID/URL |
+| POST /api/image-uploads/{imageId}/complete | No body; identity from Bearer token | 200 {"id":"00000000-0000-4000-8000-000000000001","finalUrl":"temporary capability"} |
+| GET /api/image-uploads/{imageId}/download-url | No body; owned completed image | 200 {"id":"00000000-0000-4000-8000-000000000001","finalUrl":"temporary capability"} |
+| Existing PUT /api/me | Existing contract plus omitted/null/canonical UUID profileImageId | Existing 200 response plus image ID/URL |
 | Existing GET /api/me and GET /api/users/{id} | Existing permission/privacy rules | Existing 200 profile response plus image ID/URL |
 
-Creation requires a JSON object; unknown fields including owner/key/bucket parameters are 400. Renewal is a proposed owner-only contract needed for standalone image reuse. Upload URLs expire 15 minutes after creation; download URLs expire 15 minutes after each issuance, potentially earlier if signing credentials cease to be valid.
+Creation requires a JSON object; unknown fields including owner/key/bucket parameters are 400. Renewal is a proposed owner-only contract needed for standalone image reuse. Upload URLs expire 15 minutes after creation; download URLs expire 5 minutes after each issuance, potentially earlier if signing credentials cease to be valid.
 
 ### Failure and Retry Behavior
 
@@ -158,7 +158,7 @@ These requested engineering constraints are separate from business outcomes and 
 - Use existing demo/ module and domain-oriented layers under com.example.demo. Separate storage infrastructure from media lifecycle/ownership. Controllers delegate; service implementations have interfaces; validators enforce business rules; repositories persist; converters map prepared data without queries/storage calls.
 - Cross-domain consumers use service interfaces, never media repositories; keep dependencies acyclic. Avoid unnecessary factories, strategy layers, asynchronous jobs and extra infrastructure.
 - PostgreSQL stores metadata/keys/references; S3 stores bytes. Use Instant and TIMESTAMPTZ for absolute timestamps and new Flyway migrations preserving existing data/IDs.
-- Configure region, bucket, optional endpoint override, optional dummy local credentials, path-style access, and positive upload/download durations with explicit units. Upload lifetime is 15 minutes (900 seconds); download lifetime is 15 minutes (900 seconds). Each renewed download URL receives a fresh lifetime; renewal never extends a pending upload deadline.
+- Configure region, bucket, optional endpoint override, optional dummy local credentials, path-style access, and positive upload/download durations with explicit units. Upload lifetime is 15 minutes (900 seconds); download lifetime is 5 minutes (300 seconds). Each renewed download URL receives a fresh lifetime; renewal never extends a pending upload deadline.
 - LocalStack uses Docker Compose, documented bucket initialization and optional data persistence. Explain Docker-internal versus browser-accessible hostnames. Sign for the intended client's reachable endpoint; never rewrite the hostname after signing.
 - Production uses private AWS S3 and SDK default credentials, including IAM roles; no hardcoded credentials or secrets exposed to browsers.
 - Storage bucket CORS separately permits required browser PUT/GET and Content-Type for explicit origins; retain backend security/CORS. Never make the bucket public to fix CORS.
@@ -195,7 +195,7 @@ Inspected constitution, specifications 001/002, current authentication configura
 
 - Existing header Bearer JWT authentication checks current sessions/accounts/authorities. MANAGE_USER_PROFILE and MANAGE_ADDRESS exist; no media permission exists. Unlisted endpoints are denied, so media routes require explicit authorization.
 - Existing security chains disable CSRF under stateless header-only transport; this feature introduces no global security weakening or cookie transport.
-- User has Long ID but no avatar association. UpdateUserRequest rejects non-null profileImageId with MediaUnavailableException; responses use null-only Void placeholders. This feature replaces that deliberate unavailable boundary with Long references while preserving feature 001 omitted/null semantics.
+- User has Long ID but no avatar association. UpdateUserRequest rejects non-null profileImageId with MediaUnavailableException; responses use null-only Void placeholders. This feature replaces that deliberate unavailable boundary with UUID references while preserving feature 001 omitted/null semantics.
 - Only user profiles are existing consumers. No media/storage domain, S3 dependencies, LocalStack setup or established WebP decoder was found. These are future delivery dependencies, not completed capabilities.
 - ApiError extends ProblemDetail, satisfying the requested existing error format and constitution. Tests use disposable PostgreSQL JDBC Testcontainers; Maven has Failsafe configuration. No application tests were run for document-only work.
 - Attached-avatar visibility follows existing authenticated limited-public profiles. Standalone renewal remains owner-only; recipients of signed capabilities can use them until expiry.
@@ -204,14 +204,14 @@ Inspected constitution, specifications 001/002, current authentication configura
 ### Confirmed Decisions (2026-10-27)
 
 - **Q1 — Media authorization**: Authentication alone permits upload creation; authentication plus ownership permits completion and standalone download-URL renewal. No media permission is introduced, and MANAGE_USER_PROFILE is not required for those operations. Existing profile read/edit permissions remain unchanged.
-- **Q2 — URL lifetimes**: Upload and download URLs each have a configured lifetime of 15 minutes (900 seconds). The upload deadline equals creation plus that lifetime; completion at that instant is expired. Download renewal starts a fresh 15-minute lifetime without changing lifecycle or upload deadlines.
+- **Q2 — URL lifetimes**: Upload URLs have a configured lifetime of 15 minutes (900 seconds); download URLs have a lifetime of 5 minutes (300 seconds). The upload deadline equals creation plus that lifetime; completion at that instant is expired. Download renewal starts a fresh 5-minute lifetime without changing lifecycle or upload deadlines.
 - **Q3 — Test scope**: Postpone the simultaneous-completion integration test. Retain the object-replacement-during-validation/promotion integration test. Implementation concurrency safeguards remain mandatory; test deferral does not establish verified simultaneous-completion behavior.
 
 ### Additional Acceptance Scenarios
 
 1. **Given** an eligible authenticated user lacking MANAGE_USER_PROFILE, **When** creating, completing or renewing their own upload, **Then** the operation is allowed if otherwise valid; editing their profile still returns 403 without that permission.
 2. **Given** a pending upload created at time T, **When** completion is attempted at T plus 900 seconds, **Then** 409 is returned and EXPIRED persists; completion strictly before that instant may succeed.
-3. **Given** a completed image, **When** download access is issued at time D, **Then** its configured expiry is D plus 900 seconds; a later renewal provides a new expiry without reuploading.
+3. **Given** a completed image, **When** download access is issued at time D, **Then** its configured expiry is D plus 300 seconds; a later renewal provides a new expiry without reuploading.
 4. **Given** staging content replaced with different bytes between validation and promotion, **When** the retained integration test runs, **Then** completion returns 409, does not commit COMPLETED and does not publish replacement bytes as validated content.
 
 ### Content Identity Decision (2026-10-27)
@@ -228,3 +228,7 @@ Original feature decisions are resolved. Implementation found a local-environmen
 ### Latest user override ? 2026-10-27
 
 Allow-all API CORS (origins/methods/headers), retaining Bearer JWT authorization and allowCredentials=false, supersedes earlier explicit-origin restrictions. Bucket initialization is deferred; Compose must not reference ignored docker/ files or require an initialized bucket for health. docker/ and the fixture media README are excluded from Git. Future bucket CORS allows all origins/headers and all S3-supported methods while the bucket remains private. See research.md for the decision and fixture attribution. Existing persistence work remains deferred/open.
+
+### Catalog contract alignment (2026-10-28)
+
+Image upload IDs and profile image references use canonical lowercase hyphenated UUID strings. User IDs remain Long. Upload sessions and PUT URLs last 900 seconds; each signed GET lasts 300 seconds. The shared bucket and storage implementation remain authoritative for the server. This change does not introduce product upload/gallery behavior or replace user ownership rules. Migrations are V4-V9 because no database has been deployed.

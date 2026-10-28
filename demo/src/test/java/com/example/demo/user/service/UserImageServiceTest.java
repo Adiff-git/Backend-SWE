@@ -26,9 +26,9 @@ class UserImageServiceTest {
         User user = new User();
         user.setId(1L);
         when(repository.findForUpdate(1L)).thenReturn(Optional.of(user));
-        when(media.validateImageForAttachment(1L, 2L)).thenThrow(new ImageUploadNotFoundException());
+        when(media.validateImageForAttachment(1L, java.util.UUID.fromString("00000000-0000-4000-8000-000000000002"))).thenThrow(new ImageUploadNotFoundException());
         UserServiceImpl service = new UserServiceImpl(repository, new UserConverter(), new UserValidator(), mock(EntityManager.class), 5000, media);
-        UpdateUserRequest request = JsonMapper.builder().build().readValue("{\"displayName\":\"Rejected\",\"profileImageId\":2}", UpdateUserRequest.class);
+        UpdateUserRequest request = JsonMapper.builder().build().readValue("{\"displayName\":\"Rejected\",\"profileImageId\":\"00000000-0000-4000-8000-000000000002\"}", UpdateUserRequest.class);
         assertThatThrownBy(() -> service.updateUser(1L, request)).isInstanceOf(ImageUploadNotFoundException.class);
         assertThat(user.getDisplayName()).isNull();
     }
@@ -37,7 +37,7 @@ class UserImageServiceTest {
         UserRepository repository = mock(UserRepository.class);
         MediaService media = mock(MediaService.class);
         User user = new User();
-        user.setProfileImageId(2L);
+        user.setProfileImageId(java.util.UUID.fromString("00000000-0000-4000-8000-000000000002"));
         when(repository.findForUpdate(1L)).thenReturn(Optional.of(user));
         UserServiceImpl service = new UserServiceImpl(repository, new UserConverter(), new UserValidator(), mock(EntityManager.class), 5000, media);
         service.updateUser(1L, JsonMapper.builder().build().readValue("{\"profileImageId\":null}", UpdateUserRequest.class));
