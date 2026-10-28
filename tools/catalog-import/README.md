@@ -107,3 +107,7 @@ cd demo && mvn -B -ntp clean verify
 The importer test suite starts a disposable PostgreSQL 17 Testcontainers instance, applies the repository's Flyway V1–V9 SQL with Flyway, and uses **synthetic, explicitly approved** rows for write tests. It checks real FK and deferred constraints, history checksums, read-only preview, transactional rollback, DRAFT defaults, explicit publication, conflicts and idempotency. The crawler-derived pilot remains unapproved.
 
 Known limits: one approved variant per source product; no product-image import; no automatic reconciliation of changed source URLs, source IDs, prices, category decisions or previously imported product fields; no production target; no automatic approval. The source dataset and normalization summary may change after another crawl, so revalidate a new snapshot before preparing another review sheet.
+
+## Portable frontend seed
+
+See [FRONTEND_SEED.md](FRONTEND_SEED.md) for the versioned Catalog-only snapshot, fresh Docker setup, checksum validation, transactional loading and seed regression tests. The original crawler approval manifest remains unchanged. The generated seed remains under ignored `output/` pending distribution review.
