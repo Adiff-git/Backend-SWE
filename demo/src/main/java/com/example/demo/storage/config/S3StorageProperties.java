@@ -22,7 +22,7 @@ public class S3StorageProperties {
     private String localAccessKey;
     private String localSecretKey;
     @NotNull private Duration uploadUrlLifetime = Duration.ofSeconds(900);
-    @NotNull private Duration downloadUrlLifetime = Duration.ofSeconds(900);
+    @NotNull private Duration downloadUrlLifetime = Duration.ofSeconds(300);
     @NotNull private Duration apiCallTimeout = Duration.ofSeconds(60);
     @NotNull private Duration apiCallAttemptTimeout = Duration.ofSeconds(30);
 
@@ -36,8 +36,8 @@ public class S3StorageProperties {
         if (apiCallAttemptTimeout.compareTo(apiCallTimeout) > 0)
             throw new IllegalArgumentException("Attempt timeout exceeds total timeout");
         if (!Duration.ofSeconds(900).equals(uploadUrlLifetime)
-                || !Duration.ofSeconds(900).equals(downloadUrlLifetime))
-            throw new IllegalArgumentException("Approved capability lifetimes are 900 seconds");
+                || !Duration.ofSeconds(300).equals(downloadUrlLifetime))
+            throw new IllegalArgumentException("Upload lifetime must be 900 seconds and download lifetime 300 seconds");
         boolean hasKey = localAccessKey != null && !localAccessKey.isBlank();
         boolean hasSecret = localSecretKey != null && !localSecretKey.isBlank();
         if (hasKey != hasSecret || (hasKey && !localCredentialsAllowed))

@@ -1,5 +1,7 @@
 package com.example.demo.media.entity;
 
+import java.util.UUID;
+
 import com.example.demo.media.enums.ImageUploadStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ImageUpload {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.UUID) private UUID id;
     @Column(nullable = false, updatable = false) private Long ownerUserId;
     @Column(nullable = false, unique = true, length = 512, updatable = false) private String stagingKey;
     @Column(unique = true, length = 512) private String finalKey;

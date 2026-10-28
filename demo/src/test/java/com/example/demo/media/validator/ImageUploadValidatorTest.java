@@ -14,8 +14,7 @@ class ImageUploadValidatorTest {
     void validateType_shouldRejectMissingOrUnsupportedDeclaration(String type) {
         assertThatThrownBy(() -> validator.validateType(type)).isInstanceOf(InvalidImageRequestException.class);
     }
-    @Test void validateId_shouldRejectMissingAndNonpositiveIds() {
-        for (Long id : new Long[] {null, 0L, -1L})
-            assertThatThrownBy(() -> validator.validateId(id)).isInstanceOf(InvalidImageRequestException.class);
+    @Test void validateId_shouldRejectMissingId() {
+        assertThatThrownBy(() -> validator.validateId(null)).isInstanceOf(InvalidImageRequestException.class);
     }
 }

@@ -6,21 +6,21 @@ All backend routes use existing header `Authorization: Bearer <token>`, current 
 
 | Method/path | Body | Success | Authorization |
 | --- | --- | --- | --- |
-| POST /api/image-uploads | Required JSON object with exactly contentType | 201: id (Long), uploadUrl (String), expiresAt (UTC absolute timestamp) | Authenticated eligible caller; no permission requirement |
+| POST /api/image-uploads | Required JSON object with exactly contentType | 201: id (UUID string), uploadUrl (String), expiresAt (UTC absolute timestamp) | Authenticated eligible caller; no permission requirement |
 | POST /api/image-uploads/{imageId}/complete | No body | 200: id, finalUrl | Authenticated owner only |
 | GET /api/image-uploads/{imageId}/download-url | No body | 200: id, finalUrl | Authenticated owner of COMPLETED image only |
 
-Creation accepts exact `image/jpeg`, `image/png`, `image/webp`. Missing/null/blank/other types and unknown fields return 400. IDs are positive Long; invalid shape/range returns 400. Authentication is checked before any resource details. A valid caller without MANAGE_USER_PROFILE can perform all otherwise valid owned-media operations.
+Creation accepts exact `image/jpeg`, `image/png`, `image/webp`. Missing/null/blank/other types and unknown fields return 400. Image IDs are canonical lowercase hyphenated UUID strings; malformed or noncanonical values returns 400. Authentication is checked before any resource details. A valid caller without MANAGE_USER_PROFILE can perform all otherwise valid owned-media operations.
 
-Example creation request: `{"contentType":"image/png"}`. Response shape: `{"id":123,"uploadUrl":"<signed PUT>","expiresAt":"2026-10-27T10:00:00Z"}`. Complete/renew response shape: `{"id":123,"finalUrl":"<signed GET>"}`. Neither response exposes bucket/key/credentials/owner details. Upload expires 900 seconds after creation; each download capability is issued for 900 seconds and may cease to work sooner if signing credentials expire.
+Example creation request: `{"contentType":"image/png"}`. Response shape: `{"id":"00000000-0000-4000-8000-000000000001","uploadUrl":"<signed PUT>","expiresAt":"2026-10-27T10:00:00Z"}`. Complete/renew response shape: `{"id":"00000000-0000-4000-8000-000000000001","finalUrl":"<signed GET>"}`. Neither response exposes bucket/key/credentials/owner details. Upload expires 900 seconds after creation; each download capability is issued for 300 seconds and may cease to work sooner if signing credentials expire.
 
 Browser PUT uses raw file bytes, the required Content-Type and the untouched URL. It does not send multipart form data or the application's Authorization header. Browser GET requires no extra private headers; configure/test presigner browser compatibility. Storage failures use provider responses directly, not the backend's ApiError. Backend completion remains necessary after a successful PUT.
 
 ## Profile integration
 
-Existing PUT /api/me retains MANAGE_USER_PROFILE and selective-update semantics. `profileImageId` omitted preserves, null clears, positive integral Long selects an owned completed image. Missing/foreign selection: 404; pending/expired: 409; malformed: 400; unavailable final object: 503. Entire update is atomic, including other profile fields.
+Existing PUT /api/me retains MANAGE_USER_PROFILE and selective-update semantics. `profileImageId` omitted preserves, null clears, canonical lowercase UUID string selects an owned completed image. Missing/foreign selection: 404; pending/expired: 409; malformed: 400; unavailable final object: 503. Entire update is atomic, including other profile fields.
 
-GET /api/me retains its profile permission. GET /api/users/{id} remains authenticated-only with its existing limited privacy allowlist. Responses change profileImageId from null-only placeholder to Long/null and add profileImageUrl as temporary URL/null. Both null when absent. An authenticated profile viewer may see another user's attached avatar but cannot invoke owner-only renewal for that image. Removing references never deletes objects. URL-generation failure during a profile write must roll back that write; retry is an ordinary repeat of the profile update.
+GET /api/me retains its profile permission. GET /api/users/{id} remains authenticated-only with its existing limited privacy allowlist. Responses change profileImageId from null-only placeholder to UUID/null and add profileImageUrl as temporary URL/null. Both null when absent. An authenticated profile viewer may see another user's attached avatar but cannot invoke owner-only renewal for that image. Removing references never deletes objects. URL-generation failure during a profile write must roll back that write; retry is an ordinary repeat of the profile update.
 
 ## Backend failures
 

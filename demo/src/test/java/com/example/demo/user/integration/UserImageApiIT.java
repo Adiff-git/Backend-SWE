@@ -38,25 +38,25 @@ class UserImageApiIT extends SeededMediaTestSupport {
                 .andExpect(status().isCreated()).andReturn().getResponse().getHeader("Authorization");
     }
     private Long id(String name) { return users.findByUsernameIdentifier(name).orElseThrow().getId(); }
-    private Long completed(Long actor) {
+    private java.util.UUID completed(Long actor) {
         ImageUploadResponse upload = prepare(actor);
         stage(upload);
         return media.completeImageUpload(actor, upload.getId()).getId();
     }
-    private String select(Long image) { return "{\"profileImageId\":" + image + "}"; }
+    private String select(java.util.UUID image) { return "{\"profileImageId\":\"" + image + "\"}"; }
 
     @Test void update_shouldPreserveClearAndReplaceWithoutDeletingObjects() throws Exception {
         String token = register("Owner");
         Long actor = id("Owner");
-        Long first = completed(actor);
+        java.util.UUID first = completed(actor);
         mvc.perform(put("/api/me").header("Authorization", token).contentType("application/json").content(select(first)))
-                .andExpect(status().isOk()).andExpect(jsonPath("profileImageId").value(first))
+                .andExpect(status().isOk()).andExpect(jsonPath("profileImageId").value(first.toString()))
                 .andExpect(jsonPath("profileImageUrl").isString()).andExpect(header().string("Cache-Control", "no-store"));
         mvc.perform(put("/api/me").header("Authorization", token).contentType("application/json").content("{\"displayName\":\"Updated\"}"))
-                .andExpect(status().isOk()).andExpect(jsonPath("profileImageId").value(first));
-        Long second = completed(actor);
+                .andExpect(status().isOk()).andExpect(jsonPath("profileImageId").value(first.toString()));
+        java.util.UUID second = completed(actor);
         mvc.perform(put("/api/me").header("Authorization", token).contentType("application/json").content(select(second)))
-                .andExpect(status().isOk()).andExpect(jsonPath("profileImageId").value(second));
+                .andExpect(status().isOk()).andExpect(jsonPath("profileImageId").value(second.toString()));
         mvc.perform(put("/api/me").header("Authorization", token).contentType("application/json").content("{\"profileImageId\":null}"))
                 .andExpect(status().isOk()).andExpect(jsonPath("profileImageId").isEmpty()).andExpect(jsonPath("profileImageUrl").isEmpty());
         assertThat(s3.listObjectsV2(request -> request.bucket(bucket).prefix("images/")).contents()).hasSize(2);
@@ -65,14 +65,14 @@ class UserImageApiIT extends SeededMediaTestSupport {
     @Test void profile_shouldPermitAttachedViewingButDenyForeignRenewalAndAttachment() throws Exception {
         String ownerToken = register("Owner");
         Long owner = id("Owner");
-        Long image = completed(owner);
+        java.util.UUID image = completed(owner);
         mvc.perform(put("/api/me").header("Authorization", ownerToken).contentType("application/json").content(select(image))).andExpect(status().isOk());
         String viewer = register("Viewer");
         mvc.perform(get("/api/users/" + owner).header("Authorization", viewer)).andExpect(status().isOk())
                 .andExpect(jsonPath("profileImageUrl").isString()).andExpect(jsonPath("email").doesNotExist());
         mvc.perform(get("/api/image-uploads/" + image + "/download-url").header("Authorization", viewer)).andExpect(status().isNotFound());
         mvc.perform(put("/api/me").header("Authorization", viewer).contentType("application/json")
-                .content("{\"displayName\":\"MustRollback\",\"profileImageId\":" + image + "}"))
+                .content("{\"displayName\":\"MustRollback\",\"profileImageId\":\"" + image + "\"}"))
                 .andExpect(status().isNotFound());
         assertThat(users.findById(id("Viewer")).orElseThrow().getDisplayName()).isNull();
     }
@@ -82,12 +82,12 @@ class UserImageApiIT extends SeededMediaTestSupport {
         Long actor = id("Owner");
         ImageUploadResponse pending = prepare(actor);
         mvc.perform(put("/api/me").header("Authorization", token).contentType("application/json")
-                .content("{\"displayName\":\"Invalid\",\"profileImageId\":" + pending.getId() + "}"))
+                .content("{\"displayName\":\"Invalid\",\"profileImageId\":\"" + pending.getId() + "\"}"))
                 .andExpect(status().isConflict());
-        Long ready = completed(actor);
+        java.util.UUID ready = completed(actor);
         doThrow(new StorageUnavailableException()).when(storage).prepareDownload(any(), any());
         mvc.perform(put("/api/me").header("Authorization", token).contentType("application/json")
-                .content("{\"displayName\":\"Invalid\",\"profileImageId\":" + ready + "}"))
+                .content("{\"displayName\":\"Invalid\",\"profileImageId\":\"" + ready + "\"}"))
                 .andExpect(status().isServiceUnavailable());
         assertThat(users.findById(actor).orElseThrow().getDisplayName()).isNull();
         assertThat(users.findById(actor).orElseThrow().getProfileImageId()).isNull();

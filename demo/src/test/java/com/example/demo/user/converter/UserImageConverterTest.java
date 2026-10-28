@@ -11,9 +11,9 @@ class UserImageConverterTest {
         User user = new User();
         user.setId(1L);
         user.setEmail("private@example.com");
-        ImageAccessResponse prepared = new ImageAccessResponse(2L, "prepared-access");
+        ImageAccessResponse prepared = new ImageAccessResponse(java.util.UUID.fromString("00000000-0000-4000-8000-000000000002"), "prepared-access");
         com.example.demo.user.dto.response.PublicUserResponse result = new UserConverter().toPublic(user, prepared);
-        assertThat(result.getProfileImageId()).isEqualTo(2L);
+        assertThat(result.getProfileImageId()).isEqualTo(prepared.getId());
         assertThat(result.getProfileImageUrl()).isEqualTo("prepared-access");
     }
 }

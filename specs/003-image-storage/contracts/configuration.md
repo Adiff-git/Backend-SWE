@@ -11,7 +11,7 @@ Proposed property names are implementation targets, not existing settings. Valid
 | storage.s3.path-style-access | true | false unless deployment explicitly requires otherwise |
 | storage.s3.local-access-key / local-secret-key | Dummy test/test only, local profile | Must be absent; default SDK provider chain/IAM role |
 | storage.s3.upload-url-lifetime | 900s | 900s |
-| storage.s3.download-url-lifetime | 900s | 900s |
+| storage.s3.download-url-lifetime | 300s | 300s |
 | storage.s3.api-call-timeout | Proposed 60s | Explicit finite operational setting, initially 60s |
 | storage.s3.api-call-attempt-timeout | Proposed 30s | Explicit finite operational setting, initially 30s |
 

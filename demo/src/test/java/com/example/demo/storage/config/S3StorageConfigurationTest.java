@@ -37,6 +37,8 @@ class S3StorageConfigurationTest {
             java.util.Map<String, String> query = java.util.Arrays.stream(URI.create(signed.getUrl()).getRawQuery().split("&"))
                     .map(value -> value.split("=", 2)).collect(java.util.stream.Collectors.toMap(value -> value[0], value -> value[1]));
             assertThat(query.get("X-Amz-Expires")).isEqualTo("900");
+            String download = storage.prepareDownload("images/final", properties.getDownloadUrlLifetime());
+            assertThat(URI.create(download).getRawQuery()).contains("X-Amz-Expires=300&");
             Instant signingTime = java.time.LocalDateTime.parse(query.get("X-Amz-Date"),
                     java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'")).toInstant(ZoneOffset.UTC);
             assertThat(signed.getExpiresAt()).isEqualTo(signingTime.plusSeconds(900));

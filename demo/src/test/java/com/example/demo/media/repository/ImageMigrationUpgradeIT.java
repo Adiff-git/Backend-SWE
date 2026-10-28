@@ -13,12 +13,12 @@ class ImageMigrationUpgradeIT {
         try (PostgreSQLContainer<?> database = new PostgreSQLContainer<>("postgres:17-alpine")) {
             database.start();
             DriverManagerDataSource data = new DriverManagerDataSource(database.getJdbcUrl(), database.getUsername(), database.getPassword());
-            Flyway.configure().dataSource(data).target("4").load().migrate();
+            Flyway.configure().dataSource(data).target("7").load().migrate();
             JdbcTemplate jdbc = new JdbcTemplate(data);
             Long id = jdbc.queryForObject("INSERT INTO users(username,password,account_status,joined_at) VALUES ('Existing','encoded','ACTIVE',NOW()) RETURNING id", Long.class);
             Flyway.configure().dataSource(data).load().migrate();
             assertThat(jdbc.queryForObject("SELECT username FROM users WHERE id=?", String.class, id)).isEqualTo("Existing");
-            assertThat(jdbc.queryForObject("SELECT profile_image_id FROM users WHERE id=?", Long.class, id)).isNull();
+            assertThat(jdbc.queryForObject("SELECT profile_image_id FROM users WHERE id=?", java.util.UUID.class, id)).isNull();
         }
     }
 }

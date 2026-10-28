@@ -1,4 +1,6 @@
 package com.example.demo.user.dto.response;
+
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 @Getter @Setter
@@ -12,6 +14,6 @@ public class PrivateUserResponse {
     private com.example.demo.user.enums.Gender gender;
     private java.time.LocalDate dateOfBirth;
     private java.time.Instant joinedAt;
-    private Long profileImageId;
+    private UUID profileImageId;
     private String profileImageUrl;
 }

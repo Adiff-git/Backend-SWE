@@ -23,10 +23,10 @@ class ImageUploadFailureControllerTest extends MediaControllerTestSupport {
     }
     @ParameterizedTest @MethodSource("failures")
     void complete_shouldUseSafeProblemDetail(RuntimeException failure, int expected) throws Exception {
-        when(media.completeImageUpload(8L, 1L)).thenThrow(failure);
-        mvc.perform(post("/api/image-uploads/1/complete").with(jwt()))
+        when(media.completeImageUpload(8L, java.util.UUID.fromString("00000000-0000-4000-8000-000000000001"))).thenThrow(failure);
+        mvc.perform(post("/api/image-uploads/00000000-0000-4000-8000-000000000001/complete").with(jwt()))
                 .andExpect(status().is(expected)).andExpect(jsonPath("status").value(expected))
                 .andExpect(jsonPath("timestamp").exists()).andExpect(jsonPath("fieldErrors").exists())
-                .andExpect(jsonPath("path").value("/api/image-uploads/1/complete"));
+                .andExpect(jsonPath("path").value("/api/image-uploads/00000000-0000-4000-8000-000000000001/complete"));
     }
 }

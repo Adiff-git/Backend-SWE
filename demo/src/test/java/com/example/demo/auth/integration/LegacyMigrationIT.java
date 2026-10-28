@@ -10,7 +10,7 @@ class LegacyMigrationIT extends AuthPostgresTestSupport {
     @Test void migrate_shouldBackfillUserRoleWithoutChangingLegacyFields() {
         String schema="upgrade_"+UUID.randomUUID().toString().replace("-","");
         try {
-            Flyway.configure().dataSource(datasource).schemas(schema).defaultSchema(schema).target("2").load().migrate();
+            Flyway.configure().dataSource(datasource).schemas(schema).defaultSchema(schema).target("5").load().migrate();
             jdbc.update("INSERT INTO "+schema+".users(username,password,account_status,joined_at) VALUES ('Alice','existing-encoded-value','ACTIVE',CURRENT_TIMESTAMP)");
             Flyway.configure().dataSource(datasource).schemas(schema).defaultSchema(schema).load().migrate();
             assertThat(jdbc.queryForObject("SELECT password FROM "+schema+".users",String.class)).isEqualTo("existing-encoded-value");
@@ -24,7 +24,7 @@ class LegacyMigrationIT extends AuthPostgresTestSupport {
     @Test void migrate_shouldFailOnLegacyAtSignWithoutRenamingOrDeleting() {
         String schema="upgrade_"+UUID.randomUUID().toString().replace("-","");
         try {
-            Flyway.configure().dataSource(datasource).schemas(schema).defaultSchema(schema).target("2").load().migrate();
+            Flyway.configure().dataSource(datasource).schemas(schema).defaultSchema(schema).target("5").load().migrate();
             jdbc.update("INSERT INTO "+schema+".users(username,password,account_status,joined_at) VALUES ('bad@name','existing-encoded-value','ACTIVE',CURRENT_TIMESTAMP)");
             assertThatThrownBy(()->Flyway.configure().dataSource(datasource).schemas(schema).defaultSchema(schema).load().migrate()).isInstanceOf(org.flywaydb.core.api.FlywayException.class);
             assertThat(jdbc.queryForObject("SELECT username FROM "+schema+".users",String.class)).isEqualTo("bad@name");

@@ -99,3 +99,5 @@ Only this checklist changed. Existing requirements.md and all requirements/desig
 **32/32 requirements-quality criteria satisfied; zero unchecked items.** The user resolved CHK025: identity means the same validated byte content. spec.md FR-008 and Content Identity Decision now define identical-content, metadata-only and different-content outcomes, including conservative 409 on failed source conditions and no cryptographic/version assurance claim from ETag. Research, consistency/domain contracts, plan, tasks and quickstart are aligned. The historical 31/32 finding above is resolved.
 
 requirements.md and production code remain unchanged. No dependencies, migrations, databases, runtime tests or deployments changed; these markers confirm requirements quality only.
+
+> Contract update (2026-10-28): the earlier review predates catalog alignment. Current spec.md requires UUID image IDs, 900-second upload URLs and 300-second download URLs. Existing checklist completion markers are retained as review history.

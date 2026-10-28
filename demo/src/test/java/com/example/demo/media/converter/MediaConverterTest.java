@@ -14,6 +14,6 @@ class MediaConverterTest {
         assertThat(response.getExpiresAt()).isEqualTo(created.plusSeconds(900));
         assertThat(response.getUploadUrl()).isEqualTo("secret-url");
         assertThat(response.toString()).doesNotContain("secret-url");
-        assertThat(new MediaConverter().toAccess(1L, "secret-download").toString()).doesNotContain("secret-download");
+        assertThat(new MediaConverter().toAccess(java.util.UUID.fromString("00000000-0000-4000-8000-000000000001"), "secret-download").toString()).doesNotContain("secret-download");
     }
 }

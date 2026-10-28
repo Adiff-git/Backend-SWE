@@ -6,7 +6,7 @@
 
 ## Summary
 
-Implement authenticated direct-to-staging uploads, actual JPEG/PNG/WebP validation, conditional publication, durable owned image IDs and existing-profile avatar integration. Use a synchronous AWS SDK v2 adapter shared by LocalStack and AWS, optimistic lifecycle version checks and unique final keys per attempt. Persist expiration before returning its error; clean staging only after commit. Upload and download lifetimes are each 900 seconds. No new permission is required for media operations; profile operations retain their existing permissions.
+Implement authenticated direct-to-staging uploads, actual JPEG/PNG/WebP validation, conditional publication, durable owned image IDs and existing-profile avatar integration. Use a synchronous AWS SDK v2 adapter shared by LocalStack and AWS, optimistic lifecycle version checks and unique final keys per attempt. Persist expiration before returning its error; clean staging only after commit. Upload lifetime is 900 seconds and download lifetime is 300 seconds. No new permission is required for media operations; profile operations retain their existing permissions.
 
 This command delivers design documents only. It does not add dependencies, migrations, production code, tests or infrastructure. Dependency proposals are concrete but not installation authorization.
 
@@ -30,7 +30,7 @@ This command delivers design documents only. It does not add dependencies, migra
 | --- | --- |
 | I–III: domains and responsibilities | `user → media → storage`; media stores scalar owner ID, never calls user repositories/services. All business services have interfaces/implementations; converters use prepared data only. |
 | IV–VI: HTTP/errors/security | [HTTP](contracts/http.md) preserves ApiError as ProblemDetail, Bearer transport, current eligibility, existing profile permissions, owner privacy and presence-aware binding. |
-| VII–VIII, XII: data/JPA | [Data model](data-model.md) defines new migration, required constraints, Long IDs, Instant/TIMESTAMPTZ and nullable scalar profile FK; no cascaded media deletion or unsafe entity equality. |
+| VII–VIII, XII: data/JPA | [Data model](data-model.md) defines new migration, required constraints, UUID image IDs, Instant/TIMESTAMPTZ and nullable scalar profile FK; no cascaded media deletion or unsafe entity equality. |
 | IX–XI: transactions/concurrency/storage | [Consistency](contracts/consistency.md) defines REQUIRED/READ COMMITTED service transactions, optimistic version checks, conditional source reads/copies, durable expiration and post-commit cleanup. No pessimistic locks around media network calls or self-invocation dependency. |
 | XIII: testing | [Quickstart](quickstart.md) and consistency verification cover real commit/rollback boundaries, disposable PostgreSQL/LocalStack and explicitly deferred simultaneous testing. |
 | II, XIV: dependencies/tooling | New SDK/decoder/test artifacts require developer approval before POM edits; packaged Java 25 decoding must be verified. No claim of active static-analysis gates or passing builds. |
@@ -82,7 +82,7 @@ demo/src/main/java/com/example/demo/
   auth/config/AuthSecurityConfiguration.java
   common/exception/              # existing central mappings, only applicable additions
 demo/src/main/resources/
-  db/migration/V5__image_uploads.sql
+  db/migration/V8__image_uploads.sql
   application-local.properties
   application-prod.properties
 demo/src/test/java/com/example/demo/{media,storage,user}/
@@ -99,7 +99,7 @@ Completed research on source-object conditions, LocalStack signature enforcement
 
 ## Phase 1: Design and Contracts
 
-[Data model](data-model.md), [HTTP](contracts/http.md), [service boundaries](contracts/domain-services.md), [consistency](contracts/consistency.md), [configuration](contracts/configuration.md) and [validation guide](quickstart.md) define the design. Preserve FR-001–021 and SC-001–006; specifically no media permission, 15-minute URLs, retained replacement test and deferred simultaneous test.
+[Data model](data-model.md), [HTTP](contracts/http.md), [service boundaries](contracts/domain-services.md), [consistency](contracts/consistency.md), [configuration](contracts/configuration.md) and [validation guide](quickstart.md) define the design. Preserve FR-001–021 and SC-001–006; specifically no media permission, 15-minute upload URLs and 5-minute download URLs, retained replacement test and deferred simultaneous test.
 
 ## Complexity Tracking
 

@@ -5,6 +5,7 @@ import com.example.demo.media.dto.request.CreateImageUploadRequest;
 import com.example.demo.media.dto.response.ImageAccessResponse;
 import com.example.demo.media.dto.response.ImageUploadResponse;
 import com.example.demo.media.service.MediaService;
+import com.example.demo.media.validator.ImageUploadValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.CacheControl;
@@ -27,12 +28,12 @@ public class ImageUploadController {
         return ResponseEntity.status(201).cacheControl(CacheControl.noStore())
                 .body(media.createImageUpload(identity.getCurrentUserId(), request));
     }
-    @PostMapping("/{imageId}/complete") public ResponseEntity<ImageAccessResponse> complete(@PathVariable Long imageId) {
+    @PostMapping("/{imageId}/complete") public ResponseEntity<ImageAccessResponse> complete(@PathVariable String imageId) {
         return ResponseEntity.ok().cacheControl(CacheControl.noStore())
-                .body(media.completeImageUpload(identity.getCurrentUserId(), imageId));
+                .body(media.completeImageUpload(identity.getCurrentUserId(), ImageUploadValidator.parseId(imageId)));
     }
-    @GetMapping("/{imageId}/download-url") public ResponseEntity<ImageAccessResponse> download(@PathVariable Long imageId) {
+    @GetMapping("/{imageId}/download-url") public ResponseEntity<ImageAccessResponse> download(@PathVariable String imageId) {
         return ResponseEntity.ok().cacheControl(CacheControl.noStore())
-                .body(media.getImageDownload(identity.getCurrentUserId(), imageId));
+                .body(media.getImageDownload(identity.getCurrentUserId(), ImageUploadValidator.parseId(imageId)));
     }
 }

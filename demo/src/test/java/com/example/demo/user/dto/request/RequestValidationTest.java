@@ -16,10 +16,10 @@ class RequestValidationTest {
             assertThat(f.getValidator().validate(r)).hasSize(1);
         }
     }
-    @Test void request_shouldBindPositiveImageIdForServiceValidation() {
+    @Test void request_shouldBindUuidImageIdForServiceValidation() {
         UpdateUserRequest r=new UpdateUserRequest();
-        r.setProfileImageId(JsonMapper.builder().build().readTree("123"));
-        assertThat(r.getProfileImageId()).isEqualTo(123L);
+        r.setProfileImageId(JsonMapper.builder().build().readTree("\"00000000-0000-4000-8000-000000000001\""));
+        assertThat(r.getProfileImageId()).isEqualTo(java.util.UUID.fromString("00000000-0000-4000-8000-000000000001"));
     }
     @Test void request_shouldRejectInternalSpacesInPhone() {
         CreateAddressRequest r=new CreateAddressRequest();
