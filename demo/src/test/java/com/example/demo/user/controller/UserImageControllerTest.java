@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 @Import({AuthSecurityConfiguration.class, JwtProperties.class, DomainUserDetailsService.class,
-        CurrentStateJwtConverter.class, ApiAuthenticationEntryPoint.class, ApiAccessDeniedHandler.class, ApiErrorFactory.class})
+        ApiAuthenticationEntryPoint.class, ApiAccessDeniedHandler.class, ApiErrorFactory.class})
 @TestPropertySource(properties = {"security.jwt.secret=controlled-test-key-with-at-least-32-bytes",
         "security.jwt.issuer=urn:test", "security.cors.allowed-origins=http://localhost:3000"})
 class UserImageControllerTest {

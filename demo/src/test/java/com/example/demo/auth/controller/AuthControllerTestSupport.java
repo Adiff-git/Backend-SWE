@@ -13,7 +13,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(AuthController.class)
 @Import( {
-    AuthSecurityConfiguration.class,JwtProperties.class,DomainUserDetailsService.class,CurrentStateJwtConverter.class,SpringSecurityCurrentUserIdProvider.class,ApiAuthenticationEntryPoint.class,ApiAccessDeniedHandler.class,ApiErrorFactory.class,AuthConverter.class
+    AuthSecurityConfiguration.class,JwtProperties.class,DomainUserDetailsService.class,SpringSecurityCurrentUserIdProvider.class,ApiAuthenticationEntryPoint.class,ApiAccessDeniedHandler.class,ApiErrorFactory.class,AuthConverter.class
 }
 )
 @TestPropertySource(properties= {

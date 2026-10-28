@@ -13,9 +13,8 @@ import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
-@Component @RequiredArgsConstructor
+@RequiredArgsConstructor
 public class CurrentStateJwtConverter implements Converter<Jwt,AbstractAuthenticationToken> {
     private final UserService users;
     private final AuthSessionService sessions;

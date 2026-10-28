@@ -30,3 +30,7 @@ Plan domain-specific ImageUploadNotFoundException (404), UploadExpiredException/
 ## Confirmed content identity clarification (2026-10-27)
 
 Authoritative content-identity requirements and acceptance outcomes are defined in [spec.md FR-008 and Content Identity Decision](../spec.md#content-identity-decision-2026-10-27). This document references that definition rather than restating it.
+
+## Draft version 1 integration
+
+See [integration decisions](../../draft-version-1.md) for the shared bucket, storage configuration, CORS and deferred product-upload scope that supersede the earlier handoff assumptions.

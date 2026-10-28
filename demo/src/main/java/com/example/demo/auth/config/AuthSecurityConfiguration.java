@@ -1,6 +1,8 @@
 package com.example.demo.auth.config;
 import com.example.demo.auth.security.CurrentStateJwtConverter;
 import com.example.demo.auth.security.DomainUserDetailsService;
+import com.example.demo.auth.service.AuthSessionService;
+import com.example.demo.user.service.UserService;
 import com.example.demo.auth.security.ApiAuthenticationEntryPoint;
 import com.example.demo.auth.security.ApiAccessDeniedHandler;
 import com.example.demo.auth.validator.JwtClaimsValidator;
@@ -29,9 +31,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration @org.springframework.scheduling.annotation.EnableScheduling
+@org.springframework.context.annotation.Import(com.example.demo.common.security.SharedCorsConfiguration.class)
 public class AuthSecurityConfiguration {
     @Bean public Clock authClock() {
         return Clock.systemUTC();
+    }
+    @Bean public CurrentStateJwtConverter currentStateJwtConverter(UserService users, AuthSessionService sessions, Clock clock) {
+        return new CurrentStateJwtConverter(users, sessions, clock);
     }
     @Bean public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
@@ -49,17 +55,6 @@ public class AuthSecurityConfiguration {
         provider.setPasswordEncoder(encoder);
         return new ProviderManager(provider);
     }
-    @Bean public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration c=new CorsConfiguration();
-        c.setAllowedOrigins(List.of("*"));
-        c.setAllowedMethods(List.of("*"));
-        c.setAllowedHeaders(List.of("*"));
-        c.setExposedHeaders(List.of("Authorization"));
-        c.setAllowCredentials(false);
-        UrlBasedCorsConfigurationSource source=new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",c);
-        return source;
-    }
     @Bean @Order(1) public SecurityFilterChain credentialsChain(HttpSecurity http,ApiAuthenticationEntryPoint entry,ApiAccessDeniedHandler denied) throws Exception {
         RequestMatcher paths=request->"POST".equals(request.getMethod()) && List.of("/api/auth/register","/api/auth/login","/api/auth/refresh","/api/auth/logout").contains(request.getRequestURI().substring(request.getContextPath().length()));
         http.securityMatcher(paths).csrf(c->c.disable()).cors(org.springframework.security.config.Customizer.withDefaults())
@@ -72,7 +67,7 @@ public class AuthSecurityConfiguration {
             .authorizeHttpRequests(a->a.anyRequest().permitAll());
         return http.build();
     }
-    @Bean @Order(2) public SecurityFilterChain bearerChain(HttpSecurity http,CurrentStateJwtConverter converter,ApiAuthenticationEntryPoint entry,ApiAccessDeniedHandler denied) throws Exception {
+    @Bean @Order(3) public SecurityFilterChain bearerChain(HttpSecurity http,CurrentStateJwtConverter converter,ApiAuthenticationEntryPoint entry,ApiAccessDeniedHandler denied) throws Exception {
         DefaultBearerTokenResolver resolver=new DefaultBearerTokenResolver();
         resolver.setAllowFormEncodedBodyParameter(false);
         resolver.setAllowUriQueryParameter(false);
