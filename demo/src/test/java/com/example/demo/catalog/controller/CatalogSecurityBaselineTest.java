@@ -27,7 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @WebMvcTest(controllers = CatalogSecurityBaselineTest.ProbeController.class)
 @Import({CatalogSecurityConfiguration.class, CatalogSecurityProblemHandler.class,
-		ApiExceptionHandler.class, CatalogSecurityBaselineTest.ProbeController.class})
+		ApiExceptionHandler.class, com.example.demo.common.exception.ApiErrorFactory.class,
+		CatalogSecurityBaselineTest.ProbeController.class})
 class CatalogSecurityBaselineTest {
 
 	@Autowired

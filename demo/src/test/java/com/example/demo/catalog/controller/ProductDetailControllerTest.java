@@ -31,7 +31,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ProductCatalogController.class)
 @Import({CatalogSecurityConfiguration.class, CatalogSecurityProblemHandler.class,
-		ApiExceptionHandler.class, ProductDetailControllerTest.StubConfiguration.class})
+		ApiExceptionHandler.class, com.example.demo.common.exception.ApiErrorFactory.class,
+		ProductDetailControllerTest.StubConfiguration.class})
 class ProductDetailControllerTest {
 
 	private static final UUID PRODUCT_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");

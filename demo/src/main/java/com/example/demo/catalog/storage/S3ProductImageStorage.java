@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Configuration;
@@ -29,11 +28,7 @@ public class S3ProductImageStorage implements ProductImageStorage {
 	@Autowired
 	public S3ProductImageStorage(@Value("${catalog.images.bucket:}") String bucket,
 			@Value("${catalog.images.region:}") String region,
-			@Value("${catalog.images.endpoint:}") String endpoint) {
-		this(bucket, region, endpoint, DefaultCredentialsProvider.create());
-	}
-
-	S3ProductImageStorage(String bucket, String region, String endpoint,
+			@Value("${catalog.images.endpoint:}") String endpoint,
 			AwsCredentialsProvider credentialsProvider) {
 		this.bucket = bucket;
 		this.region = region;

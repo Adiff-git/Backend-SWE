@@ -23,7 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ProductCatalogController.class)
 @Import({CatalogSecurityConfiguration.class, CatalogSecurityProblemHandler.class,
-		ApiExceptionHandler.class, ProductListingControllerTest.StubConfiguration.class})
+		ApiExceptionHandler.class, com.example.demo.common.exception.ApiErrorFactory.class,
+		ProductListingControllerTest.StubConfiguration.class})
 class ProductListingControllerTest {
 
 	@Autowired
