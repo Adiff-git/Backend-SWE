@@ -60,11 +60,11 @@ class CatalogMigrationsIT {
 	}
 
 	@Test
-	void migrations_shouldCreateNineVersionsAndDeferredTriggers() throws SQLException {
+	void migrations_shouldCreateTenVersionsAndDeferredTriggers() throws SQLException {
 		try (Connection connection = openConnection()) {
-			assertThat(count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success")).isEqualTo(9);
-			assertThat(count(connection, "SELECT COUNT(DISTINCT version) FROM flyway_schema_history WHERE success")).isEqualTo(9);
-			assertThat(count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version IN ('1','2','3','4','5','6','7','8','9') AND success")).isEqualTo(9);
+			assertThat(count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success")).isEqualTo(10);
+			assertThat(count(connection, "SELECT COUNT(DISTINCT version) FROM flyway_schema_history WHERE success")).isEqualTo(10);
+			assertThat(count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version IN ('1','2','3','4','5','6','7','8','9','10') AND success")).isEqualTo(10);
 			assertThat(count(connection, "SELECT COUNT(*) FROM pg_trigger WHERE tgname IN "
 					+ "('ct_products_variant_integrity', 'ct_product_variants_integrity', "
 					+ "'ct_product_images_gallery_integrity') AND tgdeferrable AND tginitdeferred"))

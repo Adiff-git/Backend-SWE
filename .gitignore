@@ -16,3 +16,13 @@ docs/
 
 # Local media fixture notes.
 /demo/src/test/resources/media/README.md
+
+# Reviewed Catalog architecture (raw datasets remain ignored)
+!docs/
+docs/*
+!docs/catalog-enhancement/
+!docs/catalog-enhancement/*.md
+!docs/catalog-enhancement/pilot-eligibility.json
+!docs/catalog-enhancement/isolated-enrichment-verification.json
+!docs/catalog-enhancement/brand-review.json
+!docs/catalog-enhancement/technical-review.json

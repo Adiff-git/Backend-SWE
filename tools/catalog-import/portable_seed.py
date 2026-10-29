@@ -17,8 +17,11 @@ def load_seed(directory, manifest_name='manifest.json'):
     raw = (directory / 'catalog.json').read_bytes()
     if manifest['version'] != VERSION or hashlib.sha256(raw).hexdigest() != manifest['sha256']:
         raise ValueError('Seed version or checksum mismatch')
+    # Immutable reviewed V1–V9 seeds remain compatible with additive V10.
+    # Accept only the complete historical or current checksum sets, never a subset.
     expected = {name: importer.flyway_checksum(importer.MIGRATIONS / name) for name in importer.MIGRATION_FILES}
-    if manifest['migrations'] != expected:
+    historical = {name: value for name, value in expected.items() if name != 'V10__catalog_data_enhancement.sql'}
+    if manifest['migrations'] not in (historical, expected):
         raise ValueError('Seed migration checksums differ from checkout')
     data = json.loads(raw)
     if set(data) != {'categories', 'products'} or len(data['products']) != 1000 or len(data['categories']) != 31:

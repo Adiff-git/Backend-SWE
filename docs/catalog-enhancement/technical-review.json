@@ -1,0 +1,30 @@
+{
+  "after_attribute_occurrences": {
+    "battery_capacity_mah": 36,
+    "battery_capacity_wh": 91,
+    "cpu_model": 101,
+    "display_diagonal": 99,
+    "display_resolution": 99,
+    "gpu_model": 101,
+    "installed_os": 23,
+    "installed_storage_gb": 71,
+    "physical_ram": 101
+  },
+  "after_variants_with_any_approved_specifications": 138,
+  "before_attribute_occurrences": {
+    "cpu_model": 101,
+    "display_diagonal": 99,
+    "gpu_model": 101,
+    "installed_os": 23,
+    "physical_ram": 101
+  },
+  "before_variants_with_any_approved_specifications": 102,
+  "new_parser_invalid_values_by_raw_key": {
+    "Dung lượng Pin": 1,
+    "Dung lượng pin": 11,
+    "Pin": 7,
+    "Ổ cứng": 30
+  },
+  "note": "A value may contribute to multiple attribute counts. Invalid values remain raw and are not filterable.",
+  "pilot_source_records": 1000
+}

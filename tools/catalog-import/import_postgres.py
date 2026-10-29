@@ -26,7 +26,7 @@ MIGRATION_FILES = (
     "V3__enforce_catalog_relationships.sql", "V4__create_users.sql",
     "V5__create_addresses.sql", "V6__authorities_and_username_policy.sql",
     "V7__authentication_sessions.sql", "V8__image_uploads.sql",
-    "V9__user_profile_images.sql",
+    "V9__user_profile_images.sql", "V10__catalog_data_enhancement.sql",
 )
 
 
@@ -300,7 +300,7 @@ def validate_history(connection):
     expected = [(str(index), name, flyway_checksum(MIGRATIONS / name), True)
                 for index, name in enumerate(MIGRATION_FILES, 1)]
     if history != expected:
-        raise ImportErrorDetail("Flyway history differs from the exact successful unified V1-V9 sequence")
+        raise ImportErrorDetail("Flyway history differs from the exact successful unified V1-V10 sequence")
     for table in ("categories", "products", "product_variants", "product_images"):
         if connection.execute("SELECT to_regclass(%s)", ("public." + table,)).fetchone()[0] is None:
             raise ImportErrorDetail("Required catalog table is missing: " + table)

@@ -115,10 +115,10 @@ class ImportPostgresIT(unittest.TestCase):
         with psycopg.connect(self.dsn) as connection:
             return connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
 
-    def test_flyway_nine_versions_and_exact_checksums(self):
+    def test_flyway_ten_versions_and_exact_checksums(self):
         with psycopg.connect(self.dsn) as connection:
             importer.validate_history(connection)
-            self.assertEqual(connection.execute("SELECT count(*) FROM flyway_schema_history WHERE success").fetchone()[0], 9)
+            self.assertEqual(connection.execute("SELECT count(*) FROM flyway_schema_history WHERE success").fetchone()[0], 10)
 
     def test_approved_category_product_variant_draft_and_idempotent_rerun(self):
         candidate = fixture(1)

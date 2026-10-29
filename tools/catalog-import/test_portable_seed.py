@@ -23,6 +23,13 @@ class SeedValidation(unittest.TestCase):
    p=Path(d);m=json.loads((DIRECTORY/'manifest.json').read_text());m['counts']['products']=999
    (p/'manifest.json').write_text(json.dumps(m));(p/'catalog.json').write_bytes((DIRECTORY/'catalog.json').read_bytes())
    with self.assertRaises(ValueError):seed.load_seed(p)
+ def test_additive_schema_accepts_immutable_seed_but_rejects_partial_history(self):
+  categories,plans=seed.load_seed(DIRECTORY)
+  self.assertEqual(len(plans),1000)
+  with tempfile.TemporaryDirectory() as d:
+   p=Path(d);m=json.loads((DIRECTORY/'manifest.json').read_text());m['migrations'].pop(next(iter(m['migrations'])))
+   (p/'manifest.json').write_text(json.dumps(m));(p/'catalog.json').write_bytes((DIRECTORY/'catalog.json').read_bytes())
+   with self.assertRaises(ValueError):seed.load_seed(p)
  def test_uuid(self):self.mutate(lambda d:d['products'][0].update(product_id='00000000-0000-0000-0000-000000000000'))
  def test_duplicate_sku(self):self.mutate(lambda d:d['products'][0].update(sku=d['products'][1]['sku']))
  def test_negative_price(self):self.mutate(lambda d:d['products'][0].update(price='-1'))
