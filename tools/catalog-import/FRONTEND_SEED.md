@@ -1,5 +1,7 @@
 # Frontend local Catalog dataset
 
+This guide describes the immutable image-free v1 seed (five PUBLISHED / 995 DRAFT). The existing private pilot was subsequently authorized to publish all 1,000 products; see the [current root README](../../README.md) and [status-only publication/rollback](LOCAL_PUBLICATION.md). That local database change did not rewrite this seed or grant media redistribution permission.
+
 The seed tooling is maintained on `feature/product-catalog`. Teammates need a shared revision containing these tools; local commits are not available from origin until the owner explicitly pushes them. No dataset upload was made. The reviewed dataset is packaged separately rather than bundled with the entire crawler snapshot.
 
 ## Obtain the seed and checkout

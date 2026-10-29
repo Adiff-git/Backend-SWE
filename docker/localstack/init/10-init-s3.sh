@@ -9,3 +9,8 @@ awslocal s3api put-public-access-block --bucket "$bucket" --public-access-block-
   BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
 awslocal s3api put-bucket-cors --bucket "$bucket" --cors-configuration \
   '{"CORSRules":[{"AllowedOrigins":["*"],"AllowedMethods":["GET","PUT","POST","DELETE","HEAD"],"AllowedHeaders":["*"],"MaxAgeSeconds":300}]}'
+# Community LocalStack may not support native snapshots. Restore the synchronous
+# Product Image checkpoints that the local backend saved before metadata commit.
+if [ -f /opt/catalog/restore_product_images.py ]; then
+  python3 /opt/catalog/restore_product_images.py
+fi

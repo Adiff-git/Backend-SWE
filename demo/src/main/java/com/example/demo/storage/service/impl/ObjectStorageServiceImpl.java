@@ -66,15 +66,27 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
     }
 
     @Override public StoredObjectContent readIfMatch(String key, String etag) {
+        return readBoundedIfMatch(key, etag, Long.MAX_VALUE);
+    }
+
+    @Override public StoredObjectContent readBoundedIfMatch(String key, String etag, long maximumBytes) {
         Path temporary = null;
         try (ResponseInputStream<GetObjectResponse> input = client.getObject(GetObjectRequest.builder()
                 .bucket(properties.getBucket()).key(key).ifMatch(etag).build())) {
             temporary = Files.createTempFile("validated-image-", ".upload");
-            Files.copy(input, temporary, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            if (input.response().contentLength() > maximumBytes) throw new StoredObjectChangedException();
+            try (var output = Files.newOutputStream(temporary)) {
+                byte[] buffer = new byte[8192]; long total = 0; int read;
+                while ((read = input.read(buffer)) != -1) {
+                    total += read;
+                    if (total > maximumBytes) throw new StoredObjectChangedException();
+                    output.write(buffer, 0, read);
+                }
+            }
             GetObjectResponse response = input.response();
             return new StoredObjectContent(temporary, new StoredObjectMetadata(
                     response.eTag(), Files.size(temporary), response.contentType()));
-        } catch (IOException | SdkException failure) {
+        } catch (IOException | RuntimeException failure) {
             if (temporary != null) {
                 try { Files.deleteIfExists(temporary); } catch (IOException ignored) { temporary.toFile().deleteOnExit(); }
             }

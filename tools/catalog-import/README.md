@@ -1,5 +1,7 @@
 # Catalog normalization and approval-gated PostgreSQL import
 
+The existing private local pilot now has all 1,000 products PUBLISHED for Frontend testing. See [local publication and status-only rollback](LOCAL_PUBLICATION.md), [its execution report](review/1000-products-local-publication.md), and the [root onboarding README](../../README.md). Immutable seed v1 and v2 fixture packages retain their original five-PUBLISHED state; do not reload them to reset the published pilot.
+
 The standalone Python 3 normalizer reads `../../../electronics-crawler/data/catalogue.sqlite` by default. It opens the crawler database with SQLite `mode=ro` and `PRAGMA query_only=ON`. It never connects to PostgreSQL, runs Flyway, calls S3, or modifies Product Catalog application code.
 
 From `Backend-SWE`:
@@ -111,3 +113,9 @@ Known limits: one approved variant per source product; no product-image import; 
 ## Portable frontend seed
 
 See [FRONTEND_SEED.md](FRONTEND_SEED.md) for the versioned Catalog-only snapshot, fresh Docker setup, checksum validation, transactional loading and seed regression tests. The original crawler approval manifest remains unchanged. The generated seed remains under ignored `output/` pending distribution review.
+
+## Product images
+
+For image-bearing portable datasets, see [PORTABLE_SEED_V2.md](PORTABLE_SEED_V2.md). The v2 tool bundles Catalog metadata, ProductImage relationships and checksummed object payloads; its tests restore 1,096 generated authorized images onto the [isolated storage topology](../../docker/localstack/gateway/README.md). Real retailer-image packaging requires separate redistribution permission and remains blocked.
+
+See [PRODUCT_IMAGES.md](PRODUCT_IMAGES.md) for the authenticated Product-specific image API, local SigV4 gateway/durability checkpoints, auditable media-permission gate, bounded API-only bulk import and authorized-fixture tests. Retailer-media execution remains blocked without documented permission.

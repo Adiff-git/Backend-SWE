@@ -1,0 +1,50 @@
+# Raw S3 listens only on loopback in a namespace shared with the trusted gateway.
+# Application containers never join this namespace or the private storage network.
+services:
+  localstack:
+    ports: !override
+      - "127.0.0.1:${LOCAL_STORAGE_PORT:-14566}:4567"
+    networks: !override
+      - storage-private
+    environment:
+      PERSISTENCE: "1"
+      GATEWAY_LISTEN: "127.0.0.1:4566"
+      # The pinned Twisted server ignores IPv4 bind addresses; Hypercorn honors them.
+      GATEWAY_SERVER: hypercorn
+    volumes:
+      - ./docker/localstack/init/10-init-s3.sh:/etc/localstack/init/ready.d/10-init-s3.sh:ro
+      - ./docker/localstack/init/restore_product_images.py:/opt/catalog/restore_product_images.py:ro
+      - ./docker/localstack/gateway/signed_s3_gateway.py:/opt/catalog/signed_s3_gateway.py:ro
+      - ${CATALOG_IMAGES_CHECKPOINT_DIRECTORY:-./tools/catalog-import/output/product-object-checkpoints}:/catalog-product-checkpoints:ro
+    healthcheck:
+      test: ["CMD", "python3", "/opt/catalog/signed_s3_gateway.py", "--upstream-healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 10s
+  image-storage:
+    image: localstack/localstack:4.14.0@sha256:3ebc37595918b8accb852f8048fef2aff047d465167edd655528065b07bc364a
+    entrypoint: ["python3", "/opt/catalog/signed_s3_gateway.py"]
+    network_mode: service:localstack
+    environment:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      S3_UPSTREAM_HOST: "127.0.0.1"
+      S3_UPSTREAM_PORT: "4566"
+      GATEWAY_PORT: "4567"
+    depends_on:
+      localstack:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python3", "/opt/catalog/signed_s3_gateway.py", "--healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    volumes:
+      - ./docker/localstack/gateway/signed_s3_gateway.py:/opt/catalog/signed_s3_gateway.py:ro
+networks:
+  storage-private:
+    # A separate bridge is needed for the loopback-published signed endpoint.
+    # Raw S3 itself binds only inside the shared storage/gateway namespace.
+    driver: bridge

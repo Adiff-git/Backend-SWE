@@ -10,8 +10,8 @@ import import_postgres as importer
 
 VERSION = 'catalog-dev-v1'
 
-def load_seed(directory):
-    manifest = json.loads((directory / 'manifest.json').read_text())
+def load_seed(directory, manifest_name='manifest.json'):
+    manifest = json.loads((directory / manifest_name).read_text())
     if manifest['counts'] != dict(products=1000, variants=1000, categories=31, published=5, draft=995):
         raise ValueError('Seed manifest counts differ')
     raw = (directory / 'catalog.json').read_bytes()

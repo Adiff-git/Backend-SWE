@@ -11,6 +11,7 @@ public interface ObjectStorageService {
     PreparedUpload prepareUpload(String key, String contentType, Instant deadline);
     Optional<StoredObjectMetadata> inspect(String key);
     StoredObjectContent readIfMatch(String key, String etag);
+    StoredObjectContent readBoundedIfMatch(String key, String etag, long maximumBytes);
     void copyIfMatch(String source, String etag, String target, String approvedContentType);
     void verifyFinalExists(String key);
     String prepareDownload(String key, Duration lifetime);
