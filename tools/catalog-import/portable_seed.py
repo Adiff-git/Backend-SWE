@@ -9,13 +9,18 @@ from pathlib import Path
 import import_postgres as importer
 
 VERSION = 'catalog-dev-v1'
+WISHLIST_VERSION = 'catalog-wishlist-v1'
+SEED_COUNTS = {
+    VERSION: dict(products=1000, variants=1000, categories=31, published=5, draft=995),
+    WISHLIST_VERSION: dict(products=1000, variants=1000, categories=31, published=1000, draft=0),
+}
 
 def load_seed(directory, manifest_name='manifest.json'):
     manifest = json.loads((directory / manifest_name).read_text())
-    if manifest['counts'] != dict(products=1000, variants=1000, categories=31, published=5, draft=995):
+    if manifest.get('version') not in SEED_COUNTS or manifest['counts'] != SEED_COUNTS[manifest['version']]:
         raise ValueError('Seed manifest counts differ')
     raw = (directory / 'catalog.json').read_bytes()
-    if manifest['version'] != VERSION or hashlib.sha256(raw).hexdigest() != manifest['sha256']:
+    if hashlib.sha256(raw).hexdigest() != manifest['sha256']:
         raise ValueError('Seed version or checksum mismatch')
     # Immutable reviewed V1–V9 seeds remain compatible with additive V10.
     # Accept only the complete historical or current checksum sets, never a subset.
@@ -56,7 +61,7 @@ def load_seed(directory, manifest_name='manifest.json'):
         if not isinstance(item['price'],str) or importer.valid_price(item['price']) is None: raise ValueError('Invalid whole VND price')
         item['price']=Decimal(item['price']);item['create_category_path']=False
         identities.add(item['identity']);ids.add(item['product_id']);skus.add(item['sku'].casefold());plans.append(item)
-    if sum(p['status']=='PUBLISHED' for p in plans)!=5: raise ValueError('Publication split differs')
+    if sum(p['status']=='PUBLISHED' for p in plans)!=manifest['counts']['published']: raise ValueError('Publication split differs')
     return ordered,plans
 
 def apply_seed(connection,categories,plans,execute):

@@ -6,6 +6,7 @@
 .env
 .env.*
 !.env.example
+.wishlist-venv/
 .DS_Store
 Thumbs.db
 *.tmp
