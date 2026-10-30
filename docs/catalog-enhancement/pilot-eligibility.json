@@ -1,0 +1,19 @@
+{
+  "ambiguous_pilot_products": 0,
+  "brand_candidates": 824,
+  "confirmed_database_updates": 0,
+  "confirmed_unchanged_metadata": null,
+  "evidence": "immutable pilot seed and exact source identities, not live PostgreSQL",
+  "matched_source_identities": 1000,
+  "matched_source_observations": 1000,
+  "products_examined": 1000,
+  "protected_product_records": 1000,
+  "specification_candidates": 138,
+  "unmatched_pilot_products": 0,
+  "unresolved_brand": 176,
+  "unsupported_attribute_issues": {
+    "INVALID_ATTRIBUTE_VALUES": 44,
+    "UNMAPPED_ATTRIBUTES": 998
+  },
+  "variants_examined": 1000
+}

@@ -1,0 +1,15 @@
+# Seed tooling finalization review
+
+The existing staged pilot review and related historical execution documents were reviewed and committed separately from the seed tooling. No generated dataset, executable approval CSV, crawler data, backup or private environment configuration is included in the source commits.
+
+Code review added strict manifest-count validation and a regression test, made the exporter produce SHA256SUMS automatically, and required complete approval decisions and matching category/options before export. The exporter was run in a read-only database transaction into a new ignored directory: all three output files match the original v1 files byte for byte. The original archive remains unchanged with SHA-256 `055416889480fe8b88ad46806c47c24d72c89fdbdccffca80f1c6639087a3d32`.
+
+Archive inspection found exactly three regular files, valid checksums and expected Catalog-only field allowlists. All 1,000 source identities, deterministic Product/variant IDs, approved prices, categories and statuses passed validation. No user/authentication/address/media data, credential values or private machine paths were found in the selected source/documentation files. The literal test/test credential is confined to disposable test fixtures. Temporary `/tmp` test logs/classpath paths are documented test artifacts, not references to a developer home directory.
+
+Read-only persistent verification confirmed 1,000 Products, 1,000 variants, 31 categories, zero images and the original 5 PUBLISHED / 995 DRAFT split. Every seed product/variant/category matched the persistent target. The 45-product pagination proposal has unique UUIDs and matches current DRAFT names, categories, variants and demo prices. No data or approval was changed.
+
+Frontend documentation now includes private environment generation, fresh project/port/volume isolation, normal Spring Flyway startup, independent archive delivery and verification, seed preview/load commands, API URLs, current CORS behavior and a development proxy option. The fresh disposable seed/API test verifies the no-crawler loading path. Seed test setup explicitly compiles the backend before running Java directly on a fresh checkout.
+
+Final test results: seed 8 passed; importer 19 passed; normalizer 12 passed; Surefire 174 passed; Failsafe 171 passed. All completed with zero failures/errors/skips. `mvn -B -ntp clean verify` reported BUILD SUCCESS. The first Maven attempt inside the sandbox failed under system restrictions; the complete rerun with the required system access passed without disabling tests. Logs are in `/tmp/catalog-final-seed.log`, `/tmp/catalog-final-importer.log`, `/tmp/catalog-final-normalizer.log`, `/tmp/catalog-seed-final-maven.log`.
+
+Distribution remains pending documented content-rights clearance and explicit upload authorization, as described in [SEED_DISTRIBUTION.md](../SEED_DISTRIBUTION.md). Private storage is proposed, not provisioned. Teammate onboarding also requires sharing the committed code revision; no push was performed. Any later authorized publication change must produce separately versioned seed data rather than modifying v1.

@@ -1,0 +1,2 @@
+# Research
+Decision: use approved Catalog model and no added dependencies. Existing PostgreSQL deferred constraints require real commit testing. Existing importer rejects schema histories beyond V9, requiring a deliberate compatibility update. Registry aliases must not create uncertain identity approval. Existing DTO exact-field tests favor no public field additions in this increment. Alternatives and evidence are preserved in architecture.md.

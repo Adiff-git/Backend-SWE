@@ -1,0 +1,23 @@
+{
+  "brands_assigned": 824,
+  "first_pass": {
+    "ENRICH": 1000,
+    "UNCHANGED": 0,
+    "UNMATCHED": 0
+  },
+  "products_after": 1000,
+  "protected_fields_unchanged": true,
+  "read_only_preview": {
+    "ENRICH": 1000
+  },
+  "real_database_touched": false,
+  "replay": {
+    "ENRICH": 0,
+    "UNCHANGED": 1000
+  },
+  "seed_products": 1000,
+  "seed_variants": 1000,
+  "source_links": 1000,
+  "specifications_assigned": 138,
+  "variants_after": 1000
+}

@@ -1,0 +1,4 @@
+# Build locally only. The copied seed contains retailer-derived content.
+FROM postgres:17-alpine@sha256:eee6c6e1b0894fa4fe0075eb054af9fd1cf39a35321c2d4110626cfe506411fb
+COPY tools/catalog-import/output/catalog-wishlist-v1/ /opt/catalog-wishlist-v1/
+ENTRYPOINT ["sh", "-ec", "test -d /seed-out; cp -R /opt/catalog-wishlist-v1/. /seed-out/; cd /seed-out; sha256sum -c SHA256SUMS"]
