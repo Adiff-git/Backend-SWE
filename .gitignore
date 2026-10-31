@@ -31,3 +31,5 @@ docs/*
 # Private runtime credentials and backups
 /.private/
 /tools/catalog-import/output/
+__pycache__/
+*.py[cod]
