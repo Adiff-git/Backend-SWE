@@ -12,10 +12,16 @@ LICENSED_MODE = 'LICENSED_PRODUCT_IMAGES'
 EXPECTED = 1500
 
 
-def run(catalog, env_file, data_only=False):
+def run(catalog, env_file, data_only=False, local_preview=False):
     catalog = Path(catalog).resolve()
     env_file = Path(env_file).resolve()
     blockers = []
+    if local_preview:
+        if data_only:
+            return {'ready': False, 'blockers': ['PREVIEW_AND_DATA_ONLY_CONFLICT'],
+                    'state': 'INVALID_MODE_COMBINATION'}
+        from catalog_local_preview import validate_local_preview
+        return validate_local_preview(catalog, env_file)
     if not catalog.is_dir():
         return {'ready': False, 'blockers': ['CATALOG_DATA_DIRECTORY_MISSING']}
 
@@ -139,12 +145,13 @@ if __name__ == '__main__':
     parser.add_argument('--catalog', type=Path, required=True)
     parser.add_argument('--env-file', type=Path, required=True)
     parser.add_argument('--data-only', action='store_true')
+    parser.add_argument('--local-preview', action='store_true')
     args = parser.parse_args()
     try:
-        report = run(args.catalog, args.env_file, args.data_only)
+        report = run(args.catalog, args.env_file, args.data_only, args.local_preview)
         print(json.dumps(report, indent=2, sort_keys=True))
         sys.exit(0 if report['ready'] else 3)
-    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as error:
+    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError, ImportError) as error:
         print(json.dumps({
             'ready': False, 'blockers': ['PREFLIGHT_INVALID_PACKAGE'], 'detail': str(error),
         }))
