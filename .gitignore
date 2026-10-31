@@ -27,3 +27,7 @@ docs/*
 !docs/catalog-enhancement/isolated-enrichment-verification.json
 !docs/catalog-enhancement/brand-review.json
 !docs/catalog-enhancement/technical-review.json
+
+# Private runtime credentials and backups
+/.private/
+/tools/catalog-import/output/

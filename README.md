@@ -1,5 +1,13 @@
 # Backend-SWE
 
+## Amazon MVP 1,500 local bootstrap
+
+The sibling `Catalog-Data` repository contains the approved Product/Variant
+dataset. Use `bash scripts/setup-demo.sh --data-only` for the isolated,
+approval-gated data workflow. See [CATALOG_BOOTSTRAP.md](CATALOG_BOOTSTRAP.md)
+for setup, resume, verification, and authorization steps. Authentic image
+redistribution rights remain unknown; the full media bootstrap is blocked.
+
 Spring Boot **4.1.2 / Java 25** backend for the electronics Product Catalog. The application uses PostgreSQL 17, Flyway, Spring Data JPA, Spring Security/JWT and private S3-compatible image storage. Existing modules include public product listing/detail, Product image uploads, registration/login/refresh sessions, user profiles, addresses, roles/permissions and user-owned media uploads.
 
 Frontend clients call the HTTP APIs. `AI-SWE` is a separate FastAPI project with placeholder recommendation/agent features; this repository does not start AI or contain an automatic Backend-to-AI integration. When running AI locally, its `BACKEND_API_BASE_URL` must point at the actual backend address below rather than its default port 8000. No AI service is required to run the Catalog.
