@@ -79,6 +79,9 @@ public class AuthSecurityConfiguration {
             .logout(c->c.disable())
             .exceptionHandling(e->e.authenticationEntryPoint(entry).accessDeniedHandler(denied))
         .authorizeHttpRequests(a->a
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/me/wishlist").hasAuthority("MANAGE_WISHLIST")
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/me/wishlist/*").hasAuthority("MANAGE_WISHLIST")
+                .requestMatchers(org.springframework.http.HttpMethod.DELETE,"/api/me/wishlist/*").hasAuthority("MANAGE_WISHLIST")
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/image-uploads","/api/image-uploads/*/complete").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/image-uploads/*/download-url").authenticated()
                 .requestMatchers("/api/me").hasAuthority("MANAGE_USER_PROFILE")

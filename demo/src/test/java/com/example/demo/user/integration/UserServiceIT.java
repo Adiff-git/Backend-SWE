@@ -97,7 +97,7 @@ class UserServiceIT extends PostgresTestSupport {
         Long id=service.createAuthenticationUser(" \u00c9 Alice ",encoded);
         var snapshot=service.getUserSecuritySnapshot(id);
         assertThat(snapshot.getUsername()).isEqualTo("\u00c9 Alice");assertThat(snapshot.getEncodedPassword()).isEqualTo(encoded);
-        assertThat(snapshot.getAuthorities()).containsExactlyInAnyOrder("ROLE_USER","MANAGE_USER_PROFILE","MANAGE_ADDRESS");
+        assertThat(snapshot.getAuthorities()).containsExactlyInAnyOrder("ROLE_USER","MANAGE_USER_PROFILE","MANAGE_ADDRESS","MANAGE_WISHLIST");
         assertThat(service.resolveSecurityIdentifier("\u00e9 ALICE")).contains(id);
         assertThat(users.findById(id).orElseThrow().getJoinedAt()).isNotNull();
     }

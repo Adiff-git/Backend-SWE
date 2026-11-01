@@ -13,7 +13,7 @@ class RegistrationLoginApiIT extends AuthPostgresTestSupport {
         assertThat(users.findByUsernameIdentifier("ALICE").orElseThrow().getUsername()).isEqualTo("Alice");
         assertThat(sessions.count()).isEqualTo(1);
         assertThat(credentials.count()).isEqualTo(1);
-        assertThat(users.findAuthorities(users.findByUsernameIdentifier("alice").orElseThrow().getId())).containsExactlyInAnyOrder("ROLE_USER","MANAGE_USER_PROFILE","MANAGE_ADDRESS");
+        assertThat(users.findAuthorities(users.findByUsernameIdentifier("alice").orElseThrow().getId())).containsExactlyInAnyOrder("ROLE_USER","MANAGE_USER_PROFILE","MANAGE_ADDRESS","MANAGE_WISHLIST");
     }
     @Test void login_shouldCreateIndependentSessionAndUseExactPassword() throws Exception {
         Pair first=register("Alice");

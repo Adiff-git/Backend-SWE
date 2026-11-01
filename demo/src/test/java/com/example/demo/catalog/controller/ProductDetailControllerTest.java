@@ -88,6 +88,17 @@ class ProductDetailControllerTest {
 	}
 
 	static class StubService implements ProductCatalogService {
+        @Override
+        public com.example.demo.catalog.entity.Product getPublishedProductEntity(java.util.UUID id) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public java.util.Map<java.util.UUID, com.example.demo.catalog.dto.response.ProductSummary> getProductSummaries(
+                java.util.Collection<java.util.UUID> ids) {
+            throw new UnsupportedOperationException();
+        }
+
 		private UUID requestedId;
 		private boolean found;
 
