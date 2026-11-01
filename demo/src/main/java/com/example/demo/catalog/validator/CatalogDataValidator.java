@@ -14,6 +14,8 @@ import com.example.demo.catalog.entity.ProductVariant;
 @Component
 public class CatalogDataValidator {
 
+	private final TechnicalSpecificationValidator technicalSpecifications = new TechnicalSpecificationValidator();
+
 	public void validateProduct(Product product, Collection<ProductVariant> variants) {
 		if (product == null || product.getCategory() == null) {
 			throw new IllegalArgumentException("Product requires a category");
@@ -48,6 +50,7 @@ public class CatalogDataValidator {
 				throw new IllegalArgumentException("Selling price must be whole VND", invalidFraction);
 			}
 
+			technicalSpecifications.validate(variant.getTechnicalSpecifications());
 			Map<String, String> options = validOptions(variant.getOptionCombination());
 			if (variants.size() > 1 && options.isEmpty()) {
 				throw new IllegalArgumentException("Multiple variants require nonempty options");

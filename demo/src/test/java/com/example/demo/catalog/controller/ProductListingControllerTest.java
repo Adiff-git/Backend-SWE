@@ -26,6 +26,11 @@ import org.springframework.test.web.servlet.MockMvc;
 		ApiExceptionHandler.class, com.example.demo.common.exception.ApiErrorFactory.class,
 		ProductListingControllerTest.StubConfiguration.class})
 class ProductListingControllerTest {
+    @org.springframework.test.context.bean.override.mockito.MockitoBean
+    private com.example.demo.auth.security.CurrentStateJwtConverter catalogJwtConverter;
+    @org.springframework.test.context.bean.override.mockito.MockitoBean
+    private org.springframework.security.oauth2.jwt.JwtDecoder catalogJwtDecoder;
+
 
 	@Autowired
 	private MockMvc mvc;

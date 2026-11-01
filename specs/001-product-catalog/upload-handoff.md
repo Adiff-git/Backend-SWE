@@ -1,3 +1,5 @@
+> Historical removal handoff. The later Product Image integration and authorized-fixture verification are documented in [PRODUCT_IMAGES.md](../../tools/catalog-import/PRODUCT_IMAGES.md). The historical text below is retained as context.
+
 # Product Image Upload handoff
 
 The public catalog owner removed upload-only implementation from `feature/product-catalog` on 2026-10-28. Recover any removed source or test from original commit `62980e03e86018a52731c405a5e5d32987a7096c` (backup branch `backup/product-catalog-before-upload-removal`). The approved [specification](spec.md), [data model](data-model.md), and [OpenAPI contract](contracts/openapi.yaml) remain authoritative. Generic user-owned Media Upload on `origin/feature/user-address` is **not a drop-in replacement** for Product Image Upload.

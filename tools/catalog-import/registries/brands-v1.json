@@ -1,0 +1,651 @@
+{
+  "version": 1,
+  "brands": [
+    {
+      "id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+      "code": "lenovo",
+      "name": "Lenovo",
+      "aliases": [
+        "Lenovo"
+      ]
+    },
+    {
+      "id": "ec6322d6-d332-5f24-8465-165cc6868146",
+      "code": "asus",
+      "name": "ASUS",
+      "aliases": [
+        "ASUS",
+        "Asus"
+      ]
+    },
+    {
+      "id": "2672986e-5795-5950-87ad-8dc8391c546e",
+      "code": "apple",
+      "name": "Apple",
+      "aliases": [
+        "Apple"
+      ]
+    },
+    {
+      "id": "323abafb-8706-56f3-8745-3e69eb7ba831",
+      "code": "dell",
+      "name": "Dell",
+      "aliases": [
+        "Dell"
+      ]
+    },
+    {
+      "id": "58d971fb-0688-5989-8646-631084b64163",
+      "code": "xiaomi",
+      "name": "Xiaomi",
+      "aliases": [
+        "Xiaomi"
+      ]
+    },
+    {
+      "id": "27facd60-6afb-5aeb-a1cf-30e200b052da",
+      "code": "canon",
+      "name": "Canon",
+      "aliases": [
+        "Canon"
+      ]
+    },
+    {
+      "id": "b0017ad0-1021-5733-8f54-862426b5a5c4",
+      "code": "acer",
+      "name": "Acer",
+      "aliases": [
+        "Acer"
+      ]
+    },
+    {
+      "id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+      "code": "samsung",
+      "name": "Samsung",
+      "aliases": [
+        "Samsung"
+      ]
+    },
+    {
+      "id": "b36c842d-6f15-5a89-b75d-946d5674761f",
+      "code": "hp",
+      "name": "HP",
+      "aliases": [
+        "HP",
+        "Hp"
+      ]
+    },
+    {
+      "id": "6caee0e6-eab9-5895-ab63-ca8ef47d8382",
+      "code": "sony",
+      "name": "Sony",
+      "aliases": [
+        "Sony"
+      ]
+    },
+    {
+      "id": "3ace847f-6b99-52fa-a39c-005d7c55320f",
+      "code": "msi",
+      "name": "MSI",
+      "aliases": [
+        "MSI",
+        "Msi"
+      ]
+    },
+    {
+      "id": "8eca9662-fdd9-51dd-99ef-0dc2fe751470",
+      "code": "lg",
+      "name": "LG",
+      "aliases": [
+        "LG"
+      ]
+    },
+    {
+      "id": "69bed5a7-70ab-511d-b84d-8b51a4733963",
+      "code": "oppo",
+      "name": "OPPO",
+      "aliases": [
+        "OPPO"
+      ]
+    },
+    {
+      "id": "d6d8dc9f-d16e-5e9b-ae03-6e56f0404fa6",
+      "code": "huawei",
+      "name": "Huawei",
+      "aliases": [
+        "Huawei"
+      ]
+    },
+    {
+      "id": "9af327c4-0558-5dcf-b8d5-fece6c362b68",
+      "code": "philips",
+      "name": "Philips",
+      "aliases": [
+        "Philips"
+      ]
+    },
+    {
+      "id": "77090c9e-ca86-5c5a-9bae-f2e4b37ec8c6",
+      "code": "ecovacs",
+      "name": "Ecovacs",
+      "aliases": [
+        "Ecovacs",
+        "Ecovacs "
+      ]
+    },
+    {
+      "id": "3072f00c-b433-553d-aa7b-308f99b92c80",
+      "code": "fujihome",
+      "name": "Fujihome",
+      "aliases": [
+        "Fujihome",
+        "Fujihome "
+      ]
+    },
+    {
+      "id": "82cd9336-e873-5e7a-9606-7bea638f4780",
+      "code": "zagg",
+      "name": "ZAGG",
+      "aliases": [
+        "ZAGG"
+      ]
+    },
+    {
+      "id": "fc25bc58-74d1-5722-9bef-803bb2182f2d",
+      "code": "tomtoc",
+      "name": "Tomtoc",
+      "aliases": [
+        "Tomtoc"
+      ]
+    },
+    {
+      "id": "e479dfe7-632b-5245-87f4-866ea260477b",
+      "code": "sunhouse",
+      "name": "Sunhouse",
+      "aliases": [
+        "Sunhouse"
+      ]
+    },
+    {
+      "id": "a2c05519-2618-5ac1-b927-dd63cf1ff8fc",
+      "code": "mipow",
+      "name": "Mipow",
+      "aliases": [
+        "Mipow"
+      ]
+    },
+    {
+      "id": "caf0cefb-ff01-5ee2-9178-aa229f290273",
+      "code": "uag",
+      "name": "UAG",
+      "aliases": [
+        "UAG"
+      ]
+    },
+    {
+      "id": "93dc7fef-9d70-5eba-b165-3ab8bdb8a744",
+      "code": "wiwu",
+      "name": "Wiwu",
+      "aliases": [
+        "Wiwu"
+      ]
+    },
+    {
+      "id": "7dc7d142-70fa-5509-abe4-68da6bf59183",
+      "code": "aula",
+      "name": "Aula",
+      "aliases": [
+        "Aula"
+      ]
+    },
+    {
+      "id": "9f122029-3cd6-54a5-8e6c-39c742ab68cd",
+      "code": "stargo",
+      "name": "StarGO",
+      "aliases": [
+        "StarGO"
+      ]
+    },
+    {
+      "id": "ae8f445f-9db3-5bd4-bb11-52ade06dd07c",
+      "code": "baseus",
+      "name": "Baseus",
+      "aliases": [
+        "Baseus"
+      ]
+    },
+    {
+      "id": "5542d402-1148-5831-8300-f9eafbe18cc0",
+      "code": "sakos",
+      "name": "Sakos",
+      "aliases": [
+        "Sakos"
+      ]
+    },
+    {
+      "id": "fff4e385-4eb2-5fba-bcf1-20b817538c95",
+      "code": "cuktech",
+      "name": "Cuktech",
+      "aliases": [
+        "Cuktech"
+      ]
+    },
+    {
+      "id": "78480495-0b34-592d-877c-a198923dd9ab",
+      "code": "innostyle",
+      "name": "Innostyle",
+      "aliases": [
+        "Innostyle"
+      ]
+    },
+    {
+      "id": "90122df2-0b71-53e0-908c-0052dd9bd852",
+      "code": "jbl",
+      "name": "JBL",
+      "aliases": [
+        "JBL"
+      ]
+    },
+    {
+      "id": "e98968cb-ffcc-5668-8ae7-4e07dd78146d",
+      "code": "zeelot",
+      "name": "Zeelot",
+      "aliases": [
+        "Zeelot"
+      ]
+    },
+    {
+      "id": "4e2e048b-23b8-5287-9b53-860ea8622a89",
+      "code": "pitaka",
+      "name": "PITAKA",
+      "aliases": [
+        "PITAKA"
+      ]
+    },
+    {
+      "id": "c6b98e33-70af-5803-aefb-69ca2995dad5",
+      "code": "rapoo",
+      "name": "Rapoo",
+      "aliases": [
+        "Rapoo"
+      ]
+    },
+    {
+      "id": "55440a6b-eac4-5afa-ac78-a38f338a9399",
+      "code": "bear",
+      "name": "BEAR",
+      "aliases": [
+        "BEAR"
+      ]
+    },
+    {
+      "id": "36ffd8fa-3f39-5bf9-b511-26682f4de341",
+      "code": "tp-link",
+      "name": "TP-Link",
+      "aliases": [
+        "TP-Link"
+      ]
+    },
+    {
+      "id": "2e25fcc2-cf69-50c4-b6e8-924f34fef1de",
+      "code": "likgus",
+      "name": "Likgus",
+      "aliases": [
+        "Likgus"
+      ]
+    },
+    {
+      "id": "a85e20c7-0201-5895-b620-d465b564b228",
+      "code": "logitech",
+      "name": "Logitech",
+      "aliases": [
+        "Logitech"
+      ]
+    },
+    {
+      "id": "6770282a-f7eb-592b-ae3d-c67ad3eb4a8d",
+      "code": "havit",
+      "name": "Havit",
+      "aliases": [
+        "Havit"
+      ]
+    },
+    {
+      "id": "6473d83b-2d52-5253-b2a5-56164a461f41",
+      "code": "acnos",
+      "name": "Acnos",
+      "aliases": [
+        "Acnos"
+      ]
+    },
+    {
+      "id": "e2a8bb03-a6ad-5cab-a6ed-c667d4e0c35f",
+      "code": "slimcase",
+      "name": "Slimcase",
+      "aliases": [
+        "Slimcase"
+      ]
+    },
+    {
+      "id": "1627d5f9-9482-56b1-aae6-b848caf68bd5",
+      "code": "thule",
+      "name": "Thule",
+      "aliases": [
+        "Thule"
+      ]
+    },
+    {
+      "id": "3ab17a38-3eb9-5586-92c8-62bf400eba3e",
+      "code": "goojodoq",
+      "name": "Goojodoq",
+      "aliases": [
+        "Goojodoq"
+      ]
+    },
+    {
+      "id": "b5b021a8-c35a-5382-ae4b-53d2393ef55e",
+      "code": "anker",
+      "name": "Anker",
+      "aliases": [
+        "Anker"
+      ]
+    },
+    {
+      "id": "67c7f89c-7bf3-5ebb-926b-48def0848351",
+      "code": "topo-designs",
+      "name": "Topo Designs",
+      "aliases": [
+        "Topo Designs"
+      ]
+    },
+    {
+      "id": "bd3bc138-d5b8-5967-b1b9-bab8e3bfce2f",
+      "code": "edifier",
+      "name": "Edifier",
+      "aliases": [
+        "Edifier"
+      ]
+    },
+    {
+      "id": "890b6e4e-6af5-59b5-8884-3e89e4b00270",
+      "code": "spigen",
+      "name": "Spigen",
+      "aliases": [
+        "Spigen"
+      ]
+    },
+    {
+      "id": "ea53af7b-697d-54e0-9171-7b55222cb57b",
+      "code": "alpha-works",
+      "name": "Alpha Works",
+      "aliases": [
+        "Alpha Works"
+      ]
+    },
+    {
+      "id": "616bad7b-9b3f-5266-bbbf-4ab28fc96686",
+      "code": "paveden",
+      "name": "Paveden",
+      "aliases": [
+        "Paveden"
+      ]
+    },
+    {
+      "id": "66ba25c9-90cf-5c45-915e-72d653901255",
+      "code": "imou",
+      "name": "Imou",
+      "aliases": [
+        "Imou"
+      ]
+    },
+    {
+      "id": "44084a21-c145-5e0f-a788-75ffe16b60f0",
+      "code": "torras",
+      "name": "Torras",
+      "aliases": [
+        "Torras"
+      ]
+    },
+    {
+      "id": "8c6ac8e3-3eae-5960-84b3-55ee9d1054f9",
+      "code": "switcheasy",
+      "name": "SwitchEasy",
+      "aliases": [
+        "SwitchEasy"
+      ]
+    },
+    {
+      "id": "bd702d89-b6ea-5d9c-aa34-6b76600d5096",
+      "code": "mutural",
+      "name": "Mutural",
+      "aliases": [
+        "Mutural"
+      ]
+    },
+    {
+      "id": "c5ce9243-8e5c-541b-9c59-cd6889953b33",
+      "code": "araree",
+      "name": "Araree",
+      "aliases": [
+        "Araree"
+      ]
+    },
+    {
+      "id": "b4719dfc-b4e1-52fd-9313-c3abff850a64",
+      "code": "hoda",
+      "name": "Hoda",
+      "aliases": [
+        "Hoda"
+      ]
+    },
+    {
+      "id": "11f6768e-b661-54dc-b0fe-9831574961a6",
+      "code": "mercusys",
+      "name": "Mercusys",
+      "aliases": [
+        "Mercusys"
+      ]
+    },
+    {
+      "id": "730a25a1-6e15-55f0-91b8-15f78d715186",
+      "code": "insta360",
+      "name": "Insta360",
+      "aliases": [
+        "Insta360"
+      ]
+    },
+    {
+      "id": "0eaae3e6-4b91-5677-82d6-d092077b9a06",
+      "code": "belkin",
+      "name": "Belkin",
+      "aliases": [
+        "Belkin"
+      ]
+    },
+    {
+      "id": "273ae520-af28-5b04-9756-22f81a1e6607",
+      "code": "hoa-phat",
+      "name": "Hòa Phát",
+      "aliases": [
+        "Hòa Phát"
+      ]
+    },
+    {
+      "id": "103631ff-8f08-5bbd-8418-dd5aef178ed6",
+      "code": "jcpal",
+      "name": "JCPal",
+      "aliases": [
+        "JCPal"
+      ]
+    },
+    {
+      "id": "503315e1-9d6b-531a-9db5-e11e280d4519",
+      "code": "aukey",
+      "name": "Aukey",
+      "aliases": [
+        "Aukey"
+      ]
+    },
+    {
+      "id": "f9557434-0ef7-571b-bfb8-a23bfa3c9b38",
+      "code": "dji",
+      "name": "DJI",
+      "aliases": [
+        "DJI"
+      ]
+    },
+    {
+      "id": "d4f710b6-d1bc-55b7-b01d-5395728aa8fd",
+      "code": "dalton",
+      "name": "Dalton",
+      "aliases": [
+        "Dalton"
+      ]
+    },
+    {
+      "id": "4c72e8d6-b9a5-5000-adf7-7e006cdff071",
+      "code": "mchose",
+      "name": "MCHOSE",
+      "aliases": [
+        "MCHOSE"
+      ]
+    },
+    {
+      "id": "cbeeacda-6ea7-5990-9de6-a8c03577ac6b",
+      "code": "hyperx",
+      "name": "HyperX",
+      "aliases": [
+        "HyperX"
+      ]
+    },
+    {
+      "id": "50a994ef-02c4-5927-8147-09eae6ece1d6",
+      "code": "e-dra",
+      "name": "E-dra",
+      "aliases": [
+        "E-dra"
+      ]
+    },
+    {
+      "id": "d87827cd-c0a0-5a68-9444-0e106ecf3bd6",
+      "code": "orico",
+      "name": "Orico",
+      "aliases": [
+        "Orico"
+      ]
+    },
+    {
+      "id": "cfc59593-6461-5a87-9e74-354c79c59db1",
+      "code": "momax",
+      "name": "Momax",
+      "aliases": [
+        "Momax"
+      ]
+    },
+    {
+      "id": "ed9e6fb2-2c7e-5c7f-93af-f0301c529c7b",
+      "code": "tiger",
+      "name": "Tiger",
+      "aliases": [
+        "Tiger"
+      ]
+    },
+    {
+      "id": "a6118028-5afe-5795-8166-24e6c2bc5347",
+      "code": "akko",
+      "name": "AKKO",
+      "aliases": [
+        "AKKO"
+      ]
+    },
+    {
+      "id": "cf7f6379-c333-544d-bedc-cc66ade57197",
+      "code": "flyco",
+      "name": "Flyco",
+      "aliases": [
+        "Flyco"
+      ]
+    },
+    {
+      "id": "ebddbe2f-68a0-53b5-8a55-03e37530390d",
+      "code": "energizer",
+      "name": "Energizer",
+      "aliases": [
+        "Energizer"
+      ]
+    },
+    {
+      "id": "9cf78550-6bfe-5b41-a368-155ca22b23b0",
+      "code": "inateck",
+      "name": "inateck",
+      "aliases": [
+        "inateck"
+      ]
+    },
+    {
+      "id": "fb0e71b2-1f57-587d-865d-5bb8d1a51640",
+      "code": "paramax",
+      "name": "PARAMAX",
+      "aliases": [
+        "PARAMAX"
+      ]
+    },
+    {
+      "id": "d362794d-4d83-5e54-9bd3-79fdf3c5354c",
+      "code": "memumi",
+      "name": "Memumi",
+      "aliases": [
+        "Memumi"
+      ]
+    },
+    {
+      "id": "0561e035-e361-5d7a-ad66-4c436a56b9a1",
+      "code": "bosch",
+      "name": "Bosch",
+      "aliases": [
+        "Bosch"
+      ]
+    },
+    {
+      "id": "488e2443-e6b6-5816-ae67-3a1319314e13",
+      "code": "anank",
+      "name": "Anank",
+      "aliases": [
+        "Anank"
+      ]
+    },
+    {
+      "id": "fd401910-8ffd-5b20-a76b-a806b365bb10",
+      "code": "marshall",
+      "name": "Marshall",
+      "aliases": [
+        "Marshall"
+      ]
+    },
+    {
+      "id": "16e31cbe-f672-5ea9-be42-2878e82b5ab9",
+      "code": "tgvis",
+      "name": "TGVIS",
+      "aliases": [
+        "TGVIS"
+      ]
+    },
+    {
+      "id": "5c8951eb-f258-53c1-9edf-6d836fbe0678",
+      "code": "nomad",
+      "name": "Nomad",
+      "aliases": [
+        "Nomad"
+      ]
+    },
+    {
+      "id": "b80eafcb-133d-5aef-83d7-f178ab954093",
+      "code": "panasonic",
+      "name": "Panasonic",
+      "aliases": [
+        "Panasonic"
+      ]
+    }
+  ],
+  "policy": "Exact source labels and documented lexical aliases only. Distribution claims remain unresolved."
+}

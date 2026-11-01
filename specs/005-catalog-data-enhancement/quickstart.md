@@ -1,0 +1,2 @@
+# Validation
+Run `mvn -B -ntp -f demo/pom.xml clean verify` with Java 25 and Docker available. Install the pinned Python importer and image requirements plus `testcontainers[postgres]==4.15.0`, build the Maven dependency classpath as documented in the importer README, then run Python unittest discovery under tools/catalog-import. Follow the enhancement runbook to select only the existing pilot source identities and preview them against a disposable target. Do not apply to populated targets without separate authorization.

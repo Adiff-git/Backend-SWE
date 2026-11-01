@@ -45,6 +45,10 @@ public class ProductVariant {
 	@Column(name = "option_combination", nullable = false, columnDefinition = "jsonb")
 	private Map<String, String> optionCombination;
 
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "technical_specifications", nullable = false, columnDefinition = "jsonb")
+	private Map<String, Object> technicalSpecifications = Map.of("schema_version", 1, "values", Map.of());
+
 	@Column(name = "selling_price", nullable = false, columnDefinition = "numeric")
 	private BigDecimal sellingPrice;
 }

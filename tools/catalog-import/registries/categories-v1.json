@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "mappings": [],
+  "policy": "No new category assignments authorized. Add reviewed source/path/category_id entries explicitly; existing enrichment preserves target category."
+}

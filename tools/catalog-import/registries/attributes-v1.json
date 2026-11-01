@@ -1,0 +1,279 @@
+{
+  "version": 1,
+  "attributes": [
+    {
+      "key": "physical_ram",
+      "aliases": [
+        "Dung lượng RAM",
+        "RAM"
+      ],
+      "type": "quantity",
+      "unit": "GB",
+      "categories": [
+        "Laptop",
+        "Laptop cũ",
+        "Macbook",
+        "Mac cũ",
+        "Điện thoại",
+        "Điện thoại cũ",
+        "Màn hình máy tính",
+        "Màn hình",
+        "Máy tính bảng",
+        "Máy tính bảng cũ"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "display_diagonal",
+      "aliases": [
+        "Kích thước màn hình"
+      ],
+      "type": "quantity",
+      "unit": "inch",
+      "categories": [
+        "Laptop",
+        "Laptop cũ",
+        "Macbook",
+        "Mac cũ",
+        "Điện thoại",
+        "Điện thoại cũ",
+        "Màn hình máy tính",
+        "Màn hình",
+        "Máy tính bảng",
+        "Máy tính bảng cũ"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "refresh_rate",
+      "aliases": [
+        "Tần số quét"
+      ],
+      "type": "quantity",
+      "unit": "Hz",
+      "categories": [
+        "Laptop",
+        "Laptop cũ",
+        "Macbook",
+        "Mac cũ",
+        "Điện thoại",
+        "Điện thoại cũ",
+        "Màn hình máy tính",
+        "Màn hình",
+        "Máy tính bảng",
+        "Máy tính bảng cũ"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "cpu_model",
+      "aliases": [
+        "Loại CPU"
+      ],
+      "type": "text",
+      "unit": null,
+      "categories": [
+        "Laptop",
+        "Laptop cũ",
+        "Macbook",
+        "Mac cũ",
+        "Điện thoại",
+        "Điện thoại cũ",
+        "Màn hình máy tính",
+        "Màn hình",
+        "Máy tính bảng",
+        "Máy tính bảng cũ"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "cpu_family",
+      "aliases": [
+        "Công nghệ CPU"
+      ],
+      "type": "text",
+      "unit": null,
+      "categories": [
+        "Laptop",
+        "Laptop cũ",
+        "Macbook",
+        "Mac cũ",
+        "Điện thoại",
+        "Điện thoại cũ",
+        "Màn hình máy tính",
+        "Màn hình",
+        "Máy tính bảng",
+        "Máy tính bảng cũ"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "gpu_model",
+      "aliases": [
+        "Loại card đồ họa",
+        "Card đồ họa",
+        "GPU"
+      ],
+      "type": "text",
+      "unit": null,
+      "categories": [
+        "Laptop",
+        "Laptop cũ",
+        "Macbook",
+        "Mac cũ",
+        "Điện thoại",
+        "Điện thoại cũ",
+        "Màn hình máy tính",
+        "Màn hình",
+        "Máy tính bảng",
+        "Máy tính bảng cũ"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "installed_os",
+      "aliases": [
+        "Hệ điều hành"
+      ],
+      "type": "text",
+      "unit": null,
+      "categories": [
+        "Laptop",
+        "Laptop cũ",
+        "Macbook",
+        "Mac cũ",
+        "Điện thoại",
+        "Điện thoại cũ",
+        "Màn hình máy tính",
+        "Màn hình",
+        "Máy tính bảng",
+        "Máy tính bảng cũ"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "internal_storage",
+      "aliases": [
+        "Bộ nhớ trong"
+      ],
+      "type": "quantity",
+      "unit": "GB",
+      "categories": [
+        "Laptop",
+        "Laptop cũ",
+        "Macbook",
+        "Mac cũ",
+        "Điện thoại",
+        "Điện thoại cũ",
+        "Màn hình máy tính",
+        "Màn hình",
+        "Máy tính bảng",
+        "Máy tính bảng cũ"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "nfc_supported",
+      "aliases": [
+        "Công nghệ NFC"
+      ],
+      "type": "boolean",
+      "unit": null,
+      "categories": [
+        "Điện thoại",
+        "Điện thoại cũ",
+        "Máy tính bảng",
+        "Máy tính bảng cũ"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "weight",
+      "aliases": [
+        "Trọng lượng",
+        "Khối lượng máy"
+      ],
+      "type": "quantity",
+      "unit": "g",
+      "accepted_units": {
+        "g": 1,
+        "kg": 1000
+      },
+      "categories": [
+        "Laptop",
+        "Laptop cũ",
+        "Mac cũ",
+        "Điện thoại",
+        "Điện thoại cũ",
+        "Máy tính bảng",
+        "Màn hình máy tính"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "display_resolution",
+      "aliases": [
+        "Độ phân giải màn hình"
+      ],
+      "type": "resolution",
+      "unit": "px",
+      "categories": [
+        "Laptop"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "installed_storage_gb",
+      "aliases": [
+        "Ổ cứng"
+      ],
+      "type": "storage_gb",
+      "unit": "GB",
+      "categories": [
+        "Laptop"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "battery_capacity_wh",
+      "aliases": [
+        "Pin"
+      ],
+      "type": "battery_wh",
+      "unit": "Wh",
+      "categories": [
+        "Laptop"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    },
+    {
+      "key": "battery_capacity_mah",
+      "aliases": [
+        "Dung lượng pin"
+      ],
+      "type": "battery_mah",
+      "unit": "mAh",
+      "categories": [
+        "Phụ kiện",
+        "Âm thanh",
+        "Đồ gia dụng"
+      ],
+      "filter_eligible": true,
+      "parser_version": 1
+    }
+  ],
+  "policy": "Declared units only. Display resolution requires width x height; only leading installed GB storage is parsed where descriptive tail is unambiguous. TB/MB capacity conversion remains unapproved. Battery Wh and mAh remain distinct physical quantities and are never converted into each other. Compound/range values require review."
+}

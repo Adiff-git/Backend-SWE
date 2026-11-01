@@ -6,6 +6,7 @@
 .env
 .env.*
 !.env.example
+.wishlist-venv/
 .DS_Store
 Thumbs.db
 *.tmp
@@ -16,3 +17,19 @@ docs/
 
 # Local media fixture notes.
 /demo/src/test/resources/media/README.md
+
+# Reviewed Catalog architecture (raw datasets remain ignored)
+!docs/
+docs/*
+!docs/catalog-enhancement/
+!docs/catalog-enhancement/*.md
+!docs/catalog-enhancement/pilot-eligibility.json
+!docs/catalog-enhancement/isolated-enrichment-verification.json
+!docs/catalog-enhancement/brand-review.json
+!docs/catalog-enhancement/technical-review.json
+
+# Private runtime credentials and backups
+/.private/
+/tools/catalog-import/output/
+__pycache__/
+*.py[cod]

@@ -1,0 +1,23 @@
+# Linux-only host networking keeps the Backend on the existing loopback-only
+# PostgreSQL and hardened image gateway endpoints without joining raw S3.
+services:
+  backend:
+    build:
+      context: ./demo
+      dockerfile: Dockerfile.demo
+    network_mode: host
+    user: "${DEMO_UID:-1000}:${DEMO_GID:-1000}"
+    env_file:
+      - ${DEMO_ENV_FILE:-.env.demo.local}
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      LOCAL_DB_HOST: 127.0.0.1
+      SERVER_ADDRESS: 127.0.0.1
+      CATALOG_IMAGES_CHECKPOINT_DIRECTORY: /catalog-checkpoints
+    volumes:
+      - ${CATALOG_IMAGES_CHECKPOINT_DIRECTORY:-./tools/catalog-import/output/demo-product-checkpoints}:/catalog-checkpoints
+    depends_on:
+      postgres:
+        condition: service_healthy
+      image-storage:
+        condition: service_healthy
