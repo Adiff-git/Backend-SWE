@@ -21,6 +21,7 @@ public class UserConverter {
         d.setUsername(u.getUsername());
         d.setDisplayName(u.getDisplayName());
         d.setEmail(u.getEmail());
+        d.setEmailVerified(u.getEmailVerifiedAt()!=null);d.setHasLocalPassword(u.getPassword()!=null);
         d.setPhoneNumber(u.getPhoneNumber());
         d.setGender(u.getGender());
         d.setDateOfBirth(u.getDateOfBirth());

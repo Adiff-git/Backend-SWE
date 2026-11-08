@@ -225,6 +225,74 @@ feature requires every category. Tests MUST be deterministic and independent.
   controller, service, and database layers. E2E/flow integration tests MUST use
   `@SpringBootTest` and appropriate infrastructure for complete user-facing workflows.
 
+#### Test File and Package Organization
+
+Tests MUST use Package by Feature/Domain and Test Class by Responsibility. All Java
+tests MUST live under `demo/src/test/java` using the production root package
+`com.example.demo`. Test packages MUST mirror the owning domain and relevant layer
+(`service`, `validator`, `converter`, `controller`, `repository`, etc.); implementation
+subpackages MAY be mirrored when used consistently in that domain. Test resources MUST
+live under `demo/src/test/resources`.
+
+Tests MUST NOT be grouped primarily into top-level `unit`, `integration`, or `api`
+packages. A domain's unit tests MUST NOT be combined into one omnibus class. Each class
+MUST have a clear component or workflow responsibility. Different test categories for
+the same component MUST remain separate classes rather than mixing mocked unit tests,
+MVC slices, and full application-context tests in one class.
+
+| Responsibility | Class naming | Intended scope |
+|---|---|---|
+| Service implementation unit test | `<ServiceName>ImplTest` | Business rules with isolated dependencies |
+| Validator unit test | `<ValidatorName>Test` | Domain validation rules |
+| Converter/mapper unit test | `<ConverterName>Test` / `<MapperName>Test` | Meaningful mapping and calculation behavior |
+| Controller MVC slice | `<ControllerName>Test` | HTTP contract with mocked services |
+| Repository integration test | `<RepositoryName>IT` | Real PostgreSQL queries, mappings and constraints |
+| Service integration test | `<ServiceName>IT` | Real service and internal persistence flow |
+| API integration test | `<ControllerName>IT` | HTTP through controller, service and database |
+| Domain flow integration test | `<FeatureName>FlowIT` | A complete user-facing scenario |
+
+For example, `UserServiceImplTest` and `UserServiceIT` belong to the user service
+layer; `UserControllerTest` and `UserControllerIT` belong to the user controller layer.
+The naming table describes responsibilities, not a requirement to generate every class.
+Where an existing approved convention uses `<ServiceName>ImplIT`, it MAY be retained;
+both service IT names MUST NOT be created for the same responsibility.
+
+A flow contained within one domain SHOULD remain under that domain. Cross-domain
+end-to-end flows SHOULD live under `com.example.demo.e2e`. API integration tests MUST
+NOT be mislabeled as complete business-flow tests merely because they use a full context.
+Only real production components and meaningful workflows SHOULD receive test classes.
+Do not create empty placeholder classes unless explicitly requested. Entity/DTO accessors,
+framework-provided CRUD, and trivial delegation MUST NOT cause mechanical file generation.
+Unit, repository, service, API, and flow tests MAY cover related behavior when each proves
+a distinct boundary; assertions and setup MUST NOT be duplicated without added value.
+
+#### Test Data, Fixtures, and Local Helpers
+
+Reusable in-memory object factories SHOULD live under `com.example.demo.testdata.<domain>`.
+They MUST return fresh independent objects and SHOULD provide clearly named valid/default
+and business-state variants where these remove repeated setup. Unit tests MUST NOT use
+persistent fixtures or load a database just to construct objects.
+
+Persistent integration fixtures SHOULD live under `com.example.demo.fixture.<domain>`.
+JPA/EntityManager SHOULD be preferred for ordinary entity graphs. JDBC MAY be used for
+special database states, database-specific behavior, or justified bulk setup. Repository
+IT setup SHOULD avoid depending on the repository method being tested. Fixture transaction
+boundaries MUST remain separate from the service operation under test where transaction
+behavior is being verified.
+
+Small helpers shared only within one test class SHOULD remain local to that class. Shared
+factories/fixtures MUST NOT become a single cross-domain catch-all or an opaque scenario
+framework. Tests MUST make the preconditions and overrides relevant to their behavior clear.
+Test methods SHOULD be grouped in the corresponding production-method order; `@Nested`
+MAY group related behavior when it improves readability.
+
+Shared infrastructure belongs under `com.example.demo.config` only when it removes real
+duplication. Prefer Spring Boot test auto-configuration; do not manually redeclare all
+production beans. PostgreSQL container configuration SHOULD be shared when safe, while
+each test retains independent data. Shared fixture/config/e2e directories MUST NOT be
+created solely to satisfy an illustrative tree. `application-test.properties` and SQL/JSON
+resources SHOULD be added only when required by the selected tests.
+
 Unit and slice classes MUST end in `Test`; integration classes MUST end in `IT`.
 Repository integration tests use `IT` despite their slice annotation. Methods MUST follow
 `methodName_shouldExpectedBehavior_whenCondition` or `methodName_shouldExpectedBehavior`.
@@ -339,7 +407,7 @@ MUST reflect the latest amendment. Corrections to an unratified initial draft do
 a new ratification or amendment event. Compliance MUST be assessed through the normal
 Spec Kit planning and review workflow.
 
-Ratification status is unverified. The existing version and dates below are retained pending
-confirmation; they do not establish formal approval or a verified amendment history.
+Ratification status remains unverified. The testing-organization amendment below was requested
+by the developer; retaining the original ratification date does not verify initial adoption.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-23
+**Version**: 1.1.0 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-30

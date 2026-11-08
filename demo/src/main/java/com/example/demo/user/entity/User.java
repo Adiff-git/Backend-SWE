@@ -22,8 +22,9 @@ public class User {
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id;
     @Column(length=100) private String displayName;
     @Column(nullable=false,length=50) private String username;
-    @Column(nullable=false,columnDefinition="TEXT") private String password;
+    @Column(columnDefinition="TEXT") private String password;
     @Column(length=254) private String email;
+    private Instant emailVerifiedAt;
     @Column(length=20) private String phoneNumber;
     @Enumerated(EnumType.STRING) @Column(nullable=false,length=16) private AccountStatus accountStatus;
     @Enumerated(EnumType.STRING) @Column(length=6) private Gender gender;

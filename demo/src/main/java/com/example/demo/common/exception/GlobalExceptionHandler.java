@@ -41,6 +41,11 @@ public class GlobalExceptionHandler {
         return response(factory.from(failure,request.getRequestURI()));
     }
     private ResponseEntity<ApiError> response(ApiError error) {
-        return ResponseEntity.status(error.getStatus()).contentType(MediaType.APPLICATION_PROBLEM_JSON).body(error);
+        ResponseEntity.BodyBuilder response = ResponseEntity.status(error.getStatus())
+                .contentType(MediaType.APPLICATION_PROBLEM_JSON);
+        if (error.getStatus() == 401) {
+            response.header("WWW-Authenticate", "Bearer");
+        }
+        return response.body(error);
     }
 }

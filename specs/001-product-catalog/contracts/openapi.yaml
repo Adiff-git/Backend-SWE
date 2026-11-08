@@ -3,8 +3,8 @@ info:
   title: Backend Product Catalog
   version: 0.1.0
   description: >-
-    Proposed Feature 1 contract. Public reads include only PUBLISHED products.
-    Upload routes require a separately implemented verified ADMIN principal.
+    Current product catalog contract. Public reads include only PUBLISHED products.
+    Image attachment requires a verified ADMIN principal.
     Signed image URLs are embedded in product responses and are valid for at
     most five minutes; clients refresh them by requesting the product again.
 servers:
@@ -56,16 +56,21 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
-  /api/products/{id}/images/uploads:
+  /api/products/{id}/images:
     post:
       tags: [Product images]
-      operationId: prepareProductImageUpload
-      summary: Prepare a private staged image upload
+      operationId: attachProductImage
+      summary: Attach an owned completed image to a product (ADMIN only)
       description: >-
-        Enabled only after the authentication dependency supplies a verified
-        stable ADMIN principal ID. The PUT URL targets a private staging key.
-        Clients must send every returned required header. The URL and session
-        expire no later than 15 minutes after preparation.
+        Upload through POST /api/image-uploads, PUT the bytes to its signed URL,
+        then POST /api/image-uploads/{imageId}/complete before attaching.
+        The authenticated administrator must own the completed image. Product
+        validation enforces JPEG/PNG/WebP, at most 10 MiB, one frame, valid
+        dimensions and bounded decoding. A verified product copy and local
+        checkpoint are saved before gallery commit. Maximum ten images, unique
+        content/order and exactly one primary image are enforced under a product
+        row lock. An identical attachment retry returns 200 with the same image;
+        conflicting explicit metadata returns 409. Shared source media is retained.
       security:
         - bearerAuth: []
       parameters:
@@ -74,67 +79,18 @@ paths:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/PrepareImageUploadRequest' }
+            schema: { $ref: '#/components/schemas/AttachProductImageRequest' }
       responses:
         '201':
-          description: Prepared upload; no gallery image exists yet.
+          description: Image attached.
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/PreparedImageUpload' }
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '503':
-          $ref: '#/components/responses/StorageUnavailable'
-  /api/products/{id}/images/uploads/{uploadId}/complete:
-    post:
-      tags: [Product images]
-      operationId: completeProductImageUpload
-      summary: Validate and publish a staged image
-      description: >-
-        Requires the same verified ADMIN principal that prepared the session.
-        The 15-minute session deadline applies to the final locked and fenced
-        database-side eligibility check, which uses PostgreSQL clock_timestamp()
-        and must occur strictly before expiresAt. Starting completion before
-        expiry does not itself grant eligibility. A check at or after expiresAt
-        returns 409 and creates no gallery image. A passing check publishes only
-        if its transaction commits successfully; physical commit may occur after
-        expiry. The first successful response is 201. An idempotent retry of a
-        committed publication, including after expiry, returns 200 with the same
-        image ID and metadata. No public URL is returned here because the
-        product may be unpublished; incomplete objects remain private.
-      security:
-        - bearerAuth: []
-      parameters:
-        - $ref: '#/components/parameters/ProductId'
-        - name: uploadId
-          in: path
-          required: true
-          description: Canonical hyphenated UUID.
-          schema: { $ref: '#/components/schemas/Uuid' }
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema: { $ref: '#/components/schemas/CompleteImageUploadRequest' }
-      responses:
-        '201':
-          description: Image publication committed after a final pre-expiry eligibility check.
-          content:
-            application/json:
-              schema: { $ref: '#/components/schemas/CompletedImageUpload' }
+              schema: { $ref: '#/components/schemas/AttachedProductImage' }
         '200':
-          description: Idempotent replay of a committed image publication, including after expiry.
+          description: Existing attachment returned for an identical retry.
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/CompletedImageUpload' }
+              schema: { $ref: '#/components/schemas/AttachedProductImage' }
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -149,19 +105,20 @@ paths:
           $ref: '#/components/responses/InvalidImage'
         '503':
           $ref: '#/components/responses/StorageUnavailable'
+
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: Future verified JWT integration; Security starter alone is insufficient.
+      description: Verified JWT with current database role checks.
   parameters:
     ProductId:
       name: id
       in: path
       required: true
-      description: Canonical hyphenated UUID; unknown/unpublished reads return 404.
+      description: Canonical hyphenated UUID; unknown products return 404, and reads also hide unpublished products.
       schema: { $ref: '#/components/schemas/Uuid' }
   responses:
     BadRequest:
@@ -175,22 +132,22 @@ components:
         application/problem+json:
           schema: { $ref: '#/components/schemas/Problem' }
     Forbidden:
-      description: CUSTOMER, or a different ADMIN completing another preparer's upload.
+      description: Authenticated caller does not have the ADMIN role.
       content:
         application/problem+json:
           schema: { $ref: '#/components/schemas/Problem' }
     NotFound:
-      description: Product absent or hidden, or upload absent/not associated with this product.
+      description: Product absent or hidden on reads, or source image absent/not owned by the caller.
       content:
         application/problem+json:
           schema: { $ref: '#/components/schemas/Problem' }
     Conflict:
-      description: Expired session, full gallery, occupied display order, or conflicting completion.
+      description: Source upload not completed, full gallery, duplicate content, occupied order, or conflicting attachment metadata.
       content:
         application/problem+json:
           schema: { $ref: '#/components/schemas/Problem' }
     InvalidImage:
-      description: Missing staged object or bytes fail content/size/dimension validation.
+      description: Image bytes fail product content/size/dimension validation.
       content:
         application/problem+json:
           schema: { $ref: '#/components/schemas/Problem' }
@@ -283,39 +240,21 @@ components:
               maxItems: 10
               description: Ascending displayOrder; empty when no images.
               items: { $ref: '#/components/schemas/ProductImageSummary' }
-    PrepareImageUploadRequest:
+    AttachProductImageRequest:
       type: object
       additionalProperties: false
-      required: [contentType, byteSize, altText]
+      required: [imageId, altText]
       properties:
-        contentType: { type: string, enum: [image/jpeg, image/png, image/webp] }
-        byteSize: { type: integer, minimum: 1, maximum: 10485760 }
-        altText: { type: string, minLength: 1, description: Nonblank after trim. }
-    PreparedImageUpload:
-      type: object
-      additionalProperties: false
-      required: [uploadId, uploadUrl, method, requiredHeaders, expiresAt]
-      properties:
-        uploadId: { $ref: '#/components/schemas/Uuid' }
-        uploadUrl: { type: string, format: uri, description: Temporary private staging PUT URL. }
-        method: { type: string, const: PUT }
-        requiredHeaders:
-          type: object
-          additionalProperties: { type: string }
-          description: Exact signed headers required for the S3 PUT.
-        expiresAt: { type: string, format: date-time }
-    CompleteImageUploadRequest:
-      type: object
-      additionalProperties: false
-      description: >-
-        Omitted primary selection means false for later images and true for the
-        first image. Omitted order appends at the next free position. Explicit
-        null is invalid for either field. Explicit false on the first image is
-        invalid because every nonempty gallery needs a primary.
-      properties:
-        isPrimary: { type: boolean }
-        displayOrder: { type: integer, minimum: 0 }
-    CompletedImageUpload:
+        imageId: { $ref: '#/components/schemas/Uuid' }
+        altText: { type: string, minLength: 1, description: Nonblank. }
+        isPrimary:
+          type: boolean
+          description: Defaults to true for the first image, false thereafter. Explicit null is invalid.
+        displayOrder:
+          type: integer
+          minimum: 0
+          description: Defaults to the position after the last image. Explicit null is invalid.
+    AttachedProductImage:
       type: object
       additionalProperties: false
       required: [imageId, productId, altText, width, height, displayOrder, isPrimary]

@@ -35,7 +35,7 @@ public class UpdateUserRequest {
     }
     public void setEmail(String value) {
         emailPresent=true;
-        email=normalize(value);
+        throw new com.example.demo.user.exception.EmailVerificationRequiredException();
     }
     public void setPhoneNumber(String value) {
         phoneNumber=normalize(value);

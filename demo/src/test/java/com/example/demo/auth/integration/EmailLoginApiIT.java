@@ -7,9 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class EmailLoginApiIT extends AuthPostgresTestSupport {
     @Test void login_shouldTrustOnlyCurrentEmailAndPreserveUsernameLogin() throws Exception {
         Pair owner=register("Alice");
-        mvc.perform(put("/api/me").header("Authorization",owner.access).contentType("application/json").content(json.writeValueAsString(Map.of("email"," First@Example.com ")))).andExpect(status().isOk());
+        userService.replaceVerifiedEmail(users.findAll().getFirst().getId(),"first@example.com",java.time.Instant.now());
         login("FIRST@example.com",200);
-        mvc.perform(put("/api/me").header("Authorization",owner.access).contentType("application/json").content(json.writeValueAsString(Map.of("email","second@example.com")))).andExpect(status().isOk());
+        userService.replaceVerifiedEmail(users.findAll().getFirst().getId(),"second@example.com",java.time.Instant.now());
         login("first@example.com",401);
         login("SECOND@example.com",200);
         login("ALICE",200);
@@ -29,8 +29,7 @@ class EmailLoginApiIT extends AuthPostgresTestSupport {
         Long id=users.findAll().getFirst().getId();
         if(email) {
             var initial=new com.example.demo.user.dto.request.UpdateUserRequest();
-            initial.setEmail("first@example.com");
-            userService.updateUser(id,initial);
+            userService.replaceVerifiedEmail(id,"first@example.com",java.time.Instant.now());
         }
         String oldIdentifier=email?"first@example.com":"Alice";
         String nextIdentifier=email?"second@example.com":"Renamed";
@@ -38,7 +37,7 @@ class EmailLoginApiIT extends AuthPostgresTestSupport {
         try(var pool=java.util.concurrent.Executors.newSingleThreadExecutor()) {
             var pending=new java.util.concurrent.atomic.AtomicReference<java.util.concurrent.Future<?>>();
             new org.springframework.transaction.support.TransactionTemplate(transactions).executeWithoutResult(tx-> {
-                userService.getUserEntityForUpdate(id);var change=new com.example.demo.user.dto.request.UpdateUserRequest();if(email)change.setEmail(nextIdentifier);else change.setUsername(nextIdentifier);userService.updateUser(id,change);
+                userService.getUserEntityForUpdate(id);var change=new com.example.demo.user.dto.request.UpdateUserRequest();if(email)userService.replaceVerifiedEmail(id,nextIdentifier,java.time.Instant.now());else {change.setUsername(nextIdentifier);userService.updateUser(id,change);}
                 pending.set(pool.submit(()-> {
                     started.countDown();org.assertj.core.api.Assertions.assertThatThrownBy(()->authService.login(oldIdentifier,"Password 123")).isInstanceOf(com.example.demo.auth.exception.AuthenticationFailedException.class);
                 }

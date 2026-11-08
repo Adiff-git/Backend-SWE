@@ -13,5 +13,8 @@ public interface UserService {
     java.util.Optional<Long> resolveSecurityIdentifier(String identifier);
     com.example.demo.user.dto.response.UserSecuritySnapshot getUserSecuritySnapshot(Long id);
     Long createAuthenticationUser(String username,String encodedPassword);
+    Long createVerifiedAccount(String email, String encodedPassword, java.time.Instant verifiedAt);
+    void replaceVerifiedEmail(Long id, String email, java.time.Instant verifiedAt);
+    void setInitialEncodedPassword(Long id, String encodedPassword);
     void replaceEncodedPassword(Long id,String encodedPassword);
 }

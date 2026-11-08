@@ -56,7 +56,7 @@ public class AuthSecurityConfiguration {
         return new ProviderManager(provider);
     }
     @Bean @Order(1) public SecurityFilterChain credentialsChain(HttpSecurity http,ApiAuthenticationEntryPoint entry,ApiAccessDeniedHandler denied) throws Exception {
-        RequestMatcher paths=request->"POST".equals(request.getMethod()) && List.of("/api/auth/register","/api/auth/login","/api/auth/refresh","/api/auth/logout").contains(request.getRequestURI().substring(request.getContextPath().length()));
+        RequestMatcher paths=request->"POST".equals(request.getMethod()) && List.of("/api/auth/register","/api/auth/registration-verifications/confirm","/api/auth/registration-verifications/resend","/api/auth/login","/api/auth/refresh","/api/auth/logout").contains(request.getRequestURI().substring(request.getContextPath().length()));
         http.securityMatcher(paths).csrf(c->c.disable()).cors(org.springframework.security.config.Customizer.withDefaults())
             .sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .requestCache(c->c.disable())
@@ -79,6 +79,9 @@ public class AuthSecurityConfiguration {
             .logout(c->c.disable())
             .exceptionHandling(e->e.authenticationEntryPoint(entry).accessDeniedHandler(denied))
         .authorizeHttpRequests(a->a
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/me/wishlist").hasAuthority("MANAGE_WISHLIST")
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/me/wishlist/*").hasAuthority("MANAGE_WISHLIST")
+                .requestMatchers(org.springframework.http.HttpMethod.DELETE,"/api/me/wishlist/*").hasAuthority("MANAGE_WISHLIST")
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/image-uploads","/api/image-uploads/*/complete").authenticated()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/image-uploads/*/download-url").authenticated()
                 .requestMatchers("/api/me").hasAuthority("MANAGE_USER_PROFILE")

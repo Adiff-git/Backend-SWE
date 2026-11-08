@@ -41,6 +41,68 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 	private final ProductCatalogConverter converter;
 
 	@Override
+	@Transactional(readOnly = true)
+	public Product getPublishedProductEntity(UUID id) {
+		return products.findByIdAndStatus(id, ProductStatus.PUBLISHED)
+				.orElseThrow(ProductNotFoundException::new);
+	}
+
+	@Override
+	@Transactional // Existing publication-safe image signing uses FOR SHARE.
+	public Map<UUID, ProductSummary> getProductSummaries(Collection<UUID> requestedIds) {
+		if (requestedIds == null || requestedIds.size() > MAX_SIZE
+				|| requestedIds.stream().anyMatch(java.util.Objects::isNull)) {
+			throw new InvalidCatalogRequestException("Invalid summary identifiers");
+		}
+		List<UUID> ids = requestedIds.stream().distinct().toList();
+		if (ids.isEmpty()) {
+			return Map.of();
+		}
+		List<ProductImage> primaryImages = images.findPrimaryImagesForProducts(ids);
+		Map<UUID, Product> eligible = indexProducts(
+				products.findAllByIdsAndStatusWithCategory(ids, ProductStatus.PUBLISHED));
+		Map<UUID, ProductImage> primaryByProduct = new HashMap<>();
+		for (ProductImage image : primaryImages) {
+			UUID id = image.getProduct().getId();
+			if (eligible.containsKey(id)) {
+				primaryByProduct.put(id, image);
+			}
+		}
+		Map<UUID, String> urls = new HashMap<>();
+		if (!primaryByProduct.isEmpty()) {
+			try (PreparedReadSigner signer = imageStorage.prepareReadSigner()) {
+				Set<UUID> published = lockPublishedImageProducts(primaryByProduct.keySet());
+				for (UUID id : primaryByProduct.keySet()) {
+					if (published.contains(id)) {
+						urls.put(id, signer.signReadUrl(primaryByProduct.get(id).getObjectKey()));
+					} else {
+						eligible.remove(id);
+					}
+				}
+			}
+		}
+		// Products without image locks still need a final publication revalidation.
+		List<UUID> withoutImages = ids.stream()
+				.filter(id -> !primaryByProduct.containsKey(id)).toList();
+		if (!withoutImages.isEmpty()) {
+			Map<UUID, Product> revalidated = indexProducts(
+					products.findAllByIdsAndStatusWithCategory(withoutImages, ProductStatus.PUBLISHED));
+			for (UUID id : withoutImages) {
+				eligible.remove(id);
+			}
+			eligible.putAll(revalidated);
+		}
+		Map<UUID, ProductSummary> summaries = new HashMap<>();
+		for (UUID id : ids) {
+			Product product = eligible.get(id);
+			if (product != null) {
+				summaries.put(id, converter.toSummary(product, urls.get(id)));
+			}
+		}
+		return Map.copyOf(summaries);
+	}
+
+	@Override
 	@Transactional // FOR SHARE URL eligibility requires a write-capable transaction.
 	public ProductPage listProducts(int page, int size) {
 		validatePage(page, size);

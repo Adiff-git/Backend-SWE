@@ -12,7 +12,6 @@ class AuthenticationFlowIT extends AuthPostgresTestSupport {
     @Test void execute_shouldVerifyFullFlowPreservesContractsWithoutLeakingCredentials(CapturedOutput output) throws Exception {
         Pair p=register("Alice");
         assertThat(access(p)).isEqualTo(200);
-        mvc.perform(put("/api/me").header("Authorization",p.access).contentType("application/json").content("{\"email\":\"Alice@Example.com\"}")).andExpect(status().isOk());
         Pair email=pair(mvc.perform(post("/api/auth/login").contentType("application/json").content("{\"identifier\":\"ALICE@example.com\",\"password\":\"Password 123\"}")).andExpect(status().isOk()).andReturn());
         Pair replacement=pair(refresh(p.refresh).andExpect(status().isOk()).andReturn());
         refresh(p.refresh).andExpect(status().isUnauthorized());

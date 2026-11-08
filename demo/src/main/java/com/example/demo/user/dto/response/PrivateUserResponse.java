@@ -9,6 +9,8 @@ public class PrivateUserResponse {
     private String displayName;
     private String username;
     private String email;
+    private boolean emailVerified;
+    private boolean hasLocalPassword;
     private String phoneNumber;
     private com.example.demo.user.enums.AccountStatus accountStatus;
     private com.example.demo.user.enums.Gender gender;

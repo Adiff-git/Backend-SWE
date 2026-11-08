@@ -26,9 +26,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class PackagedImageFlowIT extends MediaInfrastructureTestSupport {
     @Autowired DataSource dataSource;
+    @Autowired com.example.demo.user.service.UserService userService;
+    @Autowired org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     @Autowired JsonMapper json;
 
     @Test void packagedJar_shouldUploadDecodeAndViewAllFormatsOnJava25() throws Exception {
+        userService.createVerifiedAccount("packagedowner@example.com",passwordEncoder.encode("Password 123"),java.time.Instant.now());
         int port;
         try (ServerSocket reserved = new ServerSocket(0)) { port = reserved.getLocalPort(); }
         String databaseUrl;
@@ -41,6 +44,7 @@ class PackagedImageFlowIT extends MediaInfrastructureTestSupport {
         assertThat(Files.isRegularFile(jar)).isTrue();
         String javaName = System.getProperty("os.name").startsWith("Windows") ? "java.exe" : "java";
         List<String> command = new ArrayList<>(List.of(Path.of(System.getProperty("java.home"), "bin", javaName).toString(),
+                "-Djdk.net.unixdomain.tmpdir="+System.getProperty("jdk.net.unixdomain.tmpdir",Path.of("target").toAbsolutePath().toString()),
                 "-jar", jar.toString(), "--server.port=" + port, "--spring.profiles.active=local",
                 "--spring.datasource.url=" + databaseUrl, "--spring.datasource.driver-class-name=org.postgresql.Driver",
                 "--spring.datasource.username=" + databaseUser, "--spring.datasource.password=test",
@@ -65,10 +69,10 @@ class PackagedImageFlowIT extends MediaInfrastructureTestSupport {
                 Thread.sleep(200);
             }
             assertThat(ready).as("Packaged app startup; diagnostic file: %s", output).isTrue();
-            HttpResponse<String> registration = browser.send(HttpRequest.newBuilder(base.resolve("/api/auth/register"))
+            HttpResponse<String> registration = browser.send(HttpRequest.newBuilder(base.resolve("/api/auth/login"))
                     .header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(
-                            "{\"username\":\"PackagedOwner\",\"password\":\"Password 123\"}")).build(), HttpResponse.BodyHandlers.ofString());
-            assertThat(registration.statusCode()).isEqualTo(201);
+                            "{\"identifier\":\"packagedowner@example.com\",\"password\":\"Password 123\"}")).build(), HttpResponse.BodyHandlers.ofString());
+            assertThat(registration.statusCode()).isEqualTo(200);
             String token = registration.headers().firstValue("Authorization").orElseThrow();
             for (String fixture : List.of("valid.jpg", "valid.png", "lossy.webp")) {
                 String type = fixture.endsWith("jpg") ? "image/jpeg" : fixture.endsWith("png") ? "image/png" : "image/webp";

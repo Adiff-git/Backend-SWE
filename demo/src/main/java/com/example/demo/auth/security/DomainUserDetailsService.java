@@ -10,6 +10,8 @@ public class DomainUserDetailsService implements UserDetailsService {
     private final UserService users;
     public UserDetails loadUserByUsername(String identifier) {
         Long id=users.resolveSecurityIdentifier(identifier).orElseThrow(()->new UsernameNotFoundException("Authentication failed"));
-        return new CustomUserDetails(users.getUserSecuritySnapshot(id));
+        com.example.demo.user.dto.response.UserSecuritySnapshot snapshot=users.getUserSecuritySnapshot(id);
+        if(snapshot.getEncodedPassword()==null)throw new UsernameNotFoundException("Authentication failed");
+        return new CustomUserDetails(snapshot);
     }
 }

@@ -1,20 +1,20 @@
 # Local image storage trust boundary
 
-Use `compose.yaml` together with `compose.catalog-images.yaml` for the Catalog image workflow. The base Compose file alone is a generic local emulator setup, not this hardened image-storage configuration.
+Use `compose.dev.yaml` for the local development stack, including the backend, PostgreSQL and signed image gateway.
 
 The hardened topology is:
 
 ```text
-Host backend/browser → 127.0.0.1:14566 → signed gateway :4567
+Host backend/browser → 127.0.0.1:14567 → signed gateway :4567
                                           │
                         shared trusted network namespace
                                           │
                                 127.0.0.1:4566 → raw S3
 ```
 
-Only LocalStack and the trusted gateway share that namespace. PostgreSQL/application containers stay on the default network; raw storage is on a separate `storage-private` bridge. Raw S3 binds **127.0.0.1 inside its own namespace**, with no host port mapping. The gateway binds :4567 and only that port is loopback-published. Backend signed S3 operations and presigned URLs retain the same external endpoint. Changing the raw port number is not the protection: the loopback-only bind rejects bridge connections even from an ordinary container deliberately attached to the storage bridge.
+Only LocalStack and the trusted gateway share that namespace. PostgreSQL stays on the default network. The backend also joins `storage-private` to reach the gateway at `localstack:4567`; raw S3 remains bound to namespace loopback. Raw S3 binds **127.0.0.1 inside its own namespace**, with no host port mapping. The gateway binds :4567 and only that port is loopback-published. Backend signed S3 operations and presigned URLs retain the same external endpoint. Changing the raw port number is not the protection: the loopback-only bind rejects bridge connections even from an ordinary container deliberately attached to the storage bridge.
 
-The pinned LocalStack 4.14 Community Twisted runtime ignores IPv4 `GATEWAY_LISTEN` interface addresses. The override explicitly selects its supported **Hypercorn** runtime, which honors `127.0.0.1:4566`. Disposable attacker tests enforce this distinction: a configuration that merely sets the address under Twisted fails the raw-access assertion.
+The pinned LocalStack 4.14 Community Twisted runtime ignores IPv4 `GATEWAY_LISTEN` interface addresses. The Compose configuration explicitly selects its supported **Hypercorn** runtime, which honors `127.0.0.1:4566`. Disposable attacker tests enforce this distinction: a configuration that merely sets the address under Twisted fails the raw-access assertion.
 
 The private bridge is separate, not Docker `internal: true`: on the tested Docker setup an internal network also prevented access to the loopback-published signed endpoint. Namespace loopback binding remains the enforced raw-storage boundary. No untrusted workload should share the LocalStack/gateway network namespace. Do not mount a Docker socket, use host networking, or grant privileged Docker access to untrusted applications.
 

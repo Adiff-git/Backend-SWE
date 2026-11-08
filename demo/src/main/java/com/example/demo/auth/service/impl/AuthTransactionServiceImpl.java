@@ -34,14 +34,6 @@ public class AuthTransactionServiceImpl implements AuthTransactionService {
     private final PasswordEncoder encoder;
     private final AuthenticationManager authentication;
     private final Clock clock;
-    public AuthOutcome register(String username,String password) {
-        policy.validate(password);
-        Long id=users.createAuthenticationUser(username,encoder.encode(password));
-        users.getUserEntityForUpdate(id);
-        Authentication result=authentication.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(username,password));
-        if(!(result.getPrincipal() instanceof CustomUserDetails details) || !id.equals(details.getId()))throw new AuthenticationFailedException();
-        return issueNew(id);
-    }
     public AuthOutcome login(String identifier,String password) {
         if(password==null || password.getBytes(java.nio.charset.StandardCharsets.UTF_8).length>72)throw new AuthenticationFailedException();
         Optional<Long> candidate=users.resolveSecurityIdentifier(identifier);

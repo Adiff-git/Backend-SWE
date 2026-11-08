@@ -2,6 +2,10 @@ package com.example.demo.catalog.service;
 
 import com.example.demo.catalog.dto.response.ProductPage;
 import com.example.demo.catalog.dto.response.ProductDetail;
+import com.example.demo.catalog.dto.response.ProductSummary;
+import com.example.demo.catalog.entity.Product;
+import java.util.Collection;
+import java.util.Map;
 import java.util.UUID;
 
 public interface ProductCatalogService {
@@ -13,4 +17,10 @@ public interface ProductCatalogService {
 	ProductPage listProducts(int page, int size);
 
 	ProductDetail getProduct(UUID id);
+
+	/** Internal eligible reference; no detail/gallery loading. */
+	Product getPublishedProductEntity(UUID id);
+
+	/** Bounded, fully prepared public summaries; ineligible IDs are absent. */
+	Map<UUID, ProductSummary> getProductSummaries(Collection<UUID> ids);
 }

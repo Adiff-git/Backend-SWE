@@ -12,10 +12,6 @@ import lombok.RequiredArgsConstructor;
 @Service @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final AuthTransactionService commands;
-    public IssuedTokens register(String username,String password) {
-        requireEntryBoundary();
-        return accepted(commands.register(username,password)).getTokens();
-    }
     public IssuedTokens login(String identifier,String password) {
         requireEntryBoundary();
         return accepted(commands.login(identifier,password)).getTokens();

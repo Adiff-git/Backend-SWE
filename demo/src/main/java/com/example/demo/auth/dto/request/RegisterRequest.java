@@ -1,15 +1,16 @@
 package com.example.demo.auth.dto.request;
+
+import com.fasterxml.jackson.annotation.JsonSetter;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import lombok.Setter;
-@Getter @Setter
-public class RegisterRequest {
-    @jakarta.validation.constraints.NotNull @com.example.demo.user.validator.CodePointLength(max=50) @jakarta.validation.constraints.NotBlank @jakarta.validation.constraints.Pattern(regexp="[^@]*") @tools.jackson.databind.annotation.JsonDeserialize(using=com.example.demo.auth.validator.StrictStringDeserializer.class) private String username;
-    @jakarta.validation.constraints.NotNull @tools.jackson.databind.annotation.JsonDeserialize(using=com.example.demo.auth.validator.StrictStringDeserializer.class) private String password;
-    public void setUsername(String value) {
-        username=value==null?null:value.strip();
-    }
-    @com.fasterxml.jackson.annotation.JsonAnySetter
-    public void rejectUnknown(String field,tools.jackson.databind.JsonNode value) {
-        throw new com.example.demo.user.exception.BusinessValidationException("Unsupported request field");
-    }
+import lombok.NoArgsConstructor;
+import tools.jackson.databind.JsonNode;
+
+@Getter @NoArgsConstructor
+public class RegisterRequest extends IdentityRequest {
+    @NotBlank @Size(max=254) @jakarta.validation.constraints.Email private String email;
+    @NotBlank private String password;
+    @JsonSetter("email") public void setEmail(JsonNode value){email=text(value).strip();}
+    @JsonSetter("password") public void setPassword(JsonNode value){password=text(value);}
 }

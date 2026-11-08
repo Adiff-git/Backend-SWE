@@ -60,15 +60,27 @@ class CatalogMigrationsIT {
 	}
 
 	@Test
-	void migrations_shouldCreateTenVersionsAndDeferredTriggers() throws SQLException {
+	void migrations_shouldPreserveCatalogVersionsAndDeferredTriggers() throws SQLException {
 		try (Connection connection = openConnection()) {
-			assertThat(count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success")).isEqualTo(10);
-			assertThat(count(connection, "SELECT COUNT(DISTINCT version) FROM flyway_schema_history WHERE success")).isEqualTo(10);
-			assertThat(count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version IN ('1','2','3','4','5','6','7','8','9','10') AND success")).isEqualTo(10);
+			assertThat(count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success")).isEqualTo(14);
+			assertThat(count(connection, "SELECT COUNT(DISTINCT version) FROM flyway_schema_history WHERE success")).isEqualTo(14);
+			assertThat(count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version IN ('1','2','3','4','5','6','7','8','9','10','11','12') AND success")).isEqualTo(12);
 			assertThat(count(connection, "SELECT COUNT(*) FROM pg_trigger WHERE tgname IN "
 					+ "('ct_products_variant_integrity', 'ct_product_variants_integrity', "
 					+ "'ct_product_images_gallery_integrity') AND tgdeferrable AND tginitdeferred"))
 					.isEqualTo(3);
+		}
+	}
+
+	@Test
+	void attachmentSource_shouldReferenceSharedUploadsAndBeUniquePerProduct() throws SQLException {
+		try (Connection connection = openConnection()) {
+			assertThat(count(connection, "SELECT COUNT(*) FROM information_schema.columns WHERE table_name='product_images' AND column_name='source_image_id' AND is_nullable='YES' AND data_type='uuid'"))
+					.isEqualTo(1);
+			assertThat(count(connection, "SELECT COUNT(*) FROM pg_constraint WHERE conrelid='product_images'::regclass AND confrelid='image_uploads'::regclass AND contype='f'"))
+					.isEqualTo(1);
+			assertThat(count(connection, "SELECT COUNT(*) FROM pg_constraint WHERE conrelid='product_images'::regclass AND conname='uk_product_images_source' AND contype='u'"))
+					.isEqualTo(1);
 		}
 	}
 
