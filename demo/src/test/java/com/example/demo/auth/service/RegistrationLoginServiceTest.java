@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 class RegistrationLoginServiceTest extends AuthCommandTestSupport {
     @Test void execute_shouldRejectInvalidPasswordBeforeCreatingAccount() {
-        assertThatThrownBy(()->commands.register("Alice","short")).isInstanceOf(com.example.demo.user.exception.BusinessValidationException.class);
+        assertThatThrownBy(()->new com.example.demo.auth.validator.PasswordPolicyValidator().validate("short")).isInstanceOf(com.example.demo.user.exception.BusinessValidationException.class);
         verifyNoInteractions(users,sessions,manager);
     }
     @Test void execute_shouldRejectOversizedLoginBeforeBcryptCanTruncate() {

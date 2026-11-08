@@ -56,7 +56,7 @@ public class AuthSecurityConfiguration {
         return new ProviderManager(provider);
     }
     @Bean @Order(1) public SecurityFilterChain credentialsChain(HttpSecurity http,ApiAuthenticationEntryPoint entry,ApiAccessDeniedHandler denied) throws Exception {
-        RequestMatcher paths=request->"POST".equals(request.getMethod()) && List.of("/api/auth/register","/api/auth/login","/api/auth/refresh","/api/auth/logout").contains(request.getRequestURI().substring(request.getContextPath().length()));
+        RequestMatcher paths=request->"POST".equals(request.getMethod()) && List.of("/api/auth/register","/api/auth/registration-verifications/confirm","/api/auth/registration-verifications/resend","/api/auth/login","/api/auth/refresh","/api/auth/logout").contains(request.getRequestURI().substring(request.getContextPath().length()));
         http.securityMatcher(paths).csrf(c->c.disable()).cors(org.springframework.security.config.Customizer.withDefaults())
             .sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .requestCache(c->c.disable())

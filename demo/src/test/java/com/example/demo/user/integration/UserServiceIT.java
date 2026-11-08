@@ -20,8 +20,7 @@ class UserServiceIT extends PostgresTestSupport {
     @Test void updateUser_shouldNormalizeEmailAndPreserveOmittedValuesAcrossTransactions() {
         Long id=users.saveAndFlush(UserTestData.user("Alice")).getId();
         UpdateUserRequest first=new UpdateUserRequest();
-        first.setEmail(" NAME@EXAMPLE.COM ");
-        service.updateUser(id,first);
+        service.replaceVerifiedEmail(id," NAME@EXAMPLE.COM ",java.time.Instant.now());
         UpdateUserRequest second=new UpdateUserRequest();
         second.setDisplayName(" New ");
         service.updateUser(id,second);
@@ -72,11 +71,11 @@ class UserServiceIT extends PostgresTestSupport {
                 try { if(!release.await(5,java.util.concurrent.TimeUnit.SECONDS)) throw new IllegalStateException("Release timeout"); } catch(InterruptedException e){Thread.currentThread().interrupt();throw new IllegalStateException(e);}return null;
             }));
             assertThat(firstChanged.await(5,java.util.concurrent.TimeUnit.SECONDS)).isTrue();
-            java.util.concurrent.Future<?> second=executor.submit(()->{UpdateUserRequest two=new UpdateUserRequest();if(sameField)two.setDisplayName("Second");else two.setEmail("new@example.com");return service.updateUser(id,two);});
+            java.util.concurrent.Future<?> second=executor.submit(()->{UpdateUserRequest two=new UpdateUserRequest();if(sameField)two.setDisplayName("Second");else two.setPhoneNumber("123456789");return service.updateUser(id,two);});
             release.countDown();first.get(10,java.util.concurrent.TimeUnit.SECONDS);second.get(10,java.util.concurrent.TimeUnit.SECONDS);
         }
         assertThat(service.getCurrentUser(id).getDisplayName()).isEqualTo(sameField?"Second":"First");
-        if(!sameField)assertThat(service.getCurrentUser(id).getEmail()).isEqualTo("new@example.com");
+        if(!sameField)assertThat(service.getCurrentUser(id).getPhoneNumber()).isEqualTo("123456789");
     }
     @Test
     void updateUser_shouldProtectConcurrentCaseInsensitiveClaimsAcrossOwners() throws Exception {

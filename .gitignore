@@ -21,6 +21,7 @@ docs/
 # Reviewed Catalog architecture (raw datasets remain ignored)
 !docs/
 docs/*
+!docs/README.md
 !docs/catalog-enhancement/
 !docs/catalog-enhancement/*.md
 !docs/catalog-enhancement/pilot-eligibility.json

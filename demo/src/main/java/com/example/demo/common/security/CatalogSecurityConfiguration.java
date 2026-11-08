@@ -24,8 +24,7 @@ public class CatalogSecurityConfiguration {
 			.authorizeHttpRequests(authorize -> authorize
 				.requestMatchers(HttpMethod.GET, "/api/products", "/api/products/{id}").permitAll()
 				// Roles come from current database state through the shared JWT converter.
-				.requestMatchers(HttpMethod.POST, "/api/products/{id}/images/uploads",
-						"/api/products/{id}/images/uploads/{uploadId}/complete").access((authentication, context) -> {
+				.requestMatchers(HttpMethod.POST, "/api/products/{id}/images").access((authentication, context) -> {
                             var actor = authentication.get();
                             return new org.springframework.security.authorization.AuthorizationDecision(
                                 actor instanceof org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken

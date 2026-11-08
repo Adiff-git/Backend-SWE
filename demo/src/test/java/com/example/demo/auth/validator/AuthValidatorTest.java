@@ -1,23 +1,22 @@
 package com.example.demo.auth.validator;
+
 import com.example.demo.auth.dto.request.RegisterRequest;
-import jakarta.validation.Validation;
+import com.example.demo.auth.exception.IdentityException;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.*;
+import tools.jackson.databind.json.JsonMapper;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 class AuthValidatorTest {
-    @Test void execute_shouldNormalizeUsernameOnlyAndPreservesNonAsciiCaseAndWhitespace() {
-        RegisterRequest r=new RegisterRequest();
-        r.setUsername("  \u00c9 A  B  ");
-        r.setPassword(" exact ");
-        assertThat(r.getUsername()).isEqualTo("\u00c9 A  B");
-        assertThat(r.getPassword()).isEqualTo(" exact ");
-        try(var f=Validation.buildDefaultValidatorFactory()) {
-            assertThat(f.getValidator().validate(r)).isEmpty();
-            r.setUsername("name@example.com");
-            assertThat(f.getValidator().validate(r)).isNotEmpty();
-            r.setUsername("a".repeat(51));
-            assertThat(f.getValidator().validate(r)).isNotEmpty();
-            r.setUsername(" ");
-            assertThat(f.getValidator().validate(r)).isNotEmpty();
+    private final JsonMapper json=JsonMapper.builder().build();
+    @Test void registration_shouldNormalizeOnlyEmailAndPreserveExactPassword(){
+        RegisterRequest request=json.readValue("{\"email\":\"  Alice@Example.com  \",\"password\":\" exact 123 \"}",RegisterRequest.class);
+        try(jakarta.validation.ValidatorFactory factory=jakarta.validation.Validation.buildDefaultValidatorFactory()){
+            PendingRegistrationValidator validator=new PendingRegistrationValidator(new PasswordPolicyValidator(),factory.getValidator());
+            assertThat(validator.normalizeEmail(request.getEmail())).isEqualTo("alice@example.com");assertThat(request.getPassword()).isEqualTo(" exact 123 ");
+            for(String invalid:java.util.List.of("bad@name","first,second@example.com","first..second@example.com","first@example.com\r\nBcc:other@example.com"))
+                assertThatThrownBy(()->validator.normalizeEmail(invalid)).isInstanceOf(IdentityException.class);
         }
+        assertThatThrownBy(()->json.readValue("{\"email\":42,\"password\":\"Password 123\"}",RegisterRequest.class)).isInstanceOf(RuntimeException.class);
     }
 }

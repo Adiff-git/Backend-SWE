@@ -61,22 +61,20 @@ class CatalogSecurityBaselineTest {
 	}
 
 	@Test
-	void anonymousUploadPreparationAndCompletionReceiveFilterChain401() throws Exception {
-		assertUploadDeniedForAnonymous("/api/products/00000000-0000-0000-0000-000000000001/images/uploads");
-		assertUploadDeniedForAnonymous("/api/products/00000000-0000-0000-0000-000000000001/images/uploads/00000000-0000-0000-0000-000000000002/complete");
+	void anonymousAttachmentReceivesFilterChain401() throws Exception {
+		assertUploadDeniedForAnonymous("/api/products/00000000-0000-0000-0000-000000000001/images");
 	}
 
 	@Test
 	@WithMockUser(roles = "CUSTOMER")
-	void customerUploadPreparationAndCompletionReceiveFilterChain403() throws Exception {
-		assertUploadDeniedForAuthenticated("/api/products/00000000-0000-0000-0000-000000000001/images/uploads");
-		assertUploadDeniedForAuthenticated("/api/products/00000000-0000-0000-0000-000000000001/images/uploads/00000000-0000-0000-0000-000000000002/complete");
+	void customerAttachmentReceivesFilterChain403() throws Exception {
+		assertUploadDeniedForAuthenticated("/api/products/00000000-0000-0000-0000-000000000001/images");
 	}
 
 	@Test
 	@WithMockUser(roles = "ADMIN")
-	void mockAdministratorCannotActivateUploadsBeforeVerifiedIdentityIntegration() throws Exception {
-		assertUploadDeniedForAuthenticated("/api/products/00000000-0000-0000-0000-000000000001/images/uploads");
+	void mockAdministratorCannotAttachWithoutVerifiedJwt() throws Exception {
+		assertUploadDeniedForAuthenticated("/api/products/00000000-0000-0000-0000-000000000001/images");
 	}
 
 	@Test
@@ -125,7 +123,7 @@ class CatalogSecurityBaselineTest {
 			};
 		}
 
-		@PostMapping("/api/products/{id}/images/uploads")
+		@PostMapping("/api/products/{id}/images")
 		String prepare() {
 			return "probe controller reached";
 		}

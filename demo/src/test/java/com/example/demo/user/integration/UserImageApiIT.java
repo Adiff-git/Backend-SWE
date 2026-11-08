@@ -28,14 +28,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class UserImageApiIT extends SeededMediaTestSupport {
     @Autowired MockMvc mvc;
+    @Autowired com.example.demo.user.service.UserService userService;
+    @Autowired org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     @Autowired JsonMapper json;
     @Autowired JdbcTemplate jdbc;
     @MockitoSpyBean ObjectStorageService storage;
 
     private String register(String name) throws Exception {
-        return mvc.perform(post("/api/auth/register").contentType("application/json")
-                .content(json.writeValueAsString(Map.of("username", name, "password", "Password 123"))))
-                .andExpect(status().isCreated()).andReturn().getResponse().getHeader("Authorization");
+        userService.createVerifiedAccount(name+"@example.com",passwordEncoder.encode("Password 123"),java.time.Instant.now());
+        return mvc.perform(post("/api/auth/login").contentType("application/json").content(json.writeValueAsString(Map.of("identifier",name,"password","Password 123"))))
+            .andExpect(status().isOk()).andReturn().getResponse().getHeader("Authorization");
     }
     private Long id(String name) { return users.findByUsernameIdentifier(name).orElseThrow().getId(); }
     private java.util.UUID completed(Long actor) {

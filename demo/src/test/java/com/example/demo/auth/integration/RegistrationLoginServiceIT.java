@@ -8,11 +8,14 @@ import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 class RegistrationLoginServiceIT extends AuthPostgresTestSupport {
     @Autowired AuthService auth;
+    @Autowired PendingRegistrationService registrations;
     @MockitoSpyBean TokenService tokens;
     @MockitoSpyBean AuthSessionService sessionService;
     @Test void execute_shouldVerifySigningFailureRollsBackAccountRoleSessionAndCredential() {
+        com.example.demo.auth.dto.response.PendingRegistrationResponse pending=registrations.initiate("alice@example.com","Initial 123");
+        String code=registrationCode(pending.getChallengeId());
         doThrow(new IllegalStateException("Controlled signing failure")).when(tokens).issue(any(),anyString());
-        assertThatThrownBy(()->auth.register("Alice","Password 123")).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(()->registrations.confirm(pending.getRegistrationCredential(),pending.getChallengeId(),code,"Password 123")).isInstanceOf(IllegalStateException.class);
         assertThat(users.count()).isZero();
         assertThat(sessions.count()).isZero();
         assertThat(credentials.count()).isZero();
@@ -54,9 +57,11 @@ class RegistrationLoginServiceIT extends AuthPostgresTestSupport {
     }
     @Autowired AuthTransactionService commands;
     @Test void register_shouldRollbackAccountWhenDefaultRoleIsUnavailable() {
+        com.example.demo.auth.dto.response.PendingRegistrationResponse pending=registrations.initiate("alice@example.com","Initial 123");
+        String code=registrationCode(pending.getChallengeId());
         jdbc.update("UPDATE roles SET name='UNAVAILABLE' WHERE name='USER'");
         try {
-            assertThatThrownBy(()->auth.register("Alice","Password 123")).isInstanceOf(IllegalStateException.class);
+            assertThatThrownBy(()->registrations.confirm(pending.getRegistrationCredential(),pending.getChallengeId(),code,"Password 123")).isInstanceOf(IllegalStateException.class);
             assertThat(users.count()).isZero();
             assertThat(sessions.count()).isZero();
             assertThat(credentials.count()).isZero();
@@ -64,5 +69,9 @@ class RegistrationLoginServiceIT extends AuthPostgresTestSupport {
         finally {
             jdbc.update("UPDATE roles SET name='USER' WHERE name='UNAVAILABLE'");
         }
+    }
+    private String registrationCode(java.util.UUID challenge){
+        byte[] payload=jdbc.queryForObject("SELECT encrypted_payload FROM verification_mail_outbox WHERE challenge_id=?",byte[].class,challenge);
+        return (String)json.readValue(identityProofs.decrypt(payload,challenge.toString()),java.util.Map.class).get("code");
     }
 }

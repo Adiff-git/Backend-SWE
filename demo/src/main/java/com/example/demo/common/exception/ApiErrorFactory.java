@@ -9,7 +9,9 @@ public class ApiErrorFactory {
         return new ApiError(status,message,path,fields);
     }
     public ApiError from(Throwable failure,String path) {
-        if(failure instanceof ApplicationException app) return create(app.getStatus(),app.getMessage(),path,Map.of());
+        if(failure instanceof ApplicationException app) {
+            ApiError error=create(app.getStatus(),app.getMessage(),path,Map.of());if(app.getCode()!=null)error.setProperty("code",app.getCode());return error;
+        }
         if(failure instanceof org.springframework.dao.OptimisticLockingFailureException
                 || failure instanceof jakarta.persistence.OptimisticLockException)
             return create(409,"Concurrent update; you may retry",path,Map.of());

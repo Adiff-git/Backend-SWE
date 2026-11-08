@@ -23,10 +23,13 @@ import lombok.RequiredArgsConstructor;
 @RestController @RequestMapping("/api/auth") @RequiredArgsConstructor
 public class AuthController {
     private final AuthService auth;
+    private final org.springframework.beans.factory.ObjectProvider<com.example.demo.auth.service.PendingRegistrationService> registrations;
     private final AuthConverter converter;
     private final CurrentUserIdProvider identity;
-    @PostMapping("/register") public ResponseEntity<TokenResponse> register(@Valid @RequestBody RegisterRequest request) {
-        return response(201,auth.register(request.getUsername(),request.getPassword()));
+    @PostMapping(value="/register",consumes="application/json") public ResponseEntity<com.example.demo.auth.dto.response.PendingRegistrationResponse> register(@Valid @RequestBody RegisterRequest request) {
+        com.example.demo.auth.service.PendingRegistrationService service=registrations.getIfAvailable();
+        if(service==null)throw new com.example.demo.auth.exception.IdentityException(503,"REGISTRATION_UNAVAILABLE","Registration is temporarily unavailable");
+        return ResponseEntity.accepted().header("Cache-Control","no-store").body(service.initiate(request.getEmail(),request.getPassword()));
     }
     @PostMapping("/login") public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
         return response(200,auth.login(request.getIdentifier(),request.getPassword()));

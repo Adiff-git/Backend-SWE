@@ -15,7 +15,9 @@ public abstract class ApplicationException extends RuntimeException {
 		this(status.value(), publicDetail);
 	}
 
-	public int getStatus() {
+	public String getCode() { return null; }
+
+    public int getStatus() {
 		return status;
 	}
 }

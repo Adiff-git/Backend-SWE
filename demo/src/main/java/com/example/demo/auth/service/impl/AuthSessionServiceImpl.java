@@ -17,6 +17,7 @@ public class AuthSessionServiceImpl implements AuthSessionService {
     private final AuthenticationSessionRepository sessions;
     private final RefreshCredentialRepository credentials;
     private final jakarta.persistence.EntityManager entityManager;
+    private final org.springframework.beans.factory.ObjectProvider<com.example.demo.auth.service.IdentityCleanupService> identityCleanup;
     @Transactional public AuthenticationSession create(Long owner,Instant now) {
         AuthenticationSession s=new AuthenticationSession();
         s.setId(UUID.randomUUID());
@@ -67,6 +68,7 @@ public class AuthSessionServiceImpl implements AuthSessionService {
     }
     @Transactional public void purgeExpired(Long owner,Instant deadline) {
         for(AuthenticationSession s:sessions.findTop100ByUserIdAndExpiresAtLessThanOrderById(owner,deadline)) {
+            com.example.demo.auth.service.IdentityCleanupService cleanup=identityCleanup.getIfAvailable();if(cleanup!=null)cleanup.beforeSessionDeletion(s.getId(),deadline);
             credentials.deleteAll(credentials.findBySessionIdOrderById(s.getId()));
             credentials.flush();
             sessions.delete(s);

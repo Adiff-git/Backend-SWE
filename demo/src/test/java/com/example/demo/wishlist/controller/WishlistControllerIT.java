@@ -36,6 +36,8 @@ import tools.jackson.databind.json.JsonMapper;
 @ActiveProfiles("test")
 class WishlistControllerIT {
     @Autowired private MockMvc mvc;
+    @Autowired private com.example.demo.user.service.UserService userService;
+    @Autowired private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
     @Autowired private JsonMapper json;
     @Autowired private JdbcTemplate jdbc;
     @Autowired private EntityManager entityManager;
@@ -220,9 +222,10 @@ class WishlistControllerIT {
 
     private Credentials register() throws Exception {
         String username = "wish-" + UUID.randomUUID();
-        MvcResult result = mvc.perform(post("/api/auth/register").contentType("application/json")
-                .content(json.writeValueAsString(Map.of("username", username, "password", "Password 123"))))
-                .andExpect(status().isCreated()).andReturn();
+        userService.createVerifiedAccount(username+"@example.com",passwordEncoder.encode("Password 123"),java.time.Instant.now());
+        MvcResult result = mvc.perform(post("/api/auth/login").contentType("application/json")
+                .content(json.writeValueAsString(Map.of("identifier", username, "password", "Password 123"))))
+                .andExpect(status().isOk()).andReturn();
         return new Credentials(username, result.getResponse().getHeader("Authorization"),
                 body(result).get("refreshToken").asString());
     }

@@ -1,0 +1,109 @@
+# Local development: docker compose --env-file .env.local -f compose.dev.yaml up -d --build --wait
+services:
+  postgres:
+    image: postgres:17-alpine@sha256:eee6c6e1b0894fa4fe0075eb054af9fd1cf39a35321c2d4110626cfe506411fb
+    environment:
+      POSTGRES_DB: ${LOCAL_DB_NAME:-backend}
+      POSTGRES_USER: ${LOCAL_DB_USER:-backend}
+      POSTGRES_PASSWORD: ${LOCAL_DB_PASSWORD:?Set LOCAL_DB_PASSWORD in an uncommitted environment file}
+    ports:
+      - "127.0.0.1:${LOCAL_DB_PORT:-55433}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  localstack:
+    ports:
+      - "127.0.0.1:${LOCAL_STORAGE_PORT:-14567}:4567"
+    image: localstack/localstack:4.14.0@sha256:3ebc37595918b8accb852f8048fef2aff047d465167edd655528065b07bc364a
+    networks:
+      - storage-private
+    environment:
+      SERVICES: s3
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      S3_SKIP_SIGNATURE_VALIDATION: "0"
+      PERSISTENCE: "0"
+      LOCAL_STORAGE_BUCKET: ${LOCAL_STORAGE_BUCKET:-backend-images}
+      GATEWAY_LISTEN: "127.0.0.1:4566"
+      # The pinned Twisted server ignores IPv4 bind addresses; Hypercorn honors them.
+      GATEWAY_SERVER: hypercorn
+    volumes:
+      - ./docker/localstack/init/10-init-s3.sh:/etc/localstack/init/ready.d/10-init-s3.sh:ro
+      - ./docker/localstack/init/restore_product_images.py:/opt/catalog/restore_product_images.py:ro
+      - ./docker/localstack/gateway/signed_s3_gateway.py:/opt/catalog/signed_s3_gateway.py:ro
+      - product-checkpoints:/catalog-product-checkpoints:ro
+    healthcheck:
+      test: ["CMD", "python3", "/opt/catalog/signed_s3_gateway.py", "--upstream-healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 10s
+  image-storage:
+    image: localstack/localstack:4.14.0@sha256:3ebc37595918b8accb852f8048fef2aff047d465167edd655528065b07bc364a
+    entrypoint: ["python3", "/opt/catalog/signed_s3_gateway.py"]
+    network_mode: service:localstack
+    environment:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      S3_UPSTREAM_HOST: "127.0.0.1"
+      S3_UPSTREAM_PORT: "4566"
+      GATEWAY_PORT: "4567"
+    depends_on:
+      localstack:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python3", "/opt/catalog/signed_s3_gateway.py", "--healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    volumes:
+      - ./docker/localstack/gateway/signed_s3_gateway.py:/opt/catalog/signed_s3_gateway.py:ro
+  backend:
+    build:
+      context: ./demo
+      dockerfile: Dockerfile.demo
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      LOCAL_DB_HOST: postgres
+      LOCAL_DB_PORT: 5432
+      LOCAL_DB_NAME: ${LOCAL_DB_NAME:-backend}
+      LOCAL_DB_USER: ${LOCAL_DB_USER:-backend}
+      LOCAL_DB_PASSWORD: ${LOCAL_DB_PASSWORD:?Set LOCAL_DB_PASSWORD in .env.local}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET to at least 32 bytes in .env.local}
+      JWT_ISSUER: ${JWT_ISSUER:-urn:backend-swe:local}
+      SERVER_ADDRESS: 0.0.0.0
+      SERVER_PORT: 8080
+      LOCAL_STORAGE_BUCKET: ${LOCAL_STORAGE_BUCKET:-backend-images}
+      LOCAL_STORAGE_ENDPOINT: http://localstack:4567
+      LOCAL_STORAGE_SIGNING_ENDPOINT: ${LOCAL_STORAGE_SIGNING_ENDPOINT:-http://127.0.0.1:14567}
+      CATALOG_IMAGES_CHECKPOINT_DIRECTORY: /catalog-checkpoints
+    ports:
+      - "127.0.0.1:${SERVER_PORT:-18081}:8080"
+    volumes:
+      - product-checkpoints:/catalog-checkpoints
+    networks:
+      - default
+      - storage-private
+    depends_on:
+      postgres:
+        condition: service_healthy
+      image-storage:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/api/products?page=0&size=1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+networks:
+  storage-private:
+    driver: bridge
+volumes:
+  postgres-data:
+  product-checkpoints:

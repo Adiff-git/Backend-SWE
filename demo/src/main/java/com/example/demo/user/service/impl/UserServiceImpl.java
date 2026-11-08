@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
     }
     @Transactional public PrivateUserResponse updateUser(Long actorId,UpdateUserRequest request) {
         // Transaction is established on this public entry point; self-call does not establish it.
+        if(request.isEmailPresent())throw new com.example.demo.user.exception.EmailVerificationRequiredException();
         User user=getUserEntityForUpdate(actorId);
         validator.validate(request,request.getUsername()!=null && repository.usernameExists(request.getUsername(),actorId),request.getEmail()!=null && repository.emailExists(request.getEmail(),actorId));
         com.example.demo.media.dto.response.ImageAccessResponse image;
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
             user.setProfileImageId(request.getProfileImageId());
         } else image=attachedImage(user);
         if(request.getUsername()!=null) user.setUsername(request.getUsername());
-        if(request.getEmail()!=null) user.setEmail(repository.lowercase(request.getEmail()));
+
         if(request.getDisplayName()!=null) user.setDisplayName(request.getDisplayName());
         if(request.getPhoneNumber()!=null) user.setPhoneNumber(request.getPhoneNumber());
         if(request.getGender()!=null) user.setGender(request.getGender());
@@ -104,5 +105,53 @@ public class UserServiceImpl implements UserService {
         User user=getUserEntityForUpdate(id);
         user.setPassword(encodedPassword);
         repository.flush();
+    }
+    @Transactional
+    public Long createVerifiedAccount(String email, String encodedPassword, java.time.Instant verifiedAt) {
+        String normalized = normalizedEmail(email);
+        if (verifiedAt == null) throw new com.example.demo.user.exception.BusinessValidationException("Verification evidence required");
+        if (encodedPassword != null) validateEncodedPassword(encodedPassword);
+        String base = normalized.substring(0, normalized.indexOf('@'));
+        for (int ordinal = 1; ordinal < Integer.MAX_VALUE; ordinal++) {
+            String suffix = ordinal == 1 ? "" : "_" + ordinal;
+            int available = 50 - suffix.length();
+            int length = Math.min(base.codePointCount(0, base.length()), available);
+            String username = base.substring(0, base.offsetByCodePoints(0, length)) + suffix;
+            java.util.Optional<Long> inserted = repository.insertVerifiedAccount(username, encodedPassword, normalized, verifiedAt);
+            if (inserted.isPresent()) {
+                Long id = inserted.get();
+                repository.assignDefaultRole(id);
+                if (!repository.findAuthorities(id).contains("ROLE_USER")) throw new IllegalStateException("Default role is unavailable");
+                return id;
+            }
+        }
+        throw new com.example.demo.user.exception.IdentityConflictException();
+    }
+    @Transactional
+    public void replaceVerifiedEmail(Long id, String email, java.time.Instant verifiedAt) {
+        User user = getUserEntityForUpdate(id);
+        String normalized = normalizedEmail(email);
+        if (verifiedAt == null) throw new com.example.demo.user.exception.BusinessValidationException("Verification evidence required");
+        if (repository.emailExists(normalized, id)) throw new com.example.demo.user.exception.IdentityConflictException();
+        user.setEmail(normalized);
+        user.setEmailVerifiedAt(verifiedAt);
+        repository.flush();
+    }
+    @Transactional
+    public void setInitialEncodedPassword(Long id, String encodedPassword) {
+        validateEncodedPassword(encodedPassword);
+        User user = getUserEntityForUpdate(id);
+        if (user.getPassword() != null) throw new com.example.demo.user.exception.IdentityConflictException();
+        user.setPassword(encodedPassword);
+        repository.flush();
+    }
+    private String normalizedEmail(String email) {
+        if (email == null || email.strip().length() > 254 || !email.strip().matches("[^\\s@]+@[^\\s@]+"))
+            throw new com.example.demo.user.exception.BusinessValidationException("Invalid email");
+        return repository.lowercase(email.strip());
+    }
+    private void validateEncodedPassword(String value) {
+        if (value == null || !value.matches("[$]2[aby][$]10[$][./A-Za-z0-9]{53}"))
+            throw new com.example.demo.user.exception.BusinessValidationException("Encoded password required");
     }
 }
