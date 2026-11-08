@@ -13,24 +13,31 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
-docs/
+# Local documentation, design artifacts and AI/specification tooling.
+/docs/
+/specs/
+/Database-Design/
+/.agents/
+/.specify/
+/.codex/
+
+# Keep Docker runtime scripts: compose.dev.yaml mounts them into LocalStack.
+# Only its documentation is excluded.
+/docker/**/README.md
 
 # Local media fixture notes.
 /demo/src/test/resources/media/README.md
-
-# Reviewed Catalog architecture (raw datasets remain ignored)
-!docs/
-docs/*
-!docs/README.md
-!docs/catalog-enhancement/
-!docs/catalog-enhancement/*.md
-!docs/catalog-enhancement/pilot-eligibility.json
-!docs/catalog-enhancement/isolated-enrichment-verification.json
-!docs/catalog-enhancement/brand-review.json
-!docs/catalog-enhancement/technical-review.json
 
 # Private runtime credentials and backups
 /.private/
 /tools/catalog-import/output/
 __pycache__/
 *.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+coverage/
+.coverage
+htmlcov/

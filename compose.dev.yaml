@@ -1,5 +1,14 @@
 # Local development: docker compose --env-file .env.local -f compose.dev.yaml up -d --build --wait
 services:
+  mailpit:
+    image: axllent/mailpit:v1.27.4@sha256:df6c2541907e1be6fac21f509927cf6ed771617a1f4b361ef66d97bd05593d2d
+    ports:
+      - "127.0.0.1:${LOCAL_MAILPIT_PORT:-8025}:8025"
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
   postgres:
     image: postgres:17-alpine@sha256:eee6c6e1b0894fa4fe0075eb054af9fd1cf39a35321c2d4110626cfe506411fb
     environment:
@@ -65,6 +74,8 @@ services:
     volumes:
       - ./docker/localstack/gateway/signed_s3_gateway.py:/opt/catalog/signed_s3_gateway.py:ro
   backend:
+    env_file:
+      - .env.local
     build:
       context: ./demo
       dockerfile: Dockerfile.demo
@@ -83,6 +94,13 @@ services:
       LOCAL_STORAGE_ENDPOINT: http://localstack:4567
       LOCAL_STORAGE_SIGNING_ENDPOINT: ${LOCAL_STORAGE_SIGNING_ENDPOINT:-http://127.0.0.1:14567}
       CATALOG_IMAGES_CHECKPOINT_DIRECTORY: /catalog-checkpoints
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      SMTP_USERNAME: ""
+      SMTP_PASSWORD: ""
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "false"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "false"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_REQUIRED: "false"
     ports:
       - "127.0.0.1:${SERVER_PORT:-18081}:8080"
     volumes:
@@ -94,6 +112,8 @@ services:
       postgres:
         condition: service_healthy
       image-storage:
+        condition: service_healthy
+      mailpit:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/api/products?page=0&size=1"]
