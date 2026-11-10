@@ -1,0 +1,110 @@
+{
+  "proposalVersion": "identifier-scope-proposal-2026-11-09-v1",
+  "approval": null,
+  "status": "PROPOSED_NOT_EXECUTED_CLASSIFIER_TESTS",
+  "originalDraftCases": {
+    "path": "demo/src/test/resources/catalog/search/identifier-cases.json",
+    "count": 16,
+    "sha256": "eb5c9da71d5571cc1a04341bdf52e6e51d21386d1ad036a1c7631aa82ed710e9"
+  },
+  "reviewCases": [
+    {
+      "case": "IV01",
+      "input": "WH-1000XM5",
+      "source": "B0C5ZC7FWR",
+      "expectation": "One structural protected token;candidate device model anchor proposed;no fuzzy",
+      "basis": "Observed Product Name and original draft D2"
+    },
+    {
+      "case": "IV02",
+      "input": "i7-1360P / C++",
+      "source": null,
+      "expectation": "Structural protected grammar cases;not observed in these1500 Product Names;not fabricated catalog models",
+      "basis": "Original16 draft cases remain mandatory"
+    },
+    {
+      "case": "IV03",
+      "input": "galaxi vs Galaxy A51",
+      "source": "B08PPSRLQ5",
+      "expectation": "If family proposal approved,candidate Galaxy is protected;unknown typo cannot enter via name fuzzy;family token itself is NOT tier7",
+      "basis": "Proposed19 exact family exclusions;no measured fuzzy threshold"
+    },
+    {
+      "case": "IV04",
+      "input": "samsnug vs Samsung",
+      "source": "B08PPSRLQ5",
+      "expectation": "Natural brand text may remain fuzzy-eligible≥4;brand names are not blacklisted solely because they occur in model context",
+      "basis": "Preserve FR-007 Brand Name fuzzy;actual acceptance awaits T014"
+    },
+    {
+      "case": "IV05",
+      "input": "Microsoft Surface Pro compatibility target",
+      "source": "B07L9RJ957",
+      "expectation": "Protect reviewed target-name span from fuzzy;do not infer this Fintie accessory owns a Surface device model/tier7",
+      "basis": "Observed compatibility title;context review required"
+    },
+    {
+      "case": "IV06",
+      "input": "Use on Any Surface",
+      "source": "B0BNCXKX3G",
+      "expectation": "Generic surface stays natural under context-only rule;not a Microsoft model",
+      "basis": "Observed Logitech mouse title"
+    },
+    {
+      "case": "IV07",
+      "input": "HP Pavilion / ordinary pavilion",
+      "source": "B09ZTB9LDW",
+      "expectation": "Protect Pavilion only in reviewed HP family context;generic noun not a blanket model identifier",
+      "basis": "Anchored proposal;generic counterexample is synthetic"
+    },
+    {
+      "case": "IV08",
+      "input": "Google Pixel / pixel display",
+      "source": "B08JR6Y1KJ",
+      "expectation": "Protect Pixel in Google device context;generic pixel not automatically a model",
+      "basis": "Observed Google title;generic counterexample synthetic"
+    },
+    {
+      "case": "IV09",
+      "input": "Intel Core / Galaxy A03 Core / octa-core",
+      "source": "B0B6QQ9Q9V",
+      "expectation": "Core is not globally a model;review exact spans,while octa-core is already structurally protected",
+      "basis": "Multiple roles in actual Product Names"
+    },
+    {
+      "case": "IV10",
+      "input": "Studio Monitor Headphones",
+      "source": "B00WSLYQ7C",
+      "expectation": "Studio descriptive use stays natural;no global family protection inferred",
+      "basis": "Observed audio title"
+    },
+    {
+      "case": "IV11",
+      "input": "DEMO-AMZ-B08PPSRLQ5",
+      "source": "B08PPSRLQ5",
+      "expectation": "SKU source is always non-fuzzy;exact whole-SKU precedence only against canonical SKU at runtime,not a claim source package is imported",
+      "basis": "Import CSV agrees with SKU proposal;live state unknown"
+    },
+    {
+      "case": "IV12",
+      "input": "16GB /16 GB /16.0 /3.50mm",
+      "source": null,
+      "expectation": "D2 boundaries preserved,no implicit unit conversion,numeric protection not automatic MODEL rank7",
+      "basis": "Approved D2;synthetic shape cases,not registry approval"
+    },
+    {
+      "case": "IV13",
+      "input": "Galaxy Star Projector",
+      "source": null,
+      "expectation": "Conservative19-family exact-token policy would disable Galaxy fuzzy here too;reviewer must accept homonym recall cost or choose a contextual rule",
+      "basis": "Synthetic false-positive counterexample;not claimed observed"
+    },
+    {
+      "case": "IV14",
+      "input": "Exynos 9611 from cpu_model only",
+      "source": "B08PPSRLQ5",
+      "expectation": "Observation only;do not enable this unverified technical field or promote vocabulary automatically;requires T003 for field activation",
+      "basis": "Actual UNVERIFIED source specification"
+    }
+  ]
+}

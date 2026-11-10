@@ -1,0 +1,375 @@
+openapi: 3.1.0
+info:
+  title: Product Search & Filter — implemented local MVP
+  version: 0.1.0
+  description: 'Implemented local MVP contract; deployment readiness is separate. Supplements the existing Product Catalog contract without
+    redefining detail, wishlist or images. Unknown query names and duplicate singleton parameters return 400. Owner-approved registry/vocabulary and controlled corpus verification are recorded in feature evidence.
+    Source fact correctness and intended-target deployment remain separate verification scopes. See products-search.md for limits, comparison and concurrent-publication
+    semantics. Design corrections D1-D7: nullable paired fields preserve legacy orphan membership without introducing
+    listing409; mode header and503 make diagnostic/unavailable fuzzy explicit. See ../design-resolutions.md. Relevance
+    follows analysis-remediation.md R3:whole-query SKU/reviewed Model > whole-query Product Name > exact phrase
+    > exact token > prefix > partial > fuzzy. All eligibility first,then deterministic tier-local tuple and UUID
+    ASC. No new readiness endpoint:the operational probe uses a nonblank q on this endpoint. Complete contract acceptance
+    requires every corpus partition;partial core development is not full feature/deployment acceptance.'
+servers:
+- url: /
+paths:
+  /api/products:
+    get:
+      operationId: listProducts
+      summary: Search and filter published electronics products
+      security: []
+      parameters:
+      - name: page
+        in: query
+        required: false
+        description: Singleton; canonical unsigned integer syntax, no leading zeros except 0; duplicate/empty invalid.
+        schema:
+          type: integer
+          minimum: 0
+          maximum: 2147483647
+          default: 0
+      - name: size
+        in: query
+        required: false
+        description: Singleton; same canonical syntax; duplicate/empty invalid.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+      - name: q
+        in: query
+        required: false
+        description: Singleton. At most 16 normalized tokens. Blank means omitted. Literal null is ordinary text.
+          Token AND across shared Product fields and a single eligible variant. Preserve technical punctuation/digits;
+          no wildcard syntax. Apply design-resolutions D1-D4. Whitespace-only omitted; nonblank zero tokens400.
+          Raw16-token limit before normalized dedup; original order/repetitions retained for phrase boost. Preserve
+          D2 connectors/decimals; typed numeric equivalence never rewrites textual model IDs.
+        schema:
+          type: string
+          maxLength: 256
+      - name: categoryId
+        in: query
+        required: false
+        description: Singleton. Includes self and all descendants. Required with specFilters. Unknown valid UUID
+          gives no matches after global filter syntax/approval validation.
+        schema:
+          $ref: '#/components/schemas/Uuid'
+      - name: brandId
+        in: query
+        required: false
+        description: Repeat parameter for OR selection; no CSV. Duplicates collapse; empty invalid.
+        schema:
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/Uuid'
+        style: form
+        explode: true
+      - name: minPrice
+        in: query
+        required: false
+        description: Singleton inclusive VND bound, nonnegative whole amount, at most 30 digits; minPrice <= maxPrice.
+          Empty/fraction/exponent invalid.
+        schema:
+          type: string
+          pattern: ^(0|[1-9][0-9]{0,29})$
+      - name: maxPrice
+        in: query
+        required: false
+        description: Singleton inclusive VND bound, nonnegative whole amount, at most 30 digits; minPrice <= maxPrice.
+          Empty/fraction/exponent invalid.
+        schema:
+          type: string
+          pattern: ^(0|[1-9][0-9]{0,29})$
+      - name: sort
+        in: query
+        required: false
+        description: Singleton. Default relevance with nonblank q, UUID ascending otherwise. relevance without q
+          invalid. Price uses representative; name normalized COLLATE C. Final UUID ASC in either direction. D7
+          null orphan prices sort LAST in both price directions. Relevance exact subtiers are defined by analysis-remediation.md
+          R3/RK01-RK10;whole-query identifier equality is not a scattered-token identifier-count boost.
+        schema:
+          type: string
+          enum:
+          - relevance
+          - price-asc
+          - price-desc
+          - name-asc
+          - name-desc
+      - name: specFilters
+        in: query
+        required: false
+        description: Singleton URL-encoded JSON. Groups AND, alternatives within a group OR. All variant keyword/price/spec
+          predicates bind the same variant. Only registry-approved definitions activate. No conversion; unknown
+          fields/nulls unsupported. Strict duplicate JSON-member rejection before DTO binding, even equal values.
+          Known-category unsupported key/combination400; supported no-match200.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpecFilters'
+      responses:
+        '200':
+          description: Distinct published products with candidate-snapshot totals; empty later pages retain totals.
+            Exactly two additive fields in listing only.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPage'
+          headers:
+            X-Catalog-Search-Mode:
+              description: 'Required with nonblank q: fuzzy-enabled normally, exact-only only for explicit operator-disabled
+                diagnostic mode. Not required without keyword.'
+              schema:
+                type: string
+                enum:
+                - fuzzy-enabled
+                - exact-only
+        '400':
+          description: Invalid/unknown/duplicate parameters, unsupported filter/type/unit/operator, missing categoryId
+            or incompatible definitions.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '401':
+          description: Existing authentication handling for explicitly supplied invalid bearer credentials; anonymous
+            GET remains public.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '500':
+          description: Unexpected server/infrastructure failure; never represented as an empty successful search.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '503':
+          description: Required search capability lost after startup for nonblank q in either configured mode; no
+            silent exact-only or successful empty fallback. Missing startup capability blocks rollout.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+components:
+  schemas:
+    Uuid:
+      type: string
+      format: uuid
+      pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    NumericAlternative:
+      type: object
+      additionalProperties: false
+      required:
+      - op
+      - value
+      properties:
+        op:
+          type: string
+          enum:
+          - eq
+          - gt
+          - gte
+          - lt
+          - lte
+        value: &id001
+          type: number
+          description: 'Finite exact decimal: at most 30 significant digits and 12 fractional digits. Never parse
+            through binary double.'
+        unit: &id002
+          type: string
+          minLength: 1
+          maxLength: 32
+          description: Required for quantity, forbidden otherwise; exact approved canonical unit only.
+    RangeAlternative:
+      type: object
+      additionalProperties: false
+      required:
+      - op
+      - min
+      - max
+      properties:
+        op:
+          const: between
+        min: *id001
+        max: *id001
+        unit: *id002
+    TextAlternative:
+      type: object
+      additionalProperties: false
+      required:
+      - op
+      - value
+      properties:
+        op:
+          type: string
+          enum:
+          - eq
+          - prefix
+          - contains
+        value:
+          type: string
+          minLength: 1
+          maxLength: 128
+    BooleanAlternative:
+      type: object
+      additionalProperties: false
+      required:
+      - op
+      - value
+      properties:
+        op:
+          const: eq
+        value:
+          type: boolean
+    SpecGroup:
+      type: object
+      additionalProperties: false
+      required:
+      - key
+      - alternatives
+      properties:
+        key:
+          type: string
+          pattern: ^[a-z][a-z0-9_]*$
+          maxLength: 64
+        alternatives:
+          type: array
+          minItems: 1
+          maxItems: 4
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/NumericAlternative'
+            - $ref: '#/components/schemas/RangeAlternative'
+            - $ref: '#/components/schemas/TextAlternative'
+            - $ref: '#/components/schemas/BooleanAlternative'
+    SpecFilters:
+      type: array
+      minItems: 1
+      maxItems: 8
+      items:
+        $ref: '#/components/schemas/SpecGroup'
+      description: Distinct keys, at most 32 alternatives total, categoryId required. Registry validates key/type/unit/operator/category
+        compatibility and approval. min must not exceed max. Decoded JSON at most 4096 code points. Strictly reject
+        duplicate object members at every nesting before binding. For a known category, zero key applicability or
+        no category supporting all requested keys is400; supported no-match is200. No automatic unit conversion.
+    SellingPrice:
+      type: object
+      additionalProperties: false
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          type: integer
+          description: Exact whole VND amount. No artificial stored-value cap; arbitrary precision may exceed int64.
+        currency:
+          const: VND
+    CategorySummary:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - name
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        name:
+          type: string
+          minLength: 1
+    ProductListingItem:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - category
+      - primaryImageUrl
+      - displayPrice
+      - representativeVariantId
+      properties:
+        id:
+          $ref: '#/components/schemas/Uuid'
+        name:
+          type: string
+          minLength: 1
+        category:
+          $ref: '#/components/schemas/CategorySummary'
+        primaryImageUrl:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: Existing nullable signed image URL, valid at most five minutes.
+        displayPrice:
+          oneOf:
+          - $ref: '#/components/schemas/SellingPrice'
+          - type: 'null'
+          description: Non-null with representativeVariantId for valid variant-backed results; both null only in
+            D7 preserved orphan branch.
+        representativeVariantId:
+          oneOf:
+          - $ref: '#/components/schemas/Uuid'
+          - type: 'null'
+          description: Same real eligible variant as displayPrice, or null in D7 orphan branch; never fabricated.
+      oneOf:
+      - properties:
+          displayPrice:
+            type: object
+          representativeVariantId:
+            type: string
+      - properties:
+          displayPrice:
+            type: 'null'
+          representativeVariantId:
+            type: 'null'
+    ProductPage:
+      type: object
+      additionalProperties: false
+      required:
+      - items
+      - page
+      - size
+      - totalItems
+      - totalPages
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductListingItem'
+        page:
+          type: integer
+          minimum: 0
+        size:
+          type: integer
+          minimum: 1
+          maximum: 100
+        totalItems:
+          type: integer
+          minimum: 0
+        totalPages:
+          type: integer
+          minimum: 0
+    Problem:
+      type: object
+      required:
+      - type
+      - title
+      - status
+      - detail
+      properties:
+        type:
+          type: string
+          const: about:blank
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+      additionalProperties: true

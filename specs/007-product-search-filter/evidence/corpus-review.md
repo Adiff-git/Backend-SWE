@@ -1,0 +1,3 @@
+# Corpus provenance
+
+Approved pre-existing RK table provides independent expectations;packaged manifest and fixture-owned ID assertions are not derived from search output. All10 RK cases remain;RK07 is US3.configuration,others US1.core. Other partitions use explicit controlled variants,Vietnamese text,typed approved facts,invalid requests,orphan/race/sort/page fixtures.1500 frozen source titles feed token diagnostics and source candidates;manual source relevance judgments=0.30 original identifier expectations retain16 primitive vs14 source/proposal evidence categories;not all are relabeled runtime ranking tests. Exact runtime tests cover all19 family exclusions and declared contexts.

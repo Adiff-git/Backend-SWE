@@ -1,0 +1,121 @@
+{
+  "database": {
+    "database": "backend_test",
+    "schema": "public",
+    "version": "PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+    "encoding": "UTF8",
+    "default_isolation": "read committed"
+  },
+  "extensions": [
+    {
+      "extname": "pg_trgm",
+      "extversion": "1.6"
+    },
+    {
+      "extname": "plpgsql",
+      "extversion": "1.0"
+    }
+  ],
+  "collation": [
+    {
+      "collname": "und-x-icu",
+      "collisdeterministic": true,
+      "collversion": "153.136"
+    }
+  ],
+  "history": [
+    {
+      "installed_rank": 1,
+      "version": "1",
+      "checksum": 1465354838,
+      "success": true
+    },
+    {
+      "installed_rank": 2,
+      "version": "2",
+      "checksum": -381686089,
+      "success": true
+    },
+    {
+      "installed_rank": 3,
+      "version": "3",
+      "checksum": -1556433633,
+      "success": true
+    },
+    {
+      "installed_rank": 4,
+      "version": "4",
+      "checksum": -1454285628,
+      "success": true
+    },
+    {
+      "installed_rank": 5,
+      "version": "5",
+      "checksum": 1471133392,
+      "success": true
+    },
+    {
+      "installed_rank": 6,
+      "version": "6",
+      "checksum": -1818920388,
+      "success": true
+    },
+    {
+      "installed_rank": 7,
+      "version": "7",
+      "checksum": 2064659438,
+      "success": true
+    },
+    {
+      "installed_rank": 8,
+      "version": "8",
+      "checksum": -1972120639,
+      "success": true
+    },
+    {
+      "installed_rank": 9,
+      "version": "9",
+      "checksum": 1027214722,
+      "success": true
+    },
+    {
+      "installed_rank": 10,
+      "version": "10",
+      "checksum": -271996647,
+      "success": true
+    },
+    {
+      "installed_rank": 11,
+      "version": "11",
+      "checksum": 421746174,
+      "success": true
+    },
+    {
+      "installed_rank": 12,
+      "version": "12",
+      "checksum": 1912594192,
+      "success": true
+    },
+    {
+      "installed_rank": 13,
+      "version": "13",
+      "checksum": 1524374580,
+      "success": true
+    },
+    {
+      "installed_rank": 14,
+      "version": "14",
+      "checksum": -1490235424,
+      "success": true
+    },
+    {
+      "installed_rank": 15,
+      "version": "15",
+      "checksum": 1357434404,
+      "success": true
+    }
+  ],
+  "jdbcUrl": "jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF",
+  "serialExecution": true,
+  "storage": "test-local signer;no AWS network calls"
+}

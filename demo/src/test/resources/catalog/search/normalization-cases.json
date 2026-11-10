@@ -1,0 +1,172 @@
+[
+  {
+    "input": "Điện thoại ĐẸP",
+    "tokens": [
+      "dien",
+      "thoai",
+      "dep"
+    ],
+    "protected": [
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "input": "WH-1000XM5",
+    "tokens": [
+      "wh-1000xm5"
+    ],
+    "protected": [
+      true
+    ]
+  },
+  {
+    "input": "i7-1360P",
+    "tokens": [
+      "i7-1360p"
+    ],
+    "protected": [
+      true
+    ]
+  },
+  {
+    "input": "USB-C",
+    "tokens": [
+      "usb-c"
+    ],
+    "protected": [
+      true
+    ]
+  },
+  {
+    "input": "USB C",
+    "tokens": [
+      "usb",
+      "c"
+    ],
+    "protected": [
+      false,
+      false
+    ]
+  },
+  {
+    "input": "3.50mm",
+    "tokens": [
+      "3.50mm"
+    ],
+    "protected": [
+      true
+    ]
+  },
+  {
+    "input": "3.50 mm",
+    "tokens": [
+      "3.50",
+      "mm"
+    ],
+    "protected": [
+      true,
+      false
+    ]
+  },
+  {
+    "input": "A_B/C.D+E",
+    "tokens": [
+      "a_b/c.d+e"
+    ],
+    "protected": [
+      true
+    ]
+  },
+  {
+    "input": "C++",
+    "tokens": [
+      "c++"
+    ],
+    "protected": [
+      true
+    ]
+  },
+  {
+    "input": "C+++",
+    "tokens": [
+      "c"
+    ],
+    "protected": [
+      false
+    ]
+  },
+  {
+    "input": "O'Neil",
+    "tokens": [
+      "o'neil"
+    ],
+    "protected": [
+      true
+    ]
+  },
+  {
+    "input": "O’Neil",
+    "tokens": [
+      "o",
+      "neil"
+    ],
+    "protected": [
+      false,
+      false
+    ]
+  },
+  {
+    "input": "A--B",
+    "tokens": [
+      "a",
+      "b"
+    ],
+    "protected": [
+      false,
+      false
+    ]
+  },
+  {
+    "input": "1,000",
+    "tokens": [
+      "1",
+      "000"
+    ],
+    "protected": [
+      true,
+      true
+    ]
+  },
+  {
+    "input": "-1.50 +16 .5 -.5",
+    "tokens": [
+      "-1.50",
+      "+16",
+      ".5",
+      "-.5"
+    ],
+    "protected": [
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "input": "16 16.0 16GB 1e3",
+    "tokens": [
+      "16",
+      "16.0",
+      "16gb",
+      "1e3"
+    ],
+    "protected": [
+      true,
+      true,
+      true,
+      true
+    ]
+  }
+]

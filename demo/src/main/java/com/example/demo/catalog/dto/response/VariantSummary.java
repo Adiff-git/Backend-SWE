@@ -12,4 +12,5 @@ public final class VariantSummary {
 	private final String sku;
 	private final Map<String, String> options;
 	private final SellingPrice sellingPrice;
+	private final Map<String, Object> technicalSpecifications;
 }

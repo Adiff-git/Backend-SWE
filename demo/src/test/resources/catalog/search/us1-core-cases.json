@@ -1,0 +1,282 @@
+{
+  "version": "search-evaluation-v2",
+  "goldenExpectationVersion": "Approved RK v1,unchanged",
+  "cases": [
+    {
+      "id": "RK01",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK01",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony alpha",
+        "expectedAliases": [
+          "ownedSku",
+          "wholeName",
+          "phrase",
+          "tokens",
+          "prefix",
+          "partial",
+          "fuzzy"
+        ],
+        "rule": "owned eligible SKU7 precedes Name6"
+      }
+    },
+    {
+      "id": "RK02",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK02",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony alpha",
+        "expectedAliases": [
+          "wholeName",
+          "descriptionPhrase",
+          "scatteredBrandSku"
+        ],
+        "rule": "6>5>4 regardless of scattered SKU source"
+      }
+    },
+    {
+      "id": "RK03",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK03",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony alpha",
+        "expectedAliases": [
+          "descriptionPhrase",
+          "scatteredBrandSku"
+        ],
+        "rule": "phrase cannot be synthesized across fields"
+      }
+    },
+    {
+      "id": "RK04",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK04",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony alpha",
+        "expectedAliases": [
+          "tokens",
+          "prefix",
+          "partial",
+          "fuzzy"
+        ],
+        "rule": "4>3>2>1"
+      }
+    },
+    {
+      "id": "RK05",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK05",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "ID-X samsnug",
+        "expectedAliases": [
+          "allExactDescription",
+          "identifierAndFuzzyName"
+        ],
+        "rule": "one exact identifier does not promote fuzzy-dependent result"
+      }
+    },
+    {
+      "id": "RK06",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK06",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "WH-1000XM5",
+        "expectedAliases": [
+          "exactIdentifier"
+        ],
+        "negativeQuery": "WH-1000XM6",
+        "negativeExpectedAliases": []
+      }
+    },
+    {
+      "id": "RK08",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK08",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "stable identical",
+        "expectedOrderRule": "fixture Product UUID ascending for equal full rank tuples"
+      }
+    },
+    {
+      "id": "RK09",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK09",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony sony",
+        "expectedFirstAlias": "realRepeatedPhrase",
+        "remainingOrderRule": "dedup token evidence then Product UUID;no invented phrase"
+      }
+    },
+    {
+      "id": "RK10",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK10",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony alpha",
+        "expectedFirstAlias": "bestSkuRank",
+        "representativeAlias": "cheaperMatchingVariant",
+        "forbiddenParameters": [
+          "categoryId",
+          "brandId",
+          "minPrice",
+          "maxPrice",
+          "specFilters",
+          "sort"
+        ]
+      }
+    }
+  ]
+}

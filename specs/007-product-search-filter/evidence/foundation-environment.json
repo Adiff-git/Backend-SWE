@@ -1,0 +1,159 @@
+{
+  "os": "Linux-7.0.0-42-generic-x86_64-with-glibc2.39",
+  "cpuCount": 20,
+  "loadAverage": [
+    2.802734375,
+    1.701171875,
+    1.2021484375
+  ],
+  "memoryKiB": {
+    "MemTotal": "       16049456 kB",
+    "MemAvailable": "    5635148 kB"
+  },
+  "java": "openjdk version \"25.0.4.1\" 2026-08-18\nOpenJDK Runtime Environment (build 25.0.4.1+1-1-24.04.4-Ubuntu)\nOpenJDK 64-Bit Server VM (build 25.0.4.1+1-1-24.04.4-Ubuntu, mixed mode, sharing)\n",
+  "maven": "\u001b[1mApache Maven 3.8.7\u001b[m\nMaven home: /usr/share/maven\nJava version: 25.0.4.1, vendor: Ubuntu, runtime: /usr/lib/jvm/java-25-openjdk-amd64\nDefault locale: en, platform encoding: UTF-8\nOS name: \"linux\", version: \"7.0.0-42-generic\", arch: \"amd64\", family: \"unix\"\n",
+  "branch": "features/SearchAndFilter",
+  "head": "c5bd4e7eeb39d9b06a0c7e36af9a65635058613f",
+  "dockerVersion": "29.6.0",
+  "observedContainers": {
+    "1e4f7dcf1b0ccba9b77b605781249b6fb9e96ac2fef6170e50f3a821e824d969": {
+      "id": "1e4f7dcf1b0ccba9b77b605781249b6fb9e96ac2fef6170e50f3a821e824d969",
+      "imageId": "sha256:7c1a8a9a47c780ed0f983770a662f80deb115d95cce3e2daa3d12115b8cd28f0",
+      "image": "testcontainers/ryuk:0.14.0",
+      "stateWhenObserved": "running",
+      "created": "2026-11-09T09:44:58.094443054Z",
+      "mounts": [
+        {
+          "type": "bind",
+          "destination": "/var/run/docker.sock"
+        }
+      ],
+      "tmpfs": null,
+      "portBindings": {
+        "8080/tcp": [
+          {
+            "HostIp": "",
+            "HostPort": ""
+          }
+        ]
+      },
+      "labels": {
+        "org.testcontainers": "true",
+        "org.testcontainers.lang": "java",
+        "org.testcontainers.ryuk": "true",
+        "org.testcontainers.version": "2.0.5"
+      }
+    },
+    "dc992171c64ad9710782c26c71a3d3b12f186785a7d9f669655417c63ae8c4bb": {
+      "id": "dc992171c64ad9710782c26c71a3d3b12f186785a7d9f669655417c63ae8c4bb",
+      "imageId": "sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b",
+      "image": "postgres:17-alpine",
+      "stateWhenObserved": "running",
+      "created": "2026-11-09T09:44:59.898467378Z",
+      "mounts": [
+        {
+          "type": "volume",
+          "destination": "/var/lib/postgresql/data"
+        }
+      ],
+      "tmpfs": null,
+      "portBindings": {
+        "5432/tcp": [
+          {
+            "HostIp": "",
+            "HostPort": ""
+          }
+        ]
+      },
+      "labels": {
+        "org.testcontainers": "true",
+        "org.testcontainers.lang": "java",
+        "org.testcontainers.sessionId": "4db919ee-d734-4388-a03a-59440dd93998",
+        "org.testcontainers.version": "2.0.5"
+      }
+    }
+  },
+  "runtimeContainerIdsFromFinalLog": [
+    "1e4f7dcf1b0ccba9b77b605781249b6fb9e96ac2fef6170e50f3a821e824d969",
+    "25e67c5058ceb164f1be39ce24606f0dd952420c60229e651a8d48d13920ef6a",
+    "53f8b301cd129b334bb53823e16fc70d711632853f1920f567e7e72b5d39c312",
+    "594b2e4cc107b6d10d2049647b4e042d45230e6f7ab3827b2ce7c11a7a93b321",
+    "63223a837f88809cb3a3f8ba784e32847c76ffc92d35660bb812d1215fbad03d",
+    "6ce10fbad13ffe9791d9ac3c9963fa2ecf7556dc334df034ec19dba83abf5246",
+    "76614a9c5b411d410b16683ee2a2c768c88fe48abe18fe2d7b24afbea9506e04",
+    "a5d2ba5fc9a68b556476aad605788a389ad79e35dcf000bdb92f51b0ef8328d7",
+    "dc992171c64ad9710782c26c71a3d3b12f186785a7d9f669655417c63ae8c4bb"
+  ],
+  "cleanup": [
+    {
+      "containerId": "1e4f7dcf1b0ccba9b77b605781249b6fb9e96ac2fef6170e50f3a821e824d969",
+      "inspectExitCode": 1,
+      "removed": true
+    },
+    {
+      "containerId": "25e67c5058ceb164f1be39ce24606f0dd952420c60229e651a8d48d13920ef6a",
+      "inspectExitCode": 1,
+      "removed": true
+    },
+    {
+      "containerId": "53f8b301cd129b334bb53823e16fc70d711632853f1920f567e7e72b5d39c312",
+      "inspectExitCode": 1,
+      "removed": true
+    },
+    {
+      "containerId": "594b2e4cc107b6d10d2049647b4e042d45230e6f7ab3827b2ce7c11a7a93b321",
+      "inspectExitCode": 1,
+      "removed": true
+    },
+    {
+      "containerId": "63223a837f88809cb3a3f8ba784e32847c76ffc92d35660bb812d1215fbad03d",
+      "inspectExitCode": 1,
+      "removed": true
+    },
+    {
+      "containerId": "6ce10fbad13ffe9791d9ac3c9963fa2ecf7556dc334df034ec19dba83abf5246",
+      "inspectExitCode": 1,
+      "removed": true
+    },
+    {
+      "containerId": "76614a9c5b411d410b16683ee2a2c768c88fe48abe18fe2d7b24afbea9506e04",
+      "inspectExitCode": 1,
+      "removed": true
+    },
+    {
+      "containerId": "a5d2ba5fc9a68b556476aad605788a389ad79e35dcf000bdb92f51b0ef8328d7",
+      "inspectExitCode": 1,
+      "removed": true
+    },
+    {
+      "containerId": "dc992171c64ad9710782c26c71a3d3b12f186785a7d9f669655417c63ae8c4bb",
+      "inspectExitCode": 1,
+      "removed": true
+    }
+  ],
+  "cachedImagesAfterRun": {
+    "postgres:17-alpine": {
+      "cachedImageIdAfterRun": "sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b",
+      "repoDigests": [
+        "postgres@sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b"
+      ]
+    },
+    "localstack/localstack:4.14.0": {
+      "cachedImageIdAfterRun": "sha256:3ebc37595918b8accb852f8048fef2aff047d465167edd655528065b07bc364a",
+      "repoDigests": [
+        "localstack/localstack@sha256:3ebc37595918b8accb852f8048fef2aff047d465167edd655528065b07bc364a"
+      ]
+    },
+    "testcontainers/ryuk:0.14.0": {
+      "cachedImageIdAfterRun": "sha256:7c1a8a9a47c780ed0f983770a662f80deb115d95cce3e2daa3d12115b8cd28f0",
+      "repoDigests": [
+        "testcontainers/ryuk@sha256:7c1a8a9a47c780ed0f983770a662f80deb115d95cce3e2daa3d12115b8cd28f0"
+      ]
+    }
+  },
+  "postgresSource": "actual fresh/upgrade runtime metadata and Foundation connection;not cached image alone",
+  "parallelExecution": false,
+  "forkCount": 1,
+  "storage": "LocalStack real signature test;separate fake local signers for other suites;no external AWS",
+  "executionOwner": "Codex (automated local execution under user T019 instruction);no registry/model reviewer approval claimed"
+}

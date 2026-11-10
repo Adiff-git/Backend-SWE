@@ -13,13 +13,9 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
-# Local documentation, design artifacts and AI/specification tooling.
+# Local documentation and database design artifacts.
 /docs/
-/specs/
 /Database-Design/
-/.agents/
-/.specify/
-/.codex/
 
 # Keep Docker runtime scripts: compose.dev.yaml mounts them into LocalStack.
 # Only its documentation is excluded.

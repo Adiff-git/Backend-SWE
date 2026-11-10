@@ -1,0 +1,1428 @@
+{
+  "capturedUTC": "2026-11-10T02:26:18.972440+00:00",
+  "note": "Latest per-suite reports before isolated rerun;full functional command passed. Mixed finalization command has one actual-source timing failure. Do not replace historical705PASS snapshot.",
+  "suites": [
+    {
+      "suite": "com.example.demo.BuildConfigurationTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f8af6ba1fea8dd5c2e6112aa053954b2c375e6fdecd8d2bc619f8a2bc6596a98"
+    },
+    {
+      "suite": "com.example.demo.DemoApplicationTests",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "06e727d13b3941d5da4c0370da87032769d2221068a534bd57d2c9eaf682aeb5"
+    },
+    {
+      "suite": "com.example.demo.auth.config.IdentityPropertiesTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "469bcd06f18e6feba781764aa4e685d951dc574190037b8dfab7874ab48a0e44"
+    },
+    {
+      "suite": "com.example.demo.auth.controller.EmailLoginControllerTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2958d87d7d42a65153bbcb5687f890c71e3e316274c820e3dabf2e8ee47963fd"
+    },
+    {
+      "suite": "com.example.demo.auth.controller.EmailVerificationControllerTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "dfa9c80401ed589baac220bb8856453fcc131ad88cd8e5bd38002b3c7f5a3775"
+    },
+    {
+      "suite": "com.example.demo.auth.controller.LogoutControllerTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "daead003968fe3db0659602a049143625ec4cbb3a79a6945b170777424c5e3b5"
+    },
+    {
+      "suite": "com.example.demo.auth.controller.PasswordControllerTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b5bd4d31c1158408ab587fe38f8b2ae702f7517f31f415589d64683a1b9dd205"
+    },
+    {
+      "suite": "com.example.demo.auth.controller.RefreshControllerTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "954d991ee8d451bbf21dfe404e666e27c4349478a8b0d1cf5e800d7522890a79"
+    },
+    {
+      "suite": "com.example.demo.auth.controller.RegistrationLoginControllerTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "1f1673bbe17bb2553aeb8ea2171894c967a8592483aca16fc7a215522d566ed9"
+    },
+    {
+      "suite": "com.example.demo.auth.controller.RegistrationVerificationControllerTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "35671a183a18716948fc8601d005eed68f79757169ae30e632f0cf747c04feda"
+    },
+    {
+      "suite": "com.example.demo.auth.converter.AuthConverterTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "de8922a9bb06522a6bf7cbd6834ef2a49953298290aeb101c09a20fbf6509c37"
+    },
+    {
+      "suite": "com.example.demo.auth.security.AuthConfigurationTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4b2632447d1e1dc131462bf3637999c883c1012d510f2ca8f8676fcfe0e7afb4"
+    },
+    {
+      "suite": "com.example.demo.auth.security.ControlledOidcProviderTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "293b7de96e1e4aaf4cad7fd9a068dc047d777c99562a6b9f99e0dcc845d6c3c7"
+    },
+    {
+      "suite": "com.example.demo.auth.security.CurrentStateJwtConverterTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "bdcc35a2cd38f04072d358252d38b0eb71533015c4d600ed473f6d02d1fef037"
+    },
+    {
+      "suite": "com.example.demo.auth.security.JwtClaimsValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4cfe04ac0e125b4c2ec45704b0e1b52e7f05566a5bffe26ec22faaac22307c41"
+    },
+    {
+      "suite": "com.example.demo.auth.service.EmailLoginServiceTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "600b98ea4a901325b58592e1ee252489e0cc1d499ff6acfac0d6d3f6a5dd5fdf"
+    },
+    {
+      "suite": "com.example.demo.auth.service.IdentityAuditServiceTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "7175888e040e24a7750450fb2998050be798347671930c95efe02bc9c3e36a9d"
+    },
+    {
+      "suite": "com.example.demo.auth.service.IdentityProofServiceImplTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c011c805142b7834ad2ba3676f017f08dfe808910105ac4c2a5a4f8e82487d96"
+    },
+    {
+      "suite": "com.example.demo.auth.service.LogoutServiceTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "49aae72563a9f0773abeb04b238e22ce73e2431004366cf010b0cd525b12f03b"
+    },
+    {
+      "suite": "com.example.demo.auth.service.PasswordChangeServiceTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "66e27ae8b147c34a3fa052126753b2b83c57ea34724482f4e52a9b21e0fd819e"
+    },
+    {
+      "suite": "com.example.demo.auth.service.RefreshServiceTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "90fe22dbd95d45c6c370407950d7f32d15b30e36434a7fe8e2b628205ac9a761"
+    },
+    {
+      "suite": "com.example.demo.auth.service.RegistrationLoginServiceTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "bf353cd21363390a727b8d5b81fe4d520b0cc3803cb9b031b05321744fb76bf0"
+    },
+    {
+      "suite": "com.example.demo.auth.service.TokenServiceTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "3c0f05364322c43dfb4af0b047984ef101fd4c831ddabcd5380ae84f072cc5ee"
+    },
+    {
+      "suite": "com.example.demo.auth.validator.AuthValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "25f0e563b8df6263f4298ae2ca274c9875b9baffd76d44150098c384cc1b7fbf"
+    },
+    {
+      "suite": "com.example.demo.auth.validator.GoogleAttemptValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "7557ff8b6d9627e162875d117aaa36cbb5b851e73ecde3bc7d8d68a1e1af5ff7"
+    },
+    {
+      "suite": "com.example.demo.auth.validator.GoogleConnectionAttemptValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "620abc065af963e6a3da67b73b5dc812bd3d790663e3e1965709acc79e60a411"
+    },
+    {
+      "suite": "com.example.demo.auth.validator.PasswordPolicyValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "429ed8f3f44c8e19e3f4c06294b8abd097632ac67238bf181800355c2c9ae081"
+    },
+    {
+      "suite": "com.example.demo.catalog.controller.CatalogSecurityBaselineTest",
+      "kind": "surefire-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "1aca7f0a21c36a461a914bc8cd791188ce5c52f8ed90bfa98efa2fc0cc768b34"
+    },
+    {
+      "suite": "com.example.demo.catalog.controller.ProductDetailControllerTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4a04da130bb6c2bd857c440c02d5881310c28a0c92da1329bd23a07c1b7f2691"
+    },
+    {
+      "suite": "com.example.demo.catalog.controller.ProductImageControllerTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f649d718fa8a608d1827393b6affccb1299dee4d9e6ce8c875376579d64b611e"
+    },
+    {
+      "suite": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "kind": "surefire-reports",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0437318e2c0f79c1ab25a919e218cbb752584e9d80a62f33a2af1dca12f36e39"
+    },
+    {
+      "suite": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+      "kind": "surefire-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "1115f880aaea6a37822c1e3f9a8ac18fc1ae018ba23601739dfb73c6da582a70"
+    },
+    {
+      "suite": "com.example.demo.catalog.search.ProductIdentifierVocabularyTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "7e1ad4794d02288180f56dc94d583e7d326329d6f8649f2c9a2b04a0d5a935f3"
+    },
+    {
+      "suite": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+      "kind": "surefire-reports",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "37a49b384894edf2e43f32df869be9e58d5e6edcc08f9fbe141b338bb5bdf37b"
+    },
+    {
+      "suite": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+      "kind": "surefire-reports",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "72a86662645a3a53f1ff135ce689a0d10a0effea847b25e25407baeb64024b2b"
+    },
+    {
+      "suite": "com.example.demo.catalog.search.SpecificationFilterRegistryTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "8d11d3f8103b919d446a9a2f6c68cc01c6b121a8c3e37a4090af57667722f5b0"
+    },
+    {
+      "suite": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+      "kind": "surefire-reports",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "78543ebab3ce8f1be4aa5852f81e3c73e9b5882d2890a8c281280b71e036f226"
+    },
+    {
+      "suite": "com.example.demo.catalog.service.ProductImageServiceTest",
+      "kind": "surefire-reports",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "be622434c7edc15a75ec4d1be4a360f2c5759c546e0d2b04a064fd74e8430ca4"
+    },
+    {
+      "suite": "com.example.demo.catalog.service.ProductKeywordSearchServiceImplTest",
+      "kind": "surefire-reports",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4404cdaf107183994dc9f998f6c7a825e9554b463837021d53717c053a47f100"
+    },
+    {
+      "suite": "com.example.demo.catalog.storage.S3ProductImageStorageTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "88ceaeaabc47c190c2521a4cb570aefd5b64268e0ba1a12ce021334de8fb5494"
+    },
+    {
+      "suite": "com.example.demo.catalog.validator.CatalogDataValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "95ece8f252e959bae89a68994e68afa214bd4884b957b5d790cc030c93afc60b"
+    },
+    {
+      "suite": "com.example.demo.catalog.validator.ProductImageContentValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "82fe476b4d5594d0578260fd0e8b7634608c558269b5d33bc1ade224b92f11b1"
+    },
+    {
+      "suite": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+      "kind": "surefire-reports",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "90aaa1d28e0927770af21a1f9893f0ad6436a026a816f601215030151a6edfc2"
+    },
+    {
+      "suite": "com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2ce26e6506d3398a8ee345453fb758a6445a007e0501fa9296705e4c31ddda74"
+    },
+    {
+      "suite": "com.example.demo.common.exception.ApiErrorTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "300657efd98c50850df23cf13e3e23d001000964d23438b62889026bbf4423f7"
+    },
+    {
+      "suite": "com.example.demo.common.exception.WishlistPersistenceErrorTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "6b5907789f89e37f3a6f90044540a7d99257f648a5006334d59651a72e9d3384"
+    },
+    {
+      "suite": "com.example.demo.common.identity.CurrentUserIdProviderTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "61f16fdce77f2b103b83a026c370a9cfe338991f2622a79587ebfb51d32178ec"
+    },
+    {
+      "suite": "com.example.demo.media.controller.ImageUploadControllerTest",
+      "kind": "surefire-reports",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d91f4bc6630467e3ef2e71c9eaa26dbd429107737d372e232af4ada523149e97"
+    },
+    {
+      "suite": "com.example.demo.media.controller.ImageUploadFailureControllerTest",
+      "kind": "surefire-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "bfb31fdcf039228421394e2a304cf02feb340c828d5985372fe8bc0a10788a9b"
+    },
+    {
+      "suite": "com.example.demo.media.converter.MediaConverterTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "6ee882e5be317e48f6f12b78eb7a72b1203b103fe3c4a4f34484a44ed6ec9e91"
+    },
+    {
+      "suite": "com.example.demo.media.service.MediaCommandServiceTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "309930053bde0eabf2ef0a88984156b8d0498c5a65acaf7871fed988df33b890"
+    },
+    {
+      "suite": "com.example.demo.media.service.MediaServiceTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "55722b387ad1454b6415c0cdafc3a3f022eef60dfcd80f38a23b6b4476fb66ce"
+    },
+    {
+      "suite": "com.example.demo.media.testdata.MediaFixturesTest",
+      "kind": "surefire-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "95ae84a942f8635ae6afca7a7683a9b45ed17079d40368f2732733d0d0f89fb6"
+    },
+    {
+      "suite": "com.example.demo.media.validator.ImageContentValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e0f53dfd48d22ac8fecf7f356131f75dd78fdb9da3d2d6899478a5c46c8e249b"
+    },
+    {
+      "suite": "com.example.demo.media.validator.ImageUploadValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c5a61d38ec41c2b31faf6f755a0e3031e5765ee71e75c97fcbd4df31073d1f10"
+    },
+    {
+      "suite": "com.example.demo.storage.config.S3EnvironmentConfigurationTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2477fe3e5c96ac53cba18dd0ab1b66a51a077bab4914d1a402741723866549a4"
+    },
+    {
+      "suite": "com.example.demo.storage.config.S3StorageConfigurationTest",
+      "kind": "surefire-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d41662321a3ec53e9fa4f65157829482cd933bde4f6d236553e7cbfbf54af9a1"
+    },
+    {
+      "suite": "com.example.demo.user.controller.UserImageControllerTest",
+      "kind": "surefire-reports",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2e562ca10268ba024652dc5d93917eb1d9b8aab20170bb1b3811c841f740a6a8"
+    },
+    {
+      "suite": "com.example.demo.user.converter.AddressConverterTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0562c54e93a400505f2bb6c4186beb6520fe60f5943b9167e6f46092d74b3986"
+    },
+    {
+      "suite": "com.example.demo.user.converter.PublicProfileConverterTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "a67a406f63a33932d95603af0056d57ecf8ed2abc5f487f565eb122e5b230781"
+    },
+    {
+      "suite": "com.example.demo.user.converter.UserConverterTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "8187469d89ba19dd9e18b52ea7a558a768839cacff4b25547d444cf19a5ac5db"
+    },
+    {
+      "suite": "com.example.demo.user.converter.UserImageConverterTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "864cf7b022af033cf8870e91cd8bda87382886c590d7b5a97750f477d9be23ca"
+    },
+    {
+      "suite": "com.example.demo.user.dto.request.RequestValidationTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d685ae3137c3815e73fcfdf59c90986188273317e21b2f84a5aad88b2b18a0fa"
+    },
+    {
+      "suite": "com.example.demo.user.dto.request.UserImageRequestTest",
+      "kind": "surefire-reports",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "8123c3cff752640af0d242f44e0920b07df2ff12e98c7b8a4e6dddb2aa709184"
+    },
+    {
+      "suite": "com.example.demo.user.service.AddressServiceImplTest",
+      "kind": "surefire-reports",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "dd7621861967f236fae1a84742fcdeeff27a5e0a3b5f5731f0c6fa6317773d2b"
+    },
+    {
+      "suite": "com.example.demo.user.service.UserImageServiceTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "9a93f554f892e3943e999a7af69400ebd6169b7a9f5d2803b7ac468e326f3986"
+    },
+    {
+      "suite": "com.example.demo.user.service.UserServiceImplTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "db7fb2c7dd7e8f776a366a66f88abecb83b1e568c6e8a1475ed173b22de6133c"
+    },
+    {
+      "suite": "com.example.demo.user.service.VerifiedAccountServiceTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "34aa36e58ba1a65318e2b327ca04bcf231563642fcfb8362befdbf24609eaca8"
+    },
+    {
+      "suite": "com.example.demo.user.validator.AddressValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "aed0bad89d2c87ddd0098e9428c4c359f6e7c91368194f31c78d034f7a410c58"
+    },
+    {
+      "suite": "com.example.demo.user.validator.CodePointLengthValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "1531a6188bb8aac91efa9f9ea9446f1f4e36b248565686ac9926aa9443b9d8a4"
+    },
+    {
+      "suite": "com.example.demo.user.validator.UserValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0fcfb1951530ba6b642ab66a4b1fb77f62f3865a09105ab11d4c91a0bc76cac0"
+    },
+    {
+      "suite": "com.example.demo.wishlist.controller.WishlistControllerTest",
+      "kind": "surefire-reports",
+      "tests": 31,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d4a61aa08d91e8eb10623f5776aaebe52251c29c2f9cd8801c3c226b06fad3e9"
+    },
+    {
+      "suite": "com.example.demo.wishlist.converter.WishlistConverterTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "5711d32f82a0eac0020c493f4ec100ee17cf748020abbe8f0b5822167565460d"
+    },
+    {
+      "suite": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+      "kind": "surefire-reports",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "14e1017ca4d16216ac9a5c2d9e2a460908bbd02cf049a526fc850aedaa15415d"
+    },
+    {
+      "suite": "com.example.demo.wishlist.validator.WishlistValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d5b5af0a8c028b73b94bb2ff31600b7875e712e80b11815a79d59fed9701f44e"
+    },
+    {
+      "suite": "com.example.demo.BuildConfigurationIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "53619a6bbabdc777cb5fdb93c13dd41c7412e23d68b522b842097d9150ade24b"
+    },
+    {
+      "suite": "com.example.demo.auth.controller.GoogleBrowserFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "fb65bca11a42f9c521882934609f1a8a8a9c2ab565055d1af5dc3e0dd42e4928"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.AuthCleanupIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f9c27ffac32dab526b515c9c73924245810c59e658b749741bd86f02963235bd"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.AuthCorsApiIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "3f72306583f3eee6ae0362c6bd708419c62880c79eb936bc18880320436df371"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.AuthSessionExpiryApiIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "1a796c46710a2b1013ee35b615d3031393c6b594c46c382c1cecfbda525cc0ab"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.AuthenticationFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "48a4a5bdc4aeff4ad38421bead8700e9ae45548ccccfa6fe306660d4626becc3"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.BearerAuthenticationApiIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "7696d897538306f438c9719f57de666d8d2e841699c7ee05b6f6db679588a2cb"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.EmailLoginApiIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b53915ac5cc5f0abded75cb28f6336d9ae5fe8aff0ed1d6dd0b5369106deb2b0"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.EmailVerificationFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e6e804ae38de394a0954a646bda52ad810c79f0c59619892829db1126bfae7ed"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.LegacyEmailVerificationIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0a6ebc700ab057dd91eaaee9f7808bdacee32317cc4d12e28f0a9f81c81dc13d"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.LegacyMigrationIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f2bb6b6ac512ca1ef6ad6c2e03eee509fba26066bd1828aad6d0f2c59ad47060"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.LogoutApiIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e31a0ca081bda4435b019565f0730f5e5a6378e690b00247d7f2ad8fd217f94c"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.LogoutRefreshRaceIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e6251f1022e286a1861d7ac41355bff55e7f9557388859ad12c1b5a14fd93503"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.PasswordChangeApiIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "de97e118602f2aa4166ebd299f576f3d23c9906d14e80b014ea03cdd203b1e9a"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.PasswordRevocationRaceIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "3da5403ae8c6cb266c08c6a92636ac0f8c272e86bfe305eb6343ad18f06bfc58"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.RefreshRotationApiIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e4c1f349f48b2571c49839e2e706f374551fd9515d7ceb4e6c518133ff16a8a6"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.RegistrationLoginApiIT",
+      "kind": "failsafe-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "8277363acf37575f26057ddcc18977d3b5091f5736d1d3aff42414e121936107"
+    },
+    {
+      "suite": "com.example.demo.auth.integration.RegistrationLoginServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e1ad549822424487eda386328cbe06d5e1b29a93f038b473bdb1e596343a2a32"
+    },
+    {
+      "suite": "com.example.demo.auth.repository.AuthSessionRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "8e3afc50047c9152555cbf23549260359f54195c473876a7384e5cbe319ff224"
+    },
+    {
+      "suite": "com.example.demo.auth.repository.EmailVerificationRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "546199a09a514b59d458dce1d4044a33938c6be85fb5ea9c6209a605335e5d5e"
+    },
+    {
+      "suite": "com.example.demo.auth.repository.GoogleIdentityRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "6fec6463b48024aad27ba25d652472d65990f6419eb1a83e2a0cff995aa649db"
+    },
+    {
+      "suite": "com.example.demo.auth.repository.IdentityMigrationIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "2b900689bc8c691175bf9dbf0008b0d591d8b2605f0e2102fcbfaf81714001c7"
+    },
+    {
+      "suite": "com.example.demo.auth.repository.OAuthStateRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c5e365a06e50e6bb24793514034a1006a7469a114e3b1a58127733768768e48e"
+    },
+    {
+      "suite": "com.example.demo.auth.repository.PendingRegistrationRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "e8eb264af2954794a6df21fd662b37e72f4277ecb715c50385eb8042edf37ed8"
+    },
+    {
+      "suite": "com.example.demo.auth.repository.RefreshCredentialRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "6c5a9632e3147d75070d92258338935c0252eb04813ae4b2017371bddde21f69"
+    },
+    {
+      "suite": "com.example.demo.auth.security.GoogleSecurityConfigurationIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "af667801d5f50ee131f28c678261267ca94bbebd9288e5637c83ed1bec907542"
+    },
+    {
+      "suite": "com.example.demo.auth.service.GoogleAttemptStateIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "71c882de5e218378a6541b2718e7f102b3d9510fafc63a8dc10ee1d2714745d6"
+    },
+    {
+      "suite": "com.example.demo.auth.service.GoogleHandoffIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "9d07462c81118885228e38a5054272f306b50bf829cdc5298ec11fa97f977bda"
+    },
+    {
+      "suite": "com.example.demo.auth.service.GoogleLoginConcurrencyIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c75c35e42d9770e29033225691c2200093cadddc50973c1c460eb5c122c6dc95"
+    },
+    {
+      "suite": "com.example.demo.auth.service.IdentityCleanupIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b0b4b306c271e86e12234af75fe7dc0804e292ef810824b80eee06d23d6157e5"
+    },
+    {
+      "suite": "com.example.demo.auth.service.PendingRegistrationBoundaryIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "83015a4cfbcb5582f054ced1741b1791d4229403785de142d3ca03ef40d1a947"
+    },
+    {
+      "suite": "com.example.demo.auth.service.PendingRegistrationServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "151d08db463c75ce09972739990e5ab2091c2a1f84ccdbb32c94047081bc4421"
+    },
+    {
+      "suite": "com.example.demo.auth.service.VerificationMailDeliveryIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "71e397c8b0668c968d6be2bbc3d35b3f244d6ef70524313ccd11018be5830c43"
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogContractIT",
+      "kind": "failsafe-reports",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d3264e56cd5e236d6ed426d07a7945edee14bb2011fe1c67fd39d647bae13cb5"
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogEnhancementMigrationIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "a77a08b100456a66bc72bb06bc93644ee5b1fff85ba244c1307cab6e3aa3d009"
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogMigrationsIT",
+      "kind": "failsafe-reports",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "7b02eee242a31e650a99d8a375f09c467b825ae035b6b6ee0a142a9d2542b42b"
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogQueryCountIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ed6c822478416740340a106692283d570860198d2b0192ac4f6ac7626adb9f9f"
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogReadFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b35d54869fc3b2ce5305928bd23c75a0baa13c6406988038f261b7c501137096"
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogRelationshipApiIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "6ea4498ed96b87ab8f8bb5e9135d5c943c8b14ce0159b09a2c46b19fc8d6ea61"
+    },
+    {
+      "suite": "com.example.demo.catalog.ProductDetailApiIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ea54a0be0115c615515b73868ffccdc3a5348b917f8cb22c6d9c01a010490e9c"
+    },
+    {
+      "suite": "com.example.demo.catalog.ProductImageAttachmentIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "217e01f31a0cde7a0c57da57fb97c7b5c4433d98a3a1b8632ce707b43275eaac"
+    },
+    {
+      "suite": "com.example.demo.catalog.ProductListingApiIT",
+      "kind": "failsafe-reports",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "da0d355cfc8a6c022f38fc7f3037c4238cdd645215ae23983eea1c8fef35b47b"
+    },
+    {
+      "suite": "com.example.demo.catalog.ProductSearchPerformanceIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c9b7524dc15d1efda7f20bd4b13aad722a324fb76bb01ed5f6af4bffa9dc89f6"
+    },
+    {
+      "suite": "com.example.demo.catalog.ProductSourceWorkloadPerformanceIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "720a2162be50e294b1124f5b469468143520f692703838e3b1cb4e89bba0208a"
+    },
+    {
+      "suite": "com.example.demo.catalog.controller.ProductSearchControllerIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "dd5386ef89e22eb0afa3f81967dcaf7fd7f81da5656d139d111a4cbafe2d86bc"
+    },
+    {
+      "suite": "com.example.demo.catalog.entity.CatalogEnhancementMappingsIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b92c1ea26950d4011216bb911b33c4ae4ec496b8117ee3e3fb34716df71b10f8"
+    },
+    {
+      "suite": "com.example.demo.catalog.entity.CatalogEntityMappingsIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0bd9023c21e008637ed6f2c19661e53dadc4cf7a1852804ef50105bc0e80feee"
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.CatalogConstraintsIT",
+      "kind": "failsafe-reports",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "34af82794bc6c30c0b17b41f83149832c5dcb59350280fb4d769ced9fc45a6b4"
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.CatalogRelationshipsIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "855cfb0020c2d996e08faef885cf368520eece51a41fa0cc60aedb81e7b371aa"
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.CatalogSearchMigrationIT",
+      "kind": "failsafe-reports",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4972f69279a8b11d4202bc3d8cdacaf7da8e9b3d096c73229ff5f84ed587ed56"
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.FuzzyCalibrationIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "fa7c8eb3fe3dff7cc0d10365220cab1ab02239f30909de5c2136771030b39b8d"
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.ProductDetailRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "caf67d89c3664167f4c2e88376cd7c7e5e9df4da52e3d9b66bcf5b073744c75a"
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.ProductListingRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "930a8717df25e7c3c4f07e539d3b6c6d588e57a9ff8c6440f92fb6f51a2ca16a"
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "0572bff625ea03e585e90858aa54d9f29c1aca1201827b9473fbdedaab7d28ff"
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.ProductSearchRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "70baceddbfe0924818fd587510b46ef965145978a24aa33e1be6a47cdd1a2499"
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.SearchQueryPlanIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c74013b834f28b7aacd0b14fa096130fc7fb79ba3ee3378e2e5498ad9e0625ce"
+    },
+    {
+      "suite": "com.example.demo.catalog.search.SearchCapabilityIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "eefa345c2fa3b7f016c8117bd11bed6cd0cd4dc577f2587fd345b0f89f1dffc0"
+    },
+    {
+      "suite": "com.example.demo.catalog.search.SearchExactOnlyIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "cdcfb92d5ba65072f3a69a765c4393c096124c86661ad06eaa326b71f54736e3"
+    },
+    {
+      "suite": "com.example.demo.catalog.storage.CatalogPublicReadPerformanceIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f99266b237f23d179a4a859e144f27373ed15990fe5631aa6ef163d4379b0d48"
+    },
+    {
+      "suite": "com.example.demo.common.exception.ApiErrorSerializationIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "bb69f20c19130d1190a5afca119865d873d144f7bec330bb3acef3c008c76df3"
+    },
+    {
+      "suite": "com.example.demo.e2e.GoogleConnectionFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "50e4515630e56477a2144f70c5004d4b5bbede49c8b6a872d178fca5539e20b6"
+    },
+    {
+      "suite": "com.example.demo.e2e.GoogleLoginFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b6390c3c33a21353c83434841d5aec7ed4aa41357d8e313c89ddcb74b3e18be2"
+    },
+    {
+      "suite": "com.example.demo.media.integration.ImageCompletionConsistencyIT",
+      "kind": "failsafe-reports",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b9993b0d7855e8b548a0023dd85c87ffb6b088cfa8feeeb8ef0e169fa26d6550"
+    },
+    {
+      "suite": "com.example.demo.media.integration.ImageObjectReplacementIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "153a306067e184c793c65d921a99ce05c960e1f7e39216fedc743dce9cf14f82"
+    },
+    {
+      "suite": "com.example.demo.media.integration.ImageUploadFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "72b184213a54471df7301dd111ce050b0628b0e75026d3c231d69e8ed018e6cd"
+    },
+    {
+      "suite": "com.example.demo.media.integration.PackagedImageFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "dba7af734ab5a1316b84d67e16fbb49b5b7f2be5bdb5cc00e5936d954a721efe"
+    },
+    {
+      "suite": "com.example.demo.media.repository.ImageMigrationUpgradeIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "97e409a2c389d7c9f0d5e26c3e844cfbb4ab74f2b2bfebca7d459682bf75a3db"
+    },
+    {
+      "suite": "com.example.demo.media.repository.ImageUploadRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b55e8f8469bb420fb52f4ac73b0535929619ba71991ef65660726c99f46b9ae4"
+    },
+    {
+      "suite": "com.example.demo.storage.integration.ObjectStorageServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "39ac57801d0c5fe0c4f09c24917a5d5887f18731b0b7c78670b8bdfe74a30416"
+    },
+    {
+      "suite": "com.example.demo.storage.integration.StorageCorsIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "fcbc2e7d7f2a757695283046c2134d41232e77afa38fc7d3199356e59b81ca65"
+    },
+    {
+      "suite": "com.example.demo.user.integration.AddressApiIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "1ad3ae7ac1bef7ec7fa937fe7929edc9f30c010b2a01821019131fcb657294ba"
+    },
+    {
+      "suite": "com.example.demo.user.integration.AddressServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "c9944c73555b04fa284c3fdbff9ba6dab85d26a555632b692d4a412b6cccf32e"
+    },
+    {
+      "suite": "com.example.demo.user.integration.PublicProfileServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "a95f88cbae4126b771564a4796bdae004437908f3114c20a660880ac803a927c"
+    },
+    {
+      "suite": "com.example.demo.user.integration.UserApiIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ca4a570d2ed181ce18dabb0c13d0003187c2a70afc6902b95dabc41758ff643d"
+    },
+    {
+      "suite": "com.example.demo.user.integration.UserImageApiIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "b66c8e455fa355f2f7865c8a639162ad693594f3790099aa9e38bf1512ba2a43"
+    },
+    {
+      "suite": "com.example.demo.user.integration.UserServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d502d354a0943d98ecf85c2214c48391b3290d6f125250bf7f1269bc1437b8f3"
+    },
+    {
+      "suite": "com.example.demo.user.repository.AddressRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "719d2d26c86da3e1d6ecafb2923ef496852d3d95e308ef9058180ad9edc2d100"
+    },
+    {
+      "suite": "com.example.demo.user.repository.UserImageRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "a51ecbe02a1df07b389f6f24831bc6bd4f40ebf6e637553ffbe806b8ac2dc463"
+    },
+    {
+      "suite": "com.example.demo.user.repository.UserRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "84c7b63dd962ebb004a1ea997945bf96a13acdfe459e8e8c21a8e35276082696"
+    },
+    {
+      "suite": "com.example.demo.user.repository.VerifiedAccountRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "6d9d23194b5a1f43a0e70184b4198527991b30441403376cfc982649f3a99e37"
+    },
+    {
+      "suite": "com.example.demo.wishlist.controller.WishlistControllerIT",
+      "kind": "failsafe-reports",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "8d884d9ba84984b8d8181d2f79f54675a62509e961182cce9511a34ced3bab52"
+    },
+    {
+      "suite": "com.example.demo.wishlist.repository.WishlistRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "89db32b0cc3580e495ac0e16d01eec0f3b1b74e673b3ad72568c492304b00b5a"
+    },
+    {
+      "suite": "com.example.demo.wishlist.service.WishlistServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "35aa05a5f97e99cffe69fc8fc22ddf6298a49a257616cb7d439d5586ccc43a66"
+    }
+  ]
+}

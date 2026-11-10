@@ -16,6 +16,8 @@ public interface ProductCatalogService {
 
 	ProductPage listProducts(int page, int size);
 
+	ProductPage listProducts(com.example.demo.catalog.dto.request.ProductSearchRequest request);
+
 	ProductDetail getProduct(UUID id);
 
 	/** Internal eligible reference; no detail/gallery loading. */

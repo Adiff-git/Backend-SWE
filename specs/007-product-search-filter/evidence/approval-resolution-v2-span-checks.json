@@ -1,0 +1,1008 @@
+{
+  "version": "approval-resolution-v2-span-checks",
+  "scope": "Actual existing Java D2 primitive plus documentary contiguous-sequence checks;NOT production context-classifier/fuzzy/ranking tests",
+  "patterns": [
+    [
+      "galaxy",
+      "s8",
+      "plus"
+    ],
+    [
+      "galaxy",
+      "s9",
+      "plus"
+    ],
+    [
+      "galaxy",
+      "s20+",
+      "plus"
+    ],
+    [
+      "galaxy",
+      "s21+",
+      "plus"
+    ],
+    [
+      "lg",
+      "k22+",
+      "plus"
+    ]
+  ],
+  "results": [
+    {
+      "input": "SAMSUNG Galaxy S21+ Plus 5G Factory Unlocked Android Cell Phone 128GB US Version Smartphone Pro-Grade Camera 8K Video 12MP High Res, Phantom Silver",
+      "sourceLine": 11,
+      "sourceAsin": "B0B8PD3H1W",
+      "basis": "actual source title",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "samsung"
+        },
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s21+"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        },
+        {
+          "protected": true,
+          "text": "5g"
+        },
+        {
+          "protected": false,
+          "text": "factory"
+        },
+        {
+          "protected": false,
+          "text": "unlocked"
+        },
+        {
+          "protected": false,
+          "text": "android"
+        },
+        {
+          "protected": false,
+          "text": "cell"
+        },
+        {
+          "protected": false,
+          "text": "phone"
+        },
+        {
+          "protected": true,
+          "text": "128gb"
+        },
+        {
+          "protected": false,
+          "text": "us"
+        },
+        {
+          "protected": false,
+          "text": "version"
+        },
+        {
+          "protected": false,
+          "text": "smartphone"
+        },
+        {
+          "protected": true,
+          "text": "pro-grade"
+        },
+        {
+          "protected": false,
+          "text": "camera"
+        },
+        {
+          "protected": true,
+          "text": "8k"
+        },
+        {
+          "protected": false,
+          "text": "video"
+        },
+        {
+          "protected": true,
+          "text": "12mp"
+        },
+        {
+          "protected": false,
+          "text": "high"
+        },
+        {
+          "protected": false,
+          "text": "res"
+        },
+        {
+          "protected": false,
+          "text": "phantom"
+        },
+        {
+          "protected": false,
+          "text": "silver"
+        }
+      ],
+      "literalSequenceMatches": [
+        [
+          "galaxy",
+          "s21+",
+          "plus"
+        ]
+      ],
+      "expectedMatch": true,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    },
+    {
+      "input": "LG K22+ Plus LM-K200HAW Smartphone, US+LATIN 4G LTE, International Version (No US Warranty), 64GB, Titan - Unlocked w/ 64GB SD Bundle",
+      "sourceLine": 32,
+      "sourceAsin": "B08KWNJ26D",
+      "basis": "actual source title",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "lg"
+        },
+        {
+          "protected": true,
+          "text": "k22+"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        },
+        {
+          "protected": true,
+          "text": "lm-k200haw"
+        },
+        {
+          "protected": false,
+          "text": "smartphone"
+        },
+        {
+          "protected": true,
+          "text": "us+latin"
+        },
+        {
+          "protected": true,
+          "text": "4g"
+        },
+        {
+          "protected": false,
+          "text": "lte"
+        },
+        {
+          "protected": false,
+          "text": "international"
+        },
+        {
+          "protected": false,
+          "text": "version"
+        },
+        {
+          "protected": false,
+          "text": "no"
+        },
+        {
+          "protected": false,
+          "text": "us"
+        },
+        {
+          "protected": false,
+          "text": "warranty"
+        },
+        {
+          "protected": true,
+          "text": "64gb"
+        },
+        {
+          "protected": false,
+          "text": "titan"
+        },
+        {
+          "protected": false,
+          "text": "unlocked"
+        },
+        {
+          "protected": false,
+          "text": "w"
+        },
+        {
+          "protected": true,
+          "text": "64gb"
+        },
+        {
+          "protected": false,
+          "text": "sd"
+        },
+        {
+          "protected": false,
+          "text": "bundle"
+        }
+      ],
+      "literalSequenceMatches": [
+        [
+          "lg",
+          "k22+",
+          "plus"
+        ]
+      ],
+      "expectedMatch": true,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    },
+    {
+      "input": "SAMSUNG Galaxy S20+ Plus 5G Factory Unlocked Android Cell Phone SM-G986U US Version | 128GB | Fingerprint ID & Facial Recognition | Long-Lasting Battery (Cosmic Black, 128GB)",
+      "sourceLine": 53,
+      "sourceAsin": "B08FRS3R32",
+      "basis": "actual source title",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "samsung"
+        },
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s20+"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        },
+        {
+          "protected": true,
+          "text": "5g"
+        },
+        {
+          "protected": false,
+          "text": "factory"
+        },
+        {
+          "protected": false,
+          "text": "unlocked"
+        },
+        {
+          "protected": false,
+          "text": "android"
+        },
+        {
+          "protected": false,
+          "text": "cell"
+        },
+        {
+          "protected": false,
+          "text": "phone"
+        },
+        {
+          "protected": true,
+          "text": "sm-g986u"
+        },
+        {
+          "protected": false,
+          "text": "us"
+        },
+        {
+          "protected": false,
+          "text": "version"
+        },
+        {
+          "protected": true,
+          "text": "128gb"
+        },
+        {
+          "protected": false,
+          "text": "fingerprint"
+        },
+        {
+          "protected": false,
+          "text": "id"
+        },
+        {
+          "protected": false,
+          "text": "facial"
+        },
+        {
+          "protected": false,
+          "text": "recognition"
+        },
+        {
+          "protected": true,
+          "text": "long-lasting"
+        },
+        {
+          "protected": false,
+          "text": "battery"
+        },
+        {
+          "protected": false,
+          "text": "cosmic"
+        },
+        {
+          "protected": false,
+          "text": "black"
+        },
+        {
+          "protected": true,
+          "text": "128gb"
+        }
+      ],
+      "literalSequenceMatches": [
+        [
+          "galaxy",
+          "s20+",
+          "plus"
+        ]
+      ],
+      "expectedMatch": true,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    },
+    {
+      "input": "Samsung Galaxy S20+ Plus 5G Factory Unlocked Android Cell Phone SM-G986U US Version | 128GB | Fingerprint ID & Facial Recognition | Long-Lasting Battery (Cloud Blue, 128GB)",
+      "sourceLine": 105,
+      "sourceAsin": "B08FRQZLJ7",
+      "basis": "actual source title",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "samsung"
+        },
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s20+"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        },
+        {
+          "protected": true,
+          "text": "5g"
+        },
+        {
+          "protected": false,
+          "text": "factory"
+        },
+        {
+          "protected": false,
+          "text": "unlocked"
+        },
+        {
+          "protected": false,
+          "text": "android"
+        },
+        {
+          "protected": false,
+          "text": "cell"
+        },
+        {
+          "protected": false,
+          "text": "phone"
+        },
+        {
+          "protected": true,
+          "text": "sm-g986u"
+        },
+        {
+          "protected": false,
+          "text": "us"
+        },
+        {
+          "protected": false,
+          "text": "version"
+        },
+        {
+          "protected": true,
+          "text": "128gb"
+        },
+        {
+          "protected": false,
+          "text": "fingerprint"
+        },
+        {
+          "protected": false,
+          "text": "id"
+        },
+        {
+          "protected": false,
+          "text": "facial"
+        },
+        {
+          "protected": false,
+          "text": "recognition"
+        },
+        {
+          "protected": true,
+          "text": "long-lasting"
+        },
+        {
+          "protected": false,
+          "text": "battery"
+        },
+        {
+          "protected": false,
+          "text": "cloud"
+        },
+        {
+          "protected": false,
+          "text": "blue"
+        },
+        {
+          "protected": true,
+          "text": "128gb"
+        }
+      ],
+      "literalSequenceMatches": [
+        [
+          "galaxy",
+          "s20+",
+          "plus"
+        ]
+      ],
+      "expectedMatch": true,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    },
+    {
+      "input": "SURITCH Case for Galaxy S9 Plus, [Built-in Screen Protector] Rose Marble Full-Body Protection Shockproof Rugged Bumper Protective Cover for Samsung Galaxy S9 Plus 6.2 Inch (Rose Marble)",
+      "sourceLine": 1364,
+      "sourceAsin": "B07RX6294J",
+      "basis": "actual source title",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "suritch"
+        },
+        {
+          "protected": false,
+          "text": "case"
+        },
+        {
+          "protected": false,
+          "text": "for"
+        },
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s9"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        },
+        {
+          "protected": true,
+          "text": "built-in"
+        },
+        {
+          "protected": false,
+          "text": "screen"
+        },
+        {
+          "protected": false,
+          "text": "protector"
+        },
+        {
+          "protected": false,
+          "text": "rose"
+        },
+        {
+          "protected": false,
+          "text": "marble"
+        },
+        {
+          "protected": true,
+          "text": "full-body"
+        },
+        {
+          "protected": false,
+          "text": "protection"
+        },
+        {
+          "protected": false,
+          "text": "shockproof"
+        },
+        {
+          "protected": false,
+          "text": "rugged"
+        },
+        {
+          "protected": false,
+          "text": "bumper"
+        },
+        {
+          "protected": false,
+          "text": "protective"
+        },
+        {
+          "protected": false,
+          "text": "cover"
+        },
+        {
+          "protected": false,
+          "text": "for"
+        },
+        {
+          "protected": false,
+          "text": "samsung"
+        },
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s9"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        },
+        {
+          "protected": true,
+          "text": "6.2"
+        },
+        {
+          "protected": false,
+          "text": "inch"
+        },
+        {
+          "protected": false,
+          "text": "rose"
+        },
+        {
+          "protected": false,
+          "text": "marble"
+        }
+      ],
+      "literalSequenceMatches": [
+        [
+          "galaxy",
+          "s9",
+          "plus"
+        ]
+      ],
+      "expectedMatch": true,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    },
+    {
+      "input": "SUPCASE Unicorn Beetle PRO Series Phone Case for Samsung Galaxy S8 Plus, Full-Body Rugged Holster Case with Built-in SP for Galaxy S8 Plus (Black)",
+      "sourceLine": 1442,
+      "sourceAsin": "B07F1GJ4VV",
+      "basis": "actual source title",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "supcase"
+        },
+        {
+          "protected": false,
+          "text": "unicorn"
+        },
+        {
+          "protected": false,
+          "text": "beetle"
+        },
+        {
+          "protected": false,
+          "text": "pro"
+        },
+        {
+          "protected": false,
+          "text": "series"
+        },
+        {
+          "protected": false,
+          "text": "phone"
+        },
+        {
+          "protected": false,
+          "text": "case"
+        },
+        {
+          "protected": false,
+          "text": "for"
+        },
+        {
+          "protected": false,
+          "text": "samsung"
+        },
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s8"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        },
+        {
+          "protected": true,
+          "text": "full-body"
+        },
+        {
+          "protected": false,
+          "text": "rugged"
+        },
+        {
+          "protected": false,
+          "text": "holster"
+        },
+        {
+          "protected": false,
+          "text": "case"
+        },
+        {
+          "protected": false,
+          "text": "with"
+        },
+        {
+          "protected": true,
+          "text": "built-in"
+        },
+        {
+          "protected": false,
+          "text": "sp"
+        },
+        {
+          "protected": false,
+          "text": "for"
+        },
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s8"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        },
+        {
+          "protected": false,
+          "text": "black"
+        }
+      ],
+      "literalSequenceMatches": [
+        [
+          "galaxy",
+          "s8",
+          "plus"
+        ]
+      ],
+      "expectedMatch": true,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    },
+    {
+      "input": "DeltaShield Screen Protector for Samsung Galaxy S9 Plus (2-Pack)(Case Friendly Version) Anti-Bubble Military-Grade Clear TPU Film",
+      "sourceLine": 1482,
+      "sourceAsin": "B07SW2159H",
+      "basis": "actual source title",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "deltashield"
+        },
+        {
+          "protected": false,
+          "text": "screen"
+        },
+        {
+          "protected": false,
+          "text": "protector"
+        },
+        {
+          "protected": false,
+          "text": "for"
+        },
+        {
+          "protected": false,
+          "text": "samsung"
+        },
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s9"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        },
+        {
+          "protected": true,
+          "text": "2-pack"
+        },
+        {
+          "protected": false,
+          "text": "case"
+        },
+        {
+          "protected": false,
+          "text": "friendly"
+        },
+        {
+          "protected": false,
+          "text": "version"
+        },
+        {
+          "protected": true,
+          "text": "anti-bubble"
+        },
+        {
+          "protected": true,
+          "text": "military-grade"
+        },
+        {
+          "protected": false,
+          "text": "clear"
+        },
+        {
+          "protected": false,
+          "text": "tpu"
+        },
+        {
+          "protected": false,
+          "text": "film"
+        }
+      ],
+      "literalSequenceMatches": [
+        [
+          "galaxy",
+          "s9",
+          "plus"
+        ]
+      ],
+      "expectedMatch": true,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    },
+    {
+      "input": "Clayco Samsung Galaxy S8 Plus Case, [Hera Series] Full-Body Rugged Case with Built-in Screen Protector for Samsung Galaxy S8 Plus (2017 Release) (MintGreen)",
+      "sourceLine": 1491,
+      "sourceAsin": "B06XJ1QG5N",
+      "basis": "actual source title",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "clayco"
+        },
+        {
+          "protected": false,
+          "text": "samsung"
+        },
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s8"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        },
+        {
+          "protected": false,
+          "text": "case"
+        },
+        {
+          "protected": false,
+          "text": "hera"
+        },
+        {
+          "protected": false,
+          "text": "series"
+        },
+        {
+          "protected": true,
+          "text": "full-body"
+        },
+        {
+          "protected": false,
+          "text": "rugged"
+        },
+        {
+          "protected": false,
+          "text": "case"
+        },
+        {
+          "protected": false,
+          "text": "with"
+        },
+        {
+          "protected": true,
+          "text": "built-in"
+        },
+        {
+          "protected": false,
+          "text": "screen"
+        },
+        {
+          "protected": false,
+          "text": "protector"
+        },
+        {
+          "protected": false,
+          "text": "for"
+        },
+        {
+          "protected": false,
+          "text": "samsung"
+        },
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s8"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        },
+        {
+          "protected": true,
+          "text": "2017"
+        },
+        {
+          "protected": false,
+          "text": "release"
+        },
+        {
+          "protected": false,
+          "text": "mintgreen"
+        }
+      ],
+      "literalSequenceMatches": [
+        [
+          "galaxy",
+          "s8",
+          "plus"
+        ]
+      ],
+      "expectedMatch": true,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    },
+    {
+      "input": "Galaxy S20 Plus",
+      "sourceLine": null,
+      "sourceAsin": null,
+      "basis": "synthetic negative/no-alias boundary",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s20"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        }
+      ],
+      "literalSequenceMatches": [],
+      "expectedMatch": false,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    },
+    {
+      "input": "LG K22 Plus",
+      "sourceLine": null,
+      "sourceAsin": null,
+      "basis": "synthetic negative/no-alias boundary",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "lg"
+        },
+        {
+          "protected": true,
+          "text": "k22"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        }
+      ],
+      "literalSequenceMatches": [],
+      "expectedMatch": false,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    },
+    {
+      "input": "Galaxy S20++ Plus",
+      "sourceLine": null,
+      "sourceAsin": null,
+      "basis": "synthetic negative/no-alias boundary",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s20++"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        }
+      ],
+      "literalSequenceMatches": [],
+      "expectedMatch": false,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    },
+    {
+      "input": "LG K22++ Plus",
+      "sourceLine": null,
+      "sourceAsin": null,
+      "basis": "synthetic negative/no-alias boundary",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "lg"
+        },
+        {
+          "protected": true,
+          "text": "k22++"
+        },
+        {
+          "protected": false,
+          "text": "plus"
+        }
+      ],
+      "literalSequenceMatches": [],
+      "expectedMatch": false,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    },
+    {
+      "input": "Galaxy S8Plus",
+      "sourceLine": null,
+      "sourceAsin": null,
+      "basis": "synthetic negative/no-alias boundary",
+      "actualD2Tokens": [
+        {
+          "protected": false,
+          "text": "galaxy"
+        },
+        {
+          "protected": true,
+          "text": "s8plus"
+        }
+      ],
+      "literalSequenceMatches": [],
+      "expectedMatch": false,
+      "status": "PASS_PRIMITIVE_AND_DOCUMENT_LITERAL_SEQUENCE_CHECK"
+    }
+  ],
+  "totals": {
+    "actualSourceTitles": 8,
+    "syntheticNegatives": 5,
+    "passed": 13,
+    "productionClassifierOrRankingTests": 0
+  },
+  "reproduction": "Compile existing evidence/NormalizationParityProbe.java into a fresh temporary directory using current Surefire java.class.path;run its main on the recorded input array;compare actual token-text windows with the five literal arrays. Temporary directory removed automatically.",
+  "normalizerSourceSHA256": "a4538c4efb61347a01a82337b4e1598f5f43f1846b475a833ffbfd5df472efaa"
+}

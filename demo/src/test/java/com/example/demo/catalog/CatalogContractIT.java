@@ -47,11 +47,12 @@ class CatalogContractIT {
 	private static final Pattern CANONICAL_UUID = Pattern.compile(
 			"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
 	private static final Set<String> PAGE_FIELDS = Set.of("items", "page", "size", "totalItems", "totalPages");
-	private static final Set<String> SUMMARY_FIELDS = Set.of("id", "name", "category", "primaryImageUrl");
+	private static final Set<String> SUMMARY_FIELDS = Set.of("id", "name", "category", "primaryImageUrl",
+            "displayPrice", "representativeVariantId");
 	private static final Set<String> DETAIL_FIELDS = Set.of(
-			"id", "name", "category", "primaryImageUrl", "description", "variants", "images");
+			"id", "name", "category", "primaryImageUrl", "description", "brand", "variants", "images");
 	private static final Set<String> CATEGORY_FIELDS = Set.of("id", "name");
-	private static final Set<String> VARIANT_FIELDS = Set.of("id", "sku", "options", "sellingPrice");
+	private static final Set<String> VARIANT_FIELDS = Set.of("id", "sku", "options", "sellingPrice", "technicalSpecifications");
 	private static final Set<String> PRICE_FIELDS = Set.of("amount", "currency");
 	private static final Set<String> IMAGE_FIELDS = Set.of(
 			"id", "url", "altText", "width", "height", "displayOrder", "isPrimary");
@@ -100,6 +101,15 @@ class CatalogContractIT {
 			assertThat(item.get("name").asText()).isNotBlank();
 			assertCategory(item.get("category"));
 			assertNoSensitiveFields(item);
+            assertExactFields(item.get("displayPrice"), PRICE_FIELDS);
+            assertCanonicalUuid(item.get("representativeVariantId"));
+            UUID productId = UUID.fromString(item.get("id").asText());
+            Map<String, Object> expectedVariant = jdbc.queryForMap(
+                    "SELECT id,selling_price FROM product_variants WHERE product_id=? ORDER BY selling_price,id LIMIT 1", productId);
+            assertThat(item.get("representativeVariantId").asText()).isEqualTo(expectedVariant.get("id").toString());
+            assertThat(item.get("displayPrice").get("amount").bigIntegerValue())
+                    .isEqualTo(((BigDecimal) expectedVariant.get("selling_price")).toBigIntegerExact());
+            assertThat(item.get("displayPrice").get("currency").asText()).isEqualTo("VND");
 			returnedIds.add(item.get("id").asText());
 		}
 		assertThat(returnedIds).containsExactlyInAnyOrder(
@@ -145,12 +155,18 @@ class CatalogContractIT {
 		assertThat(response.get("id").asText()).isEqualTo(fixture.productId().toString());
 		assertThat(response.get("name").asText()).isNotBlank();
 		assertThat(response.get("description").asText()).isEqualTo("Contract product description");
+        assertThat(response.get("brand").isNull()).isTrue();
 		assertCategory(response.get("category"));
 		assertSignedUrl(response.get("primaryImageUrl"));
 
 		assertThat(response.get("variants").size()).isEqualTo(2);
 		for (JsonNode variant : response.get("variants")) {
 			assertExactFields(variant, VARIANT_FIELDS);
+            assertThat(variant.get("technicalSpecifications").isObject()).isTrue();
+            assertExactFields(variant.get("technicalSpecifications"), Set.of("schema_version", "values"));
+            assertThat(variant.get("technicalSpecifications").get("schema_version").intValue()).isOne();
+            assertThat(variant.get("technicalSpecifications").get("values").isObject()).isTrue();
+            assertThat(variant.get("technicalSpecifications").get("values").isEmpty()).isTrue();
 			assertCanonicalUuid(variant.get("id"));
 			assertThat(variant.get("sku").asText()).isNotBlank();
 			assertThat(variant.get("options").isObject()).isTrue();
@@ -189,6 +205,7 @@ class CatalogContractIT {
 
 		assertExactFields(response, DETAIL_FIELDS);
 		assertThat(response.get("description").isNull()).isTrue();
+        assertThat(response.get("brand").isNull()).isTrue();
 		assertThat(response.get("primaryImageUrl").isNull()).isTrue();
 		assertThat(response.get("images").isArray()).isTrue();
 		assertThat(response.get("images").isEmpty()).isTrue();
@@ -210,6 +227,56 @@ class CatalogContractIT {
 					MediaType.APPLICATION_PROBLEM_JSON), 404);
 		}
 	}
+
+    @Test
+    void listProducts_shouldRejectUnapprovedKeysAndInvalidSort() throws Exception {
+        persistBasicProduct(ProductStatus.PUBLISHED);
+        String category = UUID.randomUUID().toString();
+        String filters = java.net.URLEncoder.encode(
+                "[{\"key\":\"unapproved_fixture_key\",\"alternatives\":[{\"op\":\"eq\",\"value\":true}]}]",
+                java.nio.charset.StandardCharsets.UTF_8);
+        for (String query : List.of("sort=price_asc", "categoryId=" + category + "&specFilters=" + filters)) {
+            assertProblem(performJson("/api/products?" + query, 400, MediaType.APPLICATION_PROBLEM_JSON), 400);
+        }
+        assertThat(performJson("/api/products", 200, MediaType.APPLICATION_JSON).get("totalItems").longValue()).isOne();
+    }
+
+    @Test
+    @org.springframework.transaction.annotation.Transactional
+    void listProducts_shouldPreservePairedNullOrphan_whenDeferredFixtureRollsBack() throws Exception {
+        // Exceptional historical/corrupt state only:do not disable triggers or commit an orphan.
+        ProductFixture fixture = CatalogFixtures.publishedProduct();
+        entityManager.persist(fixture.category());
+        entityManager.persist(fixture.product());
+        entityManager.flush();
+        JsonNode response = performJson("/api/products", 200, MediaType.APPLICATION_JSON);
+        assertThat(response.get("totalItems").longValue()).isOne();
+        JsonNode item = response.get("items").get(0);
+        assertExactFields(item, SUMMARY_FIELDS);
+        assertThat(item.get("id").asText()).isEqualTo(fixture.product().getId().toString());
+        assertThat(item.get("displayPrice").isNull()).isTrue();
+        assertThat(item.get("representativeVariantId").isNull()).isTrue();
+        fixture.product().setName("Orphan shared keyword");entityManager.flush();
+        for(String suffix:List.of("?q=orphan","?q=orphan&sort=price-asc","?q=orphan&sort=price-desc")){
+            var orphan=performJson("/api/products"+suffix,200,MediaType.APPLICATION_JSON);
+            assertThat(orphan.get("totalItems").longValue()).isOne();
+            assertThat(orphan.get("items").get(0).get("displayPrice").isNull()).isTrue();
+            assertThat(orphan.get("items").get(0).get("representativeVariantId").isNull()).isTrue();
+        }
+        assertThat(performJson("/api/products?q=orphan&minPrice=0",200,MediaType.APPLICATION_JSON).get("totalItems").longValue()).isZero();
+        var real=CatalogFixtures.persistProduct(entityManager,ProductStatus.PUBLISHED);real.product().setName("Orphan shared keyword with variant");entityManager.flush();
+        for(String sort:List.of("price-asc","price-desc")){
+            var ordered=performJson("/api/products?q=orphan&sort="+sort,200,MediaType.APPLICATION_JSON);
+            assertThat(ordered.get("totalItems").longValue()).isEqualTo(2);
+            assertThat(ordered.get("items").get(0).get("id").asText()).isEqualTo(real.product().getId().toString());
+            assertThat(ordered.get("items").get(1).get("id").asText()).isEqualTo(fixture.product().getId().toString());
+            assertThat(ordered.get("items").get(1).get("displayPrice").isNull()).isTrue();
+        }
+        assertProblem(performJson("/api/products/" + fixture.product().getId(), 409,
+                MediaType.APPLICATION_PROBLEM_JSON), 409);
+        assertThat(jdbc.queryForObject("SELECT tgenabled::text FROM pg_trigger WHERE tgname='ct_products_variant_integrity'", String.class))
+                .isEqualTo("O");
+    }
 
 	private JsonNode performJson(String path, int expectedStatus, MediaType mediaType) throws Exception {
 		String body = mvc.perform(get(path))
@@ -301,6 +368,9 @@ class CatalogContractIT {
 	}
 
 	private void clearCommittedData() {
+        if (org.springframework.test.context.transaction.TestTransaction.isActive()) {
+            return; // Only the exceptional deferred orphan test owns a rollback transaction.
+        }
 		jdbc.execute("TRUNCATE TABLE product_image_uploads, product_images, product_variants, products, categories CASCADE");
 	}
 

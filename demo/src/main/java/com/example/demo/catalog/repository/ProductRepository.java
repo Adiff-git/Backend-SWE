@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import com.example.demo.catalog.entity.Product;
 import com.example.demo.catalog.entity.ProductStatus;
 
-public interface ProductRepository extends JpaRepository<Product, UUID> {
+public interface ProductRepository extends JpaRepository<Product, UUID>, ProductSearchRepository {
 
 	@Query(value = "SELECT id FROM products WHERE status = 'PUBLISHED' ORDER BY id ASC",
 			countQuery = "SELECT COUNT(*) FROM products WHERE status = 'PUBLISHED'", nativeQuery = true)
@@ -28,7 +28,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
 	Optional<Product> findByIdAndStatus(UUID id, ProductStatus status);
 
-	@Query("SELECT p FROM Product p JOIN FETCH p.category WHERE p.id = :id AND p.status = :status")
+	@Query("SELECT p FROM Product p JOIN FETCH p.category LEFT JOIN FETCH p.brand WHERE p.id = :id AND p.status = :status")
 	Optional<Product> findByIdAndStatusWithCategory(@Param("id") UUID id,
 			@Param("status") ProductStatus status);
 

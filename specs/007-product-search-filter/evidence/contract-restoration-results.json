@@ -1,0 +1,11 @@
+{
+  "status": "APPLIED_AUTHORIZED_RESTORATION_ONLY",
+  "beforeSHA256": "1ea2e2aa9d9586522fbd2884e2a153c0089492f031ef5a314f710746abe35c76",
+  "afterSHA256": "b9de00aee8853836fff625c6252b1c898530cc453359ebeca39715ccd9b4bc61",
+  "changes": [
+    "ProductListingItem.name.minLength=1",
+    "CategorySummary.name.minLength=1",
+    "ProductListingItem.primaryImageUrl.format=uri"
+  ],
+  "nullableAndOtherSemanticsUnchanged": true
+}

@@ -1,0 +1,194 @@
+{
+  "capturedUTC": "2026-11-09T12:25:25.171443+00:00",
+  "branch": "features/SearchAndFilter",
+  "head": "c5bd4e7eeb39d9b06a0c7e36af9a65635058613f",
+  "dirtyWorktree": true,
+  "prerequisite": {
+    "task": "T019",
+    "file": "foundation-results.json",
+    "sha256": "b6c33bbeede5e70ab67aacd12d389d1731c508a68309172d054a360dcd8f1a0e",
+    "status": "PASS;165 tests;recorded source/migration hashes verified"
+  },
+  "writeSetReview": {
+    "T020": [
+      "demo/src/test/java/com/example/demo/catalog/controller/ProductListingControllerTest.java",
+      "task-specific evidence",
+      "tasks.md"
+    ],
+    "T022": [
+      "demo/src/test/java/com/example/demo/catalog/service/ProductKeywordSearchServiceImplTest.java",
+      "task-specific evidence",
+      "tasks.md"
+    ],
+    "overlap": [
+      "tasks.md",
+      "shared test build/report directories"
+    ],
+    "execution": "SEQUENTIAL:T020 author/run completed before T022 author/run;regression after both"
+  },
+  "limits": [
+    "Test authoring only;no production behavior implemented",
+    "No T003/T004 approval assumed;structural synthetic identifiers only",
+    "No PostgreSQL/shared DB/migration commands or commit/push"
+  ],
+  "task": "T020",
+  "status": "PASS_TEST_AUTHORING_WITH_VERIFIED_RED",
+  "taskComplete": true,
+  "applicationKeywordAcceptance": "NOT_PASSED",
+  "command": "mvn -o -f demo/pom.xml -Dtest=ProductListingControllerTest -Djunit.jupiter.execution.parallel.enabled=false test",
+  "exitCode": 1,
+  "totals": {
+    "tests": 17,
+    "passed": 15,
+    "expectedRed": 2,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    {
+      "name": "acceptsSizeBoundaryValues",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listProducts_shouldTreatLiteralNullAsSearchText",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listProducts_shouldReportFuzzyEnabledModeForNonblankKeyword",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "EXPECTED_RED_MISSING_MODE_HEADER",
+      "failureMessage": "Response header 'X-Catalog-Search-Mode' expected:<fuzzy-enabled> but was:<null>"
+    },
+    {
+      "name": "listProducts_shouldReturnSafeParameterProblemFromService",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listProducts_shouldPreserveRawVietnameseQueryForSharedNormalizer",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listProducts_shouldRejectInvalidBearerBeforeKeywordService",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "rejectsInvalidDuplicateAndUnapprovedParametersAsProblemDetail",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listProducts_shouldRejectZeroTokensAndControlsBeforeCallingService",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listingSerializesOnlyAdditiveMetadataIncludingPairedNulls",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "anonymousDefaultAndOutOfRangePagesUseCanonicalResponse",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listProducts_shouldAcceptUnicodeCodePointAndRawTokenBoundaries",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listProducts_shouldPreserveStructuralIdentifiersAndNumericText",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listProducts_shouldRejectRawLimitsBeforeNormalizationOrDeduplication",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listProducts_shouldTreatBlankAsLegacyWithoutSearchModeHeader",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listProducts_shouldRejectDuplicateKeywordEvenWhenValuesEqual",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listProducts_shouldAcceptAnonymousKeywordAndRetainListingEnvelope",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "status": "PASS",
+      "failureMessage": null
+    },
+    {
+      "name": "listProducts_shouldReportExplicitDiagnosticModeForNonblankKeyword",
+      "className": "com.example.demo.catalog.controller.ProductListingControllerTest$ExactOnlyMode",
+      "status": "EXPECTED_RED_MISSING_MODE_HEADER",
+      "failureMessage": "Response header 'X-Catalog-Search-Mode' expected:<exact-only> but was:<null>"
+    }
+  ],
+  "coverage": {
+    "public GET q": [
+      "listProducts_shouldAcceptAnonymousKeywordAndRetainListingEnvelope"
+    ],
+    "blank/zero tokens": [
+      "listProducts_shouldTreatBlankAsLegacyWithoutSearchModeHeader",
+      "listProducts_shouldRejectZeroTokensAndControlsBeforeCallingService"
+    ],
+    "duplicate singleton": [
+      "listProducts_shouldRejectDuplicateKeywordEvenWhenValuesEqual",
+      "rejectsInvalidDuplicateAndUnapprovedParametersAsProblemDetail"
+    ],
+    "raw limits before normalization/dedup": [
+      "listProducts_shouldRejectRawLimitsBeforeNormalizationOrDeduplication",
+      "listProducts_shouldAcceptUnicodeCodePointAndRawTokenBoundaries"
+    ],
+    "Vietnamese/original phrase/dedup": [
+      "listProducts_shouldPreserveRawVietnameseQueryForSharedNormalizer"
+    ],
+    "structural identifiers/numeric text": [
+      "listProducts_shouldPreserveStructuralIdentifiersAndNumericText"
+    ],
+    "mode header enabled/disabled": [
+      "listProducts_shouldReportFuzzyEnabledModeForNonblankKeyword",
+      "listProducts_shouldReportExplicitDiagnosticModeForNonblankKeyword"
+    ],
+    "safe ProblemDetail": [
+      "listProducts_shouldReturnSafeParameterProblemFromService",
+      "listProducts_shouldRejectZeroTokensAndControlsBeforeCallingService"
+    ],
+    "invalid supplied bearer401": [
+      "listProducts_shouldRejectInvalidBearerBeforeKeywordService"
+    ],
+    "listing compatibility": [
+      "anonymousDefaultAndOutOfRangePagesUseCanonicalResponse",
+      "acceptsSizeBoundaryValues",
+      "listingSerializesOnlyAdditiveMetadataIncludingPairedNulls"
+    ]
+  },
+  "sourceSHA256": {
+    "demo/src/test/java/com/example/demo/catalog/controller/ProductListingControllerTest.java": "2c3f1a5fc4613c66467757f39545013777185693cdb5dfcd0a0234c57ece6eaa"
+  },
+  "redInterpretation": "Both HTTP200 requests reach the real controller with actual enabled/disabled environment properties and mocked service response;only header assertions fail. No compilation,wiring,infrastructure or approval error. Tests remain enabled and assertions unchanged. Future T025/T026 must implement behavior;not implemented here."
+}

@@ -1,0 +1,35 @@
+{
+  "policy": "Only trailing whitespace removed from presentation;exact original bytes retained in gzip archives;test results/assertions unchanged.",
+  "files": [
+    {
+      "path": "specs/007-product-search-filter/evidence/foundation-test-output.txt",
+      "originalSha256": "c3faa0302108084a97a53d6fdc22c01efd81f57b744218ca7c1a226577df4b53",
+      "originalArchive": "specs/007-product-search-filter/evidence/foundation-test-output.txt.before-whitespace-cleanup.gz",
+      "formattedSha256": "24abdf2969a6d63de08ea7922138e51767a7ab5769b223b6b47b29899642a490"
+    },
+    {
+      "path": "specs/007-product-search-filter/evidence/keyword-contract-test-output.txt",
+      "originalSha256": "142925a3c414603751bb1f26fe7a0837e50ffbcf02a99658d04fe5aa05125dc9",
+      "originalArchive": "specs/007-product-search-filter/evidence/keyword-contract-test-output.txt.before-whitespace-cleanup.gz",
+      "formattedSha256": "9489bf95dacf06b78c1eb57317e18462c56ef4b50e6626cc74f921b2682a73b3"
+    },
+    {
+      "path": "specs/007-product-search-filter/evidence/keyword-foundation-regression-output.txt",
+      "originalSha256": "3aef8476e793f39b2634b5ab3d7b434da2f1d02761864943b11574866c0a9323",
+      "originalArchive": "specs/007-product-search-filter/evidence/keyword-foundation-regression-output.txt.before-whitespace-cleanup.gz",
+      "formattedSha256": "5a8e7477f3366c10ddaea3e2e3617a36bb5a905f09596835413da2d905cb4359"
+    },
+    {
+      "path": "specs/007-product-search-filter/evidence/keyword-service-test-output.txt",
+      "originalSha256": "09ef87fc09f45a83bd6d218acde1ca033afbf6c37bc72c7f4f607577b3cfb6d7",
+      "originalArchive": "specs/007-product-search-filter/evidence/keyword-service-test-output.txt.before-whitespace-cleanup.gz",
+      "formattedSha256": "60ce873246aadeab5bd2e6e5f4ab10b69255a921b7ae750d08248d432f7005aa"
+    },
+    {
+      "path": "specs/007-product-search-filter/evidence/resume-checkpoint.md",
+      "originalSha256": "3e478d4de59facc895d0d5355107011b8c5b00e32ac7d1fb0cd4c6a5a5650f1f",
+      "originalArchive": "specs/007-product-search-filter/evidence/resume-checkpoint.md.before-whitespace-cleanup.gz",
+      "formattedSha256": "c196a435e359439f71c3c8c8ae9137aed3dc81e8e07309f27d8a02b93dc53951"
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "approvedBy": "Project owner via explicit MISSION instruction in this conversation",
+  "humanSignature": null,
+  "dateUTC": "2026-11-09T15:16:44.907368+00:00",
+  "decision": "AUTHORIZED_DEFINITION_AND_LOCAL_MVP_IMPLEMENTATION",
+  "evidenceReference": "User MISSION:COMPLETE SEARCH & FILTER FEATURE;sections2-3",
+  "baselineVersion": "approval-resolution-v2-2026-11-09",
+  "baselineSHA256": "297f5004d11b3ddb1b3655d469fe1c1986c2cd149ba0edd3b5309aacc8eaa052",
+  "scopeLimits": [
+    "No production deployment",
+    "No source dataset modification",
+    "Unverified model7 deferred",
+    "Battery deferred",
+    "Best-effort facts with known exclusions;not semantically verified dataset"
+  ],
+  "version": "specification-registry-v1",
+  "definitions": [
+    {
+      "key": "display_diagonal",
+      "type": "quantity",
+      "unit": "inch",
+      "sourceCategoryLabels": [
+        "Laptop",
+        "Tablet"
+      ],
+      "operators": [
+        "eq",
+        "gt",
+        "gte",
+        "lt",
+        "lte",
+        "between"
+      ],
+      "searchable": true,
+      "filterable": true,
+      "identifier": false,
+      "runtimeActivated": false,
+      "sourceCategoryBindings": [
+        {
+          "label": "Laptop",
+          "sourceCategoryUuid": "31549723-c1a2-56a6-a1a1-64da36e16f65",
+          "sourceMappingApproval": "APPROVED",
+          "targetReconciled": false
+        },
+        {
+          "label": "Tablet",
+          "sourceCategoryUuid": "5793dbd1-a3e4-514e-bf1d-ef50a31acc04",
+          "sourceMappingApproval": "APPROVED",
+          "targetReconciled": false
+        }
+      ]
+    },
+    {
+      "key": "physical_ram",
+      "type": "quantity",
+      "unit": "GB",
+      "sourceCategoryLabels": [
+        "Laptop"
+      ],
+      "operators": [
+        "eq",
+        "gt",
+        "gte",
+        "lt",
+        "lte",
+        "between"
+      ],
+      "searchable": true,
+      "filterable": true,
+      "identifier": false,
+      "runtimeActivated": false,
+      "sourceCategoryBindings": [
+        {
+          "label": "Laptop",
+          "sourceCategoryUuid": "31549723-c1a2-56a6-a1a1-64da36e16f65",
+          "sourceMappingApproval": "APPROVED",
+          "targetReconciled": false
+        }
+      ]
+    },
+    {
+      "key": "installed_storage_gb",
+      "type": "quantity",
+      "unit": "GB",
+      "sourceCategoryLabels": [
+        "Laptop"
+      ],
+      "operators": [
+        "eq",
+        "gt",
+        "gte",
+        "lt",
+        "lte",
+        "between"
+      ],
+      "searchable": true,
+      "filterable": true,
+      "identifier": false,
+      "runtimeActivated": false,
+      "sourceCategoryBindings": [
+        {
+          "label": "Laptop",
+          "sourceCategoryUuid": "31549723-c1a2-56a6-a1a1-64da36e16f65",
+          "sourceMappingApproval": "APPROVED",
+          "targetReconciled": false
+        }
+      ]
+    },
+    {
+      "key": "display_resolution",
+      "type": "text",
+      "unit": null,
+      "sourceCategoryLabels": [
+        "Laptop"
+      ],
+      "operators": [
+        "eq",
+        "prefix",
+        "contains"
+      ],
+      "searchable": true,
+      "filterable": true,
+      "identifier": false,
+      "runtimeActivated": false,
+      "sourceCategoryBindings": [
+        {
+          "label": "Laptop",
+          "sourceCategoryUuid": "31549723-c1a2-56a6-a1a1-64da36e16f65",
+          "sourceMappingApproval": "APPROVED",
+          "targetReconciled": false
+        }
+      ]
+    }
+  ],
+  "categoryMapping": "Resolve unique actual Backend taxonomy Laptop/Tablet roots and descendants;ambiguous/missing roots disable that family only;never import source UUIDs",
+  "dataPolicy": "Best-effort local facts;guard structure,canonical units and known contradictions before matching",
+  "runtimeResource": "demo/src/main/resources/catalog/specification-filter-registry.json",
+  "runtimeSHA256": "c3d783a5e6462df62126a88a63d58f96d0433e9f7510ea87128cd389ba447cd3",
+  "taxonomyVerification": "Disposable Backend fixture evidence only;deployment NOT_VERIFIED"
+}

@@ -1,0 +1,115 @@
+{
+  "version": "identifier-vocabulary-v1",
+  "approvalReference": "Owner mission;vocabulary-approval-v1.json",
+  "families": [
+    "galaxy",
+    "iphone",
+    "ipad",
+    "xperia",
+    "redmi",
+    "thinkpad",
+    "ideapad",
+    "inspiron",
+    "vivobook",
+    "zenbook",
+    "macbook",
+    "chromebook",
+    "elitebook",
+    "celeron",
+    "pentium",
+    "ryzen",
+    "snapdragon",
+    "geforce",
+    "radeon"
+  ],
+  "contexts": {
+    "pro": [
+      "iphone 11 pro",
+      "iphone 12 pro",
+      "iphone 13 pro",
+      "iphone 14 pro",
+      "ipad pro",
+      "microsoft surface pro",
+      "redmi note 8 pro",
+      "redmi note 9 pro",
+      "redmi note8 pro",
+      "huawei p20 pro",
+      "huawei p30 pro",
+      "oneplus 10 pro",
+      "iphone pro"
+    ],
+    "plus": [
+      "chromebook plus",
+      "moto e7 plus",
+      "tab m10 plus",
+      "tab p11 plus",
+      "iphone 14 plus",
+      "galaxy plus",
+      "galaxy s8 plus",
+      "galaxy s9 plus",
+      "galaxy s20+ plus",
+      "galaxy s21+ plus",
+      "lg k22+ plus"
+    ],
+    "max": [
+      "iphone 11 pro max",
+      "iphone 12 pro max",
+      "iphone 13 pro max",
+      "iphone 14 pro max",
+      "iphone xs max",
+      "walkerfit m2 max",
+      "iphone pro max"
+    ],
+    "core": [
+      "intel core",
+      "galaxy a03 core"
+    ],
+    "air": [
+      "macbook air",
+      "ipad air"
+    ],
+    "note": [
+      "galaxy note",
+      "redmi note"
+    ],
+    "surface": [
+      "microsoft surface"
+    ],
+    "pavilion": [
+      "hp pavilion"
+    ],
+    "aspire": [
+      "acer aspire"
+    ],
+    "envy": [
+      "hp envy"
+    ],
+    "spectre": [
+      "hp spectre"
+    ],
+    "pixel": [
+      "google pixel"
+    ],
+    "nord": [
+      "oneplus nord"
+    ],
+    "vega": [
+      "amd radeon vega"
+    ],
+    "legion": [
+      "lenovo legion"
+    ]
+  },
+  "modelAnchors": [],
+  "sourceAnchorsDeferred": true,
+  "noGlobalIdentifiers": [
+    "studio",
+    "graphics"
+  ],
+  "shortTokens": [
+    "hd",
+    "uhd",
+    "rog",
+    "tuf"
+  ]
+}

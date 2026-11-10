@@ -1,0 +1,46 @@
+{
+  "version": "search-evaluation-v2",
+  "goldenExpectationVersion": "Approved RK v1,unchanged",
+  "cases": [
+    {
+      "id": "RK07",
+      "partition": "US3.configuration",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK07",
+      "version": "search-evaluation-v2",
+      "story": "US3",
+      "increment": "US3.configuration",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "Registry-v1",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony alpha",
+        "variants": [
+          "cheapExcludedSku7",
+          "largeEligibleTokens4"
+        ],
+        "forms": [
+          "price-only",
+          "approved-specification-only",
+          "combined"
+        ],
+        "expectedAliases": [
+          "phraseCompetitor",
+          "remainingTier4"
+        ],
+        "representativeAlias": "largeEligibleTokens4"
+      }
+    }
+  ]
+}

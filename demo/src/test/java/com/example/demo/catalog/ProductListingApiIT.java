@@ -163,14 +163,15 @@ class ProductListingApiIT {
 		assertThat(storage.signCalls.get()).isEqualTo(20);
 	}
 
-	@Test
-	void committedUnpublishBeforeFinalLockPreventsNewSignedUrl() throws Exception {
+	@org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(strings={"/api/products","/api/products?q=Product&minPrice=0"})
+	void committedUnpublishBeforeFinalLockPreventsNewSignedUrl(String uri) throws Exception {
 		UUID productId = persistProduct(ProductStatus.PUBLISHED, true);
 		CountDownLatch preparingSigner = new CountDownLatch(1);
 		CountDownLatch allowLock = new CountDownLatch(1);
 		storage.pauseBeforeLock(preparingSigner, allowLock);
 		try (ExecutorService executor = Executors.newSingleThreadExecutor()) {
-			Future<String> response = executor.submit(() -> mvc.perform(get("/api/products"))
+			Future<String> response = executor.submit(() -> mvc.perform(get(uri))
 					.andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
 			assertThat(preparingSigner.await(10, TimeUnit.SECONDS)).isTrue();
 			jdbc.update("UPDATE products SET status = 'ARCHIVED' WHERE id = ?", productId);
@@ -182,6 +183,19 @@ class ProductListingApiIT {
 			allowLock.countDown();
 		}
 	}
+
+    @Test
+    void mixedPage_shouldRecheckImagelessProductAfterSignerPreparation()throws Exception{
+        UUID pictured=persistProduct(ProductStatus.PUBLISHED,true);
+        UUID imageless=persistProduct(ProductStatus.PUBLISHED,false);
+        var entered=new CountDownLatch(1);var proceed=new CountDownLatch(1);storage.pauseBeforeLock(entered,proceed);
+        try(var executor=Executors.newSingleThreadExecutor()){
+            var response=executor.submit(()->mvc.perform(get("/api/products?q=Product&minPrice=0")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+            assertThat(entered.await(10,TimeUnit.SECONDS)).isTrue();jdbc.update("UPDATE products SET status='ARCHIVED' WHERE id=?",imageless);proceed.countDown();
+            String body=response.get(10,TimeUnit.SECONDS);assertThat(body).contains(pictured.toString()).doesNotContain(imageless.toString());
+            assertThat(storage.signCalls.get()).isOne();
+        }finally{proceed.countDown();}
+    }
 
 	private UUID persistProduct(ProductStatus status, boolean image) {
 		return transactions.execute(transaction -> {

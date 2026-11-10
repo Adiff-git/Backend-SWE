@@ -1,0 +1,45 @@
+{
+  "task": "T019",
+  "preexistingFilesChanged": [
+    "demo/src/test/java/com/example/demo/catalog/CatalogQueryCountIT.java",
+    "demo/src/test/java/com/example/demo/catalog/CatalogContractIT.java",
+    "specs/007-product-search-filter/tasks.md"
+  ],
+  "newEvidenceFiles": [
+    "specs/007-product-search-filter/evidence/foundation-results.json",
+    "specs/007-product-search-filter/evidence/foundation-listing-100.json",
+    "specs/007-product-search-filter/evidence/foundation-environment.json",
+    "specs/007-product-search-filter/evidence/foundation-migration-results.json",
+    "specs/007-product-search-filter/evidence/foundation-attempts.json",
+    "specs/007-product-search-filter/evidence/foundation-repository-observations.json",
+    "specs/007-product-search-filter/evidence/foundation-results.md",
+    "specs/007-product-search-filter/evidence/foundation-test-output.txt",
+    "specs/007-product-search-filter/evidence/foundation-jdbc-calibration.json",
+    "specs/007-product-search-filter/evidence/foundation-runtime-environment.json",
+    "specs/007-product-search-filter/evidence/foundation-listing-20.json"
+  ],
+  "migrationFilesVerifiedUnchanged": 15,
+  "allApplicationSourcesUnchanged": true,
+  "previousEvidenceUnchanged": true,
+  "checklistMarkersUnchanged": true,
+  "branch": "features/SearchAndFilter",
+  "head": "c5bd4e7eeb39d9b06a0c7e36af9a65635058613f",
+  "completedTasks": [
+    "T001",
+    "T002",
+    "T006",
+    "T007",
+    "T009",
+    "T010",
+    "T011",
+    "T012",
+    "T013",
+    "T015",
+    "T016",
+    "T017",
+    "T018",
+    "T019"
+  ],
+  "postImplementationHooks": "No extensions.yml;none registered",
+  "scope": "No application implementation,migration editing,commit or push;T019 only"
+}

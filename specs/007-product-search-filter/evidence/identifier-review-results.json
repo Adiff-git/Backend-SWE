@@ -1,0 +1,786 @@
+{
+  "task": "T004",
+  "status": "BLOCKED_PENDING_EXPLICIT_FINAL_SIGNOFF",
+  "draftCases": 16,
+  "reviewCases": 14,
+  "casesChecked": 30,
+  "structuralPrimitiveCasesPassed": 16,
+  "reviewSourceAndPolicyCasesChecked": 14,
+  "matrixWitnessInputsChecked": 92,
+  "runtimeClassifierFuzzyRankingCasesExecuted": 0,
+  "finalVocabularyApproval": null,
+  "caseResults": [
+    {
+      "id": "D01",
+      "input": "WH-1000XM5",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "WH-1000XM5",
+        "normalized": "wh-1000xm5",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "wh-1000xm5"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D02",
+      "input": "i7-1360P",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "i7-1360P",
+        "normalized": "i7-1360p",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "i7-1360p"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D03",
+      "input": "USB-C",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "USB-C",
+        "normalized": "usb-c",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "usb-c"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D04",
+      "input": "USB C",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "USB C",
+        "normalized": "usb c",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "usb"
+          },
+          {
+            "protected": false,
+            "text": "c"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D05",
+      "input": "C++",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "C++",
+        "normalized": "c++",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "c++"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D06",
+      "input": "C+++",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "C+++",
+        "normalized": "c+++",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "c"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D07",
+      "input": "3.50mm",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "3.50mm",
+        "normalized": "3.50mm",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "3.50mm"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D08",
+      "input": "3.50 mm",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "3.50 mm",
+        "normalized": "3.50 mm",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "3.50"
+          },
+          {
+            "protected": false,
+            "text": "mm"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D09",
+      "input": "16.0",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "16.0",
+        "normalized": "16.0",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "16.0"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D10",
+      "input": "-.5",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "-.5",
+        "normalized": "-.5",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "-.5"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D11",
+      "input": "WH-1000XM6",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "WH-1000XM6",
+        "normalized": "wh-1000xm6",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "wh-1000xm6"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D12",
+      "input": "i7-136OP",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "i7-136OP",
+        "normalized": "i7-136op",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "i7-136op"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D13",
+      "input": "samsnug",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "samsnug",
+        "normalized": "samsnug",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "samsnug"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D14",
+      "input": "sony",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "sony",
+        "normalized": "sony",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "sony"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D15",
+      "input": "Điện thoại",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "Điện thoại",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "dien"
+          },
+          {
+            "protected": false,
+            "text": "thoai"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "D16",
+      "input": "A--B",
+      "validation": "PASS_EXECUTED_D2_PRIMITIVE",
+      "actual": {
+        "input": "A--B",
+        "normalized": "a--b",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "a"
+          },
+          {
+            "protected": false,
+            "text": "b"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV01",
+      "input": "WH-1000XM5",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Source ASIN exists in unchanged package",
+        "Actual source title tokens corroborate the claimed role/context",
+        "Exact proposed model anchor exists"
+      ],
+      "actual": {
+        "input": "WH-1000XM5",
+        "normalized": "wh-1000xm5",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "wh-1000xm5"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV02",
+      "input": "i7-1360P / C++",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Both examples absent from source title token corpus;synthetic label confirmed",
+        "Both synthetic grammar tokens structurally protected"
+      ],
+      "actual": {
+        "input": "i7-1360P / C++",
+        "normalized": "i7-1360p / c++",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "i7-1360p"
+          },
+          {
+            "protected": true,
+            "text": "c++"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV03",
+      "input": "galaxi vs Galaxy A51",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Source ASIN exists in unchanged package",
+        "Actual source title tokens corroborate the claimed role/context",
+        "Canonical/typo distinct,no implicit alias in proposal"
+      ],
+      "actual": {
+        "input": "galaxi vs Galaxy A51",
+        "normalized": "galaxi vs galaxy a51",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "galaxi"
+          },
+          {
+            "protected": false,
+            "text": "vs"
+          },
+          {
+            "protected": false,
+            "text": "galaxy"
+          },
+          {
+            "protected": true,
+            "text": "a51"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV04",
+      "input": "samsnug vs Samsung",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Source ASIN exists in unchanged package",
+        "Brand words not globally blacklisted by family list"
+      ],
+      "actual": {
+        "input": "samsnug vs Samsung",
+        "normalized": "samsnug vs samsung",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "samsnug"
+          },
+          {
+            "protected": false,
+            "text": "vs"
+          },
+          {
+            "protected": false,
+            "text": "samsung"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV05",
+      "input": "Microsoft Surface Pro compatibility target",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Source ASIN exists in unchanged package",
+        "Actual source title tokens corroborate the claimed role/context",
+        "Surface requires context;not a global family or model anchor"
+      ],
+      "actual": {
+        "input": "Microsoft Surface Pro compatibility target",
+        "normalized": "microsoft surface pro compatibility target",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "microsoft"
+          },
+          {
+            "protected": false,
+            "text": "surface"
+          },
+          {
+            "protected": false,
+            "text": "pro"
+          },
+          {
+            "protected": false,
+            "text": "compatibility"
+          },
+          {
+            "protected": false,
+            "text": "target"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV06",
+      "input": "Use on Any Surface",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Source ASIN exists in unchanged package",
+        "Actual source title tokens corroborate the claimed role/context",
+        "Surface requires context;not a global family or model anchor"
+      ],
+      "actual": {
+        "input": "Use on Any Surface",
+        "normalized": "use on any surface",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "use"
+          },
+          {
+            "protected": false,
+            "text": "on"
+          },
+          {
+            "protected": false,
+            "text": "any"
+          },
+          {
+            "protected": false,
+            "text": "surface"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV07",
+      "input": "HP Pavilion / ordinary pavilion",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Source ASIN exists in unchanged package",
+        "Actual source title tokens corroborate the claimed role/context",
+        "HP-context proposal exists"
+      ],
+      "actual": {
+        "input": "HP Pavilion / ordinary pavilion",
+        "normalized": "hp pavilion / ordinary pavilion",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "hp"
+          },
+          {
+            "protected": false,
+            "text": "pavilion"
+          },
+          {
+            "protected": false,
+            "text": "ordinary"
+          },
+          {
+            "protected": false,
+            "text": "pavilion"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV08",
+      "input": "Google Pixel / pixel display",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Source ASIN exists in unchanged package",
+        "Actual source title tokens corroborate the claimed role/context",
+        "Google-context proposal exists"
+      ],
+      "actual": {
+        "input": "Google Pixel / pixel display",
+        "normalized": "google pixel / pixel display",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "google"
+          },
+          {
+            "protected": false,
+            "text": "pixel"
+          },
+          {
+            "protected": false,
+            "text": "pixel"
+          },
+          {
+            "protected": false,
+            "text": "display"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV09",
+      "input": "Intel Core / Galaxy A03 Core / octa-core",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Source ASIN exists in unchanged package",
+        "Actual source title tokens corroborate the claimed role/context",
+        "Core not global family whitelist"
+      ],
+      "actual": {
+        "input": "Intel Core / Galaxy A03 Core / octa-core",
+        "normalized": "intel core / galaxy a03 core / octa-core",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "intel"
+          },
+          {
+            "protected": false,
+            "text": "core"
+          },
+          {
+            "protected": false,
+            "text": "galaxy"
+          },
+          {
+            "protected": true,
+            "text": "a03"
+          },
+          {
+            "protected": false,
+            "text": "core"
+          },
+          {
+            "protected": true,
+            "text": "octa-core"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV10",
+      "input": "Studio Monitor Headphones",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Source ASIN exists in unchanged package",
+        "Actual source title tokens corroborate the claimed role/context",
+        "Studio not globally promoted"
+      ],
+      "actual": {
+        "input": "Studio Monitor Headphones",
+        "normalized": "studio monitor headphones",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "studio"
+          },
+          {
+            "protected": false,
+            "text": "monitor"
+          },
+          {
+            "protected": false,
+            "text": "headphones"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV11",
+      "input": "DEMO-AMZ-B08PPSRLQ5",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Source ASIN exists in unchanged package",
+        "Input matches the actual import-file SKU observation",
+        "SKU-shaped string structurally protected;live canonical ownership NOT_VERIFIED"
+      ],
+      "actual": {
+        "input": "DEMO-AMZ-B08PPSRLQ5",
+        "normalized": "demo-amz-b08ppsrlq5",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "demo-amz-b08ppsrlq5"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV12",
+      "input": "16GB /16 GB /16.0 /3.50mm",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "No implicit unit/numeric/model rewrite"
+      ],
+      "actual": {
+        "input": "16GB /16 GB /16.0 /3.50mm",
+        "normalized": "16gb /16 gb /16.0 /3.50mm",
+        "tokens": [
+          {
+            "protected": true,
+            "text": "16gb"
+          },
+          {
+            "protected": true,
+            "text": "16"
+          },
+          {
+            "protected": false,
+            "text": "gb"
+          },
+          {
+            "protected": true,
+            "text": "16.0"
+          },
+          {
+            "protected": true,
+            "text": "3.50mm"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV13",
+      "input": "Galaxy Star Projector",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Homonym recall trade-off retained for final human decision"
+      ],
+      "actual": {
+        "input": "Galaxy Star Projector",
+        "normalized": "galaxy star projector",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "galaxy"
+          },
+          {
+            "protected": false,
+            "text": "star"
+          },
+          {
+            "protected": false,
+            "text": "projector"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    },
+    {
+      "id": "IV14",
+      "input": "Exynos 9611 from cpu_model only",
+      "validation": "PASS_SOURCE_PRIMITIVE_AND_PROPOSAL_CONSISTENCY_ONLY",
+      "checks": [
+        "Source ASIN exists in unchanged package",
+        "Actual UNVERIFIED cpu_model value corroborated without activating its key",
+        "Unverified technical value does not activate vocabulary/registry"
+      ],
+      "actual": {
+        "input": "Exynos 9611 from cpu_model only",
+        "normalized": "exynos 9611 from cpu_model only",
+        "tokens": [
+          {
+            "protected": false,
+            "text": "exynos"
+          },
+          {
+            "protected": true,
+            "text": "9611"
+          },
+          {
+            "protected": false,
+            "text": "from"
+          },
+          {
+            "protected": true,
+            "text": "cpu_model"
+          },
+          {
+            "protected": false,
+            "text": "only"
+          }
+        ],
+        "accepted": true
+      },
+      "runtimeIdentifierClassifierOrRankingTest": false,
+      "finalSignOff": null
+    }
+  ],
+  "originalDraftSHA256": "eb5c9da71d5571cc1a04341bdf52e6e51d21386d1ad036a1c7631aa82ed710e9",
+  "matrixSHA256": "930c8385693d25c6edc012cbc08fbad60fdf7d4742bbb448ee4a1a3ae120b501",
+  "limits": [
+    "Thirty cases checked at primitive/source/proposal level only",
+    "No production identifier/fuzzy/ranking implementation or sign-off implied",
+    "Six anchors are source verified,not proof of live canonical ownership",
+    "T003 remains outside scope"
+  ]
+}

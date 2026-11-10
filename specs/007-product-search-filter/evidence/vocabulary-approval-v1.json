@@ -1,0 +1,28 @@
+{
+  "approvedBy": "Project owner via explicit MISSION instruction in this conversation",
+  "humanSignature": null,
+  "dateUTC": "2026-11-09T15:16:44.907368+00:00",
+  "decision": "AUTHORIZED_DEFINITION_AND_LOCAL_MVP_IMPLEMENTATION",
+  "evidenceReference": "User MISSION:COMPLETE SEARCH & FILTER FEATURE;sections2-3",
+  "baselineVersion": "approval-resolution-v2-2026-11-09",
+  "baselineSHA256": "297f5004d11b3ddb1b3655d469fe1c1986c2cd149ba0edd3b5309aacc8eaa052",
+  "scopeLimits": [
+    "No production deployment",
+    "No source dataset modification",
+    "Unverified model7 deferred",
+    "Battery deferred",
+    "Best-effort facts with known exclusions;not semantically verified dataset"
+  ],
+  "version": "identifier-vocabulary-v1",
+  "scope": {
+    "familyTerms": 19,
+    "sourceScopedAnchors": 6,
+    "ambiguousTerms": 21,
+    "expectedCases": 30
+  },
+  "runtimeModelAnchors": [],
+  "rank7Policy": "Canonical eligible SKU equality allowed;source-scoped models do not rank7 until independently verified canonical ownership",
+  "runtimeResource": "demo/src/main/resources/catalog/identifier-vocabulary-v1.json",
+  "runtimeSHA256": "86b2b180dfcf580c9261f8cc47cbb79bc1aa9ae273c60cae227ad0310542572d",
+  "taxonomyVerification": "Source anchors not activated;canonical SKU identity only"
+}
