@@ -41,7 +41,7 @@ class WishlistServiceImplTest {
     private final Instant now = Instant.parse("2026-10-31T01:00:00Z");
     private final UUID productId = UUID.randomUUID();
     private final WishlistServiceImpl service = new WishlistServiceImpl(repository, users, catalog,
-            new WishlistValidator(), new WishlistConverter(), Clock.fixed(now, ZoneOffset.UTC));
+            new WishlistValidator(), new WishlistConverter(), Clock.fixed(now, ZoneOffset.UTC), mock(com.example.demo.behavior.BehaviorService.class));
 
     @BeforeEach
     void prepare() {

@@ -36,12 +36,15 @@ public class WishlistServiceImpl implements WishlistService {
     private final WishlistValidator validator;
     private final WishlistConverter converter;
     private final Clock clock;
+    private final com.example.demo.behavior.BehaviorService behavior;
 
     @Override
     @Transactional
     public void removeProduct(Long ownerId, UUID productId) {
         validator.validateOwner(ownerId);
-        repository.deleteOwned(ownerId, productId);
+        if (repository.deleteOwned(ownerId, productId) == 1) {
+            behavior.wishlist(ownerId, productId, com.example.demo.behavior.BehaviorType.WISHLIST_REMOVE);
+        }
     }
 
     @Override
@@ -61,6 +64,7 @@ public class WishlistServiceImpl implements WishlistService {
         if (summary == null) {
             throw new ProductNotFoundException();
         }
+        if (created) behavior.wishlist(ownerId, productId, com.example.demo.behavior.BehaviorType.WISHLIST_ADD);
         return new AddWishlistResult(created, converter.toItem(addedAt, summary));
     }
 
