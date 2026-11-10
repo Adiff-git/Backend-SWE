@@ -1,0 +1,507 @@
+{
+  "taskCount": 66,
+  "acyclic": true,
+  "tasks": {
+    "T001": {
+      "checked": true,
+      "dependencies": []
+    },
+    "T002": {
+      "checked": true,
+      "dependencies": [
+        "T001"
+      ]
+    },
+    "T003": {
+      "checked": true,
+      "dependencies": [
+        "T001"
+      ]
+    },
+    "T004": {
+      "checked": true,
+      "dependencies": [
+        "T001"
+      ]
+    },
+    "T005": {
+      "checked": true,
+      "dependencies": [
+        "T001",
+        "T004"
+      ]
+    },
+    "T006": {
+      "checked": true,
+      "dependencies": [
+        "T001"
+      ]
+    },
+    "T007": {
+      "checked": true,
+      "dependencies": [
+        "T001"
+      ]
+    },
+    "T008": {
+      "checked": true,
+      "dependencies": [
+        "T003",
+        "T007"
+      ]
+    },
+    "T009": {
+      "checked": true,
+      "dependencies": [
+        "T001"
+      ]
+    },
+    "T010": {
+      "checked": true,
+      "dependencies": [
+        "T001",
+        "T009"
+      ]
+    },
+    "T011": {
+      "checked": true,
+      "dependencies": [
+        "T001"
+      ]
+    },
+    "T012": {
+      "checked": true,
+      "dependencies": [
+        "T011"
+      ]
+    },
+    "T013": {
+      "checked": true,
+      "dependencies": [
+        "T002",
+        "T007"
+      ]
+    },
+    "T014": {
+      "checked": true,
+      "dependencies": [
+        "T002",
+        "T004",
+        "T005",
+        "T013"
+      ]
+    },
+    "T015": {
+      "checked": true,
+      "dependencies": [
+        "T010",
+        "T002",
+        "T013",
+        "T007"
+      ]
+    },
+    "T016": {
+      "checked": true,
+      "dependencies": [
+        "T010",
+        "T011",
+        "T015"
+      ]
+    },
+    "T017": {
+      "checked": true,
+      "dependencies": [
+        "T011"
+      ]
+    },
+    "T018": {
+      "checked": true,
+      "dependencies": [
+        "T012",
+        "T007",
+        "T016",
+        "T017",
+        "T006"
+      ]
+    },
+    "T019": {
+      "checked": true,
+      "dependencies": [
+        "T018",
+        "T015"
+      ]
+    },
+    "T020": {
+      "checked": true,
+      "dependencies": [
+        "T019"
+      ]
+    },
+    "T021": {
+      "checked": true,
+      "dependencies": [
+        "T019",
+        "T005"
+      ]
+    },
+    "T022": {
+      "checked": true,
+      "dependencies": [
+        "T019"
+      ]
+    },
+    "T023": {
+      "checked": true,
+      "dependencies": [
+        "T021",
+        "T007"
+      ]
+    },
+    "T024": {
+      "checked": true,
+      "dependencies": [
+        "T023",
+        "T014",
+        "T004"
+      ]
+    },
+    "T025": {
+      "checked": true,
+      "dependencies": [
+        "T020",
+        "T022",
+        "T024"
+      ]
+    },
+    "T026": {
+      "checked": true,
+      "dependencies": [
+        "T025",
+        "T002"
+      ]
+    },
+    "T027": {
+      "checked": true,
+      "dependencies": [
+        "T026",
+        "T021",
+        "T022",
+        "T005"
+      ]
+    },
+    "T028": {
+      "checked": true,
+      "dependencies": [
+        "T026",
+        "T024"
+      ]
+    },
+    "T029": {
+      "checked": true,
+      "dependencies": [
+        "T027",
+        "T028",
+        "T014"
+      ]
+    },
+    "T030": {
+      "checked": true,
+      "dependencies": [
+        "T008",
+        "T029",
+        "T003"
+      ]
+    },
+    "T031": {
+      "checked": true,
+      "dependencies": [
+        "T029",
+        "T030"
+      ]
+    },
+    "T032": {
+      "checked": true,
+      "dependencies": [
+        "T029"
+      ]
+    },
+    "T033": {
+      "checked": true,
+      "dependencies": [
+        "T019",
+        "T005"
+      ]
+    },
+    "T034": {
+      "checked": true,
+      "dependencies": [
+        "T029",
+        "T033"
+      ]
+    },
+    "T035": {
+      "checked": true,
+      "dependencies": [
+        "T034",
+        "T032"
+      ]
+    },
+    "T036": {
+      "checked": true,
+      "dependencies": [
+        "T035"
+      ]
+    },
+    "T037": {
+      "checked": true,
+      "dependencies": [
+        "T036"
+      ]
+    },
+    "T038": {
+      "checked": true,
+      "dependencies": [
+        "T037"
+      ]
+    },
+    "T039": {
+      "checked": true,
+      "dependencies": [
+        "T019",
+        "T003",
+        "T005"
+      ]
+    },
+    "T040": {
+      "checked": true,
+      "dependencies": [
+        "T037",
+        "T008",
+        "T038"
+      ]
+    },
+    "T041": {
+      "checked": true,
+      "dependencies": [
+        "T037",
+        "T038"
+      ]
+    },
+    "T042": {
+      "checked": true,
+      "dependencies": [
+        "T040",
+        "T041",
+        "T039"
+      ]
+    },
+    "T043": {
+      "checked": true,
+      "dependencies": [
+        "T042",
+        "T039",
+        "T037"
+      ]
+    },
+    "T044": {
+      "checked": true,
+      "dependencies": [
+        "T043",
+        "T040",
+        "T041"
+      ]
+    },
+    "T045": {
+      "checked": true,
+      "dependencies": [
+        "T044",
+        "T030"
+      ]
+    },
+    "T046": {
+      "checked": true,
+      "dependencies": [
+        "T044",
+        "T030"
+      ]
+    },
+    "T047": {
+      "checked": true,
+      "dependencies": [
+        "T045",
+        "T046",
+        "T003"
+      ]
+    },
+    "T048": {
+      "checked": true,
+      "dependencies": [
+        "T047"
+      ]
+    },
+    "T049": {
+      "checked": true,
+      "dependencies": [
+        "T048"
+      ]
+    },
+    "T050": {
+      "checked": true,
+      "dependencies": [
+        "T019",
+        "T005"
+      ]
+    },
+    "T051": {
+      "checked": true,
+      "dependencies": [
+        "T048",
+        "T050"
+      ]
+    },
+    "T052": {
+      "checked": true,
+      "dependencies": [
+        "T051",
+        "T049"
+      ]
+    },
+    "T053": {
+      "checked": true,
+      "dependencies": [
+        "T052"
+      ]
+    },
+    "T054": {
+      "checked": true,
+      "dependencies": [
+        "T052"
+      ]
+    },
+    "T055": {
+      "checked": true,
+      "dependencies": [
+        "T052"
+      ]
+    },
+    "T056": {
+      "checked": true,
+      "dependencies": [
+        "T053",
+        "T054",
+        "T055",
+        "T031",
+        "T005"
+      ]
+    },
+    "T057": {
+      "checked": true,
+      "dependencies": [
+        "T056"
+      ]
+    },
+    "T058": {
+      "checked": true,
+      "dependencies": [
+        "T057"
+      ]
+    },
+    "T059": {
+      "checked": false,
+      "dependencies": [
+        "T058",
+        "T015",
+        "T003",
+        "T029"
+      ]
+    },
+    "T060": {
+      "checked": true,
+      "dependencies": [
+        "T059"
+      ]
+    },
+    "T061": {
+      "checked": true,
+      "dependencies": [
+        "T060",
+        "T009",
+        "T057"
+      ]
+    },
+    "T062": {
+      "checked": true,
+      "dependencies": [
+        "T060",
+        "T057",
+        "T009"
+      ]
+    },
+    "T063": {
+      "checked": false,
+      "dependencies": [
+        "T002",
+        "T003",
+        "T060"
+      ]
+    },
+    "T064": {
+      "checked": true,
+      "dependencies": [
+        "T062",
+        "T006"
+      ]
+    },
+    "T065": {
+      "checked": true,
+      "dependencies": [
+        "T031",
+        "T037",
+        "T048",
+        "T057",
+        "T061",
+        "T062",
+        "T064",
+        "T047"
+      ]
+    },
+    "T066": {
+      "checked": true,
+      "dependencies": [
+        "T065"
+      ]
+    }
+  },
+  "functionalRequirements": [
+    "FR-001",
+    "FR-002",
+    "FR-003",
+    "FR-004",
+    "FR-005",
+    "FR-006",
+    "FR-007",
+    "FR-008",
+    "FR-009",
+    "FR-010",
+    "FR-011",
+    "FR-012",
+    "FR-013",
+    "FR-014",
+    "FR-015",
+    "FR-016",
+    "FR-017",
+    "FR-018",
+    "FR-019",
+    "FR-020"
+  ],
+  "successCriteria": [
+    "SC-001",
+    "SC-002",
+    "SC-003",
+    "SC-004",
+    "SC-005",
+    "SC-006"
+  ],
+  "unmappedRequirements": [],
+  "conditionalDependency": "T059 index addition is DEFERRED/no justified additional index at1500;T060/T061 use the tested existing-index state and generated cache. T063 is separate deployment-only BLOCKED."
+}

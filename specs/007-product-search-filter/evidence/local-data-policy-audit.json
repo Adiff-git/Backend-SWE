@@ -1,0 +1,1464 @@
+{
+  "sourceRows": 1500,
+  "unverifiedRows": 1500,
+  "candidateFactsByApprovedBindingBeforeRuntimeShapeChecks": {
+    "display_diagonal": 224,
+    "physical_ram": 150,
+    "installed_storage_gb": 147,
+    "display_resolution": 104
+  },
+  "excludedFacts": [
+    {
+      "asin": "B07VD3JH2C",
+      "key": "display_diagonal",
+      "value": {
+        "unit": "inch",
+        "value": 6088
+      },
+      "reason": "6088-inch fact",
+      "title": "Xiaomi Mi A3 64GB + 4GB RAM, Triple Camera, 4G LTE Smartphone - International Global Version (Not just Blue)"
+    },
+    {
+      "asin": "B07VN7WKLR",
+      "key": "display_diagonal",
+      "value": {
+        "unit": "inch",
+        "value": 6088
+      },
+      "reason": "6088-inch fact",
+      "title": "Xiaomi Mi A3 64GB + 4GB RAM, Triple Camera, 4G LTE Smartphone - International Global Version (More Than White)"
+    },
+    {
+      "asin": "B07J1SY5QQ",
+      "key": "display_resolution",
+      "value": "1600x600",
+      "reason": "title16:10 vs resolution1600x600",
+      "title": "SAMSUNG Chromebook Plus V2, 2-in-1, 4GB RAM, 32GB eMMC, 13MP Camera, Chrome OS, 12.2\", 16:10 Aspect Ratio, Light Titan (XE520QAB-K01US)"
+    },
+    {
+      "asin": "B09TWRH21N",
+      "key": "installed_storage_gb",
+      "value": {
+        "unit": "GB",
+        "value": 65
+      },
+      "reason": "title 64GB vs fact65GB",
+      "title": "ASUS Chromebook Detachable CM3, 10.5\" Touchscreen WUXGA 16:10 Display, MediaTek 8183 Processor 64GB Storage, 4GB RAM, Garaged USI Stylus, Chrome OS, Aluminum, Mineral Gray, CM3000DVA-DS44T-S"
+    },
+    {
+      "asin": "B07VDB92RK",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG SM-T290NZKAXAR, Galaxy Tab A 8.0\" 32 GB Wifi Android 9.0 Pie Tablet Black 2019"
+    },
+    {
+      "asin": "B07VDB92RK",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG SM-T290NZKAXAR, Galaxy Tab A 8.0\" 32 GB Wifi Android 9.0 Pie Tablet Black 2019"
+    },
+    {
+      "asin": "B07Q3T1YJS",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 64
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A- 10.1\" 64GB, Wifi Tablet- SM-T510NZKFXAR Black"
+    },
+    {
+      "asin": "B07Q3T1YJS",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 3
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A- 10.1\" 64GB, Wifi Tablet- SM-T510NZKFXAR Black"
+    },
+    {
+      "asin": "B0728GY2VR",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Apple iPad with WiFi, 32GB, Space Gray (2017 Model)"
+    },
+    {
+      "asin": "B0728GY2VR",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Apple iPad with WiFi, 32GB, Space Gray (2017 Model)"
+    },
+    {
+      "asin": "B00JYSPH5M",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 1.5
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 4 SM-T530NYKAXAR 10.1-Inch 16GB (Black)"
+    },
+    {
+      "asin": "B00JYSPH5M",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1.5
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 4 SM-T530NYKAXAR 10.1-Inch 16GB (Black)"
+    },
+    {
+      "asin": "B07XC3CW4G",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A 8.0\" (2019, WiFi + Cellular) 32GB, 5100mAh Battery, 4G LTE Tablet & Phone (Makes Calls) GSM Unlocked SM-T295, International Model (32 GB, Black)"
+    },
+    {
+      "asin": "B07XC3CW4G",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A 8.0\" (2019, WiFi + Cellular) 32GB, 5100mAh Battery, 4G LTE Tablet & Phone (Makes Calls) GSM Unlocked SM-T295, International Model (32 GB, Black)"
+    },
+    {
+      "asin": "B01N24N9TH",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 8 Inch; 16 GB Wifi Tablet (Smoky Titanium) SM-T350NZAAXAR"
+    },
+    {
+      "asin": "B01N24N9TH",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1.5
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 8 Inch; 16 GB Wifi Tablet (Smoky Titanium) SM-T350NZAAXAR"
+    },
+    {
+      "asin": "B07VHJJCS1",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG SM-T290NZSAXAR, Galaxy Tab A 8.0\" 32 GB Wifi Tablet Silver 2019"
+    },
+    {
+      "asin": "B07VHJJCS1",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG SM-T290NZSAXAR, Galaxy Tab A 8.0\" 32 GB Wifi Tablet Silver 2019"
+    },
+    {
+      "asin": "B01EUC7NPI",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A SM-T580NZKAXAR 10.1-Inch 16 GB, Tablet (Black)"
+    },
+    {
+      "asin": "B01EUC7NPI",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A SM-T580NZKAXAR 10.1-Inch 16 GB, Tablet (Black)"
+    },
+    {
+      "asin": "B07Q5VM8ZD",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 10.1 32 GB Wifi Tablet Black (2019)"
+    },
+    {
+      "asin": "B07Q5VM8ZD",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 10.1 32 GB Wifi Tablet Black (2019)"
+    },
+    {
+      "asin": "B07XJZ7VQD",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A 8.0\" (2019, WiFi Only) 32GB, 5100mAh Battery, Dual Speaker, SM-T290, International Model (Black)"
+    },
+    {
+      "asin": "B07XJZ7VQD",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A 8.0\" (2019, WiFi Only) 32GB, 5100mAh Battery, Dual Speaker, SM-T290, International Model (Black)"
+    },
+    {
+      "asin": "B017TK4H6G",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 8
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 4 (7-Inch, White)"
+    },
+    {
+      "asin": "B017TK4H6G",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1.5
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 4 (7-Inch, White)"
+    },
+    {
+      "asin": "B08BH87FPJ",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 128
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab M10 Plus Tablet, FHD Android Tablet, Octa-Core Processor, 128GB Storage, 4GB RAM, Dual Speakers, Kid Mode, Face Unlock, Android 9 Pie, Iron Grey"
+    },
+    {
+      "asin": "B08BH87FPJ",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 4
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab M10 Plus Tablet, FHD Android Tablet, Octa-Core Processor, 128GB Storage, 4GB RAM, Dual Speakers, Kid Mode, Face Unlock, Android 9 Pie, Iron Grey"
+    },
+    {
+      "asin": "B09Q4RTSLX",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 256
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab S8+ 12.4” 256GB WiFi 6E Android Tablet, Large AMOLED Screen, S Pen Included, Ultra Wide Camera, Long Lasting Battery, US Version, 2022, Silver"
+    },
+    {
+      "asin": "B09Q4RTSLX",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 8
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab S8+ 12.4” 256GB WiFi 6E Android Tablet, Large AMOLED Screen, S Pen Included, Ultra Wide Camera, Long Lasting Battery, US Version, 2022, Silver"
+    },
+    {
+      "asin": "B01N13866H",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 8
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 7\"; 8 GB Wifi Tablet (Black) SM-T280NZKAXAR"
+    },
+    {
+      "asin": "B01N13866H",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1.5
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 7\"; 8 GB Wifi Tablet (Black) SM-T280NZKAXAR"
+    },
+    {
+      "asin": "B07Q84QRKD",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 128
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 10.1 128 GB Wifi Tablet Black (2019)"
+    },
+    {
+      "asin": "B07Q84QRKD",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 3
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 10.1 128 GB Wifi Tablet Black (2019)"
+    },
+    {
+      "asin": "B07Q3T2RZF",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 10.1 Inch (T510) 32 GB WiFi Tablet Silver (2019), Silver"
+    },
+    {
+      "asin": "B07Q3T2RZF",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 10.1 Inch (T510) 32 GB WiFi Tablet Silver (2019), Silver"
+    },
+    {
+      "asin": "B01FWT4V12",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab S2 8\"; 32 GB Wifi Tablet (White) SM-T713NZWEXAR"
+    },
+    {
+      "asin": "B01FWT4V12",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 3
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab S2 8\"; 32 GB Wifi Tablet (White) SM-T713NZWEXAR"
+    },
+    {
+      "asin": "B07V29CYF3",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab M10 HD 10.1\" Tablet, Android 9.0, 32GB Storage, Quad-Core Processor, WiFi, Bluetooth, ZA4G0078US, Slate Black"
+    },
+    {
+      "asin": "B07V29CYF3",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab M10 HD 10.1\" Tablet, Android 9.0, 32GB Storage, Quad-Core Processor, WiFi, Bluetooth, ZA4G0078US, Slate Black"
+    },
+    {
+      "asin": "B00TR05L9Y",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo TAB2 A10 - 10.1\" Tablet (ARM Cortex A53 Quad-Core, FHD IPS, 2GB SDRAM, 16GB SSD, Android 4.4 KitKat) ZA000001US"
+    },
+    {
+      "asin": "B00TR05L9Y",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo TAB2 A10 - 10.1\" Tablet (ARM Cortex A53 Quad-Core, FHD IPS, 2GB SDRAM, 16GB SSD, Android 4.4 KitKat) ZA000001US"
+    },
+    {
+      "asin": "B08SCBFG97",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 128
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab P11 Tablet 11\" Screen 4GB RAM, 128GB Storage"
+    },
+    {
+      "asin": "B08SCBFG97",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 4
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab P11 Tablet 11\" Screen 4GB RAM, 128GB Storage"
+    },
+    {
+      "asin": "B0C1HYPS16",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 6
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab P11 Plus (1st Gen) - 2021 - Tablet - Long Battery Life - 11\" LCD - MediaTek Octa-Core Processor - 6GB Memory - 128GB Storage - Android 11 - Bluetooth & Wi-Fi - Keyboard & Pen Included"
+    },
+    {
+      "asin": "B0C1HYPS16",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 6
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab P11 Plus (1st Gen) - 2021 - Tablet - Long Battery Life - 11\" LCD - MediaTek Octa-Core Processor - 6GB Memory - 128GB Storage - Android 11 - Bluetooth & Wi-Fi - Keyboard & Pen Included"
+    },
+    {
+      "asin": "B00F4WM1H4",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "ASUS MeMO Pad FHD 10 ME302C-A1-BL 10.1-Inch 16GB Tablet (Blue)"
+    },
+    {
+      "asin": "B00F4WM1H4",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "ASUS MeMO Pad FHD 10 ME302C-A1-BL 10.1-Inch 16GB Tablet (Blue)"
+    },
+    {
+      "asin": "B07V3F7SNR",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab M10 HD 10.1\" Tablet, Android 9.0, 16GB Storage, Quad-Core Processor, WiFi, Bluetooth, ZA4G0000US, Slate Black"
+    },
+    {
+      "asin": "B07V3F7SNR",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab M10 HD 10.1\" Tablet, Android 9.0, 16GB Storage, Quad-Core Processor, WiFi, Bluetooth, ZA4G0000US, Slate Black"
+    },
+    {
+      "asin": "B07CSBMJ9G",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab 10, 10-Inch Android Tablet, Qualcomm Snapdragon 210 Quad-Core 1.3 GHz Processor, 2GB RAM, 16 GB Storage, Slate Black - Lenovo TB-X103F"
+    },
+    {
+      "asin": "B07CSBMJ9G",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab 10, 10-Inch Android Tablet, Qualcomm Snapdragon 210 Quad-Core 1.3 GHz Processor, 2GB RAM, 16 GB Storage, Slate Black - Lenovo TB-X103F"
+    },
+    {
+      "asin": "B01N3YVBG2",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Yoga Tab 3 - HD 8\" Android Tablet Computer (Qualcomm Snapdragon APQ8009, 2GB RAM, 16GB SSD) ZA090094US,Black"
+    },
+    {
+      "asin": "B01N3YVBG2",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Yoga Tab 3 - HD 8\" Android Tablet Computer (Qualcomm Snapdragon APQ8009, 2GB RAM, 16GB SSD) ZA090094US,Black"
+    },
+    {
+      "asin": "B0002VIT0A",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 40
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Panasonic Toughbook 18 Tablet PC (CF-18DHAZXKM)"
+    },
+    {
+      "asin": "B0002VIT0A",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 256
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Panasonic Toughbook 18 Tablet PC (CF-18DHAZXKM)"
+    },
+    {
+      "asin": "B000T2RGFG",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo ThinkPad X61 Tablet 7767 Notebook"
+    },
+    {
+      "asin": "B000T2RGFG",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo ThinkPad X61 Tablet 7767 Notebook"
+    },
+    {
+      "asin": "B010KHT8GO",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo ThinkPad Yoga 11e Chromebook Tablet PC - 11.6\" - In-plane Switching (IPS) Technology - Wireless LAN - Intel 20DU000EUS"
+    },
+    {
+      "asin": "B012Y127M6",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 4
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Dell Inspiron 13 7000 Tablet PC 13.3\" Core i5 2.20GHz 4GB SDRAM RAM 500GB HDD Windows 10 Home 64-bit i7348-1428SLV"
+    },
+    {
+      "asin": "B01M5D505V",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "RCA Viking Pro 10\" 2-in-1 Tablet 32GB Quad Core Charcoal Laptop Computer with Touchscreen and Detachable Keyboard Android 6.0"
+    },
+    {
+      "asin": "B01M5D505V",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "RCA Viking Pro 10\" 2-in-1 Tablet 32GB Quad Core Charcoal Laptop Computer with Touchscreen and Detachable Keyboard Android 6.0"
+    },
+    {
+      "asin": "B07BHHM37W",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "RCA Cambio 10.1\" 2 in 1 32GB Tablet with Windows 10, Intel Atom Z8350 2GB RAM, Includes Keyboard"
+    },
+    {
+      "asin": "B07BHHM37W",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "RCA Cambio 10.1\" 2 in 1 32GB Tablet with Windows 10, Intel Atom Z8350 2GB RAM, Includes Keyboard"
+    },
+    {
+      "asin": "B077WKX8VL",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "RCA Cambio 10.1\" 2 in 1 32GB Tablet with Windows 10, Intel Atom Z8350 2GB RAM, Includes Keyboard (BLUE)"
+    },
+    {
+      "asin": "B077WKX8VL",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "RCA Cambio 10.1\" 2 in 1 32GB Tablet with Windows 10, Intel Atom Z8350 2GB RAM, Includes Keyboard (BLUE)"
+    },
+    {
+      "asin": "B0CF1QMK7X",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "TCL Android Tablet, TAB 10s 10.1 Inch FHD Tablet, 8000mAh Larger Battery, 32GB (up to 256GB) Storage, 3GB RAM, WiFi Android Tab, Eye Protection, Matte Gray"
+    },
+    {
+      "asin": "B0CF1QMK7X",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 3
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "TCL Android Tablet, TAB 10s 10.1 Inch FHD Tablet, 8000mAh Larger Battery, 32GB (up to 256GB) Storage, 3GB RAM, WiFi Android Tab, Eye Protection, Matte Gray"
+    },
+    {
+      "asin": "B073WDMBKK",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "EPIK ELT0801H-PK-WM Highq Kids Tablet Pink 8in"
+    },
+    {
+      "asin": "B073WDMBKK",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "EPIK ELT0801H-PK-WM Highq Kids Tablet Pink 8in"
+    },
+    {
+      "asin": "B09XWSXN93",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "IBALL 10.1 Inch Octa-core Android Tablet PC,7000mAH 4G LTE with SIM Card Slot,2G RAM/32G ROM,Metal Shell Material,Blue Ray Eye Protection Function,GPS,8MP/8 MP Dual Camera WiFi,BT5.0"
+    },
+    {
+      "asin": "B09XWSXN93",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "IBALL 10.1 Inch Octa-core Android Tablet PC,7000mAH 4G LTE with SIM Card Slot,2G RAM/32G ROM,Metal Shell Material,Blue Ray Eye Protection Function,GPS,8MP/8 MP Dual Camera WiFi,BT5.0"
+    },
+    {
+      "asin": "B077WTB2LY",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "RCA Cambio 10\" 2-in-1 Notebook Tablet with 32GB Storage, Intel Atom Z8350 Processor, 2GB RAM, Windows 10, Includes Keyboard"
+    },
+    {
+      "asin": "B005G6CQKA",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 4
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Ematic eGLIDE 2 7-Inch Touch Screen Android Tablet - Black"
+    },
+    {
+      "asin": "B00RPJOMDU",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 4
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "HP EliteBook Revolve 810 G1 11.6\" Business Tablet PC Intel Core i5-3437U 1.9 GHz 4GB RAM 128GB SSD 64-bit W7P K9Y12U8#ABA"
+    },
+    {
+      "asin": "B081HG6HT1",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG SM-T290NZSKXAR, Galaxy Tab A Kids Edition 8”, 32GB Wifi Tablet Silver 2019"
+    },
+    {
+      "asin": "B081HG6HT1",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG SM-T290NZSKXAR, Galaxy Tab A Kids Edition 8”, 32GB Wifi Tablet Silver 2019"
+    },
+    {
+      "asin": "B00DGM721O",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 3 GT-P5210GNYXAR 10.1\", 16GB, Wi-Fi Tablet (Gold Brown)"
+    },
+    {
+      "asin": "B00DGM721O",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 3 GT-P5210GNYXAR 10.1\", 16GB, Wi-Fi Tablet (Gold Brown)"
+    },
+    {
+      "asin": "B075VSG1TQ",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 8\" 32 GB Wifi Tablet (Black) - SM-T380NZKEXAR"
+    },
+    {
+      "asin": "B075VSG1TQ",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 8\" 32 GB Wifi Tablet (Black) - SM-T380NZKEXAR"
+    },
+    {
+      "asin": "B07XQC3NLR",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A 8.0\" (2019, WiFi Only) 32GB, 5100mAh Battery, Dual Speaker, SM-T290, International Model (Silver)"
+    },
+    {
+      "asin": "B07XQC3NLR",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A 8.0\" (2019, WiFi Only) 32GB, 5100mAh Battery, Dual Speaker, SM-T290, International Model (Silver)"
+    },
+    {
+      "asin": "B01AZ7LT20",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 8
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab E Lite 7\"; 8 GB Wifi Tablet (White) SM-T113NDWAXAR"
+    },
+    {
+      "asin": "B01AZ7LT20",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab E Lite 7\"; 8 GB Wifi Tablet (White) SM-T113NDWAXAR"
+    },
+    {
+      "asin": "B00MMPPOHU",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab S 10.5-Inch Tablet (16 GB, Titanium Bronze)"
+    },
+    {
+      "asin": "B00MMPPOHU",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 3
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab S 10.5-Inch Tablet (16 GB, Titanium Bronze)"
+    },
+    {
+      "asin": "B0161UWH76",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab E 9.6\" 16GB Black Wi-Fi Sm-T560NZKUXAC"
+    },
+    {
+      "asin": "B0161UWH76",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1.5
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab E 9.6\" 16GB Black Wi-Fi Sm-T560NZKUXAC"
+    },
+    {
+      "asin": "B0B3BJ3QYR",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 64
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A7 10.4\" 2020 (64GB, 3GB) Wi-Fi Only Android 10 One UI Tablet, Snapdragon 662, 7040mAh Battery, SM-T500 (64GB SD Bundle) (Gold)"
+    },
+    {
+      "asin": "B0B3BJ3QYR",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 3
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A7 10.4\" 2020 (64GB, 3GB) Wi-Fi Only Android 10 One UI Tablet, Snapdragon 662, 7040mAh Battery, SM-T500 (64GB SD Bundle) (Gold)"
+    },
+    {
+      "asin": "B00DGM6ZE4",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 3 (8-Inch, Gold-Brown) 2013 Model"
+    },
+    {
+      "asin": "B00DGM6ZE4",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1.5
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 3 (8-Inch, Gold-Brown) 2013 Model"
+    },
+    {
+      "asin": "B06XC2GJTF",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab S3 9.7-Inch, 32GB Tablet (Silver, SM-T820NZSAXAR)"
+    },
+    {
+      "asin": "B06XC2GJTF",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 4
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab S3 9.7-Inch, 32GB Tablet (Silver, SM-T820NZSAXAR)"
+    },
+    {
+      "asin": "B00JYSPD5Q",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 1.5
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 4 (8-Inch, Black)"
+    },
+    {
+      "asin": "B00JYSPD5Q",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1.5
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 4 (8-Inch, Black)"
+    },
+    {
+      "asin": "B07XF94PHV",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 8.0\" (2019, WiFi + Cellular) 32GB, 5100mAh Battery, 4G LTE Tablet & Phone (Makes Calls) GSM Unlocked SM-T295, International Model (32 GB, Silver)"
+    },
+    {
+      "asin": "B07XF94PHV",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 8.0\" (2019, WiFi + Cellular) 32GB, 5100mAh Battery, 4G LTE Tablet & Phone (Makes Calls) GSM Unlocked SM-T295, International Model (32 GB, Silver)"
+    },
+    {
+      "asin": "B01CAU288Y",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 8
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab E Lite 7\"; 8 GB Wifi Tablet (Black) SM-T113NYKAXAR"
+    },
+    {
+      "asin": "B01CAU288Y",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab E Lite 7\"; 8 GB Wifi Tablet (Black) SM-T113NYKAXAR"
+    },
+    {
+      "asin": "B0B3BTZ7KR",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A7 10.4 Wi-Fi 32GB Tablet - Gold SM-T500NZDAXAR (2020)"
+    },
+    {
+      "asin": "B0B3BTZ7KR",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 3
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A7 10.4 Wi-Fi 32GB Tablet - Gold SM-T500NZDAXAR (2020)"
+    },
+    {
+      "asin": "B082TMKZ51",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A 8.0\" (2019, WiFi Only) 32GB, 5100mAh All Day Battery, Dual Speaker, SM-T290, International Model (32GB + 32GB SD Bundle, Silver)"
+    },
+    {
+      "asin": "B082TMKZ51",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A 8.0\" (2019, WiFi Only) 32GB, 5100mAh All Day Battery, Dual Speaker, SM-T290, International Model (32GB + 32GB SD Bundle, Silver)"
+    },
+    {
+      "asin": "B00HWMPSJC",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 8
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 3 Lite 7-Inch 8 GB Tablet (White)"
+    },
+    {
+      "asin": "B00HWMPSJC",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 3 Lite 7-Inch 8 GB Tablet (White)"
+    },
+    {
+      "asin": "B00G6D6HBG",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 1
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 3 (7-Inch, Gold-Brown, 8-GB) 2013 Model"
+    },
+    {
+      "asin": "B00G6D6HBG",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 3 (7-Inch, Gold-Brown, 8-GB) 2013 Model"
+    },
+    {
+      "asin": "B00ZY7ZUIG",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "8.0\" Samsung Galaxy Tab A - 16GB Smoky Titanium"
+    },
+    {
+      "asin": "B00ZY7ZUIG",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1.5
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "8.0\" Samsung Galaxy Tab A - 16GB Smoky Titanium"
+    },
+    {
+      "asin": "B01N6T96OI",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 9.7-Inch Tablet (16 GB, Smoky Titanium)"
+    },
+    {
+      "asin": "B01N6T96OI",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1.5
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A 9.7-Inch Tablet (16 GB, Smoky Titanium)"
+    },
+    {
+      "asin": "B081122SFR",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Electronics SM-T597VZKAVZW Galaxy Tab A, 10.5\", Black (WiFi & LTE Verizon)"
+    },
+    {
+      "asin": "B081122SFR",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Electronics SM-T597VZKAVZW Galaxy Tab A, 10.5\", Black (WiFi & LTE Verizon)"
+    },
+    {
+      "asin": "B00KHA2DQM",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab S 8.4-Inch Tablet (16 GB, Titanium Bronze)"
+    },
+    {
+      "asin": "B00KHA2DQM",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 3
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab S 8.4-Inch Tablet (16 GB, Titanium Bronze)"
+    },
+    {
+      "asin": "B08QQMBYRV",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 64
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A 8.0-inch Android Tablet 64GB Wi-Fi Lightweight Large Screen Feel Camera Long-Lasting Battery, Silver"
+    },
+    {
+      "asin": "B08QQMBYRV",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 64
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A 8.0-inch Android Tablet 64GB Wi-Fi Lightweight Large Screen Feel Camera Long-Lasting Battery, Silver"
+    },
+    {
+      "asin": "B0881HDRTH",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 64
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Yoga Smart Tab, 10.1\" FHD Android Tablet, Octa-Core Processor, 64GB Storage, 4GB RAM, Iron Grey, ZA3V0005US"
+    },
+    {
+      "asin": "B0881HDRTH",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 4
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Yoga Smart Tab, 10.1\" FHD Android Tablet, Octa-Core Processor, 64GB Storage, 4GB RAM, Iron Grey, ZA3V0005US"
+    },
+    {
+      "asin": "B017MNWJUG",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG IT SM-T670NZKAXAR Galaxy View 32GB Android 18.4\" Wi-Fi Tablet Computer (Black)"
+    },
+    {
+      "asin": "B017MNWJUG",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG IT SM-T670NZKAXAR Galaxy View 32GB Android 18.4\" Wi-Fi Tablet Computer (Black)"
+    },
+    {
+      "asin": "B00HWMPSL0",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 8
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 3 Lite (7-Inch, Dark Gray)"
+    },
+    {
+      "asin": "B00HWMPSL0",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab 3 Lite (7-Inch, Dark Gray)"
+    },
+    {
+      "asin": "B0C5QQDN3T",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab M10 Plus 3rd Gen Tablet - 10\" FHD - Android 12-32GB Storage - Long Battery Life"
+    },
+    {
+      "asin": "B0C5QQDN3T",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Lenovo Tab M10 Plus 3rd Gen Tablet - 10\" FHD - Android 12-32GB Storage - Long Battery Life"
+    },
+    {
+      "asin": "B01N9E9KYP",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "HUAWEI + Harman Kardon MediaPad M3 8.0 Octa Core 8.4\" Android (Marshmallow) +EMUI Tablet, WiFi only, 32GB, Moonlight Silver (US Warranty)"
+    },
+    {
+      "asin": "B01N9E9KYP",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 4
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "HUAWEI + Harman Kardon MediaPad M3 8.0 Octa Core 8.4\" Android (Marshmallow) +EMUI Tablet, WiFi only, 32GB, Moonlight Silver (US Warranty)"
+    },
+    {
+      "asin": "B08JC7MFWM",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 64
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab S5e- 64GB, Wifi Tablet - SM-T720NZSAXAR, Silver"
+    },
+    {
+      "asin": "B08JC7MFWM",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 4
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab S5e- 64GB, Wifi Tablet - SM-T720NZSAXAR, Silver"
+    },
+    {
+      "asin": "B01LFV5SG8",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A with S Pen 10.1\"; 16 GB Wifi Tablet (White) SM-P580NZWAXAR"
+    },
+    {
+      "asin": "B01LFV5SG8",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A with S Pen 10.1\"; 16 GB Wifi Tablet (White) SM-P580NZWAXAR"
+    },
+    {
+      "asin": "B072BCTFJG",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A T580 10.1\" SM-T580NZWAXAR 16GB 8MP WiFi Tablet (White)"
+    },
+    {
+      "asin": "B072BCTFJG",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 2
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A T580 10.1\" SM-T580NZWAXAR 16GB 8MP WiFi Tablet (White)"
+    },
+    {
+      "asin": "B00KHAFI9G",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 16
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab S 8.4-Inch Tablet (16 GB, Dazzling White)"
+    },
+    {
+      "asin": "B00KHAFI9G",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 3
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab S 8.4-Inch Tablet (16 GB, Dazzling White)"
+    },
+    {
+      "asin": "B00BG6FTZI",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 1
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "ASUS MeMO Pad Smart ME301T-A1-BL 10.1-Inch 16 GB Tablet (Blue)"
+    },
+    {
+      "asin": "B00BG6FTZI",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "ASUS MeMO Pad Smart ME301T-A1-BL 10.1-Inch 16 GB Tablet (Blue)"
+    },
+    {
+      "asin": "B09HN83YK3",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A7 10.4\" 2020 (32GB, 3GB) Wi-Fi Only Android 10 One UI Tablet, Snapdragon 662, 7040mAh Battery, SM-T500 (US Model, 64GB SD Bundle, Dark Gray)"
+    },
+    {
+      "asin": "B09HN83YK3",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 3
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "Samsung Galaxy Tab A7 10.4\" 2020 (32GB, 3GB) Wi-Fi Only Android 10 One UI Tablet, Snapdragon 662, 7040mAh Battery, SM-T500 (US Model, 64GB SD Bundle, Dark Gray)"
+    },
+    {
+      "asin": "B08ZQNPFP9",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A7 10.4\" (32GB, 3GB, WiFi + Cellular) 4G LTE Tablet GSM Unlocked (Global, T-Mobile, AT&T, Metro) International Model SM-T505 (64GB SD Bundle) (Dark Gray)"
+    },
+    {
+      "asin": "B08ZQNPFP9",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 3
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "SAMSUNG Galaxy Tab A7 10.4\" (32GB, 3GB, WiFi + Cellular) 4G LTE Tablet GSM Unlocked (Global, T-Mobile, AT&T, Metro) International Model SM-T505 (64GB SD Bundle) (Dark Gray)"
+    },
+    {
+      "asin": "B00AK7OEBE",
+      "key": "internal_storage",
+      "value": {
+        "unit": "GB",
+        "value": 32
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "ASUS Nexus 7 ASUS-1B32-4G 7-Inch 32 GB Tablet"
+    },
+    {
+      "asin": "B00AK7OEBE",
+      "key": "physical_ram",
+      "value": {
+        "unit": "GB",
+        "value": 1
+      },
+      "reason": "Tablet RAM/storage binding excluded;semantic review deferred",
+      "title": "ASUS Nexus 7 ASUS-1B32-4G 7-Inch 32 GB Tablet"
+    }
+  ],
+  "sourceSpecSha256": "b74cbdd2c2f15d415280a17352ed4025dc126d89fae19b1201a4d579d7b2506d",
+  "policy": "No source rewrite;runtime safe_facts excludes approved-key shape/unit violations and known contradictions;all other keys unavailable. Candidate counts are not target import or semantic verification evidence.",
+  "caseOnlyGroups": 122,
+  "punctuationSpacingGroups": 11,
+  "groupCountEvidence": "cross-repository-audit-v1.md;previous read-only audit,not remerged"
+}

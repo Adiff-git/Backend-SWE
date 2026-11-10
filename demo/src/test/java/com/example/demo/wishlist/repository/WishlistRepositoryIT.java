@@ -162,7 +162,9 @@ class WishlistRepositoryIT {
                     + ".roles r WHERE r.name = 'USER'");
             Long assignments = jdbc.queryForObject("SELECT COUNT(*) FROM " + schema + ".user_roles", Long.class);
             Long grants = jdbc.queryForObject("SELECT COUNT(*) FROM " + schema + ".role_permissions", Long.class);
-            Flyway.configure().dataSource(dataSource).schemas(schema).defaultSchema(schema).load().migrate();
+            // This schema-isolated regression owns V9→V10 permission upgrade only.
+            // Catalog search V15+ explicitly owns public functions and is verified in dedicated databases.
+            Flyway.configure().dataSource(dataSource).schemas(schema).defaultSchema(schema).target("10").load().migrate();
             assertThat(jdbc.queryForList("SELECT r.name FROM " + schema + ".roles r JOIN " + schema
                     + ".role_permissions rp ON r.id = rp.role_id JOIN " + schema
                     + ".permissions p ON p.id = rp.permission_id WHERE p.name = 'MANAGE_WISHLIST'",

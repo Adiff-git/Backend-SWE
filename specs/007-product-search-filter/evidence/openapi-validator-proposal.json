@@ -1,0 +1,34 @@
+{
+  "task": "T006",
+  "status": "APPROVED_FOR_ISOLATED_VERIFICATION_EXECUTED",
+  "packagesProposed": {
+    "openapi-spec-validator": "0.9.0",
+    "openapi-schema-validator": "0.9.0",
+    "jsonschema[format-nongpl]": "4.26.0",
+    "PyYAML": "6.0.3"
+  },
+  "scope": "temporary /tmp venv for document/evidence validation only;no Maven/application/CI dependency",
+  "approval": {
+    "authorization": "Current explicit user instruction",
+    "scope": "Temporary venv verification with named versions/OAS31 and required URI-format dependencies",
+    "permanentCIOrApplicationAdoption": false
+  },
+  "pythonAvailable": "3.14.9",
+  "documentValidator": "OpenAPIV31SpecValidator",
+  "schemaValidator": "OAS31Validator explicitly,not defaultOAS32",
+  "requiredChecks": [
+    "two existing OpenAPI3.1 documents",
+    "all41 instance probes replayed through OAS31Validator",
+    "negative document controls missing info/duplicate parameter/duplicate operationId",
+    "URI format enforcement sentinel,not merely FormatChecker construction",
+    "review of prose-only constraints and compatibility patch"
+  ],
+  "sources": {
+    "specDoc": "https://openapi-spec-validator.readthedocs.io/en/latest/",
+    "specRelease": "https://pypi.org/project/openapi-spec-validator/0.9.0/",
+    "specDependencies": "https://github.com/python-openapi/openapi-spec-validator/blob/0.9.0/pyproject.toml",
+    "schemaDoc": "https://openapi-schema-validator.readthedocs.io/en/latest/validation.html",
+    "schemaSource": "https://github.com/python-openapi/openapi-schema-validator/blob/0.9.0/openapi_schema_validator/validators.py"
+  },
+  "note": "Installed only in temporary venv;actual capabilities,versions,outputs and wheel hashes recorded in openapi-semantic-verification.json. No permanent dependency adoption implied."
+}

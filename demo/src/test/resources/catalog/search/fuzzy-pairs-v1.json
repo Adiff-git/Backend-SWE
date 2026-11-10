@@ -1,0 +1,170 @@
+[
+  {
+    "q": "samsnug",
+    "c": "samsung",
+    "label": true,
+    "score": 0.33333334,
+    "prefilter_score": 0.33333334
+  },
+  {
+    "q": "samsng",
+    "c": "samsung",
+    "label": true,
+    "score": 0.5,
+    "prefilter_score": 0.5
+  },
+  {
+    "q": "samzung",
+    "c": "samsung",
+    "label": true,
+    "score": 0.45454547,
+    "prefilter_score": 0.45454547
+  },
+  {
+    "q": "sonny",
+    "c": "sony",
+    "label": true,
+    "score": 0.5714286,
+    "prefilter_score": 0.5714286
+  },
+  {
+    "q": "appel",
+    "c": "apple",
+    "label": true,
+    "score": 0.33333334,
+    "prefilter_score": 0.33333334
+  },
+  {
+    "q": "lenvo",
+    "c": "lenovo",
+    "label": true,
+    "score": 0.44444445,
+    "prefilter_score": 0.44444445
+  },
+  {
+    "q": "lenov",
+    "c": "lenovo",
+    "label": true,
+    "score": 0.625,
+    "prefilter_score": 0.625
+  },
+  {
+    "q": "logitec",
+    "c": "logitech",
+    "label": true,
+    "score": 0.7,
+    "prefilter_score": 0.7
+  },
+  {
+    "q": "microsof",
+    "c": "microsoft",
+    "label": true,
+    "score": 0.72727275,
+    "prefilter_score": 0.72727275
+  },
+  {
+    "q": "panasonc",
+    "c": "panasonic",
+    "label": true,
+    "score": 0.5833333,
+    "prefilter_score": 0.5833333
+  },
+  {
+    "q": "sansung",
+    "c": "samsung",
+    "label": true,
+    "score": 0.45454547,
+    "prefilter_score": 0.45454547
+  },
+  {
+    "q": "delll",
+    "c": "dell",
+    "label": true,
+    "score": 0.8333333,
+    "prefilter_score": 0.8333333
+  },
+  {
+    "q": "asuss",
+    "c": "asus",
+    "label": true,
+    "score": 0.5714286,
+    "prefilter_score": 0.5714286
+  },
+  {
+    "q": "headphons",
+    "c": "headphones",
+    "label": true,
+    "score": 0.61538464,
+    "prefilter_score": 0.61538464
+  },
+  {
+    "q": "wirless",
+    "c": "wireless",
+    "label": true,
+    "score": 0.54545456,
+    "prefilter_score": 0.54545456
+  },
+  {
+    "q": "samsung",
+    "c": "samson",
+    "label": false,
+    "score": 0.36363637,
+    "prefilter_score": 0.36363637
+  },
+  {
+    "q": "sony",
+    "c": "sonic",
+    "label": false,
+    "score": 0.375,
+    "prefilter_score": 0.375
+  },
+  {
+    "q": "apple",
+    "c": "maple",
+    "label": false,
+    "score": 0.2,
+    "prefilter_score": 0.2
+  },
+  {
+    "q": "dell",
+    "c": "bell",
+    "label": false,
+    "score": 0.25,
+    "prefilter_score": 0.25
+  },
+  {
+    "q": "acer",
+    "c": "anker",
+    "label": false,
+    "score": 0.22222222,
+    "prefilter_score": 0.22222222
+  },
+  {
+    "q": "canon",
+    "c": "canyon",
+    "label": false,
+    "score": 0.44444445,
+    "prefilter_score": 0.44444445
+  },
+  {
+    "q": "lenovo",
+    "c": "lenox",
+    "label": false,
+    "score": 0.44444445,
+    "prefilter_score": 0.44444445
+  },
+  {
+    "q": "intel",
+    "c": "inter",
+    "label": false,
+    "score": 0.5,
+    "prefilter_score": 0.5
+  },
+  {
+    "q": "huawei",
+    "c": "hawaii",
+    "label": false,
+    "score": 0.07692308,
+    "prefilter_score": 0.07692308
+  }
+]

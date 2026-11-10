@@ -1,0 +1,161 @@
+{
+  "tasks": [
+    "T007",
+    "T010",
+    "T011"
+  ],
+  "capturedUTC": "2026-11-08T19:10:40.116944+00:00",
+  "branch": "features/SearchAndFilter",
+  "head": "c5bd4e7eeb39d9b06a0c7e36af9a65635058613f",
+  "dirtyWorktree": true,
+  "command": "mvn -o -f demo/pom.xml -Dtest=ProductSearchNormalizerTest,ProductSearchRequestTest,ProductListingControllerTest,ProductDetailControllerTest,ProductCatalogConverterTest,ProductCatalogServiceImplTest,TechnicalSpecificationValidatorTest test",
+  "exitCode": 0,
+  "suiteCount": 7,
+  "totals": {
+    "tests": 38,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "class": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+      "counts": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.search.ProductSearchNormalizerTest.xml",
+      "reportSHA256": "c1d19fc1804df3129ab02a0bbdd27bf64287c955364c0ee5391178276863a167",
+      "testCases": [
+        "matchesDocumentedD2GoldenCases",
+        "nfcNfdAndVietnameseMarksHaveSameNormalization",
+        "limitsRawTokensBeforeDeduplication",
+        "queryLengthCountsUnicodeCodePointsBeforeNormalization",
+        "doesNotApplyQueryLimitsToCandidateFieldsOrInventVocabulary",
+        "deduplicatesMembershipButKeepsPhraseAndSequence",
+        "consumesExactlyTheDocumentedUnicodeWhitespace",
+        "rejectsControlsAndNonblankZeroTokensButBlankIsOmitted",
+        "lowercaseDoesNotDependOnHostLocale"
+      ]
+    },
+    {
+      "class": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+      "counts": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.validator.ProductSearchRequestTest.xml",
+      "reportSHA256": "1fcedeef640ae134bf65061d4a8c9d31f35f2b46d111dc084387f02aee7227cb",
+      "testCases": [
+        "fixedSortValuesAndCriteriaRetainExactAmounts",
+        "omittedValuesKeepLegacyDefaultsButExplicitNullIsInvalid",
+        "textBooleanAndDecodedJsonHaveDocumentedBounds",
+        "nestedGroupsAndAlternativesEnforceShapeAndLimits",
+        "exactPriceAmountsHaveThirtyDigitBoundWithoutDoubleCoercion",
+        "numericOperandsAreExactAndPrecisionBoundedIncludingExponentNotation",
+        "uuidAndRawCollectionBoundsArePreservedBeforeDeduplication",
+        "rangesAndExplicitNullOperandMembersKeepTheirPresenceSemantics",
+        "pageSizeAndKeywordBoundariesAreValidated"
+      ]
+    },
+    {
+      "class": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.controller.ProductListingControllerTest.xml",
+      "reportSHA256": "aead14e8d05cded3db719df27a00b34bb982dc57588d041b8bd7eddac98625a6",
+      "testCases": [
+        "acceptsSizeBoundaryValues",
+        "rejectsInvalidDuplicateAndUnapprovedParametersAsProblemDetail",
+        "anonymousDefaultAndOutOfRangePagesUseCanonicalResponse"
+      ]
+    },
+    {
+      "class": "com.example.demo.catalog.controller.ProductDetailControllerTest",
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.controller.ProductDetailControllerTest.xml",
+      "reportSHA256": "b2b57ff6fe2ada061fd0274b44420cb094765f85ce54d1655f888bce1ee891db",
+      "testCases": [
+        "invalidAndNoncanonicalIdsReturn400ProblemDetail",
+        "unknownCanonicalIdReturns404ProblemDetail",
+        "anonymousCanonicalIdReturnsDetailDto"
+      ]
+    },
+    {
+      "class": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.converter.ProductCatalogConverterTest.xml",
+      "reportSHA256": "6e0b48a0f1eddd3e60f9a7cba03f45249210b740f75c8cc102fbe397a0da7773",
+      "testCases": [
+        "singleVariantEmptyOptionsAndNoImagesRemainRepresentable",
+        "summaryContainsOnlyApprovedFieldsAndImmediateCategory",
+        "detailMapsEachVariantAndImageOnceUsingOnlySuppliedUrls"
+      ]
+    },
+    {
+      "class": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+      "counts": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.service.ProductCatalogServiceImplTest.xml",
+      "reportSHA256": "51e953cac44ee9fdfb198cc72d6ddfc4f5ef81b5de896530cbe8c554f47c3518",
+      "testCases": [
+        "getProductSummaries_shouldExcludeLateHiddenProduct_whenFinalRevalidationFails",
+        "getPublishedProductEntity_shouldRejectUnavailableProduct_whenNotPublicOrMissing",
+        "getProductSummaries_shouldPropagateSafeFailure_whenSignerPreparationFails",
+        "getProductSummaries_shouldReturnNullImageWithoutDetailFetch_whenProductHasNoImage",
+        "getProductSummaries_shouldNotSignUnpublishedImage_whenLockedStatusChanged",
+        "getPublishedProductEntity_shouldReturnReference_whenPublished",
+        "getProductSummaries_shouldReturnSignedSummary_whenLockedProductIsPublished",
+        "getProductSummaries_shouldAvoidFetching_whenInputIsEmpty",
+        "getProductSummaries_shouldRejectUnboundedInput_whenMoreThanOneHundredIds"
+      ]
+    },
+    {
+      "class": "com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest.xml",
+      "reportSHA256": "d64709ca684e99ace874f9b795e256ef4261936b41318402cb2a62f9ee2d4282",
+      "testCases": [
+        "validate_shouldAcceptKnownFalseAndTypedQuantities",
+        "validate_shouldRejectUnknownVersionMissingEnvelopeAndInvalidValues"
+      ]
+    }
+  ],
+  "sourceSHA256": {
+    "demo/src/main/java/com/example/demo/catalog/search/ProductSearchNormalizer.java": "a4538c4efb61347a01a82337b4e1598f5f43f1846b475a833ffbfd5df472efaa",
+    "demo/src/main/java/com/example/demo/catalog/search/ProductSearchSort.java": "74d9ed229d8b061f09149b14c00cbb8e7c214f3d03bb6b637a5b3ab22f8a362d",
+    "demo/src/main/java/com/example/demo/catalog/search/ProductSearchCriteria.java": "bee78245f6f229ef240ff7bf9a6547a2fdea7f21768d7a1ca36a8385040bf6a0",
+    "demo/src/main/java/com/example/demo/catalog/dto/request/ProductSearchRequest.java": "fda31b79e32ecaaf4ca6cdfa416d4e13e7d8ff5a314033c6aef58529b9a3015f",
+    "demo/src/test/java/com/example/demo/catalog/search/ProductSearchNormalizerTest.java": "d4ef70ce830de8bf3375f6cb8cdc38dd1a7e98fb99aefab30f797e581121b29c",
+    "demo/src/test/java/com/example/demo/catalog/validator/ProductSearchRequestTest.java": "557f1aed9d2bb71d35a38398ada6635da4c97cb052b422fb2edfbe27c53798ea",
+    "demo/src/test/resources/catalog/search/normalization-cases.json": "5542c51cbb58420de08745e714d9b482b829aebe7201defa95ea15a584b84bd6"
+  },
+  "limits": "selected unit/MVC tests only;no repository/integration/performance or SQL normalization evidence"
+}

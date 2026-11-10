@@ -1,0 +1,176 @@
+{
+  "tasks": [
+    "T012",
+    "T013",
+    "T017"
+  ],
+  "capturedUTC": "2026-11-08T19:26:31.859865+00:00",
+  "branch": "features/SearchAndFilter",
+  "head": "c5bd4e7eeb39d9b06a0c7e36af9a65635058613f",
+  "dirtyWorktree": true,
+  "testCommand": "mvn -o -f demo/pom.xml -Dtest=ProductSearchParameterParserTest,ProductSearchNormalizerTest,ProductSearchRequestTest,ProductCatalogConverterTest,ProductListingControllerTest,ProductDetailControllerTest,ProductCatalogServiceImplTest,WishlistConverterTest test",
+  "exitCode": 0,
+  "totals": {
+    "tests": 50,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "class": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+      "counts": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "legacyDefaultsAndRepeatedBrandsPreserveCompatibility",
+        "rejectsUnknownNullAndDuplicateSingletonParameters",
+        "validatesKeywordsAndSortWithoutSelectingAnyResults",
+        "enforcesLexicalAndNumericBoundsBeforeConversion",
+        "rawGroupAlternativeLimitsAndDuplicateKeysAreNotHiddenByDeduplication",
+        "acceptsAllTypedOperatorShapesAndPreservesExactDecimals",
+        "rejectsDuplicateMembersAtEachLevelEvenWhenValuesAgree",
+        "rejectsMalformedStructuresUnknownFieldsAndExplicitNulls",
+        "decodesTransportExactlyOnceAndLeavesOtherMappersUnchanged",
+        "rejectsBadOperatorShapesAndPrecisionWithoutRegistryApproval"
+      ],
+      "xmlSHA256": "0acfb470054645c44bd8037f8635478fb3b49ba1011a997603a22ed2ea3b4749"
+    },
+    {
+      "class": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+      "counts": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "matchesDocumentedD2GoldenCases",
+        "nfcNfdAndVietnameseMarksHaveSameNormalization",
+        "limitsRawTokensBeforeDeduplication",
+        "queryLengthCountsUnicodeCodePointsBeforeNormalization",
+        "doesNotApplyQueryLimitsToCandidateFieldsOrInventVocabulary",
+        "deduplicatesMembershipButKeepsPhraseAndSequence",
+        "consumesExactlyTheDocumentedUnicodeWhitespace",
+        "rejectsControlsAndNonblankZeroTokensButBlankIsOmitted",
+        "lowercaseDoesNotDependOnHostLocale"
+      ],
+      "xmlSHA256": "995540250506bcc454601e0cc6b4da927040a61e1dc8185a2db7a18103a4bc1e"
+    },
+    {
+      "class": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+      "counts": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "fixedSortValuesAndCriteriaRetainExactAmounts",
+        "omittedValuesKeepLegacyDefaultsButExplicitNullIsInvalid",
+        "textBooleanAndDecodedJsonHaveDocumentedBounds",
+        "nestedGroupsAndAlternativesEnforceShapeAndLimits",
+        "exactPriceAmountsHaveThirtyDigitBoundWithoutDoubleCoercion",
+        "numericOperandsAreExactAndPrecisionBoundedIncludingExponentNotation",
+        "uuidAndRawCollectionBoundsArePreservedBeforeDeduplication",
+        "rangesAndExplicitNullOperandMembersKeepTheirPresenceSemantics",
+        "pageSizeAndKeywordBoundariesAreValidated"
+      ],
+      "xmlSHA256": "6e84a660282e619e618ace594c0ff629319c773e14b0dc62522c9c37e84831d6"
+    },
+    {
+      "class": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+      "counts": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "singleVariantEmptyOptionsAndNoImagesRemainRepresentable",
+        "listingMapsOnlySelectedPairAndKeepsSharedSummaryUnchanged",
+        "summaryContainsOnlyApprovedFieldsAndImmediateCategory",
+        "orphanListingHasExplicitNullPairAndMixedPairsAreRejected",
+        "detailMapsEachVariantAndImageOnceUsingOnlySuppliedUrls"
+      ],
+      "xmlSHA256": "86b967681f116057e9bded1072518424aa986230d1ecdc8b470d100c9e6deb49"
+    },
+    {
+      "class": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "acceptsSizeBoundaryValues",
+        "rejectsInvalidDuplicateAndUnapprovedParametersAsProblemDetail",
+        "anonymousDefaultAndOutOfRangePagesUseCanonicalResponse"
+      ],
+      "xmlSHA256": "79db5b83ae4a134186aa5f0bbeb2ce19c64ad25c4cc90ace3aea4d211597b0f9"
+    },
+    {
+      "class": "com.example.demo.catalog.controller.ProductDetailControllerTest",
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "invalidAndNoncanonicalIdsReturn400ProblemDetail",
+        "unknownCanonicalIdReturns404ProblemDetail",
+        "anonymousCanonicalIdReturnsDetailDto"
+      ],
+      "xmlSHA256": "10fcb77d2bcf19bcf0105f4be8666cb3b31ecef893afd091d985538b2a88c630"
+    },
+    {
+      "class": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+      "counts": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "getProductSummaries_shouldExcludeLateHiddenProduct_whenFinalRevalidationFails",
+        "getPublishedProductEntity_shouldRejectUnavailableProduct_whenNotPublicOrMissing",
+        "getProductSummaries_shouldPropagateSafeFailure_whenSignerPreparationFails",
+        "getProductSummaries_shouldReturnNullImageWithoutDetailFetch_whenProductHasNoImage",
+        "getProductSummaries_shouldNotSignUnpublishedImage_whenLockedStatusChanged",
+        "getPublishedProductEntity_shouldReturnReference_whenPublished",
+        "getProductSummaries_shouldReturnSignedSummary_whenLockedProductIsPublished",
+        "getProductSummaries_shouldAvoidFetching_whenInputIsEmpty",
+        "getProductSummaries_shouldRejectUnboundedInput_whenMoreThanOneHundredIds"
+      ],
+      "xmlSHA256": "d974c499456cc7f07774c43974b0e3f1cc673dafe11595f2d6dae9f7bae14a03"
+    },
+    {
+      "class": "com.example.demo.wishlist.converter.WishlistConverterTest",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "toItem_shouldPreservePreparedSummaryAndTimestamp_whenImageIsAbsent",
+        "toPage_shouldPreserveOrderAndMetadataWithoutMutableAlias_whenItemsArePrepared"
+      ],
+      "xmlSHA256": "ff41518b430593c4d76e397c915ecb699957b3b7632035f58fa228b88200de1c"
+    }
+  ],
+  "sourceSHA256": {
+    "demo/src/main/java/com/example/demo/catalog/search/ProductSearchParameterParser.java": "0a32051811011144a0f3bf1adc44a8bbf4037c9fb614b338caea48cd26b74034",
+    "demo/src/main/java/com/example/demo/catalog/dto/response/ProductListingItem.java": "a66c4c6f616eee44a7823f38c88f526ded680b676affd3ba578c4145578070f4",
+    "demo/src/main/java/com/example/demo/catalog/dto/response/ProductPage.java": "e73cf22660facf517d2b5570e6a60e5ac08d774f32c15d66b55afa106980c719",
+    "demo/src/main/java/com/example/demo/catalog/converter/ProductCatalogConverter.java": "f7fff87794918ff0ae01001eafa1595e36f0379dffa67292bcce33cbc82b8161",
+    "demo/src/test/java/com/example/demo/catalog/search/ProductSearchParameterParserTest.java": "c4587d45d5bd36d6fa39a099dd5a7d7e4750eedfa55ecebd9099d53f7b82a558",
+    "demo/src/test/java/com/example/demo/catalog/converter/ProductCatalogConverterTest.java": "5591e94609b650b8112840fced5d3f8b748f62ead56a52149812376a8ce3eea9"
+  },
+  "scope": "selected unit/MVC regression only;no endpoint search wiring/full integration/performance acceptance"
+}

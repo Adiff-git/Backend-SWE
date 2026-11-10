@@ -1,0 +1,255 @@
+{
+  "command": "mvn -o -f demo/pom.xml -Dtest=ProductKeywordSearchServiceImplTest,ProductCatalogServiceImplTest,ProductDetailControllerTest,ProductCatalogConverterTest,ProductSearchParameterParserTest,ProductSearchRequestTest,ProductSearchNormalizerTest,TechnicalSpecificationValidatorTest,CatalogSecurityBaselineTest,WishlistServiceImplTest,WishlistConverterTest,WishlistControllerTest -Djunit.jupiter.execution.parallel.enabled=false test",
+  "exitCode": 0,
+  "totals": {
+    "tests": 109,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.service.ProductKeywordSearchServiceImplTest.xml",
+      "reportSHA256": "7ce0c393139431700e01a0c27f54173d1bc834c2ab9a40bcf45f3c8f4f9f65fb",
+      "name": "com.example.demo.catalog.service.ProductKeywordSearchServiceImplTest",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        "listProducts_shouldFollowCandidateOrder_whenBatchRowsArriveInDifferentOrder",
+        "listProducts_shouldAvoidLocksAndRetry_whenSignerPreparationFails",
+        "listProducts_shouldMapCheapestEligibleProjection_whenKeywordIsProductOnly",
+        "listProducts_shouldKeepPairedNullMetadata_whenRepositoryReturnsSharedOnlyOrphan",
+        "listProducts_shouldPrepareThenLockAndSignOnlyPublishedCandidate_whenStatusChanges",
+        "listProducts_shouldKeepCostlierSkuEligibleVariant_insteadOfReloadingCheapestOverall",
+        "listProducts_shouldCloseSignerAndPropagateFailure_whenLocalSigningFails",
+        "listProducts_shouldNormalizeAndDeduplicateMembership_withoutLosingPhraseSequence"
+      ]
+    },
+    {
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.service.ProductCatalogServiceImplTest.xml",
+      "reportSHA256": "1d5f537d66e68dd449aa3162365c6fa660bd672809fed38a915e4f1a5e00490e",
+      "name": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+      "tests": "15",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        "getProductSummaries_shouldExcludeLateHiddenProduct_whenFinalRevalidationFails",
+        "getPublishedProductEntity_shouldRejectUnavailableProduct_whenNotPublicOrMissing",
+        "getProductSummaries_shouldPropagateSafeFailure_whenSignerPreparationFails",
+        "listingValidatesDirectRequestsAndForwardsCriteriaWithoutActivatingFilters",
+        "listingPreparesSignerBeforeLocksAndSuppressesLateHiddenProduct",
+        "getProductSummaries_shouldReturnNullImageWithoutDetailFetch_whenProductHasNoImage",
+        "getProductSummaries_shouldNotSignUnpublishedImage_whenLockedStatusChanged",
+        "getPublishedProductEntity_shouldReturnReference_whenPublished",
+        "listingEmptyLaterPageRetainsSnapshotCountWithoutBatchLoads",
+        "getProductSummaries_shouldReturnSignedSummary_whenLockedProductIsPublished",
+        "listingUsesSelectedMetadataAndQueryOrderWithBatchedLoading",
+        "getProductSummaries_shouldAvoidFetching_whenInputIsEmpty",
+        "listingSuppressesProductHiddenDuringBatchLoading",
+        "getProductSummaries_shouldRejectUnboundedInput_whenMoreThanOneHundredIds",
+        "listingSignerPreparationFailureDoesNotTakeLocks"
+      ]
+    },
+    {
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.controller.ProductDetailControllerTest.xml",
+      "reportSHA256": "881de6779dfb8950fbd792dc9d078bf86b80e66db4f23d0193b5d8bcc75f8685",
+      "name": "com.example.demo.catalog.controller.ProductDetailControllerTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        "invalidAndNoncanonicalIdsReturn400ProblemDetail",
+        "unknownCanonicalIdReturns404ProblemDetail",
+        "anonymousCanonicalIdReturnsDetailDto"
+      ]
+    },
+    {
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.converter.ProductCatalogConverterTest.xml",
+      "reportSHA256": "b880c300edecd83e6c6a17396117f53e3409a6568aa6fa339174485203299ac3",
+      "name": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        "singleVariantEmptyOptionsAndNoImagesRemainRepresentable",
+        "listingMapsOnlySelectedPairAndKeepsSharedSummaryUnchanged",
+        "summaryContainsOnlyApprovedFieldsAndImmediateCategory",
+        "orphanListingHasExplicitNullPairAndMixedPairsAreRejected",
+        "detailMapsEachVariantAndImageOnceUsingOnlySuppliedUrls"
+      ]
+    },
+    {
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.search.ProductSearchParameterParserTest.xml",
+      "reportSHA256": "22fb35557cdb8eba284f8c1dad65ddea88311191f10934e10ca14dd1850e566a",
+      "name": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        "legacyDefaultsAndRepeatedBrandsPreserveCompatibility",
+        "rejectsUnknownNullAndDuplicateSingletonParameters",
+        "validatesKeywordsAndSortWithoutSelectingAnyResults",
+        "enforcesLexicalAndNumericBoundsBeforeConversion",
+        "rawGroupAlternativeLimitsAndDuplicateKeysAreNotHiddenByDeduplication",
+        "acceptsAllTypedOperatorShapesAndPreservesExactDecimals",
+        "rejectsDuplicateMembersAtEachLevelEvenWhenValuesAgree",
+        "rejectsMalformedStructuresUnknownFieldsAndExplicitNulls",
+        "decodesTransportExactlyOnceAndLeavesOtherMappersUnchanged",
+        "rejectsBadOperatorShapesAndPrecisionWithoutRegistryApproval"
+      ]
+    },
+    {
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.validator.ProductSearchRequestTest.xml",
+      "reportSHA256": "d28470b17fbb3d4f5cfe77253bc24fce0b4ac313b4a45ac88f47a015332078f4",
+      "name": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        "fixedSortValuesAndCriteriaRetainExactAmounts",
+        "omittedValuesKeepLegacyDefaultsButExplicitNullIsInvalid",
+        "textBooleanAndDecodedJsonHaveDocumentedBounds",
+        "nestedGroupsAndAlternativesEnforceShapeAndLimits",
+        "exactPriceAmountsHaveThirtyDigitBoundWithoutDoubleCoercion",
+        "numericOperandsAreExactAndPrecisionBoundedIncludingExponentNotation",
+        "uuidAndRawCollectionBoundsArePreservedBeforeDeduplication",
+        "rangesAndExplicitNullOperandMembersKeepTheirPresenceSemantics",
+        "pageSizeAndKeywordBoundariesAreValidated"
+      ]
+    },
+    {
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.search.ProductSearchNormalizerTest.xml",
+      "reportSHA256": "a69d559080f553a1d0f08278a938a8cdc7191efe870f481ca840e5b642897182",
+      "name": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        "matchesDocumentedD2GoldenCases",
+        "nfcNfdAndVietnameseMarksHaveSameNormalization",
+        "limitsRawTokensBeforeDeduplication",
+        "queryLengthCountsUnicodeCodePointsBeforeNormalization",
+        "doesNotApplyQueryLimitsToCandidateFieldsOrInventVocabulary",
+        "deduplicatesMembershipButKeepsPhraseAndSequence",
+        "consumesExactlyTheDocumentedUnicodeWhitespace",
+        "rejectsControlsAndNonblankZeroTokensButBlankIsOmitted",
+        "lowercaseDoesNotDependOnHostLocale"
+      ]
+    },
+    {
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest.xml",
+      "reportSHA256": "2cc2891b56b0842b3c016b1f22f11d8365ba7e072926ec1671fd319c9e6726f4",
+      "name": "com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        "validate_shouldAcceptKnownFalseAndTypedQuantities",
+        "validate_shouldRejectUnknownVersionMissingEnvelopeAndInvalidValues"
+      ]
+    },
+    {
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.controller.CatalogSecurityBaselineTest.xml",
+      "reportSHA256": "7902cc4594d1ebb6d21ca7056f171ff66ede1e73b82e792f4837c028eb4e60b8",
+      "name": "com.example.demo.catalog.controller.CatalogSecurityBaselineTest",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        "mockAdministratorCannotAttachWithoutVerifiedJwt",
+        "customerAttachmentReceivesFilterChain403",
+        "anonymousAttachmentReceivesFilterChain401",
+        "sharedCorsAllowsArbitraryOriginsAndPreflightMethods",
+        "anonymousCatalogReadsArePermitted",
+        "mvcAdviceHandlesSafeApplicationFailuresSeparately"
+      ]
+    },
+    {
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.wishlist.service.WishlistServiceImplTest.xml",
+      "reportSHA256": "eae815dc090fbcdf120cbc89a6e8faa2f73fb29a00eaa1e3099376d5d67459b1",
+      "name": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        "addProduct_shouldReturnCreatedItem_whenFirstInsertionSucceeds",
+        "addProduct_shouldRejectLateHiddenProduct_whenSummaryIsUnavailable",
+        "removeProduct_shouldRejectUntrustedOwner_whenIdentityIsAbsent",
+        "addProduct_shouldSurfaceSafeSigningFailure_whenPreparationFails",
+        "addProduct_shouldReportConflict_whenWinningMembershipWasRemoved",
+        "addProduct_shouldRejectMissingCurrentAccount_whenUserDisappears",
+        "addProduct_shouldPreserveOriginalTime_whenDuplicateIsIgnored",
+        "addProduct_shouldRejectUnavailableProductBeforeInsert_whenHiddenOrMissing",
+        "removeProduct_shouldDeleteOnlyOwnedReferenceWithoutCatalogLookup_whenEntryIsHiddenOrMissing"
+      ]
+    },
+    {
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.wishlist.converter.WishlistConverterTest.xml",
+      "reportSHA256": "802f8c68dda1e06a0ec8736603271bca8fe2ae9c783feaf00886f545f8083409",
+      "name": "com.example.demo.wishlist.converter.WishlistConverterTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        "toItem_shouldPreservePreparedSummaryAndTimestamp_whenImageIsAbsent",
+        "toPage_shouldPreserveOrderAndMetadataWithoutMutableAlias_whenItemsArePrepared"
+      ]
+    },
+    {
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.wishlist.controller.WishlistControllerTest.xml",
+      "reportSHA256": "e87874c73f687fd7fd7e4a978bb034dbd08676cc04bb083d22bb91b7e25b2420",
+      "name": "com.example.demo.wishlist.controller.WishlistControllerTest",
+      "tests": "31",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "cases": [
+        "removeProduct_shouldEnforcePermissionAndInputContract_whenRequestIsInvalid",
+        "addProduct_shouldRetainBearerChallenge_whenCurrentUserDisappearsAfterAuthentication",
+        "addProduct_shouldRejectOwnerSelectionAndMissingPermission_whenUnauthorized",
+        "removeProduct_shouldReturnEmptySuccess_whenOwnedOrAbsent",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[1]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[2]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[3]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[4]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[5]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[6]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[7]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[8]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[9]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[10]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[11]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[12]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[13]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[14]",
+        "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[15]",
+        "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[1]",
+        "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[2]",
+        "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[3]",
+        "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[4]",
+        "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[5]",
+        "listWishlist_shouldAcceptSizeBoundsAndBeyondLastPage_whenQueryIsValid",
+        "listWishlist_shouldUseDefaultsAndEmptyPageContract_whenParametersAreOmitted",
+        "addProduct_shouldRejectInvalidIdentifier_whenNotCanonical(String)[1]",
+        "addProduct_shouldRejectInvalidIdentifier_whenNotCanonical(String)[2]",
+        "addProduct_shouldRejectInvalidIdentifier_whenNotCanonical(String)[3]",
+        "addProduct_shouldPreserveProblemDetails_whenDomainFails",
+        "addProduct_shouldReturnOneItemWithCorrectStatus_whenCreatedOrDuplicate"
+      ]
+    }
+  ],
+  "selectionBoundary": "T020 controller class executed separately with its original4 baseline tests plus new contract tests:15 green/2 expected RED. It is not included in this separately named green regression run;no claim that complete test suite is green. No disabled/skipped tests.",
+  "notExecuted": "No integration rerun:T019 remains historical G1 receipt;no production or SQL changes in this task"
+}

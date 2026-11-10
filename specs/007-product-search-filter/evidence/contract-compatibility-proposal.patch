@@ -1,0 +1,25 @@
+--- a/specs/007-product-search-filter/contracts/openapi.yaml
++++ b/specs/007-product-search-filter/contracts/openapi.yaml
+@@ -279,6 +279,7 @@
+           $ref: '#/components/schemas/Uuid'
+         name:
+           type: string
++          minLength: 1
+     ProductListingItem:
+       type: object
+       additionalProperties: false
+@@ -294,12 +295,14 @@
+           $ref: '#/components/schemas/Uuid'
+         name:
+           type: string
++          minLength: 1
+         category:
+           $ref: '#/components/schemas/CategorySummary'
+         primaryImageUrl:
+           type:
+           - string
+           - 'null'
++          format: uri
+           description: Existing nullable signed image URL, valid at most five minutes.
+         displayPrice:
+           oneOf:

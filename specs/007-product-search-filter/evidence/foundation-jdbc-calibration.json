@@ -1,0 +1,8 @@
+{
+  "scenario": "jdbc-calibration",
+  "dataStatements": 2,
+  "sql": [
+    "SELECT 1",
+    "SELECT 2"
+  ]
+}

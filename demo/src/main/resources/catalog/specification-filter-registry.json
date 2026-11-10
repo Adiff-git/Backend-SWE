@@ -1,0 +1,88 @@
+{
+  "version": "specification-registry-v1",
+  "approvalReference": "Owner mission;registry-approval.json",
+  "documentSchemaVersion": 1,
+  "definitions": [
+    {
+      "key": "display_diagonal",
+      "type": "quantity",
+      "unit": "inch",
+      "categoryRoots": [
+        "Laptop",
+        "Tablet"
+      ],
+      "operators": [
+        "eq",
+        "gt",
+        "gte",
+        "lt",
+        "lte",
+        "between"
+      ],
+      "searchable": true,
+      "filterable": true,
+      "identifier": false,
+      "approval": "APPROVED_BY_PROJECT_OWNER"
+    },
+    {
+      "key": "physical_ram",
+      "type": "quantity",
+      "unit": "GB",
+      "categoryRoots": [
+        "Laptop"
+      ],
+      "operators": [
+        "eq",
+        "gt",
+        "gte",
+        "lt",
+        "lte",
+        "between"
+      ],
+      "searchable": true,
+      "filterable": true,
+      "identifier": false,
+      "approval": "APPROVED_BY_PROJECT_OWNER"
+    },
+    {
+      "key": "installed_storage_gb",
+      "type": "quantity",
+      "unit": "GB",
+      "categoryRoots": [
+        "Laptop"
+      ],
+      "operators": [
+        "eq",
+        "gt",
+        "gte",
+        "lt",
+        "lte",
+        "between"
+      ],
+      "searchable": true,
+      "filterable": true,
+      "identifier": false,
+      "approval": "APPROVED_BY_PROJECT_OWNER"
+    },
+    {
+      "key": "display_resolution",
+      "type": "text",
+      "unit": null,
+      "categoryRoots": [
+        "Laptop"
+      ],
+      "operators": [
+        "eq",
+        "prefix",
+        "contains"
+      ],
+      "searchable": true,
+      "filterable": true,
+      "identifier": false,
+      "approval": "APPROVED_BY_PROJECT_OWNER"
+    }
+  ],
+  "deferredKeys": [
+    "battery_capacity_mah"
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "tasks": [
+    "T020",
+    "T022"
+  ],
+  "changedPreexistingFiles": [
+    "demo/src/test/java/com/example/demo/catalog/controller/ProductListingControllerTest.java",
+    "specs/007-product-search-filter/tasks.md"
+  ],
+  "newFiles": [
+    "demo/src/test/java/com/example/demo/catalog/service/ProductKeywordSearchServiceImplTest.java",
+    "specs/007-product-search-filter/evidence/keyword-contract-results.json",
+    "specs/007-product-search-filter/evidence/keyword-foundation-regression-output.txt",
+    "specs/007-product-search-filter/evidence/keyword-service-test-output.txt",
+    "specs/007-product-search-filter/evidence/keyword-service-verification.md",
+    "specs/007-product-search-filter/evidence/keyword-foundation-regression-results.json",
+    "specs/007-product-search-filter/evidence/keyword-contract-test-output.txt",
+    "specs/007-product-search-filter/evidence/keyword-service-results.json",
+    "specs/007-product-search-filter/evidence/keyword-contract-verification.md"
+  ],
+  "sourceHashes": {
+    "demo/src/test/java/com/example/demo/catalog/controller/ProductListingControllerTest.java": "2c3f1a5fc4613c66467757f39545013777185693cdb5dfcd0a0234c57ece6eaa",
+    "specs/007-product-search-filter/tasks.md": "2b938727564578cf42a4681a44d74cbe441c5f0522272197fb2e10930b2749ae",
+    "demo/src/test/java/com/example/demo/catalog/service/ProductKeywordSearchServiceImplTest.java": "c31f833312b51adda9513129eb93ab3be9bce842d160875de0fe915d7f580e66",
+    "specs/007-product-search-filter/evidence/keyword-contract-results.json": "f465242529221d5d0f5176637207b01ad741b809b6db0b34613a83cf7cf8982e",
+    "specs/007-product-search-filter/evidence/keyword-foundation-regression-output.txt": "3aef8476e793f39b2634b5ab3d7b434da2f1d02761864943b11574866c0a9323",
+    "specs/007-product-search-filter/evidence/keyword-service-test-output.txt": "09ef87fc09f45a83bd6d218acde1ca033afbf6c37bc72c7f4f607577b3cfb6d7",
+    "specs/007-product-search-filter/evidence/keyword-service-verification.md": "4bf42989a3cb4b6ff76dd55c6f42ff7a8319a98e66b49f6b6b58dcee23621220",
+    "specs/007-product-search-filter/evidence/keyword-foundation-regression-results.json": "ae24fdcf58b49a5ce4f3af381c65432da14a3fb021eefdabe9d87d7e2a2fd5cb",
+    "specs/007-product-search-filter/evidence/keyword-contract-test-output.txt": "142925a3c414603751bb1f26fe7a0837e50ffbcf02a99658d04fe5aa05125dc9",
+    "specs/007-product-search-filter/evidence/keyword-service-results.json": "f13663b1487c4a0fb5eace588b10d1aad1a8ad6eb3054655fcba3a30a42a6793",
+    "specs/007-product-search-filter/evidence/keyword-contract-verification.md": "cdbef242b9c56e84c6640832850946bce17f01da596dd8945ae61dcc5be4a4b6"
+  },
+  "applicationCodeUnchanged": true,
+  "migrationsV1ToV15Unchanged": true,
+  "BrandSpecificationsDetailWishlistChangesPreserved": true,
+  "previousEvidenceUnchanged": true,
+  "checklistMarkersUnchanged": true,
+  "sequentialWriteSetReviewRecorded": true,
+  "completedTasks": [
+    "T001",
+    "T002",
+    "T006",
+    "T007",
+    "T009",
+    "T010",
+    "T011",
+    "T012",
+    "T013",
+    "T015",
+    "T016",
+    "T017",
+    "T018",
+    "T019",
+    "T020",
+    "T022"
+  ],
+  "noNewApplicationCodingTaskReady": true,
+  "remainingApprovalTasks": [
+    "T003",
+    "T004"
+  ],
+  "testSuiteState": "T020:17 tests15 green2 verified RED;T0228 green;separate109-test regression green. Complete suite NOT claimed green.",
+  "extensionHooks": "No extensions.yml before/after;none to execute",
+  "noCommitPushOrDatabaseAccess": true
+}

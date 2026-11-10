@@ -1,0 +1,75 @@
+{
+  "task": "T006",
+  "status": "BLOCKED",
+  "tools": {
+    "PyYAML": "6.0.3",
+    "jsonschema": "4.26.0"
+  },
+  "contractSHA256": "1ea2e2aa9d9586522fbd2884e2a153c0089492f031ef5a314f710746abe35c76",
+  "schemaCases": [
+    {
+      "case": "quantity_shape_only",
+      "expectedValid": true,
+      "schemaValid": true
+    },
+    {
+      "case": "empty",
+      "expectedValid": false,
+      "schemaValid": false
+    },
+    {
+      "case": "null",
+      "expectedValid": false,
+      "schemaValid": false
+    },
+    {
+      "case": "unsupported_op",
+      "expectedValid": false,
+      "schemaValid": false
+    },
+    {
+      "case": "extra_member",
+      "expectedValid": false,
+      "schemaValid": false
+    },
+    {
+      "case": "boolean_shape",
+      "expectedValid": true,
+      "schemaValid": true
+    },
+    {
+      "case": "text_shape",
+      "expectedValid": true,
+      "schemaValid": true
+    },
+    {
+      "case": "paired_null",
+      "expectedValid": true,
+      "schemaValid": true
+    },
+    {
+      "case": "paired_real",
+      "expectedValid": true,
+      "schemaValid": true
+    },
+    {
+      "case": "mixed_pair",
+      "expectedValid": false,
+      "schemaValid": false
+    }
+  ],
+  "urlEncodedExample": "categoryId=00000000-0000-0000-0000-000000000001&specFilters=%5B%7B%22key%22%3A%22physical_ram%22%2C%22alternatives%22%3A%5B%7B%22op%22%3A%22gte%22%2C%22value%22%3A16%2C%22unit%22%3A%22GB%22%7D%5D%7D%5D",
+  "decodedExample": {
+    "categoryId": [
+      "00000000-0000-0000-0000-000000000001"
+    ],
+    "specFilters": [
+      "[{\"key\":\"physical_ram\",\"alternatives\":[{\"op\":\"gte\",\"value\":16,\"unit\":\"GB\"}]}]"
+    ]
+  },
+  "staticSchemaChecks": 12,
+  "fullOpenAPIValidator": null,
+  "localRefsResolved": 19,
+  "reproductionCommand": "python3 specs/007-product-search-filter/evidence/validate-contract-partial.py",
+  "reproductionExitCode": 0
+}

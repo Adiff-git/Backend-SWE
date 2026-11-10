@@ -94,6 +94,12 @@ class ProductDetailControllerTest {
 
 	static class StubService implements ProductCatalogService {
         @Override
+        public com.example.demo.catalog.dto.response.ProductPage listProducts(
+                com.example.demo.catalog.dto.request.ProductSearchRequest request) {
+            return listProducts(request.getPage(), request.getSize());
+        }
+
+        @Override
         public com.example.demo.catalog.entity.Product getPublishedProductEntity(java.util.UUID id) {
             throw new UnsupportedOperationException();
         }
@@ -119,8 +125,9 @@ class ProductDetailControllerTest {
 				throw new ProductNotFoundException();
 			}
 			return new ProductDetail(id, "Product", new CategorySummary(UUID.randomUUID(), "Category"),
-					null, "Description", List.of(new VariantSummary(UUID.randomUUID(), "SKU-1",
-						Map.of(), new SellingPrice(BigInteger.valueOf(1000), "VND"))), List.of());
+					null, "Description", null, List.of(new VariantSummary(UUID.randomUUID(), "SKU-1",
+						Map.of(), new SellingPrice(BigInteger.valueOf(1000), "VND"),
+						Map.of("schema_version", 1, "values", Map.of()))), List.of());
 		}
 	}
 }

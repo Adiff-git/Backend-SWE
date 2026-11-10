@@ -1,0 +1,1191 @@
+{
+  "version": "approval-resolution-v2-2026-11-09",
+  "approvalState": "USER_POLICY_DECISIONS_RECORDED;TASK_COMPLETION_AND_RUNTIME_ACTIVATION_BLOCKED",
+  "reviewerDecisionSource": "Current explicit user instruction;not agent self-approval",
+  "reviewerName": null,
+  "formalSignoffReference": null,
+  "predecessor": {
+    "version": "approval-resolution-review-v1-2026-11-09",
+    "sha256": "096ec4ca972303ae03a8fec11a58c89cb82d93de474586e94ff1824f7c8e00f9",
+    "canonicalPayload": {
+      "version": "approval-resolution-review-v1-2026-11-09",
+      "approval": null,
+      "preserveIdentifierCounts": [
+        19,
+        6,
+        21
+      ],
+      "sources": {
+        "vocabulary": "a63b535518041fd2012b0a98b171c152f0231286d6dd4f739fe689af40af5ec0",
+        "matrix": "930c8385693d25c6edc012cbc08fbad60fdf7d4742bbb448ee4a1a3ae120b501",
+        "cases": "d69627c35a87507b7a9b42610f984bd882d58d35b11e2db034e070ad6b4813f5",
+        "results": "5578ddc1f3c9ae79446dc56e51635e8a855a66f155e537a613a6754528b7fdaa",
+        "products": "6c5dead52ce5691a3277126ff8ee9c588da70e085dae095b4e2bd0bb829e74b9",
+        "specifications": "b74cbdd2c2f15d415280a17352ed4025dc126d89fae19b1201a4d579d7b2506d",
+        "categories": "48f1dc636587c15779c68928898b43b940ee181eafa51648b699fe852ef8cb40"
+      },
+      "grammar": {
+        "basis": "D2 normalized contiguous token sequences;no identifier rewrite,stemming,aliasing,field crossing or wildcard expansion;classify query and candidate separately;no model rank from contextual spans",
+        "pro": [
+          "iphone {11,12,13,14} pro",
+          "ipad pro",
+          "microsoft surface pro",
+          "redmi note {8,9} pro",
+          "redmi note8 pro",
+          "huawei {p20,p30} pro",
+          "oneplus 10 pro",
+          "iphone pro [synthetic review span]"
+        ],
+        "plus": [
+          "galaxy {s8,s9,s20+,s21+} plus",
+          "chromebook plus",
+          "moto e7 plus",
+          "lg k22+ plus",
+          "tab {m10,p11} plus",
+          "iphone 14 plus",
+          "galaxy plus [synthetic review span]"
+        ],
+        "max": [
+          "iphone {11,12,13,14} pro max",
+          "iphone xs max",
+          "walkerfit m2 max",
+          "iphone pro max [synthetic review span]"
+        ],
+        "core": [
+          "intel core",
+          "galaxy a03 core"
+        ],
+        "otherContextTerms": "Existing matrix unchanged;nonlisted spans outside verified v1 coverage;generic pro/plus/max/core not global model identifiers"
+      },
+      "decisions": [
+        {
+          "id": "V1",
+          "rule": "Four finite context grammars above",
+          "scope": "Only listed D2 spans;synthetic spans labelled review-only;no automatic model ownership",
+          "evidence": "Actual Product Names and matrix positive witnesses",
+          "limitations": "Bounded coverage;not all observed mentions or future models",
+          "reviewerDecision": "Accept literal grammar and bounded coverage,or enumerate revisions before sign-off"
+        },
+        {
+          "id": "V2",
+          "rule": "All19 exact family tokens including chromebook excluded from fuzzy in query and candidate regardless of device brand",
+          "scope": "Fuzzy protection only;no family MODEL7",
+          "evidence": "19 family evidence entries;Chromebook used across brands",
+          "limitations": "Homonym and spelling-recall loss;no measured recall estimate",
+          "reviewerDecision": "Accept conservative recall trade-off;brand context is required for future ownership claims,not this fuzzy exclusion"
+        },
+        {
+          "id": "V3",
+          "rule": "Six model anchors stay source-ASIN scoped;no inferred canonical Product ownership",
+          "scope": "Only six existing matrix anchor pairs",
+          "evidence": "Exact source title occurrences;target DB not established",
+          "limitations": "ASIN/proposed UUID not target ownership proof",
+          "reviewerDecision": "Approve source-scoped anchors;require canonical ownership reconciliation before runtime promotion"
+        },
+        {
+          "id": "V4",
+          "rule": "MODEL7 requires signed anchor,whole normalized original query equality,proven current owner and PUBLISHED eligibility under same-variant/D7 rules;variant-bound anchors require eligible owned variant",
+          "scope": "No aliases,typo matches,family/unit/modifier or accessory target promotion;D7 only Product-bound anchor and shared matches",
+          "evidence": "R3/D7 and six source anchors",
+          "limitations": "No live ranking/classifier executed",
+          "reviewerDecision": "Accept exact conditions;SKU7 remains independent exact eligible canonical SKU rule"
+        },
+        {
+          "id": "V5",
+          "rule": "All30 cases reviewed against proposed rules;recorded16 primitive passes and14 source/proposal checks;zero actual classifier/ranking cases",
+          "scope": "No claim of30 runtime passes",
+          "evidence": "Draft16/review14/results and matching source hashes",
+          "limitations": "Runtime matcher/ranker absent;future corpus/calibration pending",
+          "reviewerDecision": "Accept expected cases and verification boundaries,not runtime acceptance"
+        },
+        {
+          "id": "R1",
+          "rule": "Keep five keys/six candidate category bindings;Smartphone display and Smartphone/Tablet RAM excluded in v1",
+          "scope": "display_diagonal Laptop/Tablet;physical_ram Laptop;installed_storage_gb Laptop;display_resolution Laptop;battery_capacity_mah Charger & Power Bank candidate only",
+          "evidence": "6088-inch Smartphone values;RAM/storage ambiguities including Tablet256GB",
+          "limitations": "Category/key-level conservative exclusion;does not prove all included facts correct",
+          "reviewerDecision": "Approve bounded definition scope without reclassifying whole categories or repairing values"
+        },
+        {
+          "id": "R2",
+          "rule": "battery_capacity_mah means manufacturer-declared capacity per Power Bank unit;never all Charger & Power Bank products",
+          "scope": "Sixth candidate binding retained but activation BLOCKED until subtype/ownership proven;exclude phone bundles,loose battery kits,ordinary chargers and ambiguous multipacks",
+          "evidence": "54 observations include phone-plus-charger and camera-battery kits as well as Power Banks",
+          "limitations": "Current category-only registry cannot express a verified Power-Bank subtype;no new UUID,ASIN allowlist or title filter invented",
+          "reviewerDecision": "Approve narrow semantics and activation hold,or explicitly redesign applicability;blanket parent-category approval is insufficient"
+        },
+        {
+          "id": "R3",
+          "rule": "identifier=true denotes protected technical text,not Product model ownership or MODEL7;display_resolution proposed true",
+          "scope": "Five candidate keys retain searchable=true/filterable=true proposal;quantity identifiers=false;no technical field fuzzy regardless of flag",
+          "evidence": "D1/data-model;1920x1080 already structurally protected",
+          "limitations": "Flags do not approve data,key applicability or exact-model rank",
+          "reviewerDecision": "Explicitly approve three flags and operator sets for each definition"
+        },
+        {
+          "id": "R4",
+          "rule": "Target category UUID and model ownership verification BLOCKED",
+          "scope": "Source category mapping only;no target connection established;no PostgreSQL container or default5432 listener observed",
+          "evidence": "Source taxonomy hashes;Docker/listener inspection",
+          "limitations": "Does not prove every possible remote target unavailable",
+          "reviewerDecision": "Provide exact read-only target and reconciliation evidence before full T003 closure/runtime ownership claims"
+        },
+        {
+          "id": "Q1",
+          "rule": "6088-inch values quarantined/excluded as technical facts before activation;never infer6.088",
+          "scope": "Affected display facts;Smartphone display binding remains outside v1",
+          "evidence": "specifications lines65/68",
+          "limitations": "No data repair/quarantine performed",
+          "reviewerDecision": "Approve fact exclusion and provenance review policy"
+        },
+        {
+          "id": "Q2",
+          "rule": "Tablet RAM256GB and RAM/storage ambiguities quarantined before activation;never swap RAM/storage automatically",
+          "scope": "Affected facts;Smartphone/Tablet RAM bindings remain outside v1",
+          "evidence": "Tablet line326 and related source values",
+          "limitations": "Suspicion is not independently verified corrected hardware capacity",
+          "reviewerDecision": "Approve exclusion pending authoritative per-product evidence"
+        },
+        {
+          "id": "Q3",
+          "rule": "CPU text in gpu_model excluded/quarantined;do not move to cpu_model",
+          "scope": "gpu_model stays unapproved/excluded;other valid Product facts unaffected",
+          "evidence": "Lines151/172 Graphics Coprocessor Intel Celeron Processor N4000",
+          "limitations": "Source label can be wrong;no automatic semantic rewrite",
+          "reviewerDecision": "Approve exclusion and manual provenance reconciliation"
+        },
+        {
+          "id": "Q4",
+          "rule": "133 differing evidence groups require review;122 case-only may be adjudicated equivalent without storage rewrite;11 punctuation/spacing differences not auto-merged",
+          "scope": "77cpu_model+55cpu_family+1gpu_model;all remain outside five-key v1",
+          "evidence": "Actual evidence arrays;case-only classification",
+          "limitations": "Not133 proven different hardware facts;selected stored value not independently certified",
+          "reviewerDecision": "Approve per-fact disposition and no-auto-merge policy"
+        },
+        {
+          "id": "Q5",
+          "rule": "Definition approval is separate from fact correctness and deployment;no fact-level quarantine mechanism is assumed",
+          "scope": "Preserve raw evidence;exclude suspect contributions only through separately authorized auditable data workflow;otherwise hold affected activation",
+          "evidence": "All1500 UNVERIFIED;typed JSON has no approved per-fact status mechanism shown",
+          "limitations": "No Product Detail/Wishlist response change or data import authorized",
+          "reviewerDecision": "Approve governance boundary;do not treat signed registry as whole-dataset or rollout approval"
+        }
+      ],
+      "operators": {
+        "quantity": [
+          "eq",
+          "gt",
+          "gte",
+          "lt",
+          "lte",
+          "between"
+        ],
+        "display_resolution": [
+          "eq",
+          "prefix",
+          "contains"
+        ]
+      }
+    }
+  },
+  "sourceEvidence": {
+    "vocabulary": "a63b535518041fd2012b0a98b171c152f0231286d6dd4f739fe689af40af5ec0",
+    "matrix": "930c8385693d25c6edc012cbc08fbad60fdf7d4742bbb448ee4a1a3ae120b501",
+    "cases": "d69627c35a87507b7a9b42610f984bd882d58d35b11e2db034e070ad6b4813f5",
+    "results": "5578ddc1f3c9ae79446dc56e51635e8a855a66f155e537a613a6754528b7fdaa",
+    "products": "6c5dead52ce5691a3277126ff8ee9c588da70e085dae095b4e2bd0bb829e74b9",
+    "specifications": "b74cbdd2c2f15d415280a17352ed4025dc126d89fae19b1201a4d579d7b2506d",
+    "categories": "48f1dc636587c15779c68928898b43b940ee181eafa51648b699fe852ef8cb40"
+  },
+  "identifierScope": {
+    "counts": [
+      19,
+      6,
+      21
+    ],
+    "grammar": {
+      "basis": "D2 normalized contiguous token sequences;no identifier rewrite,stemming,aliasing,field crossing or wildcard expansion;classify query and candidate separately;no model rank from contextual spans",
+      "pro": [
+        "iphone {11,12,13,14} pro",
+        "ipad pro",
+        "microsoft surface pro",
+        "redmi note {8,9} pro",
+        "redmi note8 pro",
+        "huawei {p20,p30} pro",
+        "oneplus 10 pro",
+        "iphone pro [synthetic review span]"
+      ],
+      "plus": [
+        "chromebook plus",
+        "moto e7 plus",
+        "tab {m10,p11} plus",
+        "iphone 14 plus",
+        "galaxy plus [synthetic review span]"
+      ],
+      "max": [
+        "iphone {11,12,13,14} pro max",
+        "iphone xs max",
+        "walkerfit m2 max",
+        "iphone pro max [synthetic review span]"
+      ],
+      "core": [
+        "intel core",
+        "galaxy a03 core"
+      ],
+      "otherContextTerms": "Existing matrix unchanged;nonlisted spans outside verified v1 coverage;generic pro/plus/max/core not global model identifiers",
+      "plusLiteralTokenArrays": [
+        [
+          "galaxy",
+          "s8",
+          "plus"
+        ],
+        [
+          "galaxy",
+          "s9",
+          "plus"
+        ],
+        [
+          "galaxy",
+          "s20+",
+          "plus"
+        ],
+        [
+          "galaxy",
+          "s21+",
+          "plus"
+        ],
+        [
+          "lg",
+          "k22+",
+          "plus"
+        ]
+      ],
+      "plusLiteralMeaning": "Each element is one exact D2 token. + is retained literal punctuation,not regex quantifier;no optional+,alias or separate+ token. Existing remaining Plus spans unchanged."
+    },
+    "syntheticSpans": "Protection only,never model identity",
+    "strictRank7Rule": "MODEL7 requires signed anchor,whole normalized original query equality,proven current owner and PUBLISHED eligibility under same-variant/D7 rules;variant-bound anchors require eligible owned variant",
+    "rank7Exclusions": "No aliases,typo matches,family/unit/modifier or accessory target promotion;D7 only Product-bound anchor and shared matches",
+    "runtimeModelRank7EnabledForUnverifiedBindings": false,
+    "terms": [
+      {
+        "term": "galaxy",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "iphone",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "ipad",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "xperia",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "redmi",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "thinkpad",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "ideapad",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "inspiron",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "vivobook",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "zenbook",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "macbook",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "chromebook",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "elitebook",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "celeron",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "pentium",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "ryzen",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "snapdragon",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "geforce",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "radeon",
+        "classification": "PRODUCT_FAMILY"
+      },
+      {
+        "term": "wh-1000xm5",
+        "classification": "SOURCE_VERIFIED_MODEL_ANCHOR"
+      },
+      {
+        "term": "wh-1000xm4",
+        "classification": "SOURCE_VERIFIED_MODEL_ANCHOR"
+      },
+      {
+        "term": "a515f",
+        "classification": "SOURCE_VERIFIED_MODEL_ANCHOR"
+      },
+      {
+        "term": "pro-i",
+        "classification": "SOURCE_VERIFIED_MODEL_ANCHOR"
+      },
+      {
+        "term": "l210",
+        "classification": "SOURCE_VERIFIED_MODEL_ANCHOR"
+      },
+      {
+        "term": "be2026",
+        "classification": "SOURCE_VERIFIED_MODEL_ANCHOR"
+      },
+      {
+        "term": "core",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "pro",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "air",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "note",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "plus",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "max",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "studio",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "surface",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "pavilion",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "aspire",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "envy",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "spectre",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "pixel",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "nord",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "vega",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "graphics",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "hd",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "uhd",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "rog",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "tuf",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      },
+      {
+        "term": "legion",
+        "classification": "CONTEXT_DEPENDENT_AMBIGUOUS"
+      }
+    ],
+    "sourceScopedAnchors": [
+      {
+        "anchor": "wh-1000xm5",
+        "sourceAsin": "B0C5ZC7FWR",
+        "sourceLine": 384,
+        "actualSourceTitle": "Sony WH-1000XM5 Wireless Industry Leading Headphones with Auto Noise Canceling Optimizer, Crystal Clear Hands-Free Calling, and Alexa Voice Control, Midnight Blue WH1000XM5",
+        "sourceVerified": true,
+        "canonicalProductId": null,
+        "canonicalVariantId": null,
+        "targetOwnershipVerified": false,
+        "targetEligibilityVerified": false,
+        "runtimeRank7Enabled": false
+      },
+      {
+        "anchor": "wh-1000xm4",
+        "sourceAsin": "B08DBDSVBC",
+        "sourceLine": 377,
+        "actualSourceTitle": "Sony WH-1000XM4 Wireless Premium Noise Canceling Overhead Headphones with Mic for Phone-Call and Alexa Voice Control, Midnight Blue WH1000XM4",
+        "sourceVerified": true,
+        "canonicalProductId": null,
+        "canonicalVariantId": null,
+        "targetOwnershipVerified": false,
+        "targetEligibilityVerified": false,
+        "runtimeRank7Enabled": false
+      },
+      {
+        "anchor": "a515f",
+        "sourceAsin": "B08PPSRLQ5",
+        "sourceLine": 1,
+        "actualSourceTitle": "SAMSUNG Galaxy A51 (A515F) 128GB DUOS GSM Unlocked Smartphone w/Quad Camera 48 MP + 12 MP + 5 MP + 5 MP (International Variant/US Compatible LTE) - Prism Crush Black",
+        "sourceVerified": true,
+        "canonicalProductId": null,
+        "canonicalVariantId": null,
+        "targetOwnershipVerified": false,
+        "targetEligibilityVerified": false,
+        "runtimeRank7Enabled": false
+      },
+      {
+        "anchor": "pro-i",
+        "sourceAsin": "B09L88FZ95",
+        "sourceLine": 2,
+        "actualSourceTitle": "Sony Xperia Pro-I Dual-SIM 512GB ROM + 12GB RAM (GSM only | No CDMA) Factory Unlocked 5G Smartphone (Frosted Black) - International Version",
+        "sourceVerified": true,
+        "canonicalProductId": null,
+        "canonicalVariantId": null,
+        "targetOwnershipVerified": false,
+        "targetEligibilityVerified": false,
+        "runtimeRank7Enabled": false
+      },
+      {
+        "anchor": "l210",
+        "sourceAsin": "B081V6W99V",
+        "sourceLine": 155,
+        "actualSourceTitle": "[2021 Version]ASUS Vivobook Laptop L210 11.6” ultra thin, Intel Celeron N4020 Processor, 4GB RAM, 64GB eMMC storage, Windows 10 Home in S mode with One Year of Office 365 Personal, L210MA-DB01",
+        "sourceVerified": true,
+        "canonicalProductId": null,
+        "canonicalVariantId": null,
+        "targetOwnershipVerified": false,
+        "targetEligibilityVerified": false,
+        "runtimeRank7Enabled": false
+      },
+      {
+        "anchor": "be2026",
+        "sourceAsin": "B08R7D4KZJ",
+        "sourceLine": 128,
+        "actualSourceTitle": "OnePlus Nord N10 5G Unlocked Smartphone, Midnight Ice​, 90Hz Refresh Rate, 6GB RAM + 128GB storage, US Version, Model BE2026",
+        "sourceVerified": true,
+        "canonicalProductId": null,
+        "canonicalVariantId": null,
+        "targetOwnershipVerified": false,
+        "targetEligibilityVerified": false,
+        "runtimeRank7Enabled": false
+      }
+    ],
+    "expectedCases": [
+      {
+        "id": "D01",
+        "input": "WH-1000XM5",
+        "expectedTokens": [
+          "wh-1000xm5"
+        ],
+        "structurallyProtected": [
+          true
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D02",
+        "input": "i7-1360P",
+        "expectedTokens": [
+          "i7-1360p"
+        ],
+        "structurallyProtected": [
+          true
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D03",
+        "input": "USB-C",
+        "expectedTokens": [
+          "usb-c"
+        ],
+        "structurallyProtected": [
+          true
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D04",
+        "input": "USB C",
+        "expectedTokens": [
+          "usb",
+          "c"
+        ],
+        "structurallyProtected": [
+          false,
+          false
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D05",
+        "input": "C++",
+        "expectedTokens": [
+          "c++"
+        ],
+        "structurallyProtected": [
+          true
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D06",
+        "input": "C+++",
+        "expectedTokens": [
+          "c"
+        ],
+        "structurallyProtected": [
+          false
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D07",
+        "input": "3.50mm",
+        "expectedTokens": [
+          "3.50mm"
+        ],
+        "structurallyProtected": [
+          true
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D08",
+        "input": "3.50 mm",
+        "expectedTokens": [
+          "3.50",
+          "mm"
+        ],
+        "structurallyProtected": [
+          true,
+          false
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D09",
+        "input": "16.0",
+        "expectedTokens": [
+          "16.0"
+        ],
+        "structurallyProtected": [
+          true
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D10",
+        "input": "-.5",
+        "expectedTokens": [
+          "-.5"
+        ],
+        "structurallyProtected": [
+          true
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D11",
+        "input": "WH-1000XM6",
+        "expectedTokens": [
+          "wh-1000xm6"
+        ],
+        "structurallyProtected": [
+          true
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D12",
+        "input": "i7-136OP",
+        "expectedTokens": [
+          "i7-136op"
+        ],
+        "structurallyProtected": [
+          true
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D13",
+        "input": "samsnug",
+        "expectedTokens": [
+          "samsnug"
+        ],
+        "structurallyProtected": [
+          false
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D14",
+        "input": "sony",
+        "expectedTokens": [
+          "sony"
+        ],
+        "structurallyProtected": [
+          false
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D15",
+        "input": "Điện thoại",
+        "expectedTokens": [
+          "dien",
+          "thoai"
+        ],
+        "structurallyProtected": [
+          false,
+          false
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "id": "D16",
+        "input": "A--B",
+        "expectedTokens": [
+          "a",
+          "b"
+        ],
+        "structurallyProtected": [
+          false,
+          false
+        ],
+        "evidenceLayer": "RECORDED_EXISTING_D2_PRIMITIVE_PASS",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV01",
+        "input": "WH-1000XM5",
+        "source": "B0C5ZC7FWR",
+        "expectation": "One structural protected token;candidate device model anchor proposed;no fuzzy",
+        "basis": "Observed Product Name and original draft D2",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV02",
+        "input": "i7-1360P / C++",
+        "source": null,
+        "expectation": "Structural protected grammar cases;not observed in these1500 Product Names;not fabricated catalog models",
+        "basis": "Original16 draft cases remain mandatory",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV03",
+        "input": "galaxi vs Galaxy A51",
+        "source": "B08PPSRLQ5",
+        "expectation": "If family proposal approved,candidate Galaxy is protected;unknown typo cannot enter via name fuzzy;family token itself is NOT tier7",
+        "basis": "Proposed19 exact family exclusions;no measured fuzzy threshold",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV04",
+        "input": "samsnug vs Samsung",
+        "source": "B08PPSRLQ5",
+        "expectation": "Natural brand text may remain fuzzy-eligible≥4;brand names are not blacklisted solely because they occur in model context",
+        "basis": "Preserve FR-007 Brand Name fuzzy;actual acceptance awaits T014",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV05",
+        "input": "Microsoft Surface Pro compatibility target",
+        "source": "B07L9RJ957",
+        "expectation": "Protect reviewed target-name span from fuzzy;do not infer this Fintie accessory owns a Surface device model/tier7",
+        "basis": "Observed compatibility title;context review required",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV06",
+        "input": "Use on Any Surface",
+        "source": "B0BNCXKX3G",
+        "expectation": "Generic surface stays natural under context-only rule;not a Microsoft model",
+        "basis": "Observed Logitech mouse title",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV07",
+        "input": "HP Pavilion / ordinary pavilion",
+        "source": "B09ZTB9LDW",
+        "expectation": "Protect Pavilion only in reviewed HP family context;generic noun not a blanket model identifier",
+        "basis": "Anchored proposal;generic counterexample is synthetic",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV08",
+        "input": "Google Pixel / pixel display",
+        "source": "B08JR6Y1KJ",
+        "expectation": "Protect Pixel in Google device context;generic pixel not automatically a model",
+        "basis": "Observed Google title;generic counterexample synthetic",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV09",
+        "input": "Intel Core / Galaxy A03 Core / octa-core",
+        "source": "B0B6QQ9Q9V",
+        "expectation": "Core is not globally a model;review exact spans,while octa-core is already structurally protected",
+        "basis": "Multiple roles in actual Product Names",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV10",
+        "input": "Studio Monitor Headphones",
+        "source": "B00WSLYQ7C",
+        "expectation": "Studio descriptive use stays natural;no global family protection inferred",
+        "basis": "Observed audio title",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV11",
+        "input": "DEMO-AMZ-B08PPSRLQ5",
+        "source": "B08PPSRLQ5",
+        "expectation": "SKU source is always non-fuzzy;exact whole-SKU precedence only against canonical SKU at runtime,not a claim source package is imported",
+        "basis": "Import CSV agrees with SKU proposal;live state unknown",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV12",
+        "input": "16GB /16 GB /16.0 /3.50mm",
+        "source": null,
+        "expectation": "D2 boundaries preserved,no implicit unit conversion,numeric protection not automatic MODEL rank7",
+        "basis": "Approved D2;synthetic shape cases,not registry approval",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV13",
+        "input": "Galaxy Star Projector",
+        "source": null,
+        "expectation": "Conservative19-family exact-token policy would disable Galaxy fuzzy here too;reviewer must accept homonym recall cost or choose a contextual rule",
+        "basis": "Synthetic false-positive counterexample;not claimed observed",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      },
+      {
+        "case": "IV14",
+        "input": "Exynos 9611 from cpu_model only",
+        "source": "B08PPSRLQ5",
+        "expectation": "Observation only;do not enable this unverified technical field or promote vocabulary automatically;requires T003 for field activation",
+        "basis": "Actual UNVERIFIED source specification",
+        "evidenceLayer": "RECORDED_SOURCE_PRIMITIVE_PROPOSAL_CHECK_ONLY",
+        "runtimeClassifierOrRankingPass": false
+      }
+    ],
+    "verification": {
+      "originalCases": 30,
+      "originalPrimitivePassesRecorded": 16,
+      "originalReviewCasesSourceChecked": 14,
+      "originalProductionClassifierRankingTests": 0,
+      "newAr2SourceTitlePrimitiveChecks": 8,
+      "newAr2SyntheticNegativePrimitiveChecks": 5,
+      "newProductionClassifierRankingTests": 0,
+      "newPrimitiveEvidenceFile": "approval-resolution-v2-span-checks.json",
+      "newPrimitiveEvidenceSHA256": "4014a4812d3d23a04e9af398f861953a5aa9a8e3a592f37863f61471ddb0ff4d"
+    }
+  },
+  "registry": {
+    "selectedKeyCount": 4,
+    "selectedBindingCount": 5,
+    "targetTaxonomy": "BLOCKED",
+    "runtimeActivated": false,
+    "definitions": [
+      {
+        "key": "display_diagonal",
+        "type": "quantity",
+        "unit": "inch",
+        "sourceCategoryLabels": [
+          "Laptop",
+          "Tablet"
+        ],
+        "operators": [
+          "eq",
+          "gt",
+          "gte",
+          "lt",
+          "lte",
+          "between"
+        ],
+        "searchable": true,
+        "filterable": true,
+        "identifier": false,
+        "runtimeActivated": false,
+        "sourceCategoryBindings": [
+          {
+            "label": "Laptop",
+            "sourceCategoryUuid": "31549723-c1a2-56a6-a1a1-64da36e16f65",
+            "sourceMappingApproval": "APPROVED",
+            "targetReconciled": false
+          },
+          {
+            "label": "Tablet",
+            "sourceCategoryUuid": "5793dbd1-a3e4-514e-bf1d-ef50a31acc04",
+            "sourceMappingApproval": "APPROVED",
+            "targetReconciled": false
+          }
+        ]
+      },
+      {
+        "key": "physical_ram",
+        "type": "quantity",
+        "unit": "GB",
+        "sourceCategoryLabels": [
+          "Laptop"
+        ],
+        "operators": [
+          "eq",
+          "gt",
+          "gte",
+          "lt",
+          "lte",
+          "between"
+        ],
+        "searchable": true,
+        "filterable": true,
+        "identifier": false,
+        "runtimeActivated": false,
+        "sourceCategoryBindings": [
+          {
+            "label": "Laptop",
+            "sourceCategoryUuid": "31549723-c1a2-56a6-a1a1-64da36e16f65",
+            "sourceMappingApproval": "APPROVED",
+            "targetReconciled": false
+          }
+        ]
+      },
+      {
+        "key": "installed_storage_gb",
+        "type": "quantity",
+        "unit": "GB",
+        "sourceCategoryLabels": [
+          "Laptop"
+        ],
+        "operators": [
+          "eq",
+          "gt",
+          "gte",
+          "lt",
+          "lte",
+          "between"
+        ],
+        "searchable": true,
+        "filterable": true,
+        "identifier": false,
+        "runtimeActivated": false,
+        "sourceCategoryBindings": [
+          {
+            "label": "Laptop",
+            "sourceCategoryUuid": "31549723-c1a2-56a6-a1a1-64da36e16f65",
+            "sourceMappingApproval": "APPROVED",
+            "targetReconciled": false
+          }
+        ]
+      },
+      {
+        "key": "display_resolution",
+        "type": "text",
+        "unit": null,
+        "sourceCategoryLabels": [
+          "Laptop"
+        ],
+        "operators": [
+          "eq",
+          "prefix",
+          "contains"
+        ],
+        "searchable": true,
+        "filterable": true,
+        "identifier": false,
+        "runtimeActivated": false,
+        "sourceCategoryBindings": [
+          {
+            "label": "Laptop",
+            "sourceCategoryUuid": "31549723-c1a2-56a6-a1a1-64da36e16f65",
+            "sourceMappingApproval": "APPROVED",
+            "targetReconciled": false
+          }
+        ]
+      }
+    ],
+    "deferredBattery": {
+      "key": "battery_capacity_mah",
+      "type": "quantity",
+      "unit": "mAh",
+      "searchable": false,
+      "filterable": false,
+      "identifier": false,
+      "parentCategoryLabel": "Charger & Power Bank",
+      "parentBindingActivated": false,
+      "requiredApprovedPowerBankSubtypeId": null,
+      "runtimeActivated": false,
+      "sourceParentCategoryUuid": "f065e70e-4abe-5b7f-9112-264bd82c2930"
+    },
+    "technicalValueFuzzyRule": "ALL technical values are non-fuzzy by source-field rule regardless of identifier flag;resolution is not Product identity",
+    "exclusionsPreserved": [
+      "Smartphone display_diagonal",
+      "Smartphone physical_ram",
+      "Tablet physical_ram"
+    ]
+  },
+  "decisions": [
+    {
+      "id": "A01",
+      "status": "ACCEPTED_BY_USER",
+      "proposedRule": "All19 families,including Chromebook:global whole-token fuzzy exclusion",
+      "evidence": "User decision;existing46-row matrix",
+      "acceptedRejectedScope": "ACCEPTED_BY_USER",
+      "knownLimitations": "No family rank7;known homonym/typo recall trade-off",
+      "requiredHumanSignoff": "Record reviewer/version receipt;no repeat policy approval needed",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "A02",
+      "status": "ACCEPTED_BY_USER",
+      "proposedRule": "Six source-scoped anchors and strict AR1 rank7 conditions",
+      "evidence": "User decision;source-ASIN/title evidence",
+      "acceptedRejectedScope": "ACCEPTED_BY_USER",
+      "knownLimitations": "Do not enable rank7 until canonical ownership and eligibility verified",
+      "requiredHumanSignoff": "Canonical target binding and eligibility proof required before runtime promotion",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "A03",
+      "status": "ACCEPTED_BY_USER",
+      "proposedRule": "All30 expected cases and remaining context rules retained;synthetic spans fuzzy-protection only",
+      "evidence": "Draft16,review14,AR1 grammar",
+      "acceptedRejectedScope": "ACCEPTED_BY_USER",
+      "knownLimitations": "16 recorded primitive passes+14 proposal/source checks;0 production classifier/ranking passes",
+      "requiredHumanSignoff": "Record expectations and verification boundary;no synthetic Product identity",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "A04",
+      "status": "ACCEPTED_BY_USER",
+      "proposedRule": "Four selected keys/five bindings;searchable/filterable true;identifier false",
+      "evidence": "User narrowing/flag decisions;existing observed data",
+      "acceptedRejectedScope": "ACCEPTED_BY_USER",
+      "knownLimitations": "Selected definitions are not runtime activation;target taxonomy BLOCKED",
+      "requiredHumanSignoff": "Named version/hash receipt and target reconciliation before T003 closure",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "A05",
+      "status": "ACCEPTED_BY_USER",
+      "proposedRule": "Battery candidate deferred;searchable/filterable false;parent binding inactive",
+      "evidence": "User decision;source includes bundles and battery kits",
+      "acceptedRejectedScope": "ACCEPTED_BY_USER",
+      "knownLimitations": "No approved Power Bank subtype UUID",
+      "requiredHumanSignoff": "Separate future approved subtype binding required",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "A06",
+      "status": "ACCEPTED_POLICY_NOT_EXECUTED",
+      "proposedRule": "Quarantine6088-inch display and questionable Tablet RAM/storage facts;exclude CPU-under-gpu_model",
+      "evidence": "AR1 facts/source lines65/68/326/151/172",
+      "acceptedRejectedScope": "ACCEPTED_POLICY_NOT_EXECUTED",
+      "knownLimitations": "No source mutation,repair or Detail/Wishlist change;no implemented quarantine assumed",
+      "requiredHumanSignoff": "Separate authorized auditable fact disposition before affected activation",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "A07",
+      "status": "ACCEPTED_POLICY_NOT_EXECUTED",
+      "proposedRule": "No auto merge/rewrite133 groups;case-only matching equivalence only after explicit review;11 punctuation/spacing groups manual",
+      "evidence": "77cpu_model+55cpu_family+1gpu_model;122case-only+11other",
+      "acceptedRejectedScope": "ACCEPTED_POLICY_NOT_EXECUTED",
+      "knownLimitations": "Classification is not approval;normal query normalization unchanged",
+      "requiredHumanSignoff": "Per-group reviewer/source/hash decision;no group self-approved here",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "A08",
+      "status": "ACCEPTED_BY_USER",
+      "proposedRule": "Definition approval,fact validation and deployment activation stay separate",
+      "evidence": "User decision;all1500 UNVERIFIED",
+      "acceptedRejectedScope": "ACCEPTED_BY_USER",
+      "knownLimitations": "No rollout approval or task PASS implied",
+      "requiredHumanSignoff": "Separate evidence/receipts required",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "X01",
+      "status": "REJECTED_SUPERSEDED",
+      "proposedRule": "AR1 display_resolution.identifier=true replaced byfalse",
+      "evidence": "Explicit user decision",
+      "acceptedRejectedScope": "REJECTED_SUPERSEDED",
+      "knownLimitations": "Technical values remain non-fuzzy by source-field rule",
+      "requiredHumanSignoff": "Already decided;record explicitly",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "X02",
+      "status": "REJECTED_SUPERSEDED",
+      "proposedRule": "Five active keys/six active bindings replaced byfour/five",
+      "evidence": "Explicit user decision",
+      "acceptedRejectedScope": "REJECTED_SUPERSEDED",
+      "knownLimitations": "Battery remains candidate outside selected v1",
+      "requiredHumanSignoff": "Already decided;record explicitly",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "X03",
+      "status": "REJECTED_REPRESENTATION",
+      "proposedRule": "Brace shorthand/unescaped regex interpretation replaced byfive literal token arrays",
+      "evidence": "Exact source titles plus existing Java D2 primitive probe",
+      "acceptedRejectedScope": "REJECTED_REPRESENTATION",
+      "knownLimitations": "Representation correction only;no alias/scope expansion or model identity",
+      "requiredHumanSignoff": "Acknowledge AR2 canonical arrays;do not reapprove unrelated context rules",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "X04",
+      "status": "REJECTED",
+      "proposedRule": "No parent Charger & Power Bank activation;no source-ASIN inferred target owner;no synthetic MODEL7",
+      "evidence": "User decisions and AR1 boundaries",
+      "acceptedRejectedScope": "REJECTED",
+      "knownLimitations": "No new category,ASIN allowlist,title-based runtime classifier or unit conversion",
+      "requiredHumanSignoff": "Not authorized",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "D01",
+      "status": "BLOCKED",
+      "proposedRule": "Canonical Product/Variant ownership and eligibility for all six anchors",
+      "evidence": "Only source evidence available",
+      "acceptedRejectedScope": "BLOCKED",
+      "knownLimitations": "No verified target connection/database evidence",
+      "requiredHumanSignoff": "Exact read-only target/source-link reconciliation and eligibility proof before rank7",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "D02",
+      "status": "BLOCKED",
+      "proposedRule": "Target taxonomy reconciliation for selected source UUIDs",
+      "evidence": "Source category_mapping.json only",
+      "acceptedRejectedScope": "BLOCKED",
+      "knownLimitations": "Prior review:no running PG container/default5432 listener;not proof every remote target unavailable",
+      "requiredHumanSignoff": "Provide exact read-only target and verify IDs,parent paths,meanings",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "D03",
+      "status": "BLOCKED",
+      "proposedRule": "Power Bank subtype approval before deferred battery activation",
+      "evidence": "Subtype UUID absent",
+      "acceptedRejectedScope": "BLOCKED",
+      "knownLimitations": "No new subtype binding created",
+      "requiredHumanSignoff": "Separate explicit subtype/category/key/unit/operator/flag approval",
+      "versionReference": "AR2"
+    },
+    {
+      "id": "D04",
+      "status": "DEFERRED_NOT_EXECUTED",
+      "proposedRule": "Quarantine execution,133-group review,fact validation and deployment",
+      "evidence": "No execution authorized in this task",
+      "acceptedRejectedScope": "DEFERRED_NOT_EXECUTED",
+      "knownLimitations": "Policy acceptance is not completed data disposition",
+      "requiredHumanSignoff": "Separate authorized data and rollout workflows",
+      "versionReference": "AR2"
+    }
+  ],
+  "taskStatuses": {
+    "T003": "BLOCKED_UNCHANGED",
+    "T004": "BLOCKED_UNCHANGED"
+  },
+  "constraints": [
+    "No application code,migration,API contract,task status or source-data changes",
+    "No quarantine,group merge,repair,DB query,commit or push",
+    "No new reviewer identity,approval receipt,Product ownership or target taxonomy evidence invented"
+  ],
+  "recordedUTC": "2026-11-09T14:08:27.584544+00:00",
+  "sourceEvidenceFiles": {
+    "identifier-vocabulary-proposal.json": "a63b535518041fd2012b0a98b171c152f0231286d6dd4f739fe689af40af5ec0",
+    "identifier-review-matrix.json": "930c8385693d25c6edc012cbc08fbad60fdf7d4742bbb448ee4a1a3ae120b501",
+    "identifier-review-cases.json": "d69627c35a87507b7a9b42610f984bd882d58d35b11e2db034e070ad6b4813f5",
+    "identifier-review-results.json": "5578ddc1f3c9ae79446dc56e51635e8a855a66f155e537a613a6754528b7fdaa"
+  },
+  "reviewerPolicyReceipt": "Explicit decisions from current user instruction only;not a completed T003/T004 approval receipt. Reviewer name/date/version acknowledgment and required target evidence remain missing."
+}

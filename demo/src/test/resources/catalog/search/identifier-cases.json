@@ -1,0 +1,198 @@
+{
+  "task": "T004",
+  "status": "BLOCKED",
+  "approval": null,
+  "vocabularyVersion": null,
+  "scope": "D2 structural expectations only;alphabetic model vocabulary unresolved",
+  "cases": [
+    {
+      "input": "WH-1000XM5",
+      "expectedTokens": [
+        "wh-1000xm5"
+      ],
+      "structurallyProtected": [
+        true
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "i7-1360P",
+      "expectedTokens": [
+        "i7-1360p"
+      ],
+      "structurallyProtected": [
+        true
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "USB-C",
+      "expectedTokens": [
+        "usb-c"
+      ],
+      "structurallyProtected": [
+        true
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "USB C",
+      "expectedTokens": [
+        "usb",
+        "c"
+      ],
+      "structurallyProtected": [
+        false,
+        false
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "C++",
+      "expectedTokens": [
+        "c++"
+      ],
+      "structurallyProtected": [
+        true
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "C+++",
+      "expectedTokens": [
+        "c"
+      ],
+      "structurallyProtected": [
+        false
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "3.50mm",
+      "expectedTokens": [
+        "3.50mm"
+      ],
+      "structurallyProtected": [
+        true
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "3.50 mm",
+      "expectedTokens": [
+        "3.50",
+        "mm"
+      ],
+      "structurallyProtected": [
+        true,
+        false
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "16.0",
+      "expectedTokens": [
+        "16.0"
+      ],
+      "structurallyProtected": [
+        true
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "-.5",
+      "expectedTokens": [
+        "-.5"
+      ],
+      "structurallyProtected": [
+        true
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "WH-1000XM6",
+      "expectedTokens": [
+        "wh-1000xm6"
+      ],
+      "structurallyProtected": [
+        true
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "i7-136OP",
+      "expectedTokens": [
+        "i7-136op"
+      ],
+      "structurallyProtected": [
+        true
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "samsnug",
+      "expectedTokens": [
+        "samsnug"
+      ],
+      "structurallyProtected": [
+        false
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "sony",
+      "expectedTokens": [
+        "sony"
+      ],
+      "structurallyProtected": [
+        false
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "Điện thoại",
+      "expectedTokens": [
+        "dien",
+        "thoai"
+      ],
+      "structurallyProtected": [
+        false,
+        false
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    },
+    {
+      "input": "A--B",
+      "expectedTokens": [
+        "a",
+        "b"
+      ],
+      "structurallyProtected": [
+        false,
+        false
+      ],
+      "fuzzyEligibility": "never for protected or tokens shorter than4;other natural tokens conditional on signed alphabetic exclusions,field and T014 calibration",
+      "basis": "design-resolutions.md D2;expectations are document-derived,not executed classifier output"
+    }
+  ],
+  "pendingReview": [
+    "catalog-backed alphabetic model vocabulary with positive/negative boundaries",
+    "anchored model sources for tier7",
+    "authorized scope sign-off/version/hash;no inferred registry approval"
+  ]
+}

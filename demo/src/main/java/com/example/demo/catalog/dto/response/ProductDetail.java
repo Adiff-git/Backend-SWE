@@ -7,13 +7,15 @@ import lombok.Getter;
 @Getter
 public final class ProductDetail extends ProductSummary {
 	private final String description;
+	private final BrandSummary brand;
 	private final List<VariantSummary> variants;
 	private final List<ProductImageSummary> images;
 
 	public ProductDetail(UUID id, String name, CategorySummary category, String primaryImageUrl,
-			String description, List<VariantSummary> variants, List<ProductImageSummary> images) {
+			String description, BrandSummary brand, List<VariantSummary> variants, List<ProductImageSummary> images) {
 		super(id, name, category, primaryImageUrl);
 		this.description = description;
+		this.brand = brand;
 		this.variants = List.copyOf(variants);
 		this.images = List.copyOf(images);
 	}

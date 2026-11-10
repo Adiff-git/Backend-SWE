@@ -1,0 +1,4729 @@
+{
+  "capturedUTC": "2026-11-09T18:56:44.154392+00:00",
+  "counts": {
+    "tests": 705,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "suite": "com.example.demo.BuildConfigurationTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.051",
+      "xmlSha256": "26ae73754889817dfaf23f54755aed75672c5770ebcb384a65a5d0f0a263342e",
+      "cases": [
+        {
+          "name": "lombok_shouldGenerateConstructorAndGetter",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.DemoApplicationTests",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "6.381",
+      "xmlSha256": "bf5f803cd3cf3068a0a4ee6c9f6a396eb6376f01319efef7cbba655c5447e6bf",
+      "cases": [
+        {
+          "name": "contextLoads",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.config.IdentityPropertiesTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.002",
+      "xmlSha256": "95b65ceda8d8dc8a1e92046e3a7cf658917b8e79938f924333fb913761adba88",
+      "cases": [
+        {
+          "name": "validate_shouldRequireIndependentKeys",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectArbitraryRedirectsAndWeakKeys",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldAllowDisabledFeatureWithoutSecrets",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectInsecureProductionDestinations",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.controller.EmailLoginControllerTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.016",
+      "xmlSha256": "25c3d83dec92a6f6a1377fe4f494b7a1e3d05f1b23c227a36f0326fbe06b54b0",
+      "cases": [
+        {
+          "name": "execute_shouldVerifyTrimsIdentifierAndPreservesExactPasswordWithGenericError",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.controller.EmailVerificationControllerTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.237",
+      "xmlSha256": "be70c135db1a24b130f394688b15e75997f0bafd9c51d83a8fd4c8eaaa73ab73",
+      "cases": [
+        {
+          "name": "create_shouldRejectNullWrongTypeAndProtectedFieldsBeforeService",
+          "status": "PASS"
+        },
+        {
+          "name": "get_shouldEnforceAuthenticationAuthorityAndOwnedChallengePrivacy",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.controller.LogoutControllerTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.023",
+      "xmlSha256": "c2ad1c7a9ffc1cf12da48c19cbed1fe940bcb9c4795fd8d20e816ebc0a654487",
+      "cases": [
+        {
+          "name": "execute_shouldRejectClientSelectedOwner",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldIgnoreStaleBearerAndUsesOnlyExactBodyCredential",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.controller.PasswordControllerTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.014",
+      "xmlSha256": "6e60bb1268b3ee65e6e53ef097c73a86948590c96a699baa105f99eaeec1ecea",
+      "cases": [
+        {
+          "name": "execute_shouldRequireRealBearerBeforePasswordService",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.controller.RefreshControllerTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.328",
+      "xmlSha256": "5e28f25ad21f0359083da17c3b16541fc16db00d51aa6b094957a6b0ea2ec748",
+      "cases": [
+        {
+          "name": "execute_shouldRejectMissingNullEmptyWrongTypeAndOversizedSecret",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldMapUnknownCredentialToGeneric401",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.controller.RegistrationLoginControllerTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.033",
+      "xmlSha256": "c14b998d013fd001fcdf98d6992d692901f27c1eb5d8e35e78c52f117961e2fc",
+      "cases": [
+        {
+          "name": "register_shouldRejectMissingWrongTypeAndProtectedFieldsBeforeService",
+          "status": "PASS"
+        },
+        {
+          "name": "register_shouldAcceptPendingOnlyAndIgnoreUnrelatedBearer",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.controller.RegistrationVerificationControllerTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.218",
+      "xmlSha256": "216fa717d5e00b43a961c24c9486f28d0506bc6681baffe67d7f696427c89990",
+      "cases": [
+        {
+          "name": "confirm_shouldRejectMissingWrongTypeAndUnknownProofFields",
+          "status": "PASS"
+        },
+        {
+          "name": "confirm_shouldIssueOnlyHeaderAccessAfterServiceCommitAndIgnoreUnrelatedBearer",
+          "status": "PASS"
+        },
+        {
+          "name": "resend_shouldReturnOnlyReplacementPendingMetadataAndMapOutageSafely",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.converter.AuthConverterTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.002",
+      "xmlSha256": "d160eec8e47a3c98260f77e25c398c875e6df9e993b78065ee6b47e70199eccc",
+      "cases": [
+        {
+          "name": "execute_shouldExposeExactlyFourResponseFieldsAndNoSecretToString",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.security.AuthConfigurationTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.004",
+      "xmlSha256": "d3bec68e3d4281a873299a4e019b232c7572b6d8a2739b21c8bbce8983abea8f",
+      "cases": [
+        {
+          "name": "execute_shouldVerifySignatureAndRejectsWrongKeyOrAlgorithm",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldRejectMissingShortSecretAndIssuer",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.security.ControlledOidcProviderTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.276",
+      "xmlSha256": "0d9d3c20554ca6004ae89fdc0b44b01c339aae12ec97db15e3fa76f2fe653e2f",
+      "cases": [
+        {
+          "name": "authorize_shouldProduceSignedCorrelatedOneUseIdentity",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.security.CurrentStateJwtConverterTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.005",
+      "xmlSha256": "b8dc7941785ca07f51a6964588c52e9e16a733b18966331cf75db771e3155a4d",
+      "cases": [
+        {
+          "name": "execute_shouldUseCurrentAuthoritiesAndRejectsForeignRevokedExpiredOrDisabledState",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.security.JwtClaimsValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.002",
+      "xmlSha256": "fecb1be5ae754fb9e4ecc84e25c7bc4c353697f401d61eeb8b1ad865d5180b76",
+      "cases": [
+        {
+          "name": "execute_shouldRejectExpiryEqualityFutureIssueAndExcessLifetime",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldEnforceAudienceOnlyWhenConfigured",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldAcceptValidClaims",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.EmailLoginServiceTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.001",
+      "xmlSha256": "1f8885bc521aeec916d31ff0eb132d5a1c907da2cf67aaa9028fe12ac790cbd6",
+      "cases": [
+        {
+          "name": "execute_shouldVerifyCurrentIdentifierSnapshotOwnsCredentialsAndAuthorities",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.IdentityAuditServiceTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.007",
+      "xmlSha256": "7d8c0887f74ff489edc0998fdab1ba443301f8bdbb75b908c96f0a89fda73785",
+      "cases": [
+        {
+          "name": "outcomes_shouldExposeOnlyFixedCategoriesAndAggregateCounts(CapturedOutput)",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.IdentityProofServiceImplTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.008",
+      "xmlSha256": "f02a594eab5a79f1000bcc43fa4b38d6cd91374f1ce3daba7dae1201a60cf912",
+      "cases": [
+        {
+          "name": "generate_shouldReturnHighEntropySecretsAndSixDigitCodes",
+          "status": "PASS"
+        },
+        {
+          "name": "encrypt_shouldAuthenticatePayloadAndContext",
+          "status": "PASS"
+        },
+        {
+          "name": "verifyCode_shouldBindLeadingZeroCodeToExactContext",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.LogoutServiceTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.003",
+      "xmlSha256": "19513cd2a7e8ad368d52ec050b5d25469ce901d790f7f72b0095c125a12608e2",
+      "cases": [
+        {
+          "name": "execute_shouldRecognizeConsumedCredentialButAbsoluteExpiryWins",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.PasswordChangeServiceTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.002",
+      "xmlSha256": "50e294b6fb918110f1312b1a7cc1251099cd78d6ed102c7afc4240b3b3e21ec1",
+      "cases": [
+        {
+          "name": "execute_shouldVerifyWrongCurrentAndUnchangedReplacementNeverMutatePasswordOrSessions",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.RefreshServiceTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.035",
+      "xmlSha256": "b87ae9d644970e943385a10082bb49685bc54d6f32f8a031d44ae6ea9c6c129a",
+      "cases": [
+        {
+          "name": "execute_shouldMapRejectedOutcomeAfterCommandReturns",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldRefuseAmbientTransactionThatWouldRollbackReuseRevocation",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.RegistrationLoginServiceTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.107",
+      "xmlSha256": "ca81fd047ca7884228f052aefd6dc9359bbd80e22fc4a5af8efbaa0ce331494b",
+      "cases": [
+        {
+          "name": "execute_shouldRejectInvalidPasswordBeforeCreatingAccount",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldRejectOversizedLoginBeforeBcryptCanTruncate",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.TokenServiceTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.025",
+      "xmlSha256": "5d26e3fcb0e8b36248ca4cd32fb7102f1ab5b538baf9d6bb8f2bf784d365b70f",
+      "cases": [
+        {
+          "name": "execute_shouldCapAccessAtSessionDeadlineAndGeneratesOpaqueSecrets",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.validator.AuthValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.014",
+      "xmlSha256": "36c00037c6cd4dfe7ddd7ab25509d3fe862756fb8c72e241113d04cf4da09136",
+      "cases": [
+        {
+          "name": "registration_shouldNormalizeOnlyEmailAndPreserveExactPassword",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.validator.GoogleAttemptValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.003",
+      "xmlSha256": "ea6489983496acac230c537440125706e03f8d0a230d073baa69d5c10b6023dd",
+      "cases": [
+        {
+          "name": "validate_shouldAcceptOnlyCanonicalS256Challenge",
+          "status": "PASS"
+        },
+        {
+          "name": "read_shouldRejectClientOwnerOverridesAndWrongJsonTypes",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.validator.GoogleConnectionAttemptValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.019",
+      "xmlSha256": "319c447c385382cc428a3c8be69383efd65eaa4ed7cc583f68fc85c5be385f82",
+      "cases": [
+        {
+          "name": "reauthentication_shouldSupportOnlyApprovedOperations",
+          "status": "PASS"
+        },
+        {
+          "name": "connection_shouldRequireProofAndRejectOwnerProviderAndDestinationOverrides",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.validator.PasswordPolicyValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.003",
+      "xmlSha256": "8c5aa69d1306ecb0f4b84737ea7b63544effc5f1d70ba3c8630129fcfe974d71",
+      "cases": [
+        {
+          "name": "validate_shouldCountMultibyteCodePointsAndBytesSeparately",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectSeventyThreeBytes",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectFewerThanEightCodePoints",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldAllowExactSeventyTwoBytesWithoutTrimming",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.controller.CatalogSecurityBaselineTest",
+      "kind": "surefire-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.207",
+      "xmlSha256": "227f6601eabf2a18d3b56835a8a0efa7a1a813860983879e05448de1ac2a4e36",
+      "cases": [
+        {
+          "name": "mockAdministratorCannotAttachWithoutVerifiedJwt",
+          "status": "PASS"
+        },
+        {
+          "name": "customerAttachmentReceivesFilterChain403",
+          "status": "PASS"
+        },
+        {
+          "name": "anonymousAttachmentReceivesFilterChain401",
+          "status": "PASS"
+        },
+        {
+          "name": "sharedCorsAllowsArbitraryOriginsAndPreflightMethods",
+          "status": "PASS"
+        },
+        {
+          "name": "anonymousCatalogReadsArePermitted",
+          "status": "PASS"
+        },
+        {
+          "name": "mvcAdviceHandlesSafeApplicationFailuresSeparately",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.controller.ProductDetailControllerTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.339",
+      "xmlSha256": "bb76b4ec49c846b95ede237bd6f2511f74edbdb882b7d11c8d3c5f83bfc676fd",
+      "cases": [
+        {
+          "name": "invalidAndNoncanonicalIdsReturn400ProblemDetail",
+          "status": "PASS"
+        },
+        {
+          "name": "unknownCanonicalIdReturns404ProblemDetail",
+          "status": "PASS"
+        },
+        {
+          "name": "anonymousCanonicalIdReturnsDetailDto",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.controller.ProductImageControllerTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.285",
+      "xmlSha256": "403b490fe94581b9a18f4112b4394912a6b24430335ae5d550dea75e52b3c162",
+      "cases": [
+        {
+          "name": "oldUploadEndpointsAreDeniedEvenForAdmin",
+          "status": "PASS"
+        },
+        {
+          "name": "rejectsUnknownFieldsInvalidIdsAndExplicitNull",
+          "status": "PASS"
+        },
+        {
+          "name": "adminCanAttachAndReplayUsingServerIdentity",
+          "status": "PASS"
+        },
+        {
+          "name": "anonymousAndCustomerCannotAttach",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "kind": "surefire-reports",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "3.057",
+      "xmlSha256": "41958162d9f3d1cebda7306b29e7af9eafdbd15ae4af94a1c0b0276f29a0ac47",
+      "cases": [
+        {
+          "name": "acceptsSizeBoundaryValues",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldTreatLiteralNullAsSearchText",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldReportFuzzyEnabledModeForNonblankKeyword",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldReturnSafeParameterProblemFromService",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldPreserveRawVietnameseQueryForSharedNormalizer",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldRejectInvalidBearerBeforeKeywordService",
+          "status": "PASS"
+        },
+        {
+          "name": "rejectsInvalidDuplicateAndUnapprovedParametersAsProblemDetail",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldRejectZeroTokensAndControlsBeforeCallingService",
+          "status": "PASS"
+        },
+        {
+          "name": "listingSerializesOnlyAdditiveMetadataIncludingPairedNulls",
+          "status": "PASS"
+        },
+        {
+          "name": "anonymousDefaultAndOutOfRangePagesUseCanonicalResponse",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldAcceptUnicodeCodePointAndRawTokenBoundaries",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldPreserveStructuralIdentifiersAndNumericText",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldRejectRawLimitsBeforeNormalizationOrDeduplication",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldTreatBlankAsLegacyWithoutSearchModeHeader",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldRejectDuplicateKeywordEvenWhenValuesEqual",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldAcceptAnonymousKeywordAndRetainListingEnvelope",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldReportExplicitDiagnosticModeForNonblankKeyword",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+      "kind": "surefire-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.015",
+      "xmlSha256": "38fe8bafa79a113240d7592663b430bf88cd1a2d429ae8d66b3d033df0869b08",
+      "cases": [
+        {
+          "name": "singleVariantEmptyOptionsAndNoImagesRemainRepresentable",
+          "status": "PASS"
+        },
+        {
+          "name": "listingMapsOnlySelectedPairAndKeepsSharedSummaryUnchanged",
+          "status": "PASS"
+        },
+        {
+          "name": "summaryContainsOnlyApprovedFieldsAndImmediateCategory",
+          "status": "PASS"
+        },
+        {
+          "name": "orphanListingHasExplicitNullPairAndMixedPairsAreRejected",
+          "status": "PASS"
+        },
+        {
+          "name": "detailMapsEachVariantAndImageOnceUsingOnlySuppliedUrls",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.search.ProductIdentifierVocabularyTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.023",
+      "xmlSha256": "a5783f38a1d42e932a0c5d47a8bccffa4e5e6b89f0c1b319c541852292e67d0b",
+      "cases": [
+        {
+          "name": "originalDraftCases_shouldRetainAllSixteenPrimitiveExpectations",
+          "status": "PASS"
+        },
+        {
+          "name": "ambiguousTerms_shouldRequireExactContext_andNeverRewritePlus",
+          "status": "PASS"
+        },
+        {
+          "name": "everyApprovedContext_shouldProtectItsModifier_butNotGenericUsage",
+          "status": "PASS"
+        },
+        {
+          "name": "families_shouldBeProtectedIncludingChromebook_withoutModelPromotion",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+      "kind": "surefire-reports",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.01",
+      "xmlSha256": "802c3ca9d1954d2b6eaa788933196a996124e79249e82f97068553485fc7fe63",
+      "cases": [
+        {
+          "name": "matchesDocumentedD2GoldenCases",
+          "status": "PASS"
+        },
+        {
+          "name": "nfcNfdAndVietnameseMarksHaveSameNormalization",
+          "status": "PASS"
+        },
+        {
+          "name": "limitsRawTokensBeforeDeduplication",
+          "status": "PASS"
+        },
+        {
+          "name": "queryLengthCountsUnicodeCodePointsBeforeNormalization",
+          "status": "PASS"
+        },
+        {
+          "name": "doesNotApplyQueryLimitsToCandidateFieldsOrInventVocabulary",
+          "status": "PASS"
+        },
+        {
+          "name": "deduplicatesMembershipButKeepsPhraseAndSequence",
+          "status": "PASS"
+        },
+        {
+          "name": "consumesExactlyTheDocumentedUnicodeWhitespace",
+          "status": "PASS"
+        },
+        {
+          "name": "rejectsControlsAndNonblankZeroTokensButBlankIsOmitted",
+          "status": "PASS"
+        },
+        {
+          "name": "lowercaseDoesNotDependOnHostLocale",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+      "kind": "surefire-reports",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.061",
+      "xmlSha256": "70b206968ac8febb35706fec52660226d16574631dd1ec020562d6ab15e3dd93",
+      "cases": [
+        {
+          "name": "legacyDefaultsAndRepeatedBrandsPreserveCompatibility",
+          "status": "PASS"
+        },
+        {
+          "name": "rejectsUnknownNullAndDuplicateSingletonParameters",
+          "status": "PASS"
+        },
+        {
+          "name": "validatesKeywordsAndSortWithoutSelectingAnyResults",
+          "status": "PASS"
+        },
+        {
+          "name": "enforcesLexicalAndNumericBoundsBeforeConversion",
+          "status": "PASS"
+        },
+        {
+          "name": "rawGroupAlternativeLimitsAndDuplicateKeysAreNotHiddenByDeduplication",
+          "status": "PASS"
+        },
+        {
+          "name": "acceptsAllTypedOperatorShapesAndPreservesExactDecimals",
+          "status": "PASS"
+        },
+        {
+          "name": "rejectsDuplicateMembersAtEachLevelEvenWhenValuesAgree",
+          "status": "PASS"
+        },
+        {
+          "name": "rejectsMalformedStructuresUnknownFieldsAndExplicitNulls",
+          "status": "PASS"
+        },
+        {
+          "name": "decodesTransportExactlyOnceAndLeavesOtherMappersUnchanged",
+          "status": "PASS"
+        },
+        {
+          "name": "rejectsBadOperatorShapesAndPrecisionWithoutRegistryApproval",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.search.SpecificationFilterRegistryTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.035",
+      "xmlSha256": "ee1be1a2670bfb7a01542aa209e21cd3fe70c1b8f639d58903521e2f244bb3b9",
+      "cases": [
+        {
+          "name": "registry_shouldContainOnlyFourApprovedDefinitions_andNeverSourceCategoryUuids",
+          "status": "PASS"
+        },
+        {
+          "name": "startup_shouldRejectUnapprovedOrMalformedDefinitions",
+          "status": "PASS"
+        },
+        {
+          "name": "filters_shouldEnforceTypesUnitsAndCategoryBeforeSql",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+      "kind": "surefire-reports",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.268",
+      "xmlSha256": "63869013a51da7d2b887fdcc6a8c4685679c122ca9f2e061b5bf41c2c2c55c3c",
+      "cases": [
+        {
+          "name": "getProductSummaries_shouldExcludeLateHiddenProduct_whenFinalRevalidationFails",
+          "status": "PASS"
+        },
+        {
+          "name": "getPublishedProductEntity_shouldRejectUnavailableProduct_whenNotPublicOrMissing",
+          "status": "PASS"
+        },
+        {
+          "name": "getProductSummaries_shouldPropagateSafeFailure_whenSignerPreparationFails",
+          "status": "PASS"
+        },
+        {
+          "name": "listingValidatesDirectRequestsAndForwardsCriteriaWithoutActivatingFilters",
+          "status": "PASS"
+        },
+        {
+          "name": "listingPreparesSignerBeforeLocksAndSuppressesLateHiddenProduct",
+          "status": "PASS"
+        },
+        {
+          "name": "getProductSummaries_shouldReturnNullImageWithoutDetailFetch_whenProductHasNoImage",
+          "status": "PASS"
+        },
+        {
+          "name": "getProductSummaries_shouldNotSignUnpublishedImage_whenLockedStatusChanged",
+          "status": "PASS"
+        },
+        {
+          "name": "getPublishedProductEntity_shouldReturnReference_whenPublished",
+          "status": "PASS"
+        },
+        {
+          "name": "listingEmptyLaterPageRetainsSnapshotCountWithoutBatchLoads",
+          "status": "PASS"
+        },
+        {
+          "name": "getProductSummaries_shouldReturnSignedSummary_whenLockedProductIsPublished",
+          "status": "PASS"
+        },
+        {
+          "name": "listingUsesSelectedMetadataAndQueryOrderWithBatchedLoading",
+          "status": "PASS"
+        },
+        {
+          "name": "getProductSummaries_shouldAvoidFetching_whenInputIsEmpty",
+          "status": "PASS"
+        },
+        {
+          "name": "listingSuppressesProductHiddenDuringBatchLoading",
+          "status": "PASS"
+        },
+        {
+          "name": "getProductSummaries_shouldRejectUnboundedInput_whenMoreThanOneHundredIds",
+          "status": "PASS"
+        },
+        {
+          "name": "listingSignerPreparationFailureDoesNotTakeLocks",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.service.ProductImageServiceTest",
+      "kind": "surefire-reports",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.238",
+      "xmlSha256": "a7add011f6598ac318dffe5f0bcb211c8d301ac996e7aa1dcf882d8825889155",
+      "cases": [
+        {
+          "name": "galleryLimitAndDuplicateContentPreventInsertion",
+          "status": "PASS"
+        },
+        {
+          "name": "checkpointsVerifiedCopyBeforePublishingAndNeverDeletesSharedSource",
+          "status": "PASS"
+        },
+        {
+          "name": "rejectsOversizeSourceBeforeReadingIt",
+          "status": "PASS"
+        },
+        {
+          "name": "checkpointFailureCannotPublishGallery",
+          "status": "PASS"
+        },
+        {
+          "name": "replaySkipsStorageButRejectsChangedMetadata",
+          "status": "PASS"
+        },
+        {
+          "name": "corruptCopyCannotCreateCheckpointOrGallery",
+          "status": "PASS"
+        },
+        {
+          "name": "rejectsAnotherOwnersImageAndUncompletedUploadBeforeStorage",
+          "status": "PASS"
+        },
+        {
+          "name": "orderAndPrimaryConstraintsCannotAlterGallery",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.service.ProductKeywordSearchServiceImplTest",
+      "kind": "surefire-reports",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.294",
+      "xmlSha256": "9dc82a343254852cc572145de85b3e7a214d76bb1f8e37ce9ae15d438f319019",
+      "cases": [
+        {
+          "name": "listProducts_shouldFollowCandidateOrder_whenBatchRowsArriveInDifferentOrder",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldAvoidLocksAndRetry_whenSignerPreparationFails",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldMapCheapestEligibleProjection_whenKeywordIsProductOnly",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldKeepPairedNullMetadata_whenRepositoryReturnsSharedOnlyOrphan",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldPrepareThenLockAndSignOnlyPublishedCandidate_whenStatusChanges",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldKeepCostlierSkuEligibleVariant_insteadOfReloadingCheapestOverall",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldCloseSignerAndPropagateFailure_whenLocalSigningFails",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldNormalizeAndDeduplicateMembership_withoutLosingPhraseSequence",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.storage.S3ProductImageStorageTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.038",
+      "xmlSha256": "16c8279966069327e8fc1fd22b6f066573bc3e3520f559b9fb1e413016d2926e",
+      "cases": [
+        {
+          "name": "translatesSharedStorageFailureWithoutLeakingDetails",
+          "status": "PASS"
+        },
+        {
+          "name": "delegatesToSharedStorageWithFiveMinuteLifetimeAndClosesPreparedSigner",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.validator.CatalogDataValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.004",
+      "xmlSha256": "30a3c84c677d1d9e6053e4f11f684815dd485c6c5a759a9c1aff2430bc019f83",
+      "cases": [
+        {
+          "name": "validateProduct_shouldRejectEmptyOptionsWhenMultipleVariantsExist",
+          "status": "PASS"
+        },
+        {
+          "name": "validateProduct_shouldRejectInvalidOptionKeysAndValues",
+          "status": "PASS"
+        },
+        {
+          "name": "validateProduct_shouldRejectFractionalPrice",
+          "status": "PASS"
+        },
+        {
+          "name": "validateProduct_shouldRejectDuplicateOptionsIndependentOfKeyOrder",
+          "status": "PASS"
+        },
+        {
+          "name": "validateProduct_shouldRejectBlankSkuAndMissingPrice",
+          "status": "PASS"
+        },
+        {
+          "name": "validateProduct_shouldAcceptSingleEmptyMapAndExactWholePrices",
+          "status": "PASS"
+        },
+        {
+          "name": "validateProduct_shouldRejectZeroVariants",
+          "status": "PASS"
+        },
+        {
+          "name": "validateProduct_shouldRejectMissingCategoryOrStatus",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.validator.ProductImageContentValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.09",
+      "xmlSha256": "df31102296feda13b8b96d70c0887e1600a607a9f150645bae8501633591673e",
+      "cases": [
+        {
+          "name": "rejectsInvalidContentMetadataAndSize",
+          "status": "PASS"
+        },
+        {
+          "name": "supportedImagesHaveVerifiedDimensionsSizeAndHash(String, String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "supportedImagesHaveVerifiedDimensionsSizeAndHash(String, String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "supportedImagesHaveVerifiedDimensionsSizeAndHash(String, String)[3]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+      "kind": "surefire-reports",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.062",
+      "xmlSha256": "a2a637c1b047bd819aac9ed8d5377f451c03b27dda93f4e08d2610b01ecfdc4d",
+      "cases": [
+        {
+          "name": "fixedSortValuesAndCriteriaRetainExactAmounts",
+          "status": "PASS"
+        },
+        {
+          "name": "omittedValuesKeepLegacyDefaultsButExplicitNullIsInvalid",
+          "status": "PASS"
+        },
+        {
+          "name": "textBooleanAndDecodedJsonHaveDocumentedBounds",
+          "status": "PASS"
+        },
+        {
+          "name": "nestedGroupsAndAlternativesEnforceShapeAndLimits",
+          "status": "PASS"
+        },
+        {
+          "name": "exactPriceAmountsHaveThirtyDigitBoundWithoutDoubleCoercion",
+          "status": "PASS"
+        },
+        {
+          "name": "numericOperandsAreExactAndPrecisionBoundedIncludingExponentNotation",
+          "status": "PASS"
+        },
+        {
+          "name": "uuidAndRawCollectionBoundsArePreservedBeforeDeduplication",
+          "status": "PASS"
+        },
+        {
+          "name": "rangesAndExplicitNullOperandMembersKeepTheirPresenceSemantics",
+          "status": "PASS"
+        },
+        {
+          "name": "pageSizeAndKeywordBoundariesAreValidated",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.002",
+      "xmlSha256": "819439ef5c706e8f8180acdbc2e1ef9cdaebf246fc1d70c92d3196b27ceff1f6",
+      "cases": [
+        {
+          "name": "validate_shouldAcceptKnownFalseAndTypedQuantities",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectUnknownVersionMissingEnvelopeAndInvalidValues",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.common.exception.ApiErrorTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.002",
+      "xmlSha256": "59bcb129739c23bb42e1d6448c9265967bc0c7e6da28e3f1e40631367440f339",
+      "cases": [
+        {
+          "name": "from_shouldMapKnownLockFailureWithoutSqlDisclosure",
+          "status": "PASS"
+        },
+        {
+          "name": "create_shouldAlignStandardAndCustomFields",
+          "status": "PASS"
+        },
+        {
+          "name": "from_shouldNotMisclassifyUnknownIntegrityFailure",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.common.exception.WishlistPersistenceErrorTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.007",
+      "xmlSha256": "62d685d89105090ffb23c1b725db9addcfd320c9b2ea1ab79bbb907d1fbe44cd",
+      "cases": [
+        {
+          "name": "from_shouldTranslateOnlyKnownFailures_whenTransactionHasFailed(String, String, int)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "from_shouldTranslateOnlyKnownFailures_whenTransactionHasFailed(String, String, int)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "from_shouldTranslateOnlyKnownFailures_whenTransactionHasFailed(String, String, int)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "from_shouldTranslateOnlyKnownFailures_whenTransactionHasFailed(String, String, int)[4]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.common.identity.CurrentUserIdProviderTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.002",
+      "xmlSha256": "c64e36bc2a2ea37dd876d2a3706951c28b19accd27c1dde0a5d53a812f635a03",
+      "cases": [
+        {
+          "name": "getCurrentUserId_shouldFailWhenIdentityIsUnavailable",
+          "status": "PASS"
+        },
+        {
+          "name": "getCurrentUserId_shouldReturnControlledImmutableIdentity",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.controller.ImageUploadControllerTest",
+      "kind": "surefire-reports",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.57",
+      "xmlSha256": "565567572f6dc2d2f40e86f35072f49c3164f2a3b332d708d270ef5b0b2ddfd5",
+      "cases": [
+        {
+          "name": "create_shouldRejectInvalidRequest(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "create_shouldRejectInvalidRequest(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "create_shouldRejectInvalidRequest(String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "create_shouldRejectInvalidRequest(String)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "download_shouldRejectMalformedIdAndUnmatchedRoutes",
+          "status": "PASS"
+        },
+        {
+          "name": "create_shouldReturnCreatedWithoutProfilePermission",
+          "status": "PASS"
+        },
+        {
+          "name": "media_shouldRejectNoncanonicalUuidOnBothRoutes(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "media_shouldRejectNoncanonicalUuidOnBothRoutes(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "media_shouldRejectNoncanonicalUuidOnBothRoutes(String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "media_shouldRejectNoncanonicalUuidOnBothRoutes(String)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "create_shouldRejectMissingAuthentication",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.controller.ImageUploadFailureControllerTest",
+      "kind": "surefire-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.101",
+      "xmlSha256": "534a8249446bb5d69b00c4d44c10395beda8648f9ad9880d9c0c6c118ee70337",
+      "cases": [
+        {
+          "name": "complete_shouldUseSafeProblemDetail(RuntimeException, int)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldUseSafeProblemDetail(RuntimeException, int)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldUseSafeProblemDetail(RuntimeException, int)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldUseSafeProblemDetail(RuntimeException, int)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldUseSafeProblemDetail(RuntimeException, int)[5]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.converter.MediaConverterTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.002",
+      "xmlSha256": "f7f83281372cd9b50a4a56e844238d04f85e952961b5e02922128fc0d8659b7b",
+      "cases": [
+        {
+          "name": "toUpload_shouldMapDeadlineAndKeepCapabilityOutOfStringRepresentation",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.service.MediaCommandServiceTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.009",
+      "xmlSha256": "689ed57e40af51f687ef7b1dbe7764720d28cd2170e15e0b902cb82053f4bb4a",
+      "cases": [
+        {
+          "name": "complete_shouldSkipStaging_whenAlreadyCompleted",
+          "status": "PASS"
+        },
+        {
+          "name": "create_shouldDeriveOwnerAndAlignDeadline",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldReturnExpiredOutcomeWithoutThrowingInsideTransaction_whenDeadlineReached",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.service.MediaServiceTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.154",
+      "xmlSha256": "e9d8ad0d91dd63c17b0ee04473215f0eef93c9e35cb786ff924d3ba273b5ad90",
+      "cases": [
+        {
+          "name": "complete_shouldTranslateExpiredOutcomeAfterCommandReturn",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldSurfaceSigningFailureAfterSuccessfulCommand",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldRejectAmbientTransaction",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.testdata.MediaFixturesTest",
+      "kind": "surefire-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.149",
+      "xmlSha256": "95fbd03490ad775d927e969266867983c6a21fa12a364137d73efa923732055f",
+      "cases": [
+        {
+          "name": "fixture_shouldDecodeActualPixels_whenSupportedFormat(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "fixture_shouldDecodeActualPixels_whenSupportedFormat(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "fixture_shouldDecodeActualPixels_whenSupportedFormat(String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "fixture_shouldDecodeActualPixels_whenSupportedFormat(String)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "fixture_shouldDecodeActualPixels_whenSupportedFormat(String)[5]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.validator.ImageContentValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.215",
+      "xmlSha256": "1362596f400ac47a52fa9eb39e9d3c03f5dfd952e5b8138c75a08118d399c613",
+      "cases": [
+        {
+          "name": "validate_shouldRejectInvalidBytes(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectInvalidBytes(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectDecodedFormatMismatchEvenWhenMetadataMatchesDeclaration",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectEmptyOrMismatchedContent(String, String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectEmptyOrMismatchedContent(String, String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectEmptyOrMismatchedContent(String, String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldDecodeActualImage_whenSupported(String, String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldDecodeActualImage_whenSupported(String, String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldDecodeActualImage_whenSupported(String, String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldDecodeActualImage_whenSupported(String, String)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldDecodeActualImage_whenSupported(String, String)[5]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.validator.ImageUploadValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.01",
+      "xmlSha256": "3a2527cbda56d2d16ed46bf3a30a439927e3b0c2e1b358a8dd0690abdbe209c6",
+      "cases": [
+        {
+          "name": "validateType_shouldRejectMissingOrUnsupportedDeclaration(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "validateType_shouldRejectMissingOrUnsupportedDeclaration(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "validateType_shouldRejectMissingOrUnsupportedDeclaration(String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "validateType_shouldRejectMissingOrUnsupportedDeclaration(String)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "validateType_shouldRejectMissingOrUnsupportedDeclaration(String)[5]",
+          "status": "PASS"
+        },
+        {
+          "name": "validateType_shouldRejectMissingOrUnsupportedDeclaration(String)[6]",
+          "status": "PASS"
+        },
+        {
+          "name": "validateId_shouldRejectMissingId",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.storage.config.S3EnvironmentConfigurationTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.007",
+      "xmlSha256": "832656a906caa2d1c656277422aa6789c664c59c02dcad55ff1fb6c0c87417ce",
+      "cases": [
+        {
+          "name": "validate_shouldRejectCredentialBearingEndpointAndPartialLocalCredentials",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.storage.config.S3StorageConfigurationTest",
+      "kind": "surefire-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.922",
+      "xmlSha256": "dfbe5d57a7b2ded604207a2243f43f22ec2d41fade7060a6550dcabf887a369a",
+      "cases": [
+        {
+          "name": "presign_shouldUseBrowserEndpointAndBindContentTypeWithoutNetworkAccess",
+          "status": "PASS"
+        },
+        {
+          "name": "credentials_shouldRejectDummyCredentialsInProductionEvenWhenLocalProfileIsAlsoActive",
+          "status": "PASS"
+        },
+        {
+          "name": "prepareUpload_shouldExposeExactSignedDeadlineAndFull900SecondLifetime",
+          "status": "PASS"
+        },
+        {
+          "name": "credentials_shouldSelectDefaultChainWithoutExplicitSecrets",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectMissingBucketAndInvalidDurations",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.controller.UserImageControllerTest",
+      "kind": "surefire-reports",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.501",
+      "xmlSha256": "297ecd0faaedd833ed88008d822315b95db9cd750e0ef73ac385be2f4feb5d57",
+      "cases": [
+        {
+          "name": "update_shouldPreserveProfilePermissionRequirement",
+          "status": "PASS"
+        },
+        {
+          "name": "update_shouldRejectMalformedImageBeforeService(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "update_shouldRejectMalformedImageBeforeService(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "update_shouldRejectMalformedImageBeforeService(String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "update_shouldRejectMalformedImageBeforeService(String)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "update_shouldRejectMalformedImageBeforeService(String)[5]",
+          "status": "PASS"
+        },
+        {
+          "name": "update_shouldRejectMalformedImageBeforeService(String)[6]",
+          "status": "PASS"
+        },
+        {
+          "name": "update_shouldRejectMalformedImageBeforeService(String)[7]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.converter.AddressConverterTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.005",
+      "xmlSha256": "24155ea07255688eb1e7b0c552588fb6a29a722d808affa171eb4bc297b14d88",
+      "cases": [
+        {
+          "name": "toResponse_shouldMapAddressWithoutOwner",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.converter.PublicProfileConverterTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.001",
+      "xmlSha256": "4aa3fb8925174b56022351b2069886230c3b2f4299a14d23daf4f90aafa484e1",
+      "cases": [
+        {
+          "name": "toPublic_shouldMapOnlyPublicIdentityAndNullImage",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.converter.UserConverterTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.002",
+      "xmlSha256": "5adda3dfe8d2601ff0ad31e67166444cd9574006eec943431ddbce5aa9b3a88e",
+      "cases": [
+        {
+          "name": "toPublic_shouldExposeOnlyPublicProperties",
+          "status": "PASS"
+        },
+        {
+          "name": "toPrivate_shouldMapPersonalDetailsWithAbsentImage",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.converter.UserImageConverterTest",
+      "kind": "surefire-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.001",
+      "xmlSha256": "30b241b97c8470b98d49ddcf18dd283d9b6a1b2e86cc1033b016b104b2ac0e0f",
+      "cases": [
+        {
+          "name": "toPublic_shouldMapPreparedImageWithoutExposingPrivateFields",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.dto.request.RequestValidationTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.018",
+      "xmlSha256": "272fde82a3f8feee59cc2b14ea0b3ff9098a04b4bb5b1053f82db42837241708",
+      "cases": [
+        {
+          "name": "request_shouldRejectProtectedFieldBinding",
+          "status": "PASS"
+        },
+        {
+          "name": "request_shouldRejectInternalSpacesInPhone",
+          "status": "PASS"
+        },
+        {
+          "name": "request_shouldStripBeforeCountingCodePoints",
+          "status": "PASS"
+        },
+        {
+          "name": "request_shouldBindUuidImageIdForServiceValidation",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.dto.request.UserImageRequestTest",
+      "kind": "surefire-reports",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.024",
+      "xmlSha256": "0921d577a974c17e1016975db93e6b4b4a85f88de55fa8f7b095ba50e6e3b7ff",
+      "cases": [
+        {
+          "name": "bind_shouldDistinguishOmittedNullAndExplicitImage",
+          "status": "PASS"
+        },
+        {
+          "name": "bind_shouldRejectMalformedImageId(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "bind_shouldRejectMalformedImageId(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "bind_shouldRejectMalformedImageId(String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "bind_shouldRejectMalformedImageId(String)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "bind_shouldRejectMalformedImageId(String)[5]",
+          "status": "PASS"
+        },
+        {
+          "name": "bind_shouldRejectMalformedImageId(String)[6]",
+          "status": "PASS"
+        },
+        {
+          "name": "bind_shouldRejectMalformedImageId(String)[7]",
+          "status": "PASS"
+        },
+        {
+          "name": "bind_shouldRejectMalformedImageId(String)[8]",
+          "status": "PASS"
+        },
+        {
+          "name": "bind_shouldRejectMalformedImageId(String)[9]",
+          "status": "PASS"
+        },
+        {
+          "name": "bind_shouldRejectMalformedImageId(String)[10]",
+          "status": "PASS"
+        },
+        {
+          "name": "bind_shouldRejectMalformedImageId(String)[11]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.service.AddressServiceImplTest",
+      "kind": "surefire-reports",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.054",
+      "xmlSha256": "c5e7ea7ed1c028d5b98b4fc30abee22065205f33fd438bb052cb8b3c3bda622c",
+      "cases": [
+        {
+          "name": "updateAddress_shouldClearOldDefaultBeforePromotingTarget",
+          "status": "PASS"
+        },
+        {
+          "name": "createAddress_shouldMakeFirstDefaultEvenWhenFalse",
+          "status": "PASS"
+        },
+        {
+          "name": "deleteAddress_shouldAllowFinalDefaultDeletion",
+          "status": "PASS"
+        },
+        {
+          "name": "getAddress_shouldNotExposeForeignOwnership",
+          "status": "PASS"
+        },
+        {
+          "name": "createAddress_shouldRespectExplicitFlagForLaterAddress(boolean)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "createAddress_shouldRespectExplicitFlagForLaterAddress(boolean)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "deleteAddress_shouldPreserveDefaultWhenNonDefaultDeleted",
+          "status": "PASS"
+        },
+        {
+          "name": "deleteAddress_shouldPromoteHighestRemainingId",
+          "status": "PASS"
+        },
+        {
+          "name": "createAddress_shouldPreserveDefaultForOmittedFlag",
+          "status": "PASS"
+        },
+        {
+          "name": "updateAddress_shouldPreserveDefaultWhenFlagOmitted",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.service.UserImageServiceTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.151",
+      "xmlSha256": "db4187eab70103d8591c223360eaa3d08971399d4d0e3d05c02ba288cc342f94",
+      "cases": [
+        {
+          "name": "update_shouldClearReferenceWithoutCallingStorage",
+          "status": "PASS"
+        },
+        {
+          "name": "update_shouldRejectForeignImageBeforeChangingOtherFields",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.service.UserServiceImplTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.005",
+      "xmlSha256": "48b792e18221cabbf2c3396559467154ed76c3a9cc5023babbb3b85c5a5e4d48",
+      "cases": [
+        {
+          "name": "updateUser_shouldPreserveOmittedFieldsAndImmutableValues",
+          "status": "PASS"
+        },
+        {
+          "name": "updateUser_shouldRejectConflictBeforeMutation",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.service.VerifiedAccountServiceTest",
+      "kind": "surefire-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.004",
+      "xmlSha256": "e8bdbb5c52fd2f0d245928265bce450f046ba05e0e4daacdfda8248c0cdc7f29",
+      "cases": [
+        {
+          "name": "setInitialPassword_shouldNeverOverwriteExistingCredential",
+          "status": "PASS"
+        },
+        {
+          "name": "createVerifiedAccount_shouldDeriveSuffixWithoutLosingOfficialEmail",
+          "status": "PASS"
+        },
+        {
+          "name": "replaceVerifiedEmail_shouldKeepUsernameAndBindEvidence",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.validator.AddressValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.006",
+      "xmlSha256": "26f249a93e5ae15d7447e525562e960dbe810e868b32bfa6c045e98d0389af36",
+      "cases": [
+        {
+          "name": "validateDefaultChange_shouldPreserveOnNull",
+          "status": "PASS"
+        },
+        {
+          "name": "validateCapacity_shouldAcceptNineteen",
+          "status": "PASS"
+        },
+        {
+          "name": "validateCapacity_shouldRejectTwenty",
+          "status": "PASS"
+        },
+        {
+          "name": "validateDefaultChange_shouldRejectUnsettingDefault",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.validator.CodePointLengthValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.083",
+      "xmlSha256": "19cc80ef0d6e70eb15c5357d1d82f2893c5c276b9c4ac423cbacb50a442a67e1",
+      "cases": [
+        {
+          "name": "isValid_shouldEnforceEveryConfiguredMaximum(int)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "isValid_shouldEnforceEveryConfiguredMaximum(int)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "isValid_shouldEnforceEveryConfiguredMaximum(int)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "isValid_shouldEnforceEveryConfiguredMaximum(int)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "isValid_shouldEnforceEveryConfiguredMaximum(int)[5]",
+          "status": "PASS"
+        },
+        {
+          "name": "isValid_shouldRejectThirdCodePoint",
+          "status": "PASS"
+        },
+        {
+          "name": "isValid_shouldCountCodePointsRatherThanUtf16Units(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "isValid_shouldCountCodePointsRatherThanUtf16Units(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "isValid_shouldCountCodePointsRatherThanUtf16Units(String)[3]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.validator.UserValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.008",
+      "xmlSha256": "85664881b09dccf8e1bd25f428970a7c5c9ec39ab56a501cde0ec16dc0fdfa15",
+      "cases": [
+        {
+          "name": "validate_shouldRejectFutureBirthDate",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectAtSignWithoutChangingOtherUsernameRules",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldAcceptToday",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectIdentityConflict",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldRejectExplicitNullUsername",
+          "status": "PASS"
+        },
+        {
+          "name": "validate_shouldPreserveOmittedUsername",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.wishlist.controller.WishlistControllerTest",
+      "kind": "surefire-reports",
+      "tests": 31,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "1.939",
+      "xmlSha256": "b4d18deb09e16de11bdd5e331577d909851f2ef40cd80630d9a42bb0c7aae7d9",
+      "cases": [
+        {
+          "name": "removeProduct_shouldEnforcePermissionAndInputContract_whenRequestIsInvalid",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRetainBearerChallenge_whenCurrentUserDisappearsAfterAuthentication",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectOwnerSelectionAndMissingPermission_whenUnauthorized",
+          "status": "PASS"
+        },
+        {
+          "name": "removeProduct_shouldReturnEmptySuccess_whenOwnedOrAbsent",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[5]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[6]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[7]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[8]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[9]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[10]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[11]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[12]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[13]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[14]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[15]",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[5]",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldAcceptSizeBoundsAndBeyondLastPage_whenQueryIsValid",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldUseDefaultsAndEmptyPageContract_whenParametersAreOmitted",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectInvalidIdentifier_whenNotCanonical(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectInvalidIdentifier_whenNotCanonical(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectInvalidIdentifier_whenNotCanonical(String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldPreserveProblemDetails_whenDomainFails",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldReturnOneItemWithCorrectStatus_whenCreatedOrDuplicate",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.wishlist.converter.WishlistConverterTest",
+      "kind": "surefire-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.021",
+      "xmlSha256": "2bd8a9f9323f4be4c7188b94f35d6a0c1a8688e9a8a20f22a17b6321e31b9baa",
+      "cases": [
+        {
+          "name": "toItem_shouldPreservePreparedSummaryAndTimestamp_whenImageIsAbsent",
+          "status": "PASS"
+        },
+        {
+          "name": "toPage_shouldPreserveOrderAndMetadataWithoutMutableAlias_whenItemsArePrepared",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+      "kind": "surefire-reports",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.238",
+      "xmlSha256": "0f446fc5b4fb56d1bc1b23cbe532b1d34c7514836d110f7a8554dd204b41e939",
+      "cases": [
+        {
+          "name": "addProduct_shouldReturnCreatedItem_whenFirstInsertionSucceeds",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectLateHiddenProduct_whenSummaryIsUnavailable",
+          "status": "PASS"
+        },
+        {
+          "name": "removeProduct_shouldRejectUntrustedOwner_whenIdentityIsAbsent",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldSurfaceSafeSigningFailure_whenPreparationFails",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldReportConflict_whenWinningMembershipWasRemoved",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectMissingCurrentAccount_whenUserDisappears",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldPreserveOriginalTime_whenDuplicateIsIgnored",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectUnavailableProductBeforeInsert_whenHiddenOrMissing",
+          "status": "PASS"
+        },
+        {
+          "name": "removeProduct_shouldDeleteOnlyOwnedReferenceWithoutCatalogLookup_whenEntryIsHiddenOrMissing",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.wishlist.validator.WishlistValidatorTest",
+      "kind": "surefire-reports",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.046",
+      "xmlSha256": "834c3c7c368131b0a5e85a7c45eac62d8b39bb4bc62ab24feec1d2575b79eb04",
+      "cases": [
+        {
+          "name": "validatePage_shouldAcceptBounds_whenInputIsValid(int, int)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "validatePage_shouldAcceptBounds_whenInputIsValid(int, int)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "validatePage_shouldAcceptBounds_whenInputIsValid(int, int)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "validatePage_shouldAcceptBounds_whenInputIsValid(int, int)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "validatePage_shouldRejectInvalidBounds_whenInputIsInvalid(int, int)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "validatePage_shouldRejectInvalidBounds_whenInputIsInvalid(int, int)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "validatePage_shouldRejectInvalidBounds_whenInputIsInvalid(int, int)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "validatePage_shouldRejectInvalidBounds_whenInputIsInvalid(int, int)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "validateOwner_shouldRejectMissingIdentity_whenOwnerIsNull",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.BuildConfigurationIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.0",
+      "xmlSha256": "2c47b4f55eb69e1a861e1c2fc513812fa6ad4a14f73ed6a47414ba83d8f66208",
+      "cases": [
+        {
+          "name": "runtime_shouldUseApprovedJavaVersion",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.controller.GoogleBrowserFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "2.089",
+      "xmlSha256": "db944d6ef6f7774b58edcbb7ca22e8975157eb47002ebdf1226a2490a070e06e",
+      "cases": [
+        {
+          "name": "callback_shouldValidateRealOidcAndNeverWriteCookiesOrIssueApplicationCredentials",
+          "status": "PASS"
+        },
+        {
+          "name": "publicStart_shouldIgnoreUnrelatedBearerAndRejectUntrustedOrigin",
+          "status": "PASS"
+        },
+        {
+          "name": "delayedSuccessfulCallbackResponse_shouldNotOverwriteCookieFromLaterInitiation",
+          "status": "PASS"
+        },
+        {
+          "name": "missingCookieAndTamperedState_shouldFailSafelyAndNeverRepairBrowserCorrelation",
+          "status": "PASS"
+        },
+        {
+          "name": "callback_shouldRejectInvalidProviderProofWithoutCookiesOrCredentials(TokenFault)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "callback_shouldRejectInvalidProviderProofWithoutCookiesOrCredentials(TokenFault)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "callback_shouldRejectInvalidProviderProofWithoutCookiesOrCredentials(TokenFault)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "callback_shouldRejectInvalidProviderProofWithoutCookiesOrCredentials(TokenFault)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "callback_shouldRejectInvalidProviderProofWithoutCookiesOrCredentials(TokenFault)[5]",
+          "status": "PASS"
+        },
+        {
+          "name": "callback_shouldRejectInvalidProviderProofWithoutCookiesOrCredentials(TokenFault)[6]",
+          "status": "PASS"
+        },
+        {
+          "name": "cancelledConsent_shouldConsumeServerAttemptWithoutTouchingCookie",
+          "status": "PASS"
+        },
+        {
+          "name": "olderCallback_shouldNotEraseNewerInitiationCookie",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.AuthCleanupIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.423",
+      "xmlSha256": "cb2da256d11336a8315cc96a079d084fed2368f5e9d83e54872a97c019ee0461",
+      "cases": [
+        {
+          "name": "execute_shouldDeleteExpiredFamilyAndPreservesActiveConsumedHistory",
+          "status": "PASS"
+        },
+        {
+          "name": "cleanup_shouldBoundEachTransactionAndDrainRemainingBatches",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.AuthCorsApiIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.016",
+      "xmlSha256": "208cc677fa2c84ed86c56d7aa03541fde6160ad4c918c5375d1e026487431cc2",
+      "cases": [
+        {
+          "name": "execute_shouldExposeAccessHeaderForBrowserClient",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldAllowAllOriginsMethodsAndHeadersWithoutCredentials",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.AuthSessionExpiryApiIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.66",
+      "xmlSha256": "c4e4aa7ddf010f07e9e88681595d023a82cb74a3a4f4fd4ec05984f23f7dfcfb",
+      "cases": [
+        {
+          "name": "execute_shouldVerifyRefreshCapsAccessAtOriginalDeadlineAndRejectsEquality",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldVerifyExpiredAccessStillAllowsRefreshCredentialLogout",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.AuthenticationFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.446",
+      "xmlSha256": "325529041f7f6fbd63e8c8ae5ca1fbe6893dc0021320d288d798a423ec952f75",
+      "cases": [
+        {
+          "name": "execute_shouldVerifyFullFlowPreservesContractsWithoutLeakingCredentials(CapturedOutput)",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.BearerAuthenticationApiIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.366",
+      "xmlSha256": "a069c558ba616348edaacd56e3582436cf7b12daa4dec5a71d71f30ca83287e2",
+      "cases": [
+        {
+          "name": "execute_shouldScopeAllAddressOperationsToCurrentOwner",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldReadCurrentPermissionsStatusAndStableIdOnEveryRequest",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldDenyAnonymousAndNonHeaderCredentials",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.EmailLoginApiIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.797",
+      "xmlSha256": "a02749b1eb17ae2c36a2ad08276558e615c74bc63dfc2851e18014c882e356ab",
+      "cases": [
+        {
+          "name": "login_shouldTrustOnlyCurrentEmailAndPreserveUsernameLogin",
+          "status": "PASS"
+        },
+        {
+          "name": "login_shouldRecheckChangedIdentifierAfterWaitingForOwnerLock(boolean)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "login_shouldRecheckChangedIdentifierAfterWaitingForOwnerLock(boolean)[2]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.EmailVerificationFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "2.325",
+      "xmlSha256": "2abbe847f9c64478da9fbd9eebef9972c735ca4045f0b1ba90cb89d37edf3f8e",
+      "cases": [
+        {
+          "name": "profile_shouldRejectEverySuppliedEmailWhileOmissionPreservesIt",
+          "status": "PASS"
+        },
+        {
+          "name": "challenge_shouldHideOtherOwnersAndWrongPasswordsShouldNotLockOutValidProof",
+          "status": "PASS"
+        },
+        {
+          "name": "wrongCodes_shouldAllowValidCodeAfterRepeatedFailuresWithoutChangingOfficialEmailOrConsumingAccountProof",
+          "status": "PASS"
+        },
+        {
+          "name": "replacement_shouldRequireFreshOwnerProofAndPreserveOfficialEmailUntilConfirmation",
+          "status": "PASS"
+        },
+        {
+          "name": "competingEmailConfirmations_shouldHaveOneWinnerAndPreserveLosingOwnersState",
+          "status": "PASS"
+        },
+        {
+          "name": "repeatedImmediateUserChallenges_shouldNotHaveOwnerOrDestinationLimits",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.LegacyEmailVerificationIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.168",
+      "xmlSha256": "ac4e8199a1a3cb068687d1f44e88ce799bb913e10fdc370eb2f45efd6b53beb7",
+      "cases": [
+        {
+          "name": "legacyAccount_shouldRetainEmailLessAccessAndVerifyItsExistingUnverifiedEmail",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.LegacyMigrationIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.239",
+      "xmlSha256": "16e54c0a583be86fdfe77a0a382b1b1809f979e3c22770ca4ec9ee50eb4da56b",
+      "cases": [
+        {
+          "name": "migrate_shouldFailOnLegacyAtSignWithoutRenamingOrDeleting",
+          "status": "PASS"
+        },
+        {
+          "name": "migrate_shouldBackfillUserRoleWithoutChangingLegacyFields",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.LogoutApiIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.184",
+      "xmlSha256": "15b5b92b6110f49bf5396c54b7986fa57cffb4e0749a0ff8a3db8d95217ad91e",
+      "cases": [
+        {
+          "name": "logout_shouldAcceptRetainedConsumedCredentialAndBeIdempotent",
+          "status": "PASS"
+        },
+        {
+          "name": "logout_shouldRejectUnknownOrExpiredCredentialIndependentlyOfCleanup",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.LogoutRefreshRaceIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.119",
+      "xmlSha256": "73b542d0cfd15d7c687596b9a01af23d667e8c7793665e75618a0a1cd8d41ae7",
+      "cases": [
+        {
+          "name": "execute_shouldVerifyConcurrentRefreshCannotLeaveLiveCredentialAfterLogout",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.PasswordChangeApiIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.82",
+      "xmlSha256": "2801195e58481f7c65d7d1c725c533eeb6337d96fb5f4392a1162f1b6124d5fe",
+      "cases": [
+        {
+          "name": "changePassword_shouldRevokeEverySessionAndNotIssueCredentials",
+          "status": "PASS"
+        },
+        {
+          "name": "changePassword_shouldPreserveStateForWrongOrUnchangedPassword",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.PasswordRevocationRaceIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.532",
+      "xmlSha256": "acdc30c4be7964df40c3c5eae51feebb09f6105090790ebaf274cd68cd68ad67",
+      "cases": [
+        {
+          "name": "execute_shouldVerifyRefreshAndOldPasswordLoginCannotSurviveCommittedPasswordChange",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.RefreshRotationApiIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.381",
+      "xmlSha256": "8a8fbf887bb499fdffbf6b4fe8191d6fbe83c62d857fa5ba9c42dd746d6f3800",
+      "cases": [
+        {
+          "name": "refresh_shouldRevokeOnConcurrentSameCredentialReuse",
+          "status": "PASS"
+        },
+        {
+          "name": "refresh_shouldRotateWithoutExtendingExpiryAndCommitReuseRevocationBefore401",
+          "status": "PASS"
+        },
+        {
+          "name": "refresh_shouldNotMutateSessionForUnknownCredential",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.RegistrationLoginApiIT",
+      "kind": "failsafe-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.708",
+      "xmlSha256": "70fdd8e92fce83bc6628e3d97028d83df6a772253560d72d67a1e4a90836dc71",
+      "cases": [
+        {
+          "name": "login_shouldCreateIndependentSessionAndUseExactPassword",
+          "status": "PASS"
+        },
+        {
+          "name": "confirmation_shouldAllowOnlyOneConcurrentCredentialIssue",
+          "status": "PASS"
+        },
+        {
+          "name": "confirmation_shouldIssueOnlyHeaderAccessAndAtomicDefaultAccount",
+          "status": "PASS"
+        },
+        {
+          "name": "login_shouldHideMissingWrongAndDisabledIdentities",
+          "status": "PASS"
+        },
+        {
+          "name": "register_shouldRejectLegacyShapeAndInvalidEmailWithoutPartialSession",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.integration.RegistrationLoginServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "1.174",
+      "xmlSha256": "0b113618043367c18f1378c68f74c2c58c6f521fb4f80a07da90d1ed9e8a0df2",
+      "cases": [
+        {
+          "name": "execute_shouldVerifyRevocationFailureRollsBackPasswordAndAllSessionChanges",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldVerifyCleanupFailureRestoresExpiredFamily",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldVerifySigningFailureRollsBackAccountRoleSessionAndCredential",
+          "status": "PASS"
+        },
+        {
+          "name": "register_shouldRollbackAccountWhenDefaultRoleIsUnavailable",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldVerifyRefreshSigningFailureRestoresConsumedCredential",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.repository.AuthSessionRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.024",
+      "xmlSha256": "f69e6a274d39fcc760bc52cfd1c1d3c673167cab8f0617592a619c56d4867025",
+      "cases": [
+        {
+          "name": "execute_shouldVerifyDatabaseRejectsRevocationWithoutReason",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldVerifyDatabaseRejectsSlidingExpiry",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldPreserveFixedExpiryAndLazyOwner",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.repository.EmailVerificationRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.029",
+      "xmlSha256": "9e9ddc114be26e78eefb5fe595c5039459ea7f72d284b9fb294e0d288b7ba2f3",
+      "cases": [
+        {
+          "name": "insert_shouldRejectPendingEmailChange",
+          "status": "PASS"
+        },
+        {
+          "name": "insert_shouldPermitOnlyOneActiveChallengePerPendingOwner",
+          "status": "PASS"
+        },
+        {
+          "name": "insert_shouldRejectMissingOwner",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.repository.GoogleIdentityRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.036",
+      "xmlSha256": "921d3276a5f26b93fa5426bea8d0465c24a996628696a14c99a812558fa1d86c",
+      "cases": [
+        {
+          "name": "association_shouldRejectNoncanonicalIssuer",
+          "status": "PASS"
+        },
+        {
+          "name": "association_shouldEnforceBothUniqueDirections(boolean)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "association_shouldEnforceBothUniqueDirections(boolean)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "association_shouldKeepOpaqueSubjectCaseAndPermitMissingProviderEmail",
+          "status": "PASS"
+        },
+        {
+          "name": "association_shouldNeverPersistReassignmentOrLinkedTimeChanges",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.repository.IdentityMigrationIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "3.824",
+      "xmlSha256": "343eaa7d24de71e5166ab56534628072f1f8f90b0fbe359b69b18715da1cbd67",
+      "cases": [
+        {
+          "name": "migrate_shouldPreserveLegacyUsersAndEnforceIdentityOwnership",
+          "status": "PASS"
+        },
+        {
+          "name": "removeRateLimiting_shouldPreserveAcceptedBusinessStateAcrossV13Upgrade",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.repository.OAuthStateRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.039",
+      "xmlSha256": "11f879995b48f8aabf396325eb0248e3e793af22ceec939b20532ec751e412ba",
+      "cases": [
+        {
+          "name": "save_shouldRejectInvalidLifetimeAndAnonymousLinking",
+          "status": "PASS"
+        },
+        {
+          "name": "findForUpdate_shouldRoundTripBrowserGenerationAndFixedDeadline",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.repository.PendingRegistrationRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.04",
+      "xmlSha256": "a7ee860c0f0a7476c01c190c99d88689093c16a6a682f78149288f3bb9084a11",
+      "cases": [
+        {
+          "name": "insert_shouldAllowIndependentAttemptsForSameDestinationWithoutUserOrPassword",
+          "status": "PASS"
+        },
+        {
+          "name": "insert_shouldRejectCredentialReuseAcrossIndependentAttempts",
+          "status": "PASS"
+        },
+        {
+          "name": "insert_shouldEnforcePendingStateConstraints(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "insert_shouldEnforcePendingStateConstraints(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "insert_shouldEnforcePendingStateConstraints(String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "insert_shouldEnforcePendingStateConstraints(String)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "insert_shouldEnforcePendingStateConstraints(String)[5]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.repository.RefreshCredentialRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.035",
+      "xmlSha256": "983e8c6da520e6843a84df74ff285edab12d011f7b20d0ed7e92e12c8bf09ce2",
+      "cases": [
+        {
+          "name": "execute_shouldVerifyDatabaseAllowsOnlyOneUnconsumedCredential",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldVerifyDatabaseRejectsNonDigestAndDuplicateDigest",
+          "status": "PASS"
+        },
+        {
+          "name": "save_shouldRejectDuplicateDigestEvenAfterConsumption",
+          "status": "PASS"
+        },
+        {
+          "name": "execute_shouldRetainConsumedEvidenceAndLoadsSessionLazily",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.security.GoogleSecurityConfigurationIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.141",
+      "xmlSha256": "5f6396dc255e9ea27d8d917d22e3cb9c7455d135fae6e1c492e1037070f6632d",
+      "cases": [
+        {
+          "name": "exactChains_shouldAllowOnlyDeclaredPublicPostsAndExactCredentialedCors",
+          "status": "PASS"
+        },
+        {
+          "name": "handoffFailures_shouldContinueValidatingRepeatedRequestsWithoutThrottling",
+          "status": "PASS"
+        },
+        {
+          "name": "publicGoogleStarts_shouldAcceptRepeatedStartsWithoutThrottling",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.GoogleAttemptStateIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.109",
+      "xmlSha256": "25b0db9fe7865a9a03436115fdb9b234a839907ecc03e978e9be5f47883482ba",
+      "cases": [
+        {
+          "name": "handoff_shouldRequirePkceAndAllowOnlyOneRedemptionEvenWhileCookieExists",
+          "status": "PASS"
+        },
+        {
+          "name": "overlappingInitiationsWithSameEarlierCookie_shouldShareSlotAndRequireRestartAfterOutOfOrderResponse",
+          "status": "PASS"
+        },
+        {
+          "name": "failedCallbackCorrelation_shouldInvalidateOnlyItsOwnAttemptAndNeverPermitLaterReplay",
+          "status": "PASS"
+        },
+        {
+          "name": "supersededAttempt_shouldRejectOldCallbackWithoutInvalidatingNewCookie",
+          "status": "PASS"
+        },
+        {
+          "name": "callbackCompletionRacingNewInitiation_shouldUseConsistentSlotThenAttemptLocks",
+          "status": "PASS"
+        },
+        {
+          "name": "authorization_shouldPersistAuthenticatedStateAndConsumeItOnce",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.GoogleHandoffIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.597",
+      "xmlSha256": "f20b4336e9e38071f094d08eca4d538e7f08831822b1634624409b9cc34ccb53",
+      "cases": [
+        {
+          "name": "redemption_shouldRequirePkceAndCommitExactlyOneConcurrentSession",
+          "status": "PASS"
+        },
+        {
+          "name": "redemption_shouldAcceptImmediatelyBeforeAndRejectExactlyAtSixtySeconds",
+          "status": "PASS"
+        },
+        {
+          "name": "cleanup_shouldEraseHandoffAtItsOwnRetentionDeadlineEvenBeforeParentAttemptDeadline",
+          "status": "PASS"
+        },
+        {
+          "name": "authorization_shouldRejectExpiredCookieAndPermitSafeRestart",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.GoogleLoginConcurrencyIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.292",
+      "xmlSha256": "ad24f4e68bba80a34ac1ca48bd14f77e1617406085195a4528d7abacfc6a10fa",
+      "cases": [
+        {
+          "name": "independentPendingConfirmations_shouldCreateOnlyOneAccountForSharedDestination",
+          "status": "PASS"
+        },
+        {
+          "name": "simultaneousFirstLogin_shouldCreateOneAssociationWithoutOrphanSessions",
+          "status": "PASS"
+        },
+        {
+          "name": "pendingConfirmationVersusGoogleRegistration_shouldHaveOneWinnerAndNoAuthenticationFromCollision",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.IdentityCleanupIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.824",
+      "xmlSha256": "2dd216d0e848e3ce7362b41482ce6dd77a6fba3affe3eeb60f4172b90472a177",
+      "cases": [
+        {
+          "name": "cleanup_shouldRespectExact24HourBoundaryAndDeleteForeignKeyChildrenFirst",
+          "status": "PASS"
+        },
+        {
+          "name": "proofCleanup_shouldRemoveDependentExpiredAttemptAtProofDeadlineWithoutDeletingActiveSession",
+          "status": "PASS"
+        },
+        {
+          "name": "sessionCleanup_shouldDeleteBoundProofStateBeforeItsReferencedSession",
+          "status": "PASS"
+        },
+        {
+          "name": "purgeOverdueMail_shouldEraseAtExpiryBeforeAnyDelivery",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.PendingRegistrationBoundaryIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.82",
+      "xmlSha256": "d6b23f5bcf5cb1f8c7140492c59271baa717c80516d057e5f9dbe8d6b6d64289",
+      "cases": [
+        {
+          "name": "resend_shouldPermitFreshGenerationImmediatelyAfterWrongCodes",
+          "status": "PASS"
+        },
+        {
+          "name": "confirmation_shouldPreserveLeadingZerosAndRejectExactlyAtTenMinuteDeadline",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.PendingRegistrationServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "1.144",
+      "xmlSha256": "94b21a0ff8ade874a3b56b72e56f1ba19235c8c63441201371bc9a5d2c39fa6d",
+      "cases": [
+        {
+          "name": "resend_shouldRotateCredentialAndCodeWhileRetainingAttemptIdentity",
+          "status": "PASS"
+        },
+        {
+          "name": "initiate_shouldPersistOnlyPendingProofAndAcceptedOutboxUntilAuthoritativeConfirmation",
+          "status": "PASS"
+        },
+        {
+          "name": "repeatedImmediateSends_shouldHaveNoDestinationQuotaOrResendCooldown",
+          "status": "PASS"
+        },
+        {
+          "name": "wrongCodes_shouldNotLockOutValidConfirmation",
+          "status": "PASS"
+        },
+        {
+          "name": "independentPendingAttempts_shouldNotReserveOfficialEmailAndCollisionMustRollbackWholeCreation",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.auth.service.VerificationMailDeliveryIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.76",
+      "xmlSha256": "2d9275b15f2e831a4ef64c46eb5c709f369d6ea80b9d108a68cd998c07056159",
+      "cases": [
+        {
+          "name": "enqueueFailure_shouldRollbackPendingChallengeAndOutbox",
+          "status": "PASS"
+        },
+        {
+          "name": "supersededMailAndRepeatedDispatch_shouldDeliverOnlyCurrentGenerationOnce",
+          "status": "PASS"
+        },
+        {
+          "name": "dispatch_shouldSendOnlyMailboxProofAndErasePayloadAfterSuccess",
+          "status": "PASS"
+        },
+        {
+          "name": "overduePayload_shouldBePurgedBeforeAnyDispatchOnRecovery",
+          "status": "PASS"
+        },
+        {
+          "name": "expiredLease_shouldRecoverAtExactDeadline",
+          "status": "PASS"
+        },
+        {
+          "name": "dispatch_shouldBoundRetriesOnDeliveryFailure",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogContractIT",
+      "kind": "failsafe-reports",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "1.232",
+      "xmlSha256": "cb556d14a2bef8973cd1c923cf910b836a200403de90b42fd7d322306fac296f",
+      "cases": [
+        {
+          "name": "getProduct_shouldReturnNullAndEmptyOptionalRepresentations_withoutImages",
+          "status": "PASS"
+        },
+        {
+          "name": "getProduct_shouldMatchOpenApiContract_forPublishedProduct",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldPreservePairedNullOrphan_whenDeferredFixtureRollsBack",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldMatchOpenApiContract_forAnonymousPublishedPage",
+          "status": "PASS"
+        },
+        {
+          "name": "getProduct_shouldReturnRfc9457Problems_forInvalidHiddenAndMissingIds",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldEnforceOpenApiPaginationAndApprovedParameters",
+          "status": "PASS"
+        },
+        {
+          "name": "listProducts_shouldRejectUnapprovedKeysAndInvalidSort",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogEnhancementMigrationIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "1.799",
+      "xmlSha256": "ea10a1ec7f76c6a59e6ab8110530cf270f6807301f64ebdc4c9af133695e7467",
+      "cases": [
+        {
+          "name": "migration_shouldPreserveLegacyIdentityAndEnforceMetadataConstraints_whenUpgradingV9",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogMigrationsIT",
+      "kind": "failsafe-reports",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "3.104",
+      "xmlSha256": "eca71e108eb14ac260876370493bba309a452c4449f91acc40f646b1bdf55023",
+      "cases": [
+        {
+          "name": "schema_shouldDeclareRequiredColumnsAndForeignKeys",
+          "status": "PASS"
+        },
+        {
+          "name": "variants_shouldRejectInvalidOptionsSkuAndPrice",
+          "status": "PASS"
+        },
+        {
+          "name": "product_shouldRequireVariantAtCommit",
+          "status": "PASS"
+        },
+        {
+          "name": "concurrentGalleryInserts_shouldKeepAtMostTenImages",
+          "status": "PASS"
+        },
+        {
+          "name": "objectKeys_shouldBeUniqueAcrossProductsAndUploads",
+          "status": "PASS"
+        },
+        {
+          "name": "referencesAndRequiredFields_shouldRejectInvalidValues",
+          "status": "PASS"
+        },
+        {
+          "name": "concurrentVariantDeletes_shouldKeepAtLeastOneVariant",
+          "status": "PASS"
+        },
+        {
+          "name": "attachmentSource_shouldReferenceSharedUploadsAndBeUniquePerProduct",
+          "status": "PASS"
+        },
+        {
+          "name": "gallery_shouldEnforcePrimaryAndMaximumAtCommit",
+          "status": "PASS"
+        },
+        {
+          "name": "coreConstraints_shouldRejectInvalidStatusNamesAndKeyOrderDuplicates",
+          "status": "PASS"
+        },
+        {
+          "name": "upload_shouldRejectInvalidMetadataAndCrossProductImage",
+          "status": "PASS"
+        },
+        {
+          "name": "productAndFirstVariant_shouldCommitTogetherWithSingleEmptyOptionMap",
+          "status": "PASS"
+        },
+        {
+          "name": "uploadLifecycle_shouldRejectInvalidStateAndIncompletePublication",
+          "status": "PASS"
+        },
+        {
+          "name": "imageAndUploadConstraints_shouldRejectInvalidFieldsAndClaims",
+          "status": "PASS"
+        },
+        {
+          "name": "migrations_shouldPreserveCatalogVersionsAndDeferredTriggers",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogQueryCountIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "2.47",
+      "xmlSha256": "fa3adf38458c934b2e4d83b6b24e18fe527a0a271a774f2cb938d55e27678cef",
+      "cases": [
+        {
+          "name": "pageOfOneHundredImagesAndManyRelatedRowsUsesBoundedQueries",
+          "status": "PASS"
+        },
+        {
+          "name": "jdbcCapture_shouldObserveDirectJdbcOutsideHibernate",
+          "status": "PASS"
+        },
+        {
+          "name": "detailWithSeveralVariantsAndMaximumGalleryUsesBoundedQueries",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogReadFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "7.34",
+      "xmlSha256": "de5d13f81fa9505611a69fcf77d9662e027439fe110e1c555558356fcbdfef4a",
+      "cases": [
+        {
+          "name": "anonymousListingThenDetailFetchesPrivateBytesOnlyThroughSignedReadUrls",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogRelationshipApiIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.503",
+      "xmlSha256": "0ae7355c434e6024a49007db4de1b1b0aabc6da2fc0f02c4040d38e795f65909",
+      "cases": [
+        {
+          "name": "unpublishedProductsAndTheirImagesStayAbsentFromBothReads",
+          "status": "PASS"
+        },
+        {
+          "name": "listingAndDetailExposeOnlyOwnedImmediateCategoryVariantsAndGallery",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.ProductDetailApiIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.674",
+      "xmlSha256": "f034f6a800d9c614b7c5a1c4957e5075973b6803a4f56e3b7e20f6c40952cae8",
+      "cases": [
+        {
+          "name": "publishedDetailContainsOnlyOwnCategoryVariantsAndOrderedSignedImages",
+          "status": "PASS"
+        },
+        {
+          "name": "productWithoutImagesHasNullPrimaryUrlAndEmptyGallery",
+          "status": "PASS"
+        },
+        {
+          "name": "committedUnpublishBeforeFinalLockPreventsGallerySigning",
+          "status": "PASS"
+        },
+        {
+          "name": "draftArchivedAndUnknownProductsAreIndistinguishable404Problems",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.ProductImageAttachmentIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "6.04",
+      "xmlSha256": "26c2eeb3631ec99e35a365f316a167c8d66146c0697d5b32af89bccc824186ac",
+      "cases": [
+        {
+          "name": "sharedUploadAttachesOnceEvenWhenRequestsRace",
+          "status": "PASS"
+        },
+        {
+          "name": "ownershipCompletionAndContentDeduplicationAreEnforced",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.ProductListingApiIT",
+      "kind": "failsafe-reports",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "1.137",
+      "xmlSha256": "68bd853688d066529bb71a16be1055dc617adf90f006cf50992b5dcb926dad89",
+      "cases": [
+        {
+          "name": "twentyImageSummariesUseBoundedRelationshipQueries",
+          "status": "PASS"
+        },
+        {
+          "name": "committedUnpublishBeforeFinalLockPreventsNewSignedUrl(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "committedUnpublishBeforeFinalLockPreventsNewSignedUrl(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "unchangedMixedCatalogHasStableOrderedIdsAndCountsAcrossEveryPage",
+          "status": "PASS"
+        },
+        {
+          "name": "mixedPage_shouldRecheckImagelessProductAfterSignerPreparation",
+          "status": "PASS"
+        },
+        {
+          "name": "emptyOutOfRangeAndRepeatedPagesHaveAccurateStableMetadata",
+          "status": "PASS"
+        },
+        {
+          "name": "anonymousListingShowsOnlyPublishedSummariesWithSignedOrNullPrimaryUrl",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.ProductSearchPerformanceIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "180.762",
+      "xmlSha256": "9c1bf0640d96932c6ca62f6458b3242a5390f90048427b672deb58105600629c",
+      "cases": [
+        {
+          "name": "benchmark_shouldMeasureFullServiceAndAllJdbcStatements",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.ProductSourceWorkloadPerformanceIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "199.161",
+      "xmlSha256": "41a11775a49d6fe2c12a08ac29b42f86e6a04c8cf7bfa55a6cc40015c5e670cd",
+      "cases": [
+        {
+          "name": "sourceTextsBaselinePlan_shouldRecordActualSourceQueries",
+          "status": "PASS"
+        },
+        {
+          "name": "actualSourceTexts_shouldHaveBoundedQueriesAndRepeatedMeasurements",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.controller.ProductSearchControllerIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "3.44",
+      "xmlSha256": "24473e7250d2c583f0c803e53319caa6c2b11a721f022442af336af87a3c3ea3",
+      "cases": [
+        {
+          "name": "categoryAndBrands_shouldApplySubtreeAndOrGroups_withAndKeyword",
+          "status": "PASS"
+        },
+        {
+          "name": "validation_shouldReturn400ForInvalidJsonUnitsAndUnsupportedKeys_but200ForNoMatch",
+          "status": "PASS"
+        },
+        {
+          "name": "phraseInDescription_shouldOutrankScatteredBrandAndSku_butNotWholeName",
+          "status": "PASS"
+        },
+        {
+          "name": "configurations_shouldExcludeRank7Variant_beforeRankingAndDisplay",
+          "status": "PASS"
+        },
+        {
+          "name": "remainingGoldenCases_shouldProtectIdentifiersAndKeepRankSeparateFromDisplay",
+          "status": "PASS"
+        },
+        {
+          "name": "search_shouldExposeSevenTierOrderingAndAllSortModes",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.entity.CatalogEnhancementMappingsIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.019",
+      "xmlSha256": "77c385964301af980dc382da51bf3040c7d1aca2202b4d88a2fed5fa425d459e",
+      "cases": [
+        {
+          "name": "repositories_shouldRoundTripBrandSpecificationAndReceiptWithoutChangingOptions",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.entity.CatalogEntityMappingsIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.035",
+      "xmlSha256": "dbe68a39c1848042404990e172fc51eb211a4258597dd8b06254ceb4408d5c27",
+      "cases": [
+        {
+          "name": "entityMappings_shouldRoundTripAgainstFlywaySchema",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.CatalogConstraintsIT",
+      "kind": "failsafe-reports",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.651",
+      "xmlSha256": "2eb42760e224f602868eee710a11e0100534e5995b8fb75000a291798d99d46e",
+      "cases": [
+        {
+          "name": "repositories_shouldFindOwnedAndBatchedCatalogRows",
+          "status": "PASS"
+        },
+        {
+          "name": "database_shouldCheckVariantMinimumAtRealCommit",
+          "status": "PASS"
+        },
+        {
+          "name": "concurrentGalleryInserts_shouldRejectOnlyExpectedIntegrityConflict",
+          "status": "PASS"
+        },
+        {
+          "name": "database_shouldEnforceUuidReferencesRequiredFieldsAndStatus",
+          "status": "PASS"
+        },
+        {
+          "name": "concurrentVariantDeletes_shouldRejectOnlyExpectedIntegrityConflict",
+          "status": "PASS"
+        },
+        {
+          "name": "database_shouldEnforceImageGallery",
+          "status": "PASS"
+        },
+        {
+          "name": "productShareLock_shouldBlockConcurrentStatusUpdate",
+          "status": "PASS"
+        },
+        {
+          "name": "database_shouldEnforceSkuOptionsAndWholePrice",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.CatalogRelationshipsIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.11",
+      "xmlSha256": "818295d8efe45aab4763312b3daa0138631f25a2e1b819535d5e5dd7de65e980",
+      "cases": [
+        {
+          "name": "jsonbKeyOrderCannotCreateDuplicateOptionCombination",
+          "status": "PASS"
+        },
+        {
+          "name": "parentWithoutVariantFailsAtRealCommitAndInvalidForeignKeysFail",
+          "status": "PASS"
+        },
+        {
+          "name": "distinctNonemptyOptionMapsCommitForMultiVariantProduct",
+          "status": "PASS"
+        },
+        {
+          "name": "singleVariantEmptyOptionsCommitsSuccessfully",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.CatalogSearchMigrationIT",
+      "kind": "failsafe-reports",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "110.074",
+      "xmlSha256": "ffe63beea173ea0ff5f4b3cbc5f17d13ab76fc4083bac07de7d3386aedc5ab68",
+      "cases": [
+        {
+          "name": "missingExtensionPackageBlocksV15WithoutFallback",
+          "status": "PASS"
+        },
+        {
+          "name": "transactionalSuccessorFailure_shouldRetainSearchPrefix_thenRetryIdenticalArtifactWithoutRepair",
+          "status": "PASS"
+        },
+        {
+          "name": "v17FreshAndUpgrade_shouldProvideConservativeTypoGuard_withoutChangingOldData",
+          "status": "PASS"
+        },
+        {
+          "name": "v14UpgradePreservesEveryBusinessRowHistoryAndConstraint",
+          "status": "PASS"
+        },
+        {
+          "name": "freshFlywayInstallProvidesImmutablePrimitivesAndExtension",
+          "status": "PASS"
+        },
+        {
+          "name": "missingInstallationPrivilegeBlocksV15WithoutInstallingObjects",
+          "status": "PASS"
+        },
+        {
+          "name": "missingPinnedCollationBlocksV15BeforeAnyInstall",
+          "status": "PASS"
+        },
+        {
+          "name": "v18FreshAndV15Upgrade_shouldPreserveDataAndProveNormalizationParity",
+          "status": "PASS"
+        },
+        {
+          "name": "v19FreshAndUpgrade_shouldBackfillAndMaintainExactGeneratedTokens_withoutChangingBusinessFields",
+          "status": "PASS"
+        },
+        {
+          "name": "v16FreshAndUpgradePreserveBusinessRowsAndOldChecksums",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.FuzzyCalibrationIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "4.372",
+      "xmlSha256": "5ac02b74eef163bcb26a5bcae275cddcbdf19676440a39071c5a20b500814dac",
+      "cases": [
+        {
+          "name": "calibration_shouldMeasureLabeledFixturesAndExhaustiveSourceTokenRecall",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.ProductDetailRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.136",
+      "xmlSha256": "88a3855cf8f2a612c5bfcaf0faf87b3b42dd0b906111df104739ba53b657bd8e",
+      "cases": [
+        {
+          "name": "detailLookupFetchesBrandAndPreservesProductWithoutBrand",
+          "status": "PASS"
+        },
+        {
+          "name": "unpublishedAndUnknownIdsShareAbsentPublishedLookup",
+          "status": "PASS"
+        },
+        {
+          "name": "publishedLookupIncludesImmediateCategoryAndOnlyOwnedVariantsAndOrderedImages",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.ProductListingRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.067",
+      "xmlSha256": "b0ce49d335d219b56e58eb85f322f50ab3072d02f8910f2cc9b0c3153a764198",
+      "cases": [
+        {
+          "name": "emptyPublishedSetReturnsZeroTotals",
+          "status": "PASS"
+        },
+        {
+          "name": "pagesOnlyPublishedIdsInStableAscendingOrderAndCountsOnlyThem",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.511",
+      "xmlSha256": "3d26c1c5a7cae97c118791301fbd413f4f0f7fc41ad8a7e7b10c340dc33ca0cf",
+      "cases": [
+        {
+          "name": "selectsCheapestVariantWithUuidTieAndPreservesExactAmount",
+          "status": "PASS"
+        },
+        {
+          "name": "legacyMembershipOrderAndCountsUseOneStatementPerPage",
+          "status": "PASS"
+        },
+        {
+          "name": "rejectsInvalidCriteriaBeforeExecutingSql",
+          "status": "PASS"
+        },
+        {
+          "name": "representativeMetadataDoesNotMultiplyWithVariantsOrImages",
+          "status": "PASS"
+        },
+        {
+          "name": "deferredOrphanFixtureRetainsLegacyMembershipWithoutWeakeningConstraints",
+          "status": "PASS"
+        },
+        {
+          "name": "emptyAndBeyondLastPagesKeepAccurateTotalsIncludingMaxOffset",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.ProductSearchRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "2.056",
+      "xmlSha256": "b11c31f6ff4782cb51b34bab7ed8a84ec63e1fec19707217ed74243dedf773db",
+      "cases": [
+        {
+          "name": "textOperatorsAndAlternatives_shouldUseLiteralSemanticsAndOrWithinKey",
+          "status": "PASS"
+        },
+        {
+          "name": "malformedStoredText_shouldNotBreakBrowseOrOtherSearchFields",
+          "status": "PASS"
+        },
+        {
+          "name": "keywords_shouldNormalizeAndRequireEveryToken_acrossProductAndBrand",
+          "status": "PASS"
+        },
+        {
+          "name": "fuzzy_shouldRejectMultiEditNaturalNameCollisions_butKeepApprovedTypos",
+          "status": "PASS"
+        },
+        {
+          "name": "specifications_shouldGuardMalformedValuesAndKnownQualityContradictions",
+          "status": "PASS"
+        },
+        {
+          "name": "ambiguousTaxonomy_shouldDisableOnlyThatBinding_notPlainSearch",
+          "status": "PASS"
+        },
+        {
+          "name": "repeatedQuery_shouldDedupMembership_butNotInventRepeatedPhrase",
+          "status": "PASS"
+        },
+        {
+          "name": "approvedBindings_shouldSupportTabletDiagonalAndLaptopStorage_withoutEnablingTabletRam",
+          "status": "PASS"
+        },
+        {
+          "name": "registryInheritance_shouldStopAtAnotherApprovedFamilyRoot",
+          "status": "PASS"
+        },
+        {
+          "name": "multipleSpecificationGroups_shouldNotCombineDifferentVariants_orKeywordSources",
+          "status": "PASS"
+        },
+        {
+          "name": "pagination_shouldKeepTotalsAndMatchingPriceOrder",
+          "status": "PASS"
+        },
+        {
+          "name": "identifiers_shouldNeverFuzzyMatchFamiliesOrModels_butBrandTyposWork",
+          "status": "PASS"
+        },
+        {
+          "name": "ranking_shouldRespectSkuNamePhraseTokenPrefixPartialFuzzy",
+          "status": "PASS"
+        },
+        {
+          "name": "quantityOperators_shouldBeInclusiveAndExact_withoutUnitConversion",
+          "status": "PASS"
+        },
+        {
+          "name": "invalidLegacyDocuments_shouldNotCastFail_withoutWeakeningPersistedConstraints",
+          "status": "PASS"
+        },
+        {
+          "name": "categoryCycles_shouldTerminateAndDedupeProducts",
+          "status": "PASS"
+        },
+        {
+          "name": "ranking_shouldUseOnlyEligibleSkuTuple_andKeepRepresentativeIndependent",
+          "status": "PASS"
+        },
+        {
+          "name": "ranking_shouldPreferAllExactOverSkuPlusFuzzy_andBreakFullTiesByUuid",
+          "status": "PASS"
+        },
+        {
+          "name": "configurations_shouldRequireSameVariant_andSelectMatchingPair",
+          "status": "PASS"
+        },
+        {
+          "name": "invalidFilters_shouldDifferFromValidNoMatches_andUnknownCategory",
+          "status": "PASS"
+        },
+        {
+          "name": "zeroMissingAndBooleanFacts_shouldRemainDistinct_withoutImplicitCoercion",
+          "status": "PASS"
+        },
+        {
+          "name": "categories_shouldIncludeDescendants_andBrandsUseOr",
+          "status": "PASS"
+        },
+        {
+          "name": "technicalKeywords_shouldUseApprovedFacts_andTypedEquality",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.SearchQueryPlanIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "41.396",
+      "xmlSha256": "a9f4d33b2012a9f70d94fcebf650ba809a48c475ed521fe449c6d1169d9f2259",
+      "cases": [
+        {
+          "name": "plans_shouldRecordActualExhaustiveAndCandidateQueries_beforeAddingIndexes",
+          "status": "PASS"
+        },
+        {
+          "name": "exploratoryTenThousandAndVariantSkew_shouldKeepSelectiveResultsAndRecordPlans",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.search.SearchCapabilityIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "3.176",
+      "xmlSha256": "a7b6f66a749648f72ddccc39068fafe402b8b06371db6dc05b8dff07b605446d",
+      "cases": [
+        {
+          "name": "missingFunction_shouldRefuseKeywordAndReadiness_withoutBreakingLegacy_thenRecover",
+          "status": "PASS"
+        },
+        {
+          "name": "thresholdSetting_shouldBeTransactionLocal_onReusedSinglePoolConnection",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.search.SearchExactOnlyIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "3.337",
+      "xmlSha256": "2353f9ba0e7d1ff79b38c42ebbaa9e37db412f7f8d39c77d09017f55a367f3cd",
+      "cases": [
+        {
+          "name": "disabledFuzzy_shouldExposeModeAndStillRequireInstalledCapability",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.catalog.storage.CatalogPublicReadPerformanceIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "5.9",
+      "xmlSha256": "aac158fc72cc837bdcaf2c3a643914e314001f798feb203088d170badfa61883",
+      "cases": [
+        {
+          "name": "publicReads_shouldMeetRecordedP95AndBoundedQueriesWithLargeCatalog",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.common.exception.ApiErrorSerializationIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.011",
+      "xmlSha256": "f7ab3f982fa0ccfb3e38c1fb5ebee3c7a844b9aa153ccc1f5112bc5208b50ad8",
+      "cases": [
+        {
+          "name": "serialize_shouldExposeProblemDetailAndExtensionsAtTopLevel",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.e2e.GoogleConnectionFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "6.97",
+      "xmlSha256": "84a0945a1e1e33939be10ad17a67b31d41d27d11be32d34418e44dbb57d93e63",
+      "cases": [
+        {
+          "name": "reauthentication_shouldRequireActualFreshProviderAuthenticationTime(TokenFault)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "reauthentication_shouldRequireActualFreshProviderAuthenticationTime(TokenFault)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "initialPasswordRevocationFailure_shouldRollbackPasswordProofAndEverySession",
+          "status": "PASS"
+        },
+        {
+          "name": "firstPasswordRaceWithRefresh_shouldSetOnceAndRevokeAnyRefreshedCredentials",
+          "status": "PASS"
+        },
+        {
+          "name": "reauthentication_shouldRejectAnIdentityThatIsNotAlreadyLinkedToTheOwner",
+          "status": "PASS"
+        },
+        {
+          "name": "localAccount_shouldConnectOnlyWithFreshProofAndOriginalSessionThenAllowGoogleLogin",
+          "status": "PASS"
+        },
+        {
+          "name": "socialAccount_shouldOptionallySetFirstPasswordAndRevokeEveryExistingSession",
+          "status": "PASS"
+        },
+        {
+          "name": "failedDifferentIdentityLink_shouldNotConsumeProofOrCreatePartialAssociation",
+          "status": "PASS"
+        },
+        {
+          "name": "initiation_shouldRejectWrongOwnerWrongOperationAndWrongSessionProof",
+          "status": "PASS"
+        },
+        {
+          "name": "sameLink_shouldBeIdempotentAndDifferentIdentityMustNeverReplaceIt",
+          "status": "PASS"
+        },
+        {
+          "name": "completion_shouldRequireCurrentProfilePermissionAndPreserveProofWhenPermissionWasRevoked",
+          "status": "PASS"
+        },
+        {
+          "name": "concurrentOwners_shouldNeverClaimTheSameGoogleIdentity",
+          "status": "PASS"
+        },
+        {
+          "name": "googleOnlyEmailChange_shouldRequireLinkedFreshProofAndPermitReacquisitionBeforeOtpExpires",
+          "status": "PASS"
+        },
+        {
+          "name": "completion_shouldRejectExpiredProofAndConcurrentProofReuseWithoutPartialAssociation",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.e2e.GoogleLoginFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "10.622",
+      "xmlSha256": "ca4c5a306887d088574ba4e2c27a00ccd993967e999d12db640f6e44ae4f99d6",
+      "cases": [
+        {
+          "name": "matchingEmail_shouldRequireExplicitConnectionWithoutCreatingAssociationOrSession",
+          "status": "PASS"
+        },
+        {
+          "name": "missingVerifiedEmail_shouldRejectOnlyNewIdentityWithoutOrphanRows",
+          "status": "PASS"
+        },
+        {
+          "name": "newIdentity_shouldRejectMissingOrMalformedVerifiedEmail(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "newIdentity_shouldRejectMissingOrMalformedVerifiedEmail(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "returningIdentity_shouldRecheckCurrentEligibilityAtExchange",
+          "status": "PASS"
+        },
+        {
+          "name": "newAndReturningGoogleIdentity_shouldUseSameSocialOnlyAccountWithoutOverwritingOfficialEmail",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.integration.ImageCompletionConsistencyIT",
+      "kind": "failsafe-reports",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "24.014",
+      "xmlSha256": "05c7444d573cf7f16a07ad11ecfcd4f525fb195497efd53338503b75b965036a",
+      "cases": [
+        {
+          "name": "complete_shouldRetainPendingAndStaging_whenCopyUnavailable",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldRecoverWithoutCopyingAgain_whenPostCommitSigningFails",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldPersistExpired_whenValidationCrossesDeadline",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldKeepCompletedImageUsableAfterOriginalDeadline",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldPersistExpiredDespiteReturnedError",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldLeavePending_whenStagingMissingOrInvalid",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldSucceedDespitePostCommitDeletionFailure",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldRollbackDatabaseButRetainCopyAndStaging_whenDatabaseFailsAfterCopy",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.integration.ImageObjectReplacementIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "11.764",
+      "xmlSha256": "472cd7584daa183114ad20b9f52b7c155475a5d77d8538af9f00453511746caa",
+      "cases": [
+        {
+          "name": "complete_shouldAllowIdenticalContentAndIgnoreUnapprovedMetadata(boolean)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldAllowIdenticalContentAndIgnoreUnapprovedMetadata(boolean)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldRejectDifferentBytesReplacedAfterDecode",
+          "status": "PASS"
+        },
+        {
+          "name": "complete_shouldRejectReplacementBeforeConditionalRead",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.integration.ImageUploadFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "8.933",
+      "xmlSha256": "0c4e9a0eebaa3f3ff0fd85a211a885e4c836d0a51b88192c32e2d8775b1d3119",
+      "cases": [
+        {
+          "name": "upload_shouldCompleteAndViewWithoutApplicationTokenAtStorage_whenSupported(String, String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "upload_shouldCompleteAndViewWithoutApplicationTokenAtStorage_whenSupported(String, String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "upload_shouldCompleteAndViewWithoutApplicationTokenAtStorage_whenSupported(String, String)[3]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.integration.PackagedImageFlowIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "9.892",
+      "xmlSha256": "f35f833a960d016e716d271b0c05e9dfb6ff1fe25c128e7571c45cf2ee9bbc3a",
+      "cases": [
+        {
+          "name": "packagedJar_shouldUploadDecodeAndViewAllFormatsOnJava25",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.repository.ImageMigrationUpgradeIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "1.675",
+      "xmlSha256": "40eb68e0acccf90777636ee91c5d6d1ec19d06b5b7ca3230cd04309e1cb19d97",
+      "cases": [
+        {
+          "name": "migrate_shouldRetainPreexistingUser_whenUpgradingFromAuthenticationSchema",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.media.repository.ImageUploadRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.131",
+      "xmlSha256": "bccc9620256fcceea012c91b73a0838ae5ac22cf7bbfc4c1c67b7d77fbe11bef",
+      "cases": [
+        {
+          "name": "save_shouldPreserveOwnerAndLifecycleAndFindOnlyOwnedUploads",
+          "status": "PASS"
+        },
+        {
+          "name": "save_shouldRejectDuplicateStagingKey",
+          "status": "PASS"
+        },
+        {
+          "name": "save_shouldRejectUnsupportedMime",
+          "status": "PASS"
+        },
+        {
+          "name": "flush_shouldRejectStaleVersionWithoutParallelCompletion",
+          "status": "PASS"
+        },
+        {
+          "name": "save_shouldRejectMissingOwner",
+          "status": "PASS"
+        },
+        {
+          "name": "save_shouldPermitMultipleNullFinalKeysButRejectDuplicateCompletedKey",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[4]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[5]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[6]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[7]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[8]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[9]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[10]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[11]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[12]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[13]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[14]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[15]",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint_shouldRejectInvalidPersistedState(String)[16]",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.storage.integration.ObjectStorageServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "8.44",
+      "xmlSha256": "ecc811f424d88fa01d7ae0f1cefa017744cffd239f264c59752820e5e71aed80",
+      "cases": [
+        {
+          "name": "presignedGet_shouldExpireWithSignatureValidationEnabled",
+          "status": "PASS"
+        },
+        {
+          "name": "presignedPut_shouldRejectWrongContentTypeAndKeepFinalImmutableAfterLaterStagingWrite",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.storage.integration.StorageCorsIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "10.556",
+      "xmlSha256": "c699fa8a31f8bb979819754c3480f77804ebf43444bb3546d52d36ce6bef1f28",
+      "cases": [
+        {
+          "name": "cors_shouldAllowAllOriginsWithSeparateStorageConfiguration",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.integration.AddressApiIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.131",
+      "xmlSha256": "3bd5bb09c86613013a2f6979e768312922631daaa5d87cf20d6c1cde5266fcbf",
+      "cases": [
+        {
+          "name": "address_shouldRequireCurrentPermissionForAllFiveOperations",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.integration.AddressServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.242",
+      "xmlSha256": "0ccb660d724e9db57e906af21f5e73d578836fe3a401cf80e553f4d8727133e9",
+      "cases": [
+        {
+          "name": "createAddress_shouldCoordinateTwoFirstCreates",
+          "status": "PASS"
+        },
+        {
+          "name": "getAddress_shouldHideForeignResource",
+          "status": "PASS"
+        },
+        {
+          "name": "createAddress_shouldNotExceedCapacityUnderConcurrentWrites",
+          "status": "PASS"
+        },
+        {
+          "name": "updateAndDelete_shouldHideForeignAddressWithoutMutation",
+          "status": "PASS"
+        },
+        {
+          "name": "deleteAddress_shouldRestoreDeletedDefaultAndPromotionOnOuterRollback",
+          "status": "PASS"
+        },
+        {
+          "name": "deleteAddress_shouldPromoteHighestRemainingIdAtRealCommitBoundary",
+          "status": "PASS"
+        },
+        {
+          "name": "createAddress_shouldRollbackDefaultSwitchWhenOuterTransactionFails",
+          "status": "PASS"
+        },
+        {
+          "name": "updateAddress_shouldOrderConcurrentDefaultSwitches",
+          "status": "PASS"
+        },
+        {
+          "name": "deleteAddress_shouldPreserveInvariantDuringConcurrentCreate",
+          "status": "PASS"
+        },
+        {
+          "name": "createAddress_shouldEnforceCapacityWithoutChangingDefault",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.integration.PublicProfileServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.454",
+      "xmlSha256": "21f6743717dbe1264118ae9b92940f245c586631b0c4395aa222edc4746e6d7b",
+      "cases": [
+        {
+          "name": "getUser_shouldMapCorePublicProfileWithNoMediaOrAuthentication",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.integration.UserApiIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.625",
+      "xmlSha256": "787babc615134b0d41d58e0a86fd6a37f9e18b33da9db66281e55497b37980b5",
+      "cases": [
+        {
+          "name": "updateUser_shouldEnforcePermissionAndRejectMissingImage",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.integration.UserImageApiIT",
+      "kind": "failsafe-reports",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "12.742",
+      "xmlSha256": "ac2417aea5479dbc43f2a4aa85f235c105e7a91e008dfc98156776163ae6c94b",
+      "cases": [
+        {
+          "name": "update_shouldPreserveClearAndReplaceWithoutDeletingObjects",
+          "status": "PASS"
+        },
+        {
+          "name": "profile_shouldPermitAttachedViewingButDenyForeignRenewalAndAttachment",
+          "status": "PASS"
+        },
+        {
+          "name": "update_shouldRollbackAllFields_whenImagePendingOrSigningUnavailable",
+          "status": "PASS"
+        },
+        {
+          "name": "media_shouldRequireNoProfilePermissionWhileProfileStillRequiresIt",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.integration.UserServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.913",
+      "xmlSha256": "083f38c3d000f8cffd3d75cde38f1f5a2501b5f3eef98ec650d3e49347b771c5",
+      "cases": [
+        {
+          "name": "updateUser_shouldApplyLatestSuppliedFieldsAfterPessimisticCoordination(boolean)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "updateUser_shouldApplyLatestSuppliedFieldsAfterPessimisticCoordination(boolean)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "updateUser_shouldProtectConcurrentCaseInsensitiveClaimsAcrossOwners",
+          "status": "PASS"
+        },
+        {
+          "name": "updateUser_shouldTimeoutWithoutPartialWritesWhileOtherUserProgresses",
+          "status": "PASS"
+        },
+        {
+          "name": "updateUser_shouldNormalizeEmailAndPreserveOmittedValuesAcrossTransactions",
+          "status": "PASS"
+        },
+        {
+          "name": "createAuthenticationUser_shouldRequireEncodedPasswordAndGrantCurrentDefaultAuthorities",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.repository.AddressRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.298",
+      "xmlSha256": "69603c20b2736cab7e561b087f2586ed55bde6105c1d7d367ebbc8fa8c894985",
+      "cases": [
+        {
+          "name": "findByUserId_shouldSortDefaultFirstThenIdDescendingAndScopeOwnership",
+          "status": "PASS"
+        },
+        {
+          "name": "findByIdAndUserId_shouldKeepOwnerLazyAndConverterQueryFree",
+          "status": "PASS"
+        },
+        {
+          "name": "save_shouldEnforcePartialUniqueDefaultIndex",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.repository.UserImageRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.024",
+      "xmlSha256": "1748a401c17b6500f200591572fb273b4ee7996a55c49a524853bd97f4101b8c",
+      "cases": [
+        {
+          "name": "save_shouldPreserveExistingUsersAndRetainImageAfterReferenceClear",
+          "status": "PASS"
+        },
+        {
+          "name": "save_shouldRejectMissingReferencedImage",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.repository.UserRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.044",
+      "xmlSha256": "59ede40819cf1b3b2f16c5273ccfa51a48f4bfef723cd57ce0f6370fa520a6d6",
+      "cases": [
+        {
+          "name": "save_shouldRejectCodePointMaximumPlusOne",
+          "status": "PASS"
+        },
+        {
+          "name": "save_shouldAcceptMultipleAbsentEmailsAndCodePointMaximum",
+          "status": "PASS"
+        },
+        {
+          "name": "securityLookup_shouldPreserveCaseAndReadCurrentGrants",
+          "status": "PASS"
+        },
+        {
+          "name": "usernameExists_shouldUseLowercaseKeyAndExcludeCurrentUser",
+          "status": "PASS"
+        },
+        {
+          "name": "usernameExists_shouldMatchNonAsciiDatabaseLowercase",
+          "status": "PASS"
+        },
+        {
+          "name": "save_shouldRejectAtSignInUsername",
+          "status": "PASS"
+        },
+        {
+          "name": "save_shouldRejectCaseInsensitiveDuplicateAtDatabaseBoundary",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.user.repository.VerifiedAccountRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.018",
+      "xmlSha256": "bf35e6c4b428c853a91796615095b8ec23b27dfc61235dd13350a4baed4e5f01",
+      "cases": [
+        {
+          "name": "insertVerifiedAccount_shouldReturnOwnerAndIgnoreOnlyUsernameCollision",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.wishlist.controller.WishlistControllerIT",
+      "kind": "failsafe-reports",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "13.785",
+      "xmlSha256": "9e4c75b33172eac89dad58c1e43c6dfef348c1809babb2052d9dd57607f521cd",
+      "cases": [
+        {
+          "name": "addProduct_shouldReturnOneCreationAndOneDuplicate_whenTwoApiCallsStartTogether",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldNotDiscloseNonpublicProducts_whenMissingDraftOrArchived",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldUseCurrentAuthorities_whenPermissionIsRevokedAndRestored",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldCreateOneMembership_whenRequestsOverlapAtDatabase",
+          "status": "PASS"
+        },
+        {
+          "name": "removeProduct_shouldKeepOtherUsersEntryAndAllowReAdd_whenProductWasHidden",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldPreserveSavedItemAcrossLogoutLogin_whenRealUserRegisters",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRejectIneligibleAccountAndSession_whenCurrentStateChanges",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldTraverseOnlyOwnedVisibleEntries_whenPagesIncludeHiddenTimestampTies",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldDenyUnrelatedPermissions_whenCustomRoleHasNoWishlistGrant",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.wishlist.repository.WishlistRepositoryIT",
+      "kind": "failsafe-reports",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "0.6",
+      "xmlSha256": "a3e47ac775434f212e9cc62a6c9ab8decb96c2764007a9d11f635c3780ae07c9",
+      "cases": [
+        {
+          "name": "insertIfAbsent_shouldKeepTransactionUsableAndOriginalTime_whenDuplicate",
+          "status": "PASS"
+        },
+        {
+          "name": "cleanup_shouldDeleteOnlyDependents_whenProductIsPhysicallyDeleted",
+          "status": "PASS"
+        },
+        {
+          "name": "schema_shouldRejectNullTimestamp_whenMembershipIsInserted",
+          "status": "PASS"
+        },
+        {
+          "name": "schema_shouldDefineRequiredColumnsAndIndexes_whenMigrated",
+          "status": "PASS"
+        },
+        {
+          "name": "findVisibleMemberships_shouldFilterBeforePagingAndCount_whenStatusesAndOwnersAreMixed",
+          "status": "PASS"
+        },
+        {
+          "name": "cleanup_shouldDeleteOnlyDependents_whenUserIsPhysicallyDeleted",
+          "status": "PASS"
+        },
+        {
+          "name": "migration_shouldGrantOnlyUserRole_whenUpgradingExistingAssignments",
+          "status": "PASS"
+        },
+        {
+          "name": "schema_shouldRejectMissingParent_whenForeignKeyIsInvalid",
+          "status": "PASS"
+        },
+        {
+          "name": "mapping_shouldPreserveReferencesAndTimestamp_whenPersisted",
+          "status": "PASS"
+        },
+        {
+          "name": "schema_shouldRejectDuplicatePair_whenInsertedTwice",
+          "status": "PASS"
+        },
+        {
+          "name": "schema_shouldRejectMissingUser_whenForeignKeyIsInvalid",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "suite": "com.example.demo.wishlist.service.WishlistServiceIT",
+      "kind": "failsafe-reports",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": "1.852",
+      "xmlSha256": "3aca1f337a3bdc39752bf7ff85afd9bc709bccfd6b64155f7ff7e073281dd112",
+      "cases": [
+        {
+          "name": "addProduct_shouldTranslateRealForeignKeyFailureAfterRollback_whenParentDisappears",
+          "status": "PASS"
+        },
+        {
+          "name": "removeProduct_shouldRollbackMembershipDeletion_whenDatabaseRejectsOperation",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldUseBoundedQueriesAndDetachedResponses_whenPageContainsOneHundredImages",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldCommitOnceAndPreserveTime_whenDuplicate",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldReturnConflictWithoutPartialPage_whenSelectedProductBecomesHidden",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRetainExistingMembership_whenProductBecomesHidden",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRollbackAndHideMetadata_whenFinalPublicationCheckFails",
+          "status": "PASS"
+        },
+        {
+          "name": "listWishlist_shouldRetainAndRestoreMembership_whenProductVisibilityChanges",
+          "status": "PASS"
+        },
+        {
+          "name": "removeProduct_shouldPreserveParentsAndOtherMembership_whenProductHasAnyVisibility(String)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "removeProduct_shouldPreserveParentsAndOtherMembership_whenProductHasAnyVisibility(String)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "removeProduct_shouldPreserveParentsAndOtherMembership_whenProductHasAnyVisibility(String)[3]",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldRollbackNewMembership_whenSigningFails",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldSampleFreshTimeWithoutStrictIncrease_whenReAddedAfterRemoval(long)[1]",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldSampleFreshTimeWithoutStrictIncrease_whenReAddedAfterRemoval(long)[2]",
+          "status": "PASS"
+        },
+        {
+          "name": "addProduct_shouldReportSafeConflict_whenMembershipIsRemovedBeforeLookup",
+          "status": "PASS"
+        }
+      ]
+    }
+  ],
+  "sourceTestClassesMissingReports": [],
+  "discoveryNote": "Final functional+measured jobs are a union;latest XML per suite is counted once. Exploratory10k assertions are retained but not an MVP timing gate."
+}

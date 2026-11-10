@@ -1,0 +1,411 @@
+{
+  "version": "search-evaluation-v2",
+  "sourceSha256": "6c5dead52ce5691a3277126ff8ee9c588da70e085dae095b4e2bd0bb829e74b9",
+  "sourceCandidates": [
+    {
+      "query": "Samsung",
+      "sourceAsin": "B08PPSRLQ5",
+      "title": "SAMSUNG Galaxy A51 (A515F) 128GB DUOS GSM Unlocked Smartphone w/Quad Camera 48 MP + 12 MP + 5 MP + 5 MP (International Variant/US Compatible LTE) - Prism Crush Black",
+      "kind": "SOURCE_CANDIDATE_NOT_RELEVANCE_GROUND_TRUTH",
+      "targetOwnership": null
+    },
+    {
+      "query": "Sony",
+      "sourceAsin": "B09L88FZ95",
+      "title": "Sony Xperia Pro-I Dual-SIM 512GB ROM + 12GB RAM (GSM only | No CDMA) Factory Unlocked 5G Smartphone (Frosted Black) - International Version",
+      "kind": "SOURCE_CANDIDATE_NOT_RELEVANCE_GROUND_TRUTH",
+      "targetOwnership": null
+    },
+    {
+      "query": "Lenovo",
+      "sourceAsin": "B0BX3VK1Z6",
+      "title": "Lenovo Chromebook Flex 5 13\" Laptop, FHD Touch Display, Intel Core i3-10110U, 4GB RAM, 64GB Storage, Chrome OS",
+      "kind": "SOURCE_CANDIDATE_NOT_RELEVANCE_GROUND_TRUTH",
+      "targetOwnership": null
+    },
+    {
+      "query": "Chromebook",
+      "sourceAsin": "B07KJX74NH",
+      "title": "SAMSUNG XE350XBA-K01US Chromebook 4 + Chrome OS 15.6\" Full HD Intel Celeron Processor N4000 4GB RAM 32Gb Emmc Gigabit Wi-Fi, Silver",
+      "kind": "SOURCE_CANDIDATE_NOT_RELEVANCE_GROUND_TRUTH",
+      "targetOwnership": null
+    },
+    {
+      "query": "Pro",
+      "sourceAsin": "B09L88FZ95",
+      "title": "Sony Xperia Pro-I Dual-SIM 512GB ROM + 12GB RAM (GSM only | No CDMA) Factory Unlocked 5G Smartphone (Frosted Black) - International Version",
+      "kind": "SOURCE_CANDIDATE_NOT_RELEVANCE_GROUND_TRUTH",
+      "targetOwnership": null
+    },
+    {
+      "query": "Plus",
+      "sourceAsin": "B0B8PD3H1W",
+      "title": "SAMSUNG Galaxy S21+ Plus 5G Factory Unlocked Android Cell Phone 128GB US Version Smartphone Pro-Grade Camera 8K Video 12MP High Res, Phantom Silver",
+      "kind": "SOURCE_CANDIDATE_NOT_RELEVANCE_GROUND_TRUTH",
+      "targetOwnership": null
+    },
+    {
+      "query": "Max",
+      "sourceAsin": "B0CBQ45L77",
+      "title": "Acer Nitro 5 Gaming Laptop, 9th Gen Intel Core i7-9750H, NVIDIA GeForce RTX 2060, 15.6\" Full HD IPS 144Hz Display, 16GB DDR4, 256GB NVMe SSD, Wi-Fi 6, Waves MaxxAudio, Backlit Keyboard, AN515-54-728C",
+      "kind": "SOURCE_CANDIDATE_NOT_RELEVANCE_GROUND_TRUTH",
+      "targetOwnership": null
+    },
+    {
+      "query": "Core",
+      "sourceAsin": "B0C63H7C76",
+      "title": "Samsung Galaxy A54 5G Dual SIM 256GB ROM 8GB RAM 6.4\" 120Hz AMOLED, Octa-Core, 50MP Camera (GSM Unlocked for T-Mobile, Metro, Global) International Model A546E/DS Mobile Cell Phone (Graphite)",
+      "kind": "SOURCE_CANDIDATE_NOT_RELEVANCE_GROUND_TRUTH",
+      "targetOwnership": null
+    },
+    {
+      "query": "WH-1000XM5",
+      "sourceAsin": "B0C5ZC7FWR",
+      "title": "Sony WH-1000XM5 Wireless Industry Leading Headphones with Auto Noise Canceling Optimizer, Crystal Clear Hands-Free Calling, and Alexa Voice Control, Midnight Blue WH1000XM5",
+      "kind": "SOURCE_CANDIDATE_NOT_RELEVANCE_GROUND_TRUTH",
+      "targetOwnership": null
+    }
+  ],
+  "sourceHumanRelevanceJudgments": 0,
+  "golden": [
+    {
+      "id": "RK01",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK01",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony alpha",
+        "expectedAliases": [
+          "ownedSku",
+          "wholeName",
+          "phrase",
+          "tokens",
+          "prefix",
+          "partial",
+          "fuzzy"
+        ],
+        "rule": "owned eligible SKU7 precedes Name6"
+      }
+    },
+    {
+      "id": "RK02",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK02",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony alpha",
+        "expectedAliases": [
+          "wholeName",
+          "descriptionPhrase",
+          "scatteredBrandSku"
+        ],
+        "rule": "6>5>4 regardless of scattered SKU source"
+      }
+    },
+    {
+      "id": "RK03",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK03",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony alpha",
+        "expectedAliases": [
+          "descriptionPhrase",
+          "scatteredBrandSku"
+        ],
+        "rule": "phrase cannot be synthesized across fields"
+      }
+    },
+    {
+      "id": "RK04",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK04",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony alpha",
+        "expectedAliases": [
+          "tokens",
+          "prefix",
+          "partial",
+          "fuzzy"
+        ],
+        "rule": "4>3>2>1"
+      }
+    },
+    {
+      "id": "RK05",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK05",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "ID-X samsnug",
+        "expectedAliases": [
+          "allExactDescription",
+          "identifierAndFuzzyName"
+        ],
+        "rule": "one exact identifier does not promote fuzzy-dependent result"
+      }
+    },
+    {
+      "id": "RK06",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK06",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "WH-1000XM5",
+        "expectedAliases": [
+          "exactIdentifier"
+        ],
+        "negativeQuery": "WH-1000XM6",
+        "negativeExpectedAliases": []
+      }
+    },
+    {
+      "id": "RK07",
+      "partition": "US3.configuration",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK07",
+      "version": "search-evaluation-v2",
+      "story": "US3",
+      "increment": "US3.configuration",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "Registry-v1",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony alpha",
+        "variants": [
+          "cheapExcludedSku7",
+          "largeEligibleTokens4"
+        ],
+        "forms": [
+          "price-only",
+          "approved-specification-only",
+          "combined"
+        ],
+        "expectedAliases": [
+          "phraseCompetitor",
+          "remainingTier4"
+        ],
+        "representativeAlias": "largeEligibleTokens4"
+      }
+    },
+    {
+      "id": "RK08",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK08",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "stable identical",
+        "expectedOrderRule": "fixture Product UUID ascending for equal full rank tuples"
+      }
+    },
+    {
+      "id": "RK09",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK09",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony sony",
+        "expectedFirstAlias": "realRepeatedPhrase",
+        "remainingOrderRule": "dedup token evidence then Product UUID;no invented phrase"
+      }
+    },
+    {
+      "id": "RK10",
+      "partition": "US1.core",
+      "kind": "DETERMINISTIC_SYNTHETIC_FIXTURE",
+      "expectedBasis": "analysis-remediation.md R3 golden table",
+      "repositoryTest": "ProductSearchRepositoryIT",
+      "httpTest": "ProductSearchControllerIT",
+      "caseId": "RK10",
+      "version": "search-evaluation-v2",
+      "story": "US1",
+      "increment": "US1.core",
+      "requiredCapabilities": [
+        "PostgreSQL17",
+        "pg_trgm1.6",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19"
+      ],
+      "fixtures": "ProductSearchRepositoryIT and ProductSearchControllerIT independently create and retain expected Product/Variant IDs before querying",
+      "expectedResults": {
+        "q": "sony alpha",
+        "expectedFirstAlias": "bestSkuRank",
+        "representativeAlias": "cheaperMatchingVariant",
+        "forbiddenParameters": [
+          "categoryId",
+          "brandId",
+          "minPrice",
+          "maxPrice",
+          "specFilters",
+          "sort"
+        ]
+      }
+    }
+  ],
+  "partitions": {
+    "US1.core": "keyword,normalization,protected identifiers and RK except07",
+    "US1.specification": "approved typed-value keyword",
+    "US2.browse": "descendants and brand OR",
+    "US3.configuration": "same-variant price/spec, RK07",
+    "US4.listing": "all sorts/counts/pages/orphans"
+  },
+  "fuzzyPairCorpus": "fuzzy-calibration-initial.json",
+  "limitations": [
+    "Source examples do not establish canonical ownership or manual relevance ground truth.",
+    "Controlled typo intentions and synthetic golden results are explicit fixture expectations."
+  ],
+  "acceptanceVsDiagnostics": "Natural-name distinct-pair false positives are measured diagnostics,not manually approved catalog relevance judgments. Protected-identifier/family negatives and golden scenarios remain mandatory exact expectations.",
+  "fixtureOwnership": "UUIDs are captured when controlled Backend fixtures are persisted,before the search call;test expected lists refer to these owned IDs,never IDs inferred from query results.",
+  "frozenExpectationsReference": "Pre-existing approved analysis-remediation.md R3 table;manifest packaging is created during implementation,not claimed to be an earlier human relevance review.",
+  "goldenExpectationVersion": "Approved RK v1,unchanged",
+  "runtimeMigrations": [
+    "V15",
+    "V16",
+    "V17",
+    "V18",
+    "V19"
+  ]
+}

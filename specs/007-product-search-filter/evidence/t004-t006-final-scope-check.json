@@ -1,0 +1,23 @@
+{
+  "scope": "T004/T006 only",
+  "changedPreexistingFiles": [
+    "specs/007-product-search-filter/tasks.md",
+    "specs/007-product-search-filter/evidence/identifier-scope.md",
+    "specs/007-product-search-filter/evidence/openapi-capability-results.json",
+    "specs/007-product-search-filter/evidence/probe-openapi-capabilities.py",
+    "specs/007-product-search-filter/evidence/contract-validation.md",
+    "specs/007-product-search-filter/evidence/openapi-validator-proposal.json",
+    "specs/007-product-search-filter/contracts/openapi.yaml"
+  ],
+  "applicationTestsAndMigrationsUnchanged": true,
+  "baseCatalogContractUnchanged": true,
+  "existingChangesPreserved": true,
+  "original16CasesUnchanged": true,
+  "taskCount": 66,
+  "completedTaskCount": 12,
+  "dependencyGraphCycles": 0,
+  "T004": "BLOCKED_PENDING_FINAL_SIGNOFF",
+  "T006": "PASS",
+  "nextCodingTask": "T018 (not executed)",
+  "extensionsFileAbsent": true
+}

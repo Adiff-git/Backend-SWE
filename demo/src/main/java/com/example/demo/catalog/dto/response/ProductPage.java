@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public final class ProductPage {
-	private final List<ProductSummary> items;
+	private final List<? extends ProductSummary> items;
 	private final int page;
 	private final int size;
 	private final long totalItems;
