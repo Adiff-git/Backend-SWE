@@ -1,6 +1,6 @@
 # Bàn giao Search & Filter MVP — local PASS
 
-Cập nhật2026-11-10 theo ngân sách hiệu năng owner phê duyệt. US1–US4 đã nghiệm thu local;production **BLOCKED/NOT_VERIFIED** theo T063. Git finalization:kiểm tra trước commit hoàn tất;featurecommit/merge được ghi ở phần cập nhật cuối checkpoint và Git history. Không push/deployment.
+Cập nhật2026-11-10 theo ngân sách hiệu năng owner phê duyệt. US1–US4 đã nghiệm thu local;production **BLOCKED/NOT_VERIFIED** theo T063. Git finalization:feature đã commit và merge thành công vào draft/version-1;59IT sau merge PASS. Hash và receipt ở phần cuối tài liệu. Không push/deployment.
 
 US1 giữ normalization tiếng Việt,AND tokens,7tầng ranking,brand/SKU/name/description/approved-spec search,fuzzy0.32+guard một edit/hoán vị liền kề và bảo vệ identifiers. Rank7 cho canonical eligible SKU;6source model anchors chưa xác minh ownership vẫn DEFERRED. Family/synthetic spans không thành model identity. Fuzzy corpus kiểm soát15TP/2FP/0FN,precision88,24%,recall100%;không tuyên bố ground truth toàn catalog.
 
@@ -56,3 +56,17 @@ git diff --check
 ```
 
 Không chạy lại historical handoff/evidence generators để thay thế kết quả mới. Baseline preservation:performance-policy-preservation.json;tested code:performance-policy-source-snapshot.json. Latest acceptance và Git handoff:git-finalization-review.md,resume-checkpoint.md. Các index lịch sử giữ hash tại thời điểm capture;git-finalization-artifact-index.json là index finalization hiện hành.
+
+
+## Git finalization completed — 2026-11-10T03:31:37.491871+00:00
+
+- Featurecommit:`067ba56395176c5158a7085e3360bf53f0069837`(305reviewed files),branch`features/SearchAndFilter`retained.
+- Direction:`features/SearchAndFilter`→`draft/version-1`.
+- Mergecommit:`c8b7435746a44640432b8166b55578b89a439c6c`;two parents,conflict-free,--no-ff. Target fetch equal/no divergence.
+- Currentbranch:`draft/version-1`;featureancestor verified. Source matches full705test snapshot.
+- Postmerge regression:**59ITPASS,0failure/error/skip**;raw log and suite hashes in git-finalization-postmerge*.
+- V1–V15unchanged;V16–V19present;Brand/Specifications,Detail/Wishlist preserved.
+- **64PASS,T059DEFERRED,T063BLOCKED**;no local blocker. DeploymentNOT_VERIFIED/BLOCKED,no approved target.
+- No push,deployment,branch deletion,source repository modification or discarded user change.
+
+A docs-only followup commits this actual operation/test receipt,leaving a clean working tree. Its exact HEAD is obtainable with `git rev-parse HEAD`;it does not replace the mergecommit above. Next local action:none required. Deployment requires separate target authorization/evidence.

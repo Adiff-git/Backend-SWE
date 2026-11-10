@@ -439,25 +439,37 @@
     "sha256": "90e549579094da9b12d553a0fcc4c519517dddb3dfdc355e4dd3dc2320d014e2",
     "bytes": 112
   },
+  "evidence/git-finalization-operation-receipt.json": {
+    "sha256": "32ce847893834065bc22f778347ef27e8d513642ee2de407de9bb1b8bb7a98f8",
+    "bytes": 1182
+  },
+  "evidence/git-finalization-postmerge-regression.log.gz": {
+    "sha256": "c3260da2ebf929844785c2b7d24ea1f40c5a43443386c2d15f73f59cf4e3bd3e",
+    "bytes": 23930
+  },
+  "evidence/git-finalization-postmerge-results.json": {
+    "sha256": "cbd3cc9c7407dc48ae927880b74d99e93ca063abcd2c783cf2be68460b8ce65d",
+    "bytes": 2451
+  },
   "evidence/git-finalization-review-first-attempt.md": {
     "sha256": "0f55054935168628fc008b06b7175e8f76c908d8f638b166e629db3637887a75",
     "bytes": 4124
   },
   "evidence/git-finalization-review.json": {
-    "sha256": "f6252426b948ded90cf2bf8c645874d8594753767963ee801a29e6ed742c3d74",
-    "bytes": 6256
+    "sha256": "00b0edc6e3feae6317a74e847286d58d5f47685b8a42261f0aca7e8e30b1efe9",
+    "bytes": 6473
   },
   "evidence/git-finalization-review.md": {
-    "sha256": "2ff4e8b135dcfd280bbb8977d57a74a8dc0bcd2848fcb08ea04c0a6874421113",
-    "bytes": 4148
+    "sha256": "86c2d3253ad8daabd1b8fe1a4f1926c96e32f208a530fb253a1ef8c66fe54643",
+    "bytes": 5294
   },
   "evidence/handoff-before-policy-revision.md": {
     "sha256": "8ca7fc2eb0c51188d3ae75c270b2dea1dc8a9b9df9638f2c4639716ee02c5ad3",
     "bytes": 7033
   },
   "evidence/handoff.md": {
-    "sha256": "80e814d6fd2d97801fad44898fa5b7794958527967e133680e14c2134133a414",
-    "bytes": 6482
+    "sha256": "f895f42c78bd7aa0b004ceda752eca1fd487ab5c6ca96dd0e426100950d92bc8",
+    "bytes": 7642
   },
   "evidence/identifier-review-cases.json": {
     "sha256": "d69627c35a87507b7a9b42610f984bd882d58d35b11e2db034e070ad6b4813f5",
@@ -740,8 +752,8 @@
     "bytes": 6540
   },
   "evidence/resume-checkpoint.md": {
-    "sha256": "fb7e31110cd596ea05990e633ec76cd494586af76aff12081c91ae02be67aa9a",
-    "bytes": 24373
+    "sha256": "d79b257425c321a04055dd79656f01270a7f75febcac2f10059c146858a8483c",
+    "bytes": 25531
   },
   "evidence/resume-checkpoint.md.before-whitespace-cleanup.gz": {
     "sha256": "7583200585877b2b8f1835e1f7e31a6a7f2722ab8cf194ea96c066a8f9857ec3",

@@ -1,0 +1,75 @@
+{
+  "capturedUTC": "2026-11-10T03:31:37.491871+00:00",
+  "testedMergeCommit": "c8b7435746a44640432b8166b55578b89a439c6c",
+  "tests": 59,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "sourceIdenticalToFull705Snapshot": true,
+  "command": "mvn -o -f demo/pom.xml -Dit.test=ProductSearchRepositoryIT,ProductSearchControllerIT,ProductListingApiIT,ProductDetailApiIT,WishlistControllerIT,CatalogContractIT,CatalogQueryCountIT -Djunit.jupiter.execution.parallel.enabled=false test-compile failsafe:integration-test failsafe:verify",
+  "suites": [
+    {
+      "suite": "com.example.demo.catalog.CatalogContractIT",
+      "timestamp": null,
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "cadcb660b180743b11350a76a7c8e5aac5c15b749505f0bdea75ca505b879008"
+    },
+    {
+      "suite": "com.example.demo.catalog.CatalogQueryCountIT",
+      "timestamp": null,
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "aec7821b52ac3d76ef7551aab47dd18d897c360f65ce9243294bcc1ec4f0d548"
+    },
+    {
+      "suite": "com.example.demo.catalog.ProductDetailApiIT",
+      "timestamp": null,
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "96363bf7894c87e0e0a39415ca7a0290b90bdece3102437f2cddb7578a658bfe"
+    },
+    {
+      "suite": "com.example.demo.catalog.ProductListingApiIT",
+      "timestamp": null,
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "80090bc7aa0ce0c62337ff06b126d6011a5b91b797aa14acc09619449b4075ac"
+    },
+    {
+      "suite": "com.example.demo.catalog.controller.ProductSearchControllerIT",
+      "timestamp": null,
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "0664acc3a56c81716524229b4bbd08923f5d19ce0b9fc298d36d7c3313a4d0d3"
+    },
+    {
+      "suite": "com.example.demo.catalog.repository.ProductSearchRepositoryIT",
+      "timestamp": null,
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "b0c4001d4f3d6a7e331a1bb965eeeb3276d66dbd9fb81e4ce9a99b8c90a9d449"
+    },
+    {
+      "suite": "com.example.demo.wishlist.controller.WishlistControllerIT",
+      "timestamp": null,
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "91af84c6eeb0192b2c825348612e2912bec4919853e81240ce0638d6e1368980"
+    }
+  ]
+}

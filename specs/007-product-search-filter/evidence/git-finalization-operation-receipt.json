@@ -1,0 +1,34 @@
+{
+  "featureCommit": "067ba56395176c5158a7085e3360bf53f0069837",
+  "originalTargetParent": "c5bd4e7eeb39d9b06a0c7e36af9a65635058613f",
+  "mergeCommit": "c8b7435746a44640432b8166b55578b89a439c6c",
+  "direction": "features/SearchAndFilter -> draft/version-1",
+  "branch": "draft/version-1",
+  "targetRemoteDivergenceBeforeMerge": [
+    0,
+    0
+  ],
+  "workingTreeCleanAfterMerge": true,
+  "pushed": false,
+  "deployed": false,
+  "recordedUTC": "2026-11-10T03:31:37.491871+00:00",
+  "mergeParents": [
+    "c5bd4e7eeb39d9b06a0c7e36af9a65635058613f",
+    "067ba56395176c5158a7085e3360bf53f0069837"
+  ],
+  "postMergeRegression": "PASS59/0/0/0",
+  "fullUniqueTests": "PASS705(342unitMvc+363IT)/0/0/0",
+  "sourceIdenticalToVerifiedFeature": true,
+  "v1ThroughV15Unchanged": true,
+  "v16ThroughV19Present": true,
+  "localAcceptance": "PASS",
+  "taskCounts": {
+    "PASS": 64,
+    "DEFERRED": 1,
+    "BLOCKED": 1
+  },
+  "productionDeployment": "NOT_VERIFIED/BLOCKED(T063)",
+  "documentationReceipt": "This receipt is committed in a docs-only followup after the merge;git log identifies its commit. It changes no application/test/migration bytes.",
+  "noPush": true,
+  "noDeployment": true
+}
