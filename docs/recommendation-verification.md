@@ -107,5 +107,26 @@ cards and tolerate empty/null media/price fields. No customerId or guest instrum
 ## Local Git integration
 
 Feature: features/AIRecommendation from verified draft/version-1 (8aa1dcd).
-Commit/merge and post-merge verification remain pending until the complete regression passes.
+Feature commit `76aa0ef7861368b197bb169d1b92c817fe363f57`; merge commit `713b76df165607ee65ec6fe4401ee511bc6c8462` into `draft/version-1`.
+AI feature `ac6a6ee` merged as `f57856d` into its verified `main` integration branch first.
+Both feature branches are retained. Core source trees are identical to their validated feature branches.
+Postmerge: all 357 Backend unit tests +167 selected IT cases (154 broad focused +13 search/listing)
+passed serially with zero failures/errors/skips; AI255 passed again. Actual two-service HTTP
+verification ran again on the merged trees. No partial integration or outstanding blocker.
+A final documentation-only commit records this evidence and current branch checkpoints.
 No push, production deployment, Catalog-Data writes or shared database changes.
+
+## Separate postmerge performance observation
+
+Do not combine these samples with the full regression run above.
+
+```text
+1500 synthetic Backend-owned products; serial HTTP samples
+Catalog preparation ms=24.309272
+Full HTTP cold/warm ms=[163.858073, 94.826448, 86.486953, 74.502752, 93.353895, 85.316168, 79.965838, 77.297686, 79.333376]
+AI HTTP inference warm ms=[50.92089, 48.424117, 47.688504, 47.597929, 48.150046, 52.484088, 51.922598, 47.644534]
+Hydration ms=[7.599385, 5.947121, 5.984413, 4.300374, 3.903503, 4.539744, 4.114938, 5.1496]
+Outage fallback HTTP ms=[40.107384]
+Verified: owner events, minimized payload, laptop personalization, guest/cold start, similar/source exclusion, internal 401, outage fallback.
+
+```
