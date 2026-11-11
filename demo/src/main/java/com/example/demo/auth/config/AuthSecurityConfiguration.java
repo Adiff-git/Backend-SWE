@@ -84,10 +84,11 @@ public class AuthSecurityConfiguration {
                     var grants = actor.getAuthorities().stream().map(org.springframework.security.core.GrantedAuthority::getAuthority).toList();
                     return new org.springframework.security.authorization.AuthorizationDecision(grants.contains("ROLE_USER") && !grants.contains("ROLE_ADMIN"));
                 })
-                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/me/behavior").access((authentication, context) -> {
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/me/behavior","/api/me/recommendations").access((authentication, context) -> {
                     var grants = authentication.get().getAuthorities().stream().map(org.springframework.security.core.GrantedAuthority::getAuthority).toList();
                     return new org.springframework.security.authorization.AuthorizationDecision(grants.contains("ROLE_USER") && !grants.contains("ROLE_ADMIN"));
                 })
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/recommendations").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/behavior/overview").hasAuthority("ROLE_ADMIN")
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/me/wishlist").hasAuthority("MANAGE_WISHLIST")
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/me/wishlist/*").hasAuthority("MANAGE_WISHLIST")
