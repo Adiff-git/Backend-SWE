@@ -37,6 +37,7 @@ services:
       AWS_SECRET_ACCESS_KEY: test
       S3_SKIP_SIGNATURE_VALIDATION: "0"
       PERSISTENCE: "0"
+      IMAGE_CHECKPOINT_DIRECTORY: /catalog-product-checkpoints
       LOCAL_STORAGE_BUCKET: ${LOCAL_STORAGE_BUCKET:-backend-images}
       GATEWAY_LISTEN: "127.0.0.1:4566"
       # The pinned Twisted server ignores IPv4 bind addresses; Hypercorn honors them.
@@ -93,7 +94,7 @@ services:
       LOCAL_STORAGE_BUCKET: ${LOCAL_STORAGE_BUCKET:-backend-images}
       LOCAL_STORAGE_ENDPOINT: http://localstack:4567
       LOCAL_STORAGE_SIGNING_ENDPOINT: ${LOCAL_STORAGE_SIGNING_ENDPOINT:-http://127.0.0.1:14567}
-      CATALOG_IMAGES_CHECKPOINT_DIRECTORY: /catalog-checkpoints
+      STORAGE_S3_CHECKPOINT_DIRECTORY: /catalog-checkpoints
       SMTP_HOST: mailpit
       SMTP_PORT: 1025
       SMTP_USERNAME: ""

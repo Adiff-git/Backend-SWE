@@ -11,6 +11,9 @@ import com.example.demo.catalog.entity.ProductImage;
 
 public interface ProductImageRepository extends JpaRepository<ProductImage, UUID> {
 
+    @Query("SELECT i.product.id, i.objectKey FROM ProductImage i WHERE i.product.id IN :ids AND i.primary = true")
+    List<Object[]> findCartPrimaryImages(@Param("ids") Collection<UUID> ids);
+
 	@Query("SELECT i FROM ProductImage i WHERE i.product.id IN :productIds AND i.primary = true")
 	List<ProductImage> findPrimaryImagesForProducts(@Param("productIds") Collection<UUID> productIds);
 

@@ -39,8 +39,8 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
     private final S3Presigner presigner;
     private final S3StorageProperties properties;
     private final Clock clock;
+    private final com.example.demo.storage.service.LocalImageCheckpoint checkpoints;
     private final software.amazon.awssdk.auth.credentials.AwsCredentialsProvider storageCredentials;
-    private final com.example.demo.storage.config.S3StorageConfiguration storageConfiguration;
 
     @Override public PreparedUpload prepareUpload(String key, String contentType, Instant deadline) {
         return available(() -> {
@@ -88,7 +88,7 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
                     response.eTag(), Files.size(temporary), response.contentType()));
         } catch (IOException | RuntimeException failure) {
             if (temporary != null) {
-                try { Files.deleteIfExists(temporary); } catch (IOException ignored) { temporary.toFile().deleteOnExit(); }
+                new StoredObjectContent(temporary, null).close();
             }
             if (failure instanceof S3Exception s3 && (s3.statusCode() == 404 || s3.statusCode() == 412))
                 throw new StoredObjectChangedException();
@@ -107,6 +107,14 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
                 if (failure.statusCode() == 404 || failure.statusCode() == 412) throw new StoredObjectChangedException();
                 throw failure;
             }
+            if (checkpoints.enabled() && target.startsWith("images/")) {
+                StoredObjectMetadata metadata=inspect(target).orElseThrow(StorageUnavailableException::new);
+                if (!approvedContentType.equals(metadata.getContentType())) throw new StorageUnavailableException();
+                try (StoredObjectContent content=readBoundedIfMatch(target,metadata.getEtag(),
+                        com.example.demo.storage.service.LocalImageCheckpoint.MAX_BYTES)) {
+                    checkpoints.save(target,approvedContentType,Files.readAllBytes(content.getPath()));
+                } catch (IOException failure) { throw new StorageUnavailableException(); }
+            }
             return null;
         });
     }
@@ -116,27 +124,26 @@ public class ObjectStorageServiceImpl implements ObjectStorageService {
     }
 
     @Override public String prepareDownload(String key, Duration lifetime) {
-        return available(() -> {
-            software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest signed =
-                    presigner.presignGetObject(GetObjectPresignRequest.builder().signatureDuration(lifetime)
-                            .getObjectRequest(GetObjectRequest.builder().bucket(properties.getBucket()).key(key).build()).build());
-            if (!signed.isBrowserExecutable()) throw new StorageUnavailableException();
-            return signed.url().toString();
-        });
+        return prepareDownloadSigner(lifetime).sign(key);
     }
 
     @Override public com.example.demo.storage.service.PreparedDownloadSigner prepareDownloadSigner(Duration lifetime) {
         return available(() -> {
             var credentials = software.amazon.awssdk.auth.credentials.StaticCredentialsProvider.create(
                     storageCredentials.resolveCredentials());
-            S3Presigner prepared = storageConfiguration.createPresigner(properties, credentials);
             return new com.example.demo.storage.service.PreparedDownloadSigner() {
                 @Override public String sign(String key) {
-                    return available(() -> prepared.presignGetObject(GetObjectPresignRequest.builder()
-                            .signatureDuration(lifetime).getObjectRequest(request -> request
-                                    .bucket(properties.getBucket()).key(key)).build()).url().toExternalForm());
+                    return available(() -> {
+                        software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest signed =
+                                presigner.presignGetObject(GetObjectPresignRequest.builder()
+                                        .signatureDuration(lifetime).getObjectRequest(GetObjectRequest.builder()
+                                                .bucket(properties.getBucket()).key(key)
+                                                .overrideConfiguration(configuration -> configuration.credentialsProvider(credentials))
+                                                .build()).build());
+                        if (!signed.isBrowserExecutable()) throw new StorageUnavailableException();
+                        return signed.url().toExternalForm();
+                    });
                 }
-                @Override public void close() { prepared.close(); }
             };
         });
     }

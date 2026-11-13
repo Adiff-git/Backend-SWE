@@ -172,7 +172,11 @@ class WishlistRepositoryIT {
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM " + schema + ".user_roles", Long.class))
                     .isEqualTo(assignments);
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM " + schema + ".role_permissions", Long.class))
-                    .isEqualTo(grants + 1);
+                    .isEqualTo(grants + 2);
+            assertThat(jdbc.queryForList("SELECT r.name FROM " + schema + ".roles r JOIN " + schema
+                    + ".role_permissions rp ON r.id = rp.role_id JOIN " + schema
+                    + ".permissions p ON p.id = rp.permission_id WHERE p.name = 'MANAGE_CART'",
+                    String.class)).containsExactly("USER");
         } finally {
             // The identifier is a fixed prefix plus generated hex, never external input.
             jdbc.execute("DROP SCHEMA IF EXISTS " + schema + " CASCADE");

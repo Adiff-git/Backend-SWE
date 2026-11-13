@@ -17,7 +17,7 @@ class RegistrationLoginApiIT extends AuthPostgresTestSupport {
         MvcResult result=confirmRegistration(initial,"Password 123");
         assertThat(access(pair(result))).isEqualTo(200);assertThat(users.findByUsernameIdentifier("ALICE").orElseThrow().getUsername()).isEqualTo("alice");
         assertThat(sessions.count()).isEqualTo(1);assertThat(credentials.count()).isEqualTo(1);
-        assertThat(users.findAuthorities(users.findByUsernameIdentifier("alice").orElseThrow().getId())).containsExactlyInAnyOrder("ROLE_USER","MANAGE_USER_PROFILE","MANAGE_ADDRESS","MANAGE_WISHLIST");
+        assertThat(users.findAuthorities(users.findByUsernameIdentifier("alice").orElseThrow().getId())).containsExactlyInAnyOrder("ROLE_USER","MANAGE_USER_PROFILE","MANAGE_ADDRESS","MANAGE_WISHLIST","MANAGE_CART");
         assertThat(result.getResponse().getHeader("Cache-Control")).isEqualTo("no-store");assertThat(result.getResponse().getHeaders("Set-Cookie")).isEmpty();
     }
     @Test void login_shouldCreateIndependentSessionAndUseExactPassword() throws Exception {
