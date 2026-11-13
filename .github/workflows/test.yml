@@ -6,8 +6,8 @@ on:
             - '**'
     pull_request:
         branches:
-            main
-            draft/version-1
+            - main
+            - draft/version-1
 
 permissions:
     contents: read
