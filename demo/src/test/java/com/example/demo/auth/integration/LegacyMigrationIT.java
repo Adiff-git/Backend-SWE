@@ -9,18 +9,22 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class LegacyMigrationIT extends AuthPostgresTestSupport {
     @Autowired DataSource datasource;
     @Test void migrate_shouldBackfillUserRoleWithoutChangingLegacyFields() {
-        String schema="upgrade_"+UUID.randomUUID().toString().replace("-","");
-        try {
+        // The cart grant is introduced at V21; public search functions require an isolated database.
+        String schema="public";
+        try (var database = new org.testcontainers.containers.PostgreSQLContainer<>("postgres:17-alpine")) {
+            database.start();
+            var datasource = new org.springframework.jdbc.datasource.DriverManagerDataSource(
+                    database.getJdbcUrl(), database.getUsername(), database.getPassword());
+            var jdbc = new org.springframework.jdbc.core.JdbcTemplate(datasource);
             Flyway.configure().dataSource(datasource).schemas(schema).defaultSchema(schema).target("5").load().migrate();
             jdbc.update("INSERT INTO "+schema+".users(username,password,account_status,joined_at) VALUES ('Alice','existing-encoded-value','ACTIVE',CURRENT_TIMESTAMP)");
             Flyway.configure().dataSource(datasource).schemas(schema).defaultSchema(schema).target("10").load().migrate();
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM "+schema+".permissions",Long.class)).isEqualTo(3);
+            Flyway.configure().dataSource(datasource).schemas(schema).defaultSchema(schema).target("21").load().migrate();
             assertThat(jdbc.queryForObject("SELECT password FROM "+schema+".users",String.class)).isEqualTo("existing-encoded-value");
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM "+schema+".user_roles",Long.class)).isEqualTo(1);
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM "+schema+".permissions",Long.class)).isEqualTo(4);
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM "+schema+".role_permissions rp JOIN "+schema+".roles r ON r.id=rp.role_id JOIN "+schema+".permissions p ON p.id=rp.permission_id WHERE r.name='USER' AND p.name='MANAGE_CART'",Long.class)).isEqualTo(1);
-        }
-        finally {
-            jdbc.execute("DROP SCHEMA IF EXISTS "+schema+" CASCADE");
         }
     }
     @Test void migrate_shouldFailOnLegacyAtSignWithoutRenamingOrDeleting() {
