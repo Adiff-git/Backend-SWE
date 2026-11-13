@@ -145,7 +145,7 @@ Creation requires a JSON object; unknown fields including owner/key/bucket param
 | Pending/expired attachment or renewal | 409 | No profile changes; complete or create new upload |
 | Empty/corrupt/non-image/undecodable/MIME mismatch | 422 | No publication; replace staging and retry before expiry |
 | Different-content replacement or state/lock conflict | 409 | No false completion; caller decides whether to retry |
-| Storage outage, failed read/copy/signing, missing final content | 503 | No false completion or attachment; retry/investigate |
+| Storage outage, failed read/copy/signing, missing final content detected at attachment/publication validation | 503 | No false completion or attachment; retry/investigate |
 | Unexpected database failure, including after copy | 500 | Database rollback; possible final orphan; reconcile |
 | Staging deletion failed after commit | 200 | Completion persists; operator cleanup retries |
 
@@ -232,3 +232,11 @@ Allow-all API CORS (origins/methods/headers), retaining Bearer JWT authorization
 ### Catalog contract alignment (2026-10-28)
 
 Image upload IDs and profile image references use canonical lowercase hyphenated UUID strings. User IDs remain Long. Upload sessions and PUT URLs last 900 seconds; each signed GET lasts 300 seconds. The shared bucket and storage implementation remain authoritative for the server. This change does not introduce product upload/gallery behavior or replace user ownership rules. Migrations are V4-V9 because no database has been deployed.
+
+### Shared URL distribution follow-up (2026-11-11)
+
+Product images and avatar/upload-download responses use storage-owned ImageUrlResolver. Presigned GET remains 300 seconds on the existing private bucket. LocalStack and AWS share ObjectStorageService and configuration; stored object keys/references and all existing response field names remain unchanged. A future CDN policy can replace the resolver implementation without rewriting domain records. No new image schema/domain or migration is introduced.
+
+Routine completed-image renewal/profile reads validate database identity, ownership where applicable and COMPLETED state, then issue URLs without S3 HEAD. URL issuance does not prove physical object existence; if completed content is deleted externally, access fails when the client uses the URL. Attaching an avatar still verifies the final object, while staging/content validation/copy preconditions remain intact. Actual credential/signing failures remain safe 503 errors. Existing completion-signing retry semantics are preserved.
+
+One application-managed S3Presigner serves URL generation. Preparation captures credentials before catalog publication locks and returns resource-free PreparedImageUrls; request cleanup cannot close the signer or override outcomes. Real temporary-file cleanup is attempted on both success and failure, safely logged on failure, and cannot replace success/original business failure. Application resources close only at shutdown.

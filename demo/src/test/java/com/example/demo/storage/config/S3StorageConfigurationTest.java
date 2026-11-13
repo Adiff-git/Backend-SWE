@@ -32,7 +32,7 @@ class S3StorageConfigurationTest {
             com.example.demo.storage.service.impl.ObjectStorageServiceImpl storage =
                     new com.example.demo.storage.service.impl.ObjectStorageServiceImpl(
                             org.mockito.Mockito.mock(software.amazon.awssdk.services.s3.S3Client.class), presigner,
-                            properties, Clock.fixed(now, ZoneOffset.UTC), configuration.storageCredentials(properties, environment), configuration);
+                            properties, Clock.fixed(now, ZoneOffset.UTC), org.mockito.Mockito.mock(com.example.demo.storage.service.LocalImageCheckpoint.class), configuration.storageCredentials(properties, environment));
             com.example.demo.storage.dto.response.PreparedUpload signed = storage.prepareUpload("staging/key", "image/png", now.plusSeconds(900));
             java.util.Map<String, String> query = java.util.Arrays.stream(URI.create(signed.getUrl()).getRawQuery().split("&"))
                     .map(value -> value.split("=", 2)).collect(java.util.stream.Collectors.toMap(value -> value[0], value -> value[1]));

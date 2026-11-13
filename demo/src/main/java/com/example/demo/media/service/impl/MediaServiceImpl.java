@@ -17,7 +17,7 @@ import com.example.demo.media.service.ImageCompletionOutcome;
 import com.example.demo.media.service.MediaCommandService;
 import com.example.demo.media.service.MediaService;
 import com.example.demo.media.validator.ImageUploadValidator;
-import com.example.demo.storage.config.S3StorageProperties;
+import com.example.demo.storage.service.ImageUrlResolver;
 import com.example.demo.storage.service.ObjectStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class MediaServiceImpl implements MediaService {
     private final ObjectStorageService storage;
     private final MediaConverter converter;
     private final ImageUploadValidator validator;
-    private final S3StorageProperties properties;
+    private final ImageUrlResolver imageUrls;
 
     @Override public ImageUploadResponse createImageUpload(Long actorId, CreateImageUploadRequest request) {
         requireEntryBoundary();
@@ -47,7 +47,15 @@ public class MediaServiceImpl implements MediaService {
     @Override @Transactional(readOnly = true)
     public ImageAccessResponse getImageDownload(Long actorId, UUID imageId) { return ownedAccess(actorId, imageId); }
     @Override @Transactional(readOnly = true)
-    public ImageAccessResponse validateImageForAttachment(Long actorId, UUID imageId) { return ownedAccess(actorId, imageId); }
+    public ImageAccessResponse validateImageForAttachment(Long actorId, UUID imageId) {
+        if (actorId == null || actorId <= 0) throw new IdentityUnavailableException();
+        validator.validateId(imageId);
+        ImageUpload image = repository.findByIdAndOwnerUserId(imageId, actorId).orElseThrow(ImageUploadNotFoundException::new);
+        if (image.getStatus() != ImageUploadStatus.COMPLETED) throw new UploadStateConflictException();
+        // Attachment is a mutation boundary: retain the existing physical-object check.
+        storage.verifyFinalExists(image.getFinalKey());
+        return access(image.getId(), image.getFinalKey());
+    }
     @Override @Transactional(readOnly = true)
     public ImageAccessResponse getAttachedImage(UUID imageId) {
         validator.validateId(imageId);
@@ -63,8 +71,7 @@ public class MediaServiceImpl implements MediaService {
         return access(image.getId(), image.getFinalKey());
     }
     private ImageAccessResponse access(UUID id, String key) {
-        storage.verifyFinalExists(key);
-        return converter.toAccess(id, storage.prepareDownload(key, properties.getDownloadUrlLifetime()));
+        return converter.toAccess(id, imageUrls.resolve(key));
     }
     private void requireEntryBoundary() {
         if (TransactionSynchronizationManager.isActualTransactionActive())

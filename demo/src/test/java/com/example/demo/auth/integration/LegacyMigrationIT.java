@@ -16,7 +16,8 @@ class LegacyMigrationIT extends AuthPostgresTestSupport {
             Flyway.configure().dataSource(datasource).schemas(schema).defaultSchema(schema).target("10").load().migrate();
             assertThat(jdbc.queryForObject("SELECT password FROM "+schema+".users",String.class)).isEqualTo("existing-encoded-value");
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM "+schema+".user_roles",Long.class)).isEqualTo(1);
-            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM "+schema+".permissions",Long.class)).isEqualTo(3);
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM "+schema+".permissions",Long.class)).isEqualTo(4);
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM "+schema+".role_permissions rp JOIN "+schema+".roles r ON r.id=rp.role_id JOIN "+schema+".permissions p ON p.id=rp.permission_id WHERE r.name='USER' AND p.name='MANAGE_CART'",Long.class)).isEqualTo(1);
         }
         finally {
             jdbc.execute("DROP SCHEMA IF EXISTS "+schema+" CASCADE");

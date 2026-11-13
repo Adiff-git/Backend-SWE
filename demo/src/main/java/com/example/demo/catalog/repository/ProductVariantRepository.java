@@ -10,6 +10,11 @@ import com.example.demo.catalog.entity.ProductVariant;
 
 public interface ProductVariantRepository extends JpaRepository<ProductVariant, UUID> {
 
+    @Query("SELECT v.id AS variantId, p.id AS productId, p.status AS status, v.sellingPrice AS price, "
+            + "p.name AS productName, v.sku AS sku, v.optionCombination AS options "
+            + "FROM ProductVariant v JOIN v.product p WHERE v.id IN :ids")
+    List<CartVariantView> findCartStates(@Param("ids") Collection<UUID> ids);
+
 	List<ProductVariant> findByProduct_IdOrderByIdAsc(UUID productId);
 
 	@Query("SELECT v FROM ProductVariant v WHERE v.product.id IN :productIds "
