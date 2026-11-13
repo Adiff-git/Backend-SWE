@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.demo.catalog.CatalogFixtures.ProductFixture;
 import com.example.demo.catalog.entity.ProductImage;
+import com.example.demo.catalog.entity.Brand;
 import com.example.demo.catalog.entity.ProductStatus;
 import com.example.demo.catalog.entity.ProductVariant;
 import com.example.demo.catalog.storage.ProductImageStorage;
@@ -74,7 +75,7 @@ class ProductDetailApiIT {
 	}
 
 	private void clearCommittedData() {
-		jdbc.execute("TRUNCATE TABLE product_image_uploads, product_images, product_variants, products, categories CASCADE");
+		jdbc.execute("TRUNCATE TABLE product_image_uploads, product_images, product_variants, products, categories, brands CASCADE");
 	}
 
 	@Test
@@ -91,6 +92,8 @@ class ProductDetailApiIT {
 				.andExpect(jsonPath("$.id").value(fixture.productId().toString()))
 				.andExpect(jsonPath("$.category.id").value(fixture.categoryId().toString()))
 				.andExpect(jsonPath("$.description").value("Detailed description"))
+				.andExpect(jsonPath("$.brand.code").value("detail-brand"))
+				.andExpect(jsonPath("$.brand.name").value("Detail Brand"))
 				.andExpect(jsonPath("$.variants.length()").value(2))
 				.andExpect(jsonPath("$.images.length()").value(2))
 				.andExpect(jsonPath("$.images[0].displayOrder").value(2))
@@ -105,10 +108,17 @@ class ProductDetailApiIT {
 		assertThat(body).contains(fixture.firstVariantId().toString(), fixture.secondVariantId().toString());
 		assertThat(body).doesNotContain(other.toString(), otherVariant.toString(), "objectKey", "stagingKey", "claimToken",
 				"contentType", "byteSize", "createdAt", "\"status\"", "weight");
+		assertThat(detail.get("brand").get("id").asText()).isEqualTo(
+				jdbc.queryForObject("SELECT brand_id FROM products WHERE id = ?", UUID.class, fixture.productId()).toString());
 		JsonNode expensiveVariant = null;
 		for (JsonNode variant : detail.get("variants")) {
 			assertThat(variant.get("sellingPrice").get("currency").asText()).isEqualTo("VND");
 			assertThat(variant.get("options").isObject()).isTrue();
+			boolean second = fixture.secondVariantId().toString().equals(variant.get("id").asText());
+			assertThat(variant.get("technicalSpecifications"))
+					.isEqualTo(json.readTree(second
+							? "{\"schema_version\":1,\"values\":{\"nfc_supported\":true}}"
+							: "{\"schema_version\":1,\"values\":{\"nfc_supported\":false,\"physical_ram\":{\"value\":8.5,\"unit\":\"GB\"}}}"));
 			if (fixture.secondVariantId().toString().equals(variant.get("id").asText())) {
 				expensiveVariant = variant;
 			}
@@ -129,6 +139,9 @@ class ProductDetailApiIT {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.primaryImageUrl").value(org.hamcrest.Matchers.nullValue()))
 				.andExpect(jsonPath("$.images").isEmpty())
+				.andExpect(jsonPath("$.brand").value(org.hamcrest.Matchers.nullValue()))
+				.andExpect(jsonPath("$.variants[0].technicalSpecifications.schema_version").value(1))
+				.andExpect(jsonPath("$.variants[0].technicalSpecifications.values").isEmpty())
 				.andExpect(jsonPath("$.variants.length()").value(1));
 		assertThat(storage.signCalls.get()).isZero();
 	}
@@ -181,9 +194,15 @@ class ProductDetailApiIT {
 		return transactions.execute(transaction -> {
 			ProductFixture fixture = CatalogFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
 			fixture.product().setDescription("Detailed description");
+			Brand brand = new Brand("detail-brand", "Detail Brand");
+			entityManager.persist(brand);
+			fixture.product().setBrand(brand);
+			fixture.variant().setTechnicalSpecifications(Map.of("schema_version", 1, "values", Map.of(
+					"nfc_supported", false, "physical_ram", Map.of("value", new BigDecimal("8.5"), "unit", "GB"))));
 			fixture.variant().setOptionCombination(Map.of("color", "red"));
 			fixture.variant().setSellingPrice(BigDecimal.valueOf(1000));
 			ProductVariant second = CatalogFixtures.variant(fixture.product(), Map.of("color", "blue"), LARGE_WHOLE_VND);
+			second.setTechnicalSpecifications(Map.of("schema_version", 1, "values", Map.of("nfc_supported", true)));
 			entityManager.persist(second);
 			ProductImage later = CatalogFixtures.image(fixture.product(), 7, false);
 			ProductImage primary = CatalogFixtures.image(fixture.product(), 2, true);

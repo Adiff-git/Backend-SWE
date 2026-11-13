@@ -1,0 +1,129 @@
+{
+  "capturedUTC": "2026-11-10T03:31:37.491871+00:00",
+  "repository": "/home/hza/Downloads/SWE/Backend-SWE",
+  "originalHead": "c5bd4e7eeb39d9b06a0c7e36af9a65635058613f",
+  "branch": "features/SearchAndFilter",
+  "migrationPreservation": [
+    {
+      "path": "demo/src/main/resources/db/migration/V4__create_users.sql",
+      "baselineSha256": "dd065d0c85e93a87573a9396ec8b427c9a4a9e7a80df272d279c5e412497f628",
+      "actualSha256": "dd065d0c85e93a87573a9396ec8b427c9a4a9e7a80df272d279c5e412497f628",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V9__user_profile_images.sql",
+      "baselineSha256": "795c2571d9ad36ca95f2c9f4a230d9d2ab05a2dcee90e9c83188d2c3db99a5ac",
+      "actualSha256": "795c2571d9ad36ca95f2c9f4a230d9d2ab05a2dcee90e9c83188d2c3db99a5ac",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V1__create_catalog_core.sql",
+      "baselineSha256": "57335af270525b03f723a14bcadf17c16a2b23c3ce2181061660b17193ddc613",
+      "actualSha256": "57335af270525b03f723a14bcadf17c16a2b23c3ce2181061660b17193ddc613",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V3__enforce_catalog_relationships.sql",
+      "baselineSha256": "d3ad76330c02dba1f9f2a1a973664441986d422ac7a57e1c8e4dd1a8c599d454",
+      "actualSha256": "d3ad76330c02dba1f9f2a1a973664441986d422ac7a57e1c8e4dd1a8c599d454",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V13__email_google_auth.sql",
+      "baselineSha256": "8051bb28f137088b0816476fb82373641e10c059f933383deff806a42c3b6085",
+      "actualSha256": "8051bb28f137088b0816476fb82373641e10c059f933383deff806a42c3b6085",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V6__authorities_and_username_policy.sql",
+      "baselineSha256": "976182f523d5f8910477ff81ede01d770313204f7109293eaa42f75763a4d6bf",
+      "actualSha256": "976182f523d5f8910477ff81ede01d770313204f7109293eaa42f75763a4d6bf",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V5__create_addresses.sql",
+      "baselineSha256": "a303f220e2c59feb0fc538648ace280a954723e5c89c43ed58fdf7597fb787a2",
+      "actualSha256": "a303f220e2c59feb0fc538648ace280a954723e5c89c43ed58fdf7597fb787a2",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V14__remove_request_rate_limiting.sql",
+      "baselineSha256": "79bb9bd5dcc159bd85073d84d3d78736e1cbd008e8a6626d4ef28f65720c55d6",
+      "actualSha256": "79bb9bd5dcc159bd85073d84d3d78736e1cbd008e8a6626d4ef28f65720c55d6",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V8__image_uploads.sql",
+      "baselineSha256": "3e142dc5084141fd3808b40f0b29de14408380b3c5694d2768738037a1114723",
+      "actualSha256": "3e142dc5084141fd3808b40f0b29de14408380b3c5694d2768738037a1114723",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V11__catalog_data_enhancement.sql",
+      "baselineSha256": "8d69dc8b8bc5b648c4fd6cfc5e95574c3ebe6c3f29acedcc63f0f459d3d783cd",
+      "actualSha256": "8d69dc8b8bc5b648c4fd6cfc5e95574c3ebe6c3f29acedcc63f0f459d3d783cd",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V2__create_product_images.sql",
+      "baselineSha256": "87e45d16aecb62f4c31c53a71d01173f31e415a9430684dce2d60bcc2c275e09",
+      "actualSha256": "87e45d16aecb62f4c31c53a71d01173f31e415a9430684dce2d60bcc2c275e09",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V12__product_image_attachments.sql",
+      "baselineSha256": "26b01726a537c448b617e3cba8e76f49c88d92216f03c4b5d10c24e8316574ed",
+      "actualSha256": "26b01726a537c448b617e3cba8e76f49c88d92216f03c4b5d10c24e8316574ed",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V10__create_wishlist_items.sql",
+      "baselineSha256": "4643e4fdfeccaf2339dcb922cf3315ffa5973e73833a8a5d0f49ba4b1d9aef47",
+      "actualSha256": "4643e4fdfeccaf2339dcb922cf3315ffa5973e73833a8a5d0f49ba4b1d9aef47",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V7__authentication_sessions.sql",
+      "baselineSha256": "a063ab4e474da4b63187af2653b7b83be9dc1b7b8083da89426479a6fdbf36f0",
+      "actualSha256": "a063ab4e474da4b63187af2653b7b83be9dc1b7b8083da89426479a6fdbf36f0",
+      "unchanged": true
+    },
+    {
+      "path": "demo/src/main/resources/db/migration/V15__catalog_search_support.sql",
+      "baselineSha256": "6c2192d788a0fd19fb6085f4dff08f892fb50c4b67139f753beb3a5b09ad1ef6",
+      "actualSha256": "6c2192d788a0fd19fb6085f4dff08f892fb50c4b67139f753beb3a5b09ad1ef6",
+      "unchanged": true
+    }
+  ],
+  "trackedAppliedMigrationDiff": "",
+  "taskCounts": {
+    "PASS": 64,
+    "DEFERRED": 1,
+    "BLOCKED": 1
+  },
+  "reviewChanges": "Only explicit imports per constitution;two OpenAPI metadata descriptions corrected;new finalization evidence/checkpoint. No application behavior change.",
+  "openapi": "PASS41capability probes;60refs;approved pinned validators",
+  "gitOutcome": "PASS:feature committed and merged into draft/version-1;postmerge59ITPASS;docs-only receipt followup.",
+  "currentValidation": {
+    "uniqueTests": 705,
+    "unitMvc": 342,
+    "integration": 363,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "independentSourceRuns": 2,
+    "allScenarioBudgets": "PASS",
+    "openapi": "PASS41probes60refs",
+    "migrations": "PASSfresh/V15-upgrade/failure/recovery;V1-V15unchanged"
+  },
+  "taskStatusPolicy": "64PASS/T059DEFERRED/T063BLOCKED unchanged;local acceptancePASS,productionNOT_VERIFIED",
+  "remainingAction": "No local blocker. T059DEFERRED,T063BLOCKED;no push/deployment.",
+  "previousAttemptOutcome": "BLOCKED before staging/commit/merge: mandatory source1500 performance test failed in mixed and isolated invocations. Branch/HEAD unchanged. No push/deployment.",
+  "performancePolicy": "performance-policy.md",
+  "cause": "Exact historical runtime causeNOT_ESTABLISHED;DBtiming variance reproduced on unchanged production code.",
+  "operationReceipt": "git-finalization-operation-receipt.json",
+  "featureCommit": "067ba56395176c5158a7085e3360bf53f0069837",
+  "mergeCommit": "c8b7435746a44640432b8166b55578b89a439c6c",
+  "currentBranch": "draft/version-1",
+  "postMergeVerification": "PASS59/0/0/0;source/migration hashes unchanged"
+}

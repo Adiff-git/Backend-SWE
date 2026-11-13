@@ -1,0 +1,4709 @@
+{
+  "candidateScopeAcceptedForReview": true,
+  "finalVocabularyApproval": null,
+  "enabledInApplication": false,
+  "counts": {
+    "families": 19,
+    "models": 6,
+    "ambiguous": 21
+  },
+  "proposalVersion": "identifier-scope-proposal-2026-11-09-v1",
+  "rows": [
+    {
+      "id": "F01",
+      "term": "galaxy",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 1,
+          "parentAsin": "B08PPSRLQ5",
+          "proposedProductId": "84d8a85d-345c-5073-b9ad-c229dd8d51ef",
+          "nameExcerpt": "SAMSUNG Galaxy A51 (A515F) 128GB DUOS GSM Unlocked Smartphone w/Quad Camera 48 MP + 12 MP + 5 MP + 5 MP (International Variant/US Compatible LTE) - Prism Crush Black",
+          "brandObservation": {
+            "code": "samsung",
+            "name": "Samsung",
+            "registry_id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08PPSRLQ5",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 5,
+          "parentAsin": "B084MD6Y5H",
+          "proposedProductId": "67281f6f-baaf-5e76-bcb3-d065f9be2d19",
+          "nameExcerpt": "Samsung Galaxy Note 10 Lite N770F, Dual SIM LTE, International Version (No US Warranty), 128GB, Aura Glow - GSM Unlocked",
+          "brandObservation": {
+            "code": "samsung",
+            "name": "Samsung",
+            "registry_id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B084MD6Y5H",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 7,
+          "parentAsin": "B0B8PDLMMS",
+          "proposedProductId": "8a619f33-1aae-5629-98f7-7ec85543a856",
+          "nameExcerpt": "SAMSUNG Galaxy S21 Ultra 5G Factory Unlocked Android Cell Phone 256GB US Version Smartphone Pro-Grade Camera 8K Video 108MP High Res, Phantom Black",
+          "brandObservation": {
+            "code": "samsung",
+            "name": "Samsung",
+            "registry_id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B8PDLMMS",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F01-P",
+        "input": "galaxy",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "galaxy",
+          "normalized": "galaxy",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "galaxy"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F01-N",
+        "input": "galaxyx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "galaxyx",
+          "normalized": "galaxyx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "galaxyx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F02",
+      "term": "iphone",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 433,
+          "parentAsin": "B0BLB1698X",
+          "proposedProductId": "d6de4493-9538-535d-9433-dc0eb13d1c33",
+          "nameExcerpt": "Belkin SoundForm Mini - Wireless Bluetooth Headphones for Kids with Built in Microphone - On-Ear Earphones for iPhone, iPad, Fire Tablet & More - Black",
+          "brandObservation": {
+            "code": "belkin",
+            "name": "Belkin",
+            "registry_id": "0eaae3e6-4b91-5677-82d6-d092077b9a06",
+            "status": "PROPOSED"
+          },
+          "category": "Headphone & Earbuds",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BLB1698X",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 575,
+          "parentAsin": "B0BXM1Q62R",
+          "proposedProductId": "63fba94a-52cb-5e56-ab23-395551746ba0",
+          "nameExcerpt": "Skullcandy Hesh Evo Bluetooth Headphones for iPhone and Android with Microphone / 36 Hours Battery Life / Great for Music, School, Travel and Gaming / Wireless Headphones - Black",
+          "brandObservation": null,
+          "category": "Headphone & Earbuds",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BXM1Q62R",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 577,
+          "parentAsin": "B0C5B3JHH7",
+          "proposedProductId": "55becbe4-d76b-5717-8c11-67b389707c36",
+          "nameExcerpt": "Skullcandy Hesh Evo Bluetooth Headphones for iPhone and Android with Microphone / 36 Hours Battery Life/Great for Music, School, Travel and Gaming/Wireless Headphones - Clear Blue",
+          "brandObservation": null,
+          "category": "Headphone & Earbuds",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0C5B3JHH7",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F02-P",
+        "input": "iphone",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "iphone",
+          "normalized": "iphone",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "iphone"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F02-N",
+        "input": "iphonex",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "iphonex",
+          "normalized": "iphonex",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "iphonex"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F03",
+      "term": "ipad",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 303,
+          "parentAsin": "B0728GY2VR",
+          "proposedProductId": "eb139b2c-0f18-55a8-b00f-1cce9a89c90d",
+          "nameExcerpt": "Apple iPad with WiFi, 32GB, Space Gray (2017 Model)",
+          "brandObservation": {
+            "code": "apple",
+            "name": "Apple",
+            "registry_id": "2672986e-5795-5950-87ad-8dc8391c546e",
+            "status": "PROPOSED"
+          },
+          "category": "Tablet",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0728GY2VR",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 433,
+          "parentAsin": "B0BLB1698X",
+          "proposedProductId": "d6de4493-9538-535d-9433-dc0eb13d1c33",
+          "nameExcerpt": "Belkin SoundForm Mini - Wireless Bluetooth Headphones for Kids with Built in Microphone - On-Ear Earphones for iPhone, iPad, Fire Tablet & More - Black",
+          "brandObservation": {
+            "code": "belkin",
+            "name": "Belkin",
+            "registry_id": "0eaae3e6-4b91-5677-82d6-d092077b9a06",
+            "status": "PROPOSED"
+          },
+          "category": "Headphone & Earbuds",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BLB1698X",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 849,
+          "parentAsin": "B0BYVW7FCC",
+          "proposedProductId": "fdcea52a-58fb-54c0-ad8c-3593007f3971",
+          "nameExcerpt": "Anker USB C 715 (Nano II 65W), GaN II PPS Fast Compact Foldable Charger for MacBook Pro/Air, Galaxy S20/S10, Dell XPS 13, Note 20/10+, iPhone 13/Pro/Mini, iPad Pro, Pixel, and More",
+          "brandObservation": {
+            "code": "anker",
+            "name": "Anker",
+            "registry_id": "b5b021a8-c35a-5382-ae4b-53d2393ef55e",
+            "status": "PROPOSED"
+          },
+          "category": "Charger & Power Bank",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BYVW7FCC",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F03-P",
+        "input": "ipad",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "ipad",
+          "normalized": "ipad",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "ipad"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F03-N",
+        "input": "ipadx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "ipadx",
+          "normalized": "ipadx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "ipadx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F04",
+      "term": "xperia",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 2,
+          "parentAsin": "B09L88FZ95",
+          "proposedProductId": "5dcd2178-361b-59d2-91eb-a7d56b4762cb",
+          "nameExcerpt": "Sony Xperia Pro-I Dual-SIM 512GB ROM + 12GB RAM (GSM only | No CDMA) Factory Unlocked 5G Smartphone (Frosted Black) - International Version",
+          "brandObservation": {
+            "code": "sony",
+            "name": "Sony",
+            "registry_id": "6caee0e6-eab9-5895-ab63-ca8ef47d8382",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B09L88FZ95",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 29,
+          "parentAsin": "B097QPFQX8",
+          "proposedProductId": "d3700d96-94a5-577b-8781-c459425b11eb",
+          "nameExcerpt": "Xperia 1 III - 5G Smartphone with 120Hz 6.5\" 21:9 4K HDR OLED display with triple camera and four focal lengths- XQBC62/B",
+          "brandObservation": {
+            "code": "sony",
+            "name": "Sony",
+            "registry_id": "6caee0e6-eab9-5895-ab63-ca8ef47d8382",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B097QPFQX8",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 49,
+          "parentAsin": "B0B1KJDM4L",
+          "proposedProductId": "c1cd4625-18b5-5c1f-9e6b-ca9c4a205048",
+          "nameExcerpt": "Sony Xperia 10 IV Dual SIM 128GB ROM + 6GB RAM (GSM only | No CDMA) Factory Unlocked 5G Smartphone (Mint) - International Version",
+          "brandObservation": {
+            "code": "sony",
+            "name": "Sony",
+            "registry_id": "6caee0e6-eab9-5895-ab63-ca8ef47d8382",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B1KJDM4L",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F04-P",
+        "input": "xperia",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "xperia",
+          "normalized": "xperia",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "xperia"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F04-N",
+        "input": "xperiax",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "xperiax",
+          "normalized": "xperiax",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "xperiax"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F05",
+      "term": "redmi",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 3,
+          "parentAsin": "B07Y8YWTFL",
+          "proposedProductId": "9d1e669c-1046-5d26-9ac9-21e14ee3543f",
+          "nameExcerpt": "Xiaomi Redmi Note8 Pro Smartphone, 6 GB + 64 GB, Grigio (Mineral Grey)",
+          "brandObservation": {
+            "code": "xiaomi",
+            "name": "Xiaomi",
+            "registry_id": "58d971fb-0688-5989-8646-631084b64163",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07Y8YWTFL",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 6,
+          "parentAsin": "B08F17DXSC",
+          "proposedProductId": "37f6198a-63c1-59d2-a08e-e2491fa7eb00",
+          "nameExcerpt": "Xiaomi Redmi 9A - Smartphone 2 GB + 32 GB, Dual Sim, Blu (Sky Blue)",
+          "brandObservation": {
+            "code": "xiaomi",
+            "name": "Xiaomi",
+            "registry_id": "58d971fb-0688-5989-8646-631084b64163",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08F17DXSC",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 9,
+          "parentAsin": "B07ZL18B89",
+          "proposedProductId": "a13fb4d2-8442-569a-8da1-fdf2a1f7c79c",
+          "nameExcerpt": "Xiaomi Redmi Note 8 Pro 128GB Hybrid Dual-SIM GSM Unlocked Phone - Dark Grey",
+          "brandObservation": {
+            "code": "xiaomi",
+            "name": "Xiaomi",
+            "registry_id": "58d971fb-0688-5989-8646-631084b64163",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07ZL18B89",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F05-P",
+        "input": "redmi",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "redmi",
+          "normalized": "redmi",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "redmi"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F05-N",
+        "input": "redmix",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "redmix",
+          "normalized": "redmix",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "redmix"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F06",
+      "term": "thinkpad",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 235,
+          "parentAsin": "B01B16MXLU",
+          "proposedProductId": "234d5a4f-7a6c-51b7-801e-4ab74e043d86",
+          "nameExcerpt": "Lenovo Thinkpad Yoga 2-in-1 Convertible 11.6-inch IPS Touchscreen Laptop(Tablet), Intel Quad Core Processor, 4GB DDR3L, 128GB SSD, HDMI, Bluetooth, Webcam, AC Wifi, Windows 10 Prof",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B01B16MXLU",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 272,
+          "parentAsin": "B00FU83YWS",
+          "proposedProductId": "349368d9-63cd-5f59-a1da-0d00d200fa0a",
+          "nameExcerpt": "Lenovo Thinkpad E545 20B20011US Laptop (Windows 8 Professional, AMD Dual-Core A6 5350M (2.9GHz) Processor, 15.6\" (1366 x 768) HD Display, SSD: 320 GB, RAM: 4 GB DDR3) Black",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B00FU83YWS",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 327,
+          "parentAsin": "B000T2RGFG",
+          "proposedProductId": "c2813fdb-4b74-59ec-ba6f-e7970c32bb8e",
+          "nameExcerpt": "Lenovo ThinkPad X61 Tablet 7767 Notebook",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Tablet",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B000T2RGFG",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F06-P",
+        "input": "thinkpad",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "thinkpad",
+          "normalized": "thinkpad",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "thinkpad"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F06-N",
+        "input": "thinkpadx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "thinkpadx",
+          "normalized": "thinkpadx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "thinkpadx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F07",
+      "term": "ideapad",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 154,
+          "parentAsin": "B0B72PYMGX",
+          "proposedProductId": "2479f7b2-97f0-552f-ba10-e55b8a957783",
+          "nameExcerpt": "Lenovo IdeaPad 3 11 Chromebook Laptop,11.6\" HD Display,Intel Celeron N4020, 4GB RAM, 64GB Storage, UHD Graphics 600, Chrome OS, Onyx Black",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B72PYMGX",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 156,
+          "parentAsin": "B0BL44GJ5Y",
+          "proposedProductId": "75f9b394-f196-54c5-8bce-a0eb7f6102c6",
+          "nameExcerpt": "Lenovo 2020 IdeaPad Laptop ComputerAMD A6-9220e 1.6GHz 4GB Memory 64GB eMMC Flash Memory 14\" AMD Radeon R4 AC WiFi Microsoft Office 365 Platinum Gray Windows 10 Home",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BL44GJ5Y",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 162,
+          "parentAsin": "B0C6YGWC8R",
+          "proposedProductId": "5797f169-489d-5e48-8df5-231fb61dbbad",
+          "nameExcerpt": "Lenovo IdeaPad 3 14\" Laptop, 14.0\" FHD 1920 x 1080 Display, AMD Ryzen 5 3500U Processor, 8GB DDR4 RAM, 256GB SSD, AMD Radeon Vega 8 Graphics, Narrow Bezel, Windows 10, 81W0003QUS, ",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0C6YGWC8R",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F07-P",
+        "input": "ideapad",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "ideapad",
+          "normalized": "ideapad",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "ideapad"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F07-N",
+        "input": "ideapadx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "ideapadx",
+          "normalized": "ideapadx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "ideapadx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F08",
+      "term": "inspiron",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 198,
+          "parentAsin": "B0BN7PCGX1",
+          "proposedProductId": "26d8fd4b-d7da-5d2b-9411-34ea5c5ff31a",
+          "nameExcerpt": "Dell Inspiron 3583 15â‚¬ Laptop Intel Celeron â‚¬\"œ 128GB SSD â‚¬\"œ 4GB DDR4 â‚¬\"œ 1.6GHz - UHD Graphics 610 - Windows 10 Home - Inspiron 15 3000 Series - New",
+          "brandObservation": {
+            "code": "dell",
+            "name": "Dell",
+            "registry_id": "323abafb-8706-56f3-8745-3e69eb7ba831",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BN7PCGX1",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 217,
+          "parentAsin": "B07P4LFDT7",
+          "proposedProductId": "9e0a1dbc-c8f8-523b-9797-3aee4eae5a07",
+          "nameExcerpt": "Dell Inspiron 14 5481, 2 in 1 convertible Touchscreen Laptop 14 inch HD (1366 X 768) 8th Gen Intel Core i3-8145U, 4GB RAM, 128GB SSD, Windows 10 S",
+          "brandObservation": {
+            "code": "dell",
+            "name": "Dell",
+            "registry_id": "323abafb-8706-56f3-8745-3e69eb7ba831",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07P4LFDT7",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 222,
+          "parentAsin": "B08YQ4JJ3C",
+          "proposedProductId": "e2615271-850f-5891-9b13-612c6f228127",
+          "nameExcerpt": "Dell Inspiron 14 5406 Touchscreen Laptop, 14-inch FHD 2 in 1 Convertible Laptop - Intel Core i5-1135G7, 12GB 3200MHz DDR4 RAM, 256GB SSD, Iris Xe Graphics, Windows 10 Home - Titan ",
+          "brandObservation": {
+            "code": "dell",
+            "name": "Dell",
+            "registry_id": "323abafb-8706-56f3-8745-3e69eb7ba831",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08YQ4JJ3C",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F08-P",
+        "input": "inspiron",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "inspiron",
+          "normalized": "inspiron",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "inspiron"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F08-N",
+        "input": "inspironx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "inspironx",
+          "normalized": "inspironx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "inspironx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F09",
+      "term": "vivobook",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 155,
+          "parentAsin": "B081V6W99V",
+          "proposedProductId": "6f5c3f0a-fbc6-5c44-bd40-c1ab2b3a2cac",
+          "nameExcerpt": "[2021 Version]ASUS Vivobook Laptop L210 11.6” ultra thin, Intel Celeron N4020 Processor, 4GB RAM, 64GB eMMC storage, Windows 10 Home in S mode with One Year of Office 365 Personal,",
+          "brandObservation": {
+            "code": "asus",
+            "name": "ASUS",
+            "registry_id": "ec6322d6-d332-5f24-8465-165cc6868146",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B081V6W99V",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 205,
+          "parentAsin": "B099PPXYB3",
+          "proposedProductId": "93d32f70-b62a-5c2e-9064-552981dd36f3",
+          "nameExcerpt": "ASUS VivoBook 15 Thin & Light Laptop, 15.6” FHD Display, AMD Quad Core R7-3700U CPU, 8GB DDR4 RAM, 512GB PCIe SSD, AMD Radeon Vega 10 Graphics, Fingerprint, Windows 10 Home, Slate ",
+          "brandObservation": {
+            "code": "asus",
+            "name": "ASUS",
+            "registry_id": "ec6322d6-d332-5f24-8465-165cc6868146",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B099PPXYB3",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 206,
+          "parentAsin": "B08M8VCHCQ",
+          "proposedProductId": "24946d5f-3e87-56d9-9f28-88a8d9826945",
+          "nameExcerpt": "ASUS VivoBook 15 Thin and Light Laptop, 15.6” FHD, Intel Core i3-8145U CPU, 8GB RAM, 128GB SSD, Windows 10 in S Mode, F512FA-AB34, Slate Gray",
+          "brandObservation": {
+            "code": "asus",
+            "name": "ASUS",
+            "registry_id": "ec6322d6-d332-5f24-8465-165cc6868146",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08M8VCHCQ",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F09-P",
+        "input": "vivobook",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "vivobook",
+          "normalized": "vivobook",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "vivobook"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F09-N",
+        "input": "vivobookx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "vivobookx",
+          "normalized": "vivobookx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "vivobookx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F10",
+      "term": "zenbook",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 298,
+          "parentAsin": "B084RSKVQZ",
+          "proposedProductId": "6c4ef88d-aa66-5c48-bb1c-3113af5afa43",
+          "nameExcerpt": "ASUS ZenBook 13 Ultra-Slim Laptop, 13.3” Full HD, 8th Gen Intel i5-8250U Processor, 8GB RAM, 256GB M.2 SSD, Backlit Kbd, Fingerprint Reader, Windows 10, Grey, UX330UA-AH55",
+          "brandObservation": {
+            "code": "asus",
+            "name": "ASUS",
+            "registry_id": "ec6322d6-d332-5f24-8465-165cc6868146",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B084RSKVQZ",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F10-P",
+        "input": "zenbook",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "zenbook",
+          "normalized": "zenbook",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "zenbook"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F10-N",
+        "input": "zenbookx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "zenbookx",
+          "normalized": "zenbookx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "zenbookx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F11",
+      "term": "macbook",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 849,
+          "parentAsin": "B0BYVW7FCC",
+          "proposedProductId": "fdcea52a-58fb-54c0-ad8c-3593007f3971",
+          "nameExcerpt": "Anker USB C 715 (Nano II 65W), GaN II PPS Fast Compact Foldable Charger for MacBook Pro/Air, Galaxy S20/S10, Dell XPS 13, Note 20/10+, iPhone 13/Pro/Mini, iPad Pro, Pixel, and More",
+          "brandObservation": {
+            "code": "anker",
+            "name": "Anker",
+            "registry_id": "b5b021a8-c35a-5382-ae4b-53d2393ef55e",
+            "status": "PROPOSED"
+          },
+          "category": "Charger & Power Bank",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BYVW7FCC",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 889,
+          "parentAsin": "B091DS2M8X",
+          "proposedProductId": "0e68ab62-e29b-5e80-8548-c7c1c09c548c",
+          "nameExcerpt": "USB C , Anker Nano II 30W Fast Charger Adapter, GaN II Compact Charger (Not Foldable) for MacBook Air/iPhone 13/13 Mini/ 13 Pro/ 13 Pro Max/ 12, Galaxy S21, Note 20, iPad Pro, Pixe",
+          "brandObservation": {
+            "code": "anker",
+            "name": "Anker",
+            "registry_id": "b5b021a8-c35a-5382-ae4b-53d2393ef55e",
+            "status": "PROPOSED"
+          },
+          "category": "Charger & Power Bank",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B091DS2M8X",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 919,
+          "parentAsin": "B086YGHRNP",
+          "proposedProductId": "6754d120-c926-5bad-9c24-645729653af9",
+          "nameExcerpt": "USB C Charger, Anker 65W PIQ 3.0 PPS Fast Charger, PowerPort III Pod, for MacBook, Dell XPS 13, Galaxy S20 / S10, Note 10+ /10, iPhone 11 / Pro/XR/Xs/X, iPad Pro, Pixel, and More",
+          "brandObservation": {
+            "code": "anker",
+            "name": "Anker",
+            "registry_id": "b5b021a8-c35a-5382-ae4b-53d2393ef55e",
+            "status": "PROPOSED"
+          },
+          "category": "Charger & Power Bank",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B086YGHRNP",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F11-P",
+        "input": "macbook",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "macbook",
+          "normalized": "macbook",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "macbook"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F11-N",
+        "input": "macbookx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "macbookx",
+          "normalized": "macbookx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "macbookx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F12",
+      "term": "chromebook",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 151,
+          "parentAsin": "B07KJX74NH",
+          "proposedProductId": "1d47166f-c73c-5fe7-b8e6-b69854653f28",
+          "nameExcerpt": "SAMSUNG XE350XBA-K01US Chromebook 4 + Chrome OS 15.6\" Full HD Intel Celeron Processor N4000 4GB RAM 32Gb Emmc Gigabit Wi-Fi, Silver",
+          "brandObservation": {
+            "code": "samsung",
+            "name": "Samsung",
+            "registry_id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07KJX74NH",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 152,
+          "parentAsin": "B0BX3VK1Z6",
+          "proposedProductId": "502ff8ba-17ce-519a-b037-2b08718f051a",
+          "nameExcerpt": "Lenovo Chromebook Flex 5 13\" Laptop, FHD Touch Display, Intel Core i3-10110U, 4GB RAM, 64GB Storage, Chrome OS",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BX3VK1Z6",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 154,
+          "parentAsin": "B0B72PYMGX",
+          "proposedProductId": "2479f7b2-97f0-552f-ba10-e55b8a957783",
+          "nameExcerpt": "Lenovo IdeaPad 3 11 Chromebook Laptop,11.6\" HD Display,Intel Celeron N4020, 4GB RAM, 64GB Storage, UHD Graphics 600, Chrome OS, Onyx Black",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B72PYMGX",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F12-P",
+        "input": "chromebook",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "chromebook",
+          "normalized": "chromebook",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "chromebook"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F12-N",
+        "input": "chromebookx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "chromebookx",
+          "normalized": "chromebookx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "chromebookx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F13",
+      "term": "elitebook",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 300,
+          "parentAsin": "B00JW6O9EQ",
+          "proposedProductId": "7ec472ea-5649-5eb6-bb5b-6d32bc04a93c",
+          "nameExcerpt": "HP Elitebook 8440p Laptop Notebook Computer - Core I5 2.4ghz - 4gb Ddr3-250gb HDD DVDRW Windows Home Premium",
+          "brandObservation": {
+            "code": "hp",
+            "name": "HP",
+            "registry_id": "b36c842d-6f15-5a89-b75d-946d5674761f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B00JW6O9EQ",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 338,
+          "parentAsin": "B00RPJOMDU",
+          "proposedProductId": "ceda6182-dffe-57d1-86da-59edb04f47e7",
+          "nameExcerpt": "HP EliteBook Revolve 810 G1 11.6\" Business Tablet PC Intel Core i5-3437U 1.9 GHz 4GB RAM 128GB SSD 64-bit W7P K9Y12U8#ABA",
+          "brandObservation": null,
+          "category": "Tablet",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B00RPJOMDU",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F13-P",
+        "input": "elitebook",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "elitebook",
+          "normalized": "elitebook",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "elitebook"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F13-N",
+        "input": "elitebookx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "elitebookx",
+          "normalized": "elitebookx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "elitebookx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F14",
+      "term": "celeron",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 151,
+          "parentAsin": "B07KJX74NH",
+          "proposedProductId": "1d47166f-c73c-5fe7-b8e6-b69854653f28",
+          "nameExcerpt": "SAMSUNG XE350XBA-K01US Chromebook 4 + Chrome OS 15.6\" Full HD Intel Celeron Processor N4000 4GB RAM 32Gb Emmc Gigabit Wi-Fi, Silver",
+          "brandObservation": {
+            "code": "samsung",
+            "name": "Samsung",
+            "registry_id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07KJX74NH",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 153,
+          "parentAsin": "B00OZJQVTG",
+          "proposedProductId": "58d69cac-4abe-503e-b746-ba3c0a3bfec7",
+          "nameExcerpt": "(Discontinued) HP Stream 11-r010nr 11.6-Inch Notebook (Intel Celeron Processor, 2GB RAM, 32 GB Hard Drive, Windows 10 Home 64- Bit), Cobalt Blue",
+          "brandObservation": {
+            "code": "hp",
+            "name": "HP",
+            "registry_id": "b36c842d-6f15-5a89-b75d-946d5674761f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B00OZJQVTG",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 154,
+          "parentAsin": "B0B72PYMGX",
+          "proposedProductId": "2479f7b2-97f0-552f-ba10-e55b8a957783",
+          "nameExcerpt": "Lenovo IdeaPad 3 11 Chromebook Laptop,11.6\" HD Display,Intel Celeron N4020, 4GB RAM, 64GB Storage, UHD Graphics 600, Chrome OS, Onyx Black",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B72PYMGX",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F14-P",
+        "input": "celeron",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "celeron",
+          "normalized": "celeron",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "celeron"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F14-N",
+        "input": "celeronx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "celeronx",
+          "normalized": "celeronx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "celeronx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F15",
+      "term": "pentium",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 183,
+          "parentAsin": "B08YKBYP62",
+          "proposedProductId": "fc307645-35a5-5291-a8d1-1ff96e22c3ae",
+          "nameExcerpt": "HP Chromebook x360 14a 2-in-1 Laptop, Intel Pentium Silver N5000 Processor, 4 GB RAM, 64 GB eMMC, 14\" HD Display, Chrome OS with Webcam & Dual Mics, Work, Play, Long Battery Life (",
+          "brandObservation": {
+            "code": "hp",
+            "name": "HP",
+            "registry_id": "b36c842d-6f15-5a89-b75d-946d5674761f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08YKBYP62",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 200,
+          "parentAsin": "B09Q4NHCWY",
+          "proposedProductId": "18c500ab-7abb-50f1-9f34-81b6fc0563bc",
+          "nameExcerpt": "2020 HP 15.6\" HD LED Display Laptop, Intel Pentium Gold 6405U Processor, 4GB DDR4 RAM, 128GB SSD, HDMI, Webcam, WI-FI, Windows 10 S, Scarlet Red",
+          "brandObservation": {
+            "code": "hp",
+            "name": "HP",
+            "registry_id": "b36c842d-6f15-5a89-b75d-946d5674761f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B09Q4NHCWY",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 220,
+          "parentAsin": "B07QXKW1Z1",
+          "proposedProductId": "054d24d3-eaa2-5861-b91c-9926d256576f",
+          "nameExcerpt": "ASUS VivoBook Flip 14 14” Thin and Light 2-in-1 Laptop, 14” HD Touchscreen, Intel Quad-Core Pentium N5000 Processor, 4GB DDR4, 128GB eMMC Storage, Windows 10, TP401MA-AB21T",
+          "brandObservation": {
+            "code": "asus",
+            "name": "ASUS",
+            "registry_id": "ec6322d6-d332-5f24-8465-165cc6868146",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07QXKW1Z1",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F15-P",
+        "input": "pentium",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "pentium",
+          "normalized": "pentium",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "pentium"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F15-N",
+        "input": "pentiumx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "pentiumx",
+          "normalized": "pentiumx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "pentiumx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F16",
+      "term": "ryzen",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 159,
+          "parentAsin": "B0C7H1XD7V",
+          "proposedProductId": "c20bc366-ffc9-5032-ba90-0f2dea1901d4",
+          "nameExcerpt": "Lenovo Flex 5 14 2-in-1 Laptop, 14.0\" FHD Touch Display, AMD Ryzen 5 4500U, 16GB RAM, 256GB Storage, AMD Radeon Graphics, Digital Pen Included, Win 10",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0C7H1XD7V",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 161,
+          "parentAsin": "B09B4MYG4F",
+          "proposedProductId": "c5486951-39d5-5c53-ba6b-3902aaf8350a",
+          "nameExcerpt": "Acer Swift 3 Thin & Light Laptop, 14\" Full HD IPS, AMD Ryzen 7 4700U Octa-Core with Radeon Graphics, 8GB LPDDR4, 512GB NVMe SSD, Wi-Fi 6, Backlit KB, Fingerprint Reader, Alexa Buil",
+          "brandObservation": {
+            "code": "acer",
+            "name": "Acer",
+            "registry_id": "b0017ad0-1021-5733-8f54-862426b5a5c4",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B09B4MYG4F",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 162,
+          "parentAsin": "B0C6YGWC8R",
+          "proposedProductId": "5797f169-489d-5e48-8df5-231fb61dbbad",
+          "nameExcerpt": "Lenovo IdeaPad 3 14\" Laptop, 14.0\" FHD 1920 x 1080 Display, AMD Ryzen 5 3500U Processor, 8GB DDR4 RAM, 256GB SSD, AMD Radeon Vega 8 Graphics, Narrow Bezel, Windows 10, 81W0003QUS, ",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0C6YGWC8R",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F16-P",
+        "input": "ryzen",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "ryzen",
+          "normalized": "ryzen",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "ryzen"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F16-N",
+        "input": "ryzenx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "ryzenx",
+          "normalized": "ryzenx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "ryzenx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F17",
+      "term": "snapdragon",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 14,
+          "parentAsin": "B0B7NY1LFJ",
+          "proposedProductId": "a8f6fc05-1624-5eb3-95ba-cfb85c63e7fe",
+          "nameExcerpt": "Xiaomi Redmi Note 9 Pro 64GB + 6GB RAM, 6.67\" FHD+ DotDisplay, 64MP AI Quad Camera, Qualcomm Snapdragon 720G LTE Factory Unlocked Smartphone - International Version (Tropical Green",
+          "brandObservation": {
+            "code": "xiaomi",
+            "name": "Xiaomi",
+            "registry_id": "58d971fb-0688-5989-8646-631084b64163",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B7NY1LFJ",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 38,
+          "parentAsin": "B08ZT258YK",
+          "proposedProductId": "ac968a4a-0c7b-5693-aaa0-ecf5958c16f6",
+          "nameExcerpt": "SAMSUNG Galaxy A02s Cell Phone, Factory Unlocked Android Smartphone, 32GB, Qualcomm Snapdragon 450 Processor, 6.5” HD+ Display Screen, Long Battery Life, Expandable Storage, US Ver",
+          "brandObservation": {
+            "code": "samsung",
+            "name": "Samsung",
+            "registry_id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08ZT258YK",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 44,
+          "parentAsin": "B09Q4JVT98",
+          "proposedProductId": "e6cb0332-89eb-53a7-80b2-6fc856923af5",
+          "nameExcerpt": "SAMSUNG Galaxy Note 9 (128GB, 6GB) 6.4\", Snapdragon 845, IP68 Water Resistant, Global 4G LTE (GSM) AT&T Unlocked (T-Mobile, Cricket, Metro) N9600 (Fast Wireless Pad Bundle, Midnigh",
+          "brandObservation": {
+            "code": "samsung",
+            "name": "Samsung",
+            "registry_id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B09Q4JVT98",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F17-P",
+        "input": "snapdragon",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "snapdragon",
+          "normalized": "snapdragon",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "snapdragon"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F17-N",
+        "input": "snapdragonx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "snapdragonx",
+          "normalized": "snapdragonx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "snapdragonx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F18",
+      "term": "geforce",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 166,
+          "parentAsin": "B0BBKNHDRH",
+          "proposedProductId": "a25ebf46-8c0a-5b60-a2a8-09f9c3453ac2",
+          "nameExcerpt": "Acer Nitro 5 Gaming Laptop, 9th Gen Intel Core i5-9300H, NVIDIA GeForce GTX 1650, 15.6\" Full HD IPS Display, 8GB DDR4, 256GB NVMe SSD, Wi-Fi 6, Backlit Keyboard, Alexa Built-in, AN",
+          "brandObservation": {
+            "code": "acer",
+            "name": "Acer",
+            "registry_id": "b0017ad0-1021-5733-8f54-862426b5a5c4",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BBKNHDRH",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 167,
+          "parentAsin": "B0BWV4MXQG",
+          "proposedProductId": "c1556ac8-4f3a-515c-9685-db199edc24ce",
+          "nameExcerpt": "Acer Nitro 5 AN515-55-53E5 Gaming Laptop | Intel Core i5-10300H | NVIDIA GeForce RTX 3050 GPU | 15.6\" FHD 144Hz IPS Display | 8GB DDR4 | 256GB NVMe SSD | Intel Wi-Fi 6 | Backlit Ke",
+          "brandObservation": {
+            "code": "acer",
+            "name": "Acer",
+            "registry_id": "b0017ad0-1021-5733-8f54-862426b5a5c4",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BWV4MXQG",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 170,
+          "parentAsin": "B07KML89F3",
+          "proposedProductId": "dd24b158-d6a6-5871-80ab-0003cbdb2f20",
+          "nameExcerpt": "Acer Predator Helios 300 Gaming Laptop, 15.6\" Full HD IPS, Intel i7 CPU, 16GB DDR4 RAM, 256GB SSD, GeForce GTX 1060-6GB, VR Ready, Red Backlit KB, Metal Chassis, Windows 10 64-bit,",
+          "brandObservation": {
+            "code": "acer",
+            "name": "Acer",
+            "registry_id": "b0017ad0-1021-5733-8f54-862426b5a5c4",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07KML89F3",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F18-P",
+        "input": "geforce",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "geforce",
+          "normalized": "geforce",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "geforce"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F18-N",
+        "input": "geforcex",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "geforcex",
+          "normalized": "geforcex",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "geforcex"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "F19",
+      "term": "radeon",
+      "classification": "PRODUCT_FAMILY",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 156,
+          "parentAsin": "B0BL44GJ5Y",
+          "proposedProductId": "75f9b394-f196-54c5-8bce-a0eb7f6102c6",
+          "nameExcerpt": "Lenovo 2020 IdeaPad Laptop ComputerAMD A6-9220e 1.6GHz 4GB Memory 64GB eMMC Flash Memory 14\" AMD Radeon R4 AC WiFi Microsoft Office 365 Platinum Gray Windows 10 Home",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BL44GJ5Y",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 159,
+          "parentAsin": "B0C7H1XD7V",
+          "proposedProductId": "c20bc366-ffc9-5032-ba90-0f2dea1901d4",
+          "nameExcerpt": "Lenovo Flex 5 14 2-in-1 Laptop, 14.0\" FHD Touch Display, AMD Ryzen 5 4500U, 16GB RAM, 256GB Storage, AMD Radeon Graphics, Digital Pen Included, Win 10",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0C7H1XD7V",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 161,
+          "parentAsin": "B09B4MYG4F",
+          "proposedProductId": "c5486951-39d5-5c53-ba6b-3902aaf8350a",
+          "nameExcerpt": "Acer Swift 3 Thin & Light Laptop, 14\" Full HD IPS, AMD Ryzen 7 4700U Octa-Core with Radeon Graphics, 8GB LPDDR4, 512GB NVMe SSD, Wi-Fi 6, Backlit KB, Fingerprint Reader, Alexa Buil",
+          "brandObservation": {
+            "code": "acer",
+            "name": "Acer",
+            "registry_id": "b0017ad0-1021-5733-8f54-862426b5a5c4",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B09B4MYG4F",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Proposed exact normalized whole-token fuzzy exclusion in query/candidate names;not substring,alias or auto model. Homonym recall cost still needs final sign-off.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-F19-P",
+        "input": "radeon",
+        "expected": "Matches this proposed family entry only if approved",
+        "executedPrimitive": {
+          "input": "radeon",
+          "normalized": "radeon",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "radeon"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-F19-N",
+        "input": "radeonx",
+        "expected": "Does not equal this family entry;no fuzzy identifier admission or implicit alias",
+        "executedPrimitive": {
+          "input": "radeonx",
+          "normalized": "radeonx",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "radeonx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV03",
+        "IV04",
+        "IV13",
+        "D13",
+        "D14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "M01",
+      "term": "wh-1000xm5",
+      "classification": "SOURCE_VERIFIED_MODEL_ANCHOR",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 384,
+          "parentAsin": "B0C5ZC7FWR",
+          "proposedProductId": "82b1eb26-7dca-5ae1-995d-a6cbca4a4abf",
+          "nameExcerpt": "Sony WH-1000XM5 Wireless Industry Leading Headphones with Auto Noise Canceling Optimizer, Crystal Clear Hands-Free Calling, and Alexa Voice Control, Midnight Blue WH1000XM5",
+          "brandObservation": {
+            "code": "sony",
+            "name": "Sony",
+            "registry_id": "6caee0e6-eab9-5895-ab63-ca8ef47d8382",
+            "status": "PROPOSED"
+          },
+          "category": "Headphone & Earbuds",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0C5ZC7FWR",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Complete-query normalized equality with this exact Product-scoped device model token;reconcile actual owner identity first. Not a compatibility target/global substring.",
+      "expectedRanking": "Proposed rank7 only for whole-query equality to the reviewed anchored model after eligibility;different identifiers never gain fuzzy admission. No other source/owner gets this promotion automatically.",
+      "positiveCase": {
+        "id": "M-M01-P",
+        "input": "wh-1000xm5",
+        "expected": "Exact equality to this proposed owner-bound model anchor",
+        "executedPrimitive": {
+          "input": "wh-1000xm5",
+          "normalized": "wh-1000xm5",
+          "tokens": [
+            {
+              "protected": true,
+              "text": "wh-1000xm5"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-M01-N",
+        "input": "wh-1000xm5x",
+        "expected": "Not exact anchor equality;no rank7 from this anchor,no fuzzy. Existing prefix/partial rules are not redefined.",
+        "executedPrimitive": {
+          "input": "wh-1000xm5x",
+          "normalized": "wh-1000xm5x",
+          "tokens": [
+            {
+              "protected": true,
+              "text": "wh-1000xm5x"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV01",
+        "IV02",
+        "IV11",
+        "D01",
+        "D02",
+        "D11",
+        "D12"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "M02",
+      "term": "wh-1000xm4",
+      "classification": "SOURCE_VERIFIED_MODEL_ANCHOR",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 377,
+          "parentAsin": "B08DBDSVBC",
+          "proposedProductId": "5cffb617-88a6-5962-a04a-6c000f08e8d2",
+          "nameExcerpt": "Sony WH-1000XM4 Wireless Premium Noise Canceling Overhead Headphones with Mic for Phone-Call and Alexa Voice Control, Midnight Blue WH1000XM4",
+          "brandObservation": {
+            "code": "sony",
+            "name": "Sony",
+            "registry_id": "6caee0e6-eab9-5895-ab63-ca8ef47d8382",
+            "status": "PROPOSED"
+          },
+          "category": "Headphone & Earbuds",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08DBDSVBC",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Complete-query normalized equality with this exact Product-scoped device model token;reconcile actual owner identity first. Not a compatibility target/global substring.",
+      "expectedRanking": "Proposed rank7 only for whole-query equality to the reviewed anchored model after eligibility;different identifiers never gain fuzzy admission. No other source/owner gets this promotion automatically.",
+      "positiveCase": {
+        "id": "M-M02-P",
+        "input": "wh-1000xm4",
+        "expected": "Exact equality to this proposed owner-bound model anchor",
+        "executedPrimitive": {
+          "input": "wh-1000xm4",
+          "normalized": "wh-1000xm4",
+          "tokens": [
+            {
+              "protected": true,
+              "text": "wh-1000xm4"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-M02-N",
+        "input": "wh-1000xm4x",
+        "expected": "Not exact anchor equality;no rank7 from this anchor,no fuzzy. Existing prefix/partial rules are not redefined.",
+        "executedPrimitive": {
+          "input": "wh-1000xm4x",
+          "normalized": "wh-1000xm4x",
+          "tokens": [
+            {
+              "protected": true,
+              "text": "wh-1000xm4x"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV01",
+        "IV02",
+        "IV11",
+        "D01",
+        "D02",
+        "D11",
+        "D12"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "M03",
+      "term": "a515f",
+      "classification": "SOURCE_VERIFIED_MODEL_ANCHOR",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 1,
+          "parentAsin": "B08PPSRLQ5",
+          "proposedProductId": "84d8a85d-345c-5073-b9ad-c229dd8d51ef",
+          "nameExcerpt": "SAMSUNG Galaxy A51 (A515F) 128GB DUOS GSM Unlocked Smartphone w/Quad Camera 48 MP + 12 MP + 5 MP + 5 MP (International Variant/US Compatible LTE) - Prism Crush Black",
+          "brandObservation": {
+            "code": "samsung",
+            "name": "Samsung",
+            "registry_id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08PPSRLQ5",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Complete-query normalized equality with this exact Product-scoped device model token;reconcile actual owner identity first. Not a compatibility target/global substring.",
+      "expectedRanking": "Proposed rank7 only for whole-query equality to the reviewed anchored model after eligibility;different identifiers never gain fuzzy admission. No other source/owner gets this promotion automatically.",
+      "positiveCase": {
+        "id": "M-M03-P",
+        "input": "a515f",
+        "expected": "Exact equality to this proposed owner-bound model anchor",
+        "executedPrimitive": {
+          "input": "a515f",
+          "normalized": "a515f",
+          "tokens": [
+            {
+              "protected": true,
+              "text": "a515f"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-M03-N",
+        "input": "a515fx",
+        "expected": "Not exact anchor equality;no rank7 from this anchor,no fuzzy. Existing prefix/partial rules are not redefined.",
+        "executedPrimitive": {
+          "input": "a515fx",
+          "normalized": "a515fx",
+          "tokens": [
+            {
+              "protected": true,
+              "text": "a515fx"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV01",
+        "IV02",
+        "IV11",
+        "D01",
+        "D02",
+        "D11",
+        "D12"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "M04",
+      "term": "pro-i",
+      "classification": "SOURCE_VERIFIED_MODEL_ANCHOR",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 2,
+          "parentAsin": "B09L88FZ95",
+          "proposedProductId": "5dcd2178-361b-59d2-91eb-a7d56b4762cb",
+          "nameExcerpt": "Sony Xperia Pro-I Dual-SIM 512GB ROM + 12GB RAM (GSM only | No CDMA) Factory Unlocked 5G Smartphone (Frosted Black) - International Version",
+          "brandObservation": {
+            "code": "sony",
+            "name": "Sony",
+            "registry_id": "6caee0e6-eab9-5895-ab63-ca8ef47d8382",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B09L88FZ95",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Complete-query normalized equality with this exact Product-scoped device model token;reconcile actual owner identity first. Not a compatibility target/global substring.",
+      "expectedRanking": "Proposed rank7 only for whole-query equality to the reviewed anchored model after eligibility;different identifiers never gain fuzzy admission. No other source/owner gets this promotion automatically.",
+      "positiveCase": {
+        "id": "M-M04-P",
+        "input": "pro-i",
+        "expected": "Exact equality to this proposed owner-bound model anchor",
+        "executedPrimitive": {
+          "input": "pro-i",
+          "normalized": "pro-i",
+          "tokens": [
+            {
+              "protected": true,
+              "text": "pro-i"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-M04-N",
+        "input": "pro-ix",
+        "expected": "Not exact anchor equality;no rank7 from this anchor,no fuzzy. Existing prefix/partial rules are not redefined.",
+        "executedPrimitive": {
+          "input": "pro-ix",
+          "normalized": "pro-ix",
+          "tokens": [
+            {
+              "protected": true,
+              "text": "pro-ix"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV01",
+        "IV02",
+        "IV11",
+        "D01",
+        "D02",
+        "D11",
+        "D12"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "M05",
+      "term": "l210",
+      "classification": "SOURCE_VERIFIED_MODEL_ANCHOR",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 155,
+          "parentAsin": "B081V6W99V",
+          "proposedProductId": "6f5c3f0a-fbc6-5c44-bd40-c1ab2b3a2cac",
+          "nameExcerpt": "[2021 Version]ASUS Vivobook Laptop L210 11.6” ultra thin, Intel Celeron N4020 Processor, 4GB RAM, 64GB eMMC storage, Windows 10 Home in S mode with One Year of Office 365 Personal,",
+          "brandObservation": {
+            "code": "asus",
+            "name": "ASUS",
+            "registry_id": "ec6322d6-d332-5f24-8465-165cc6868146",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B081V6W99V",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Complete-query normalized equality with this exact Product-scoped device model token;reconcile actual owner identity first. Not a compatibility target/global substring.",
+      "expectedRanking": "Proposed rank7 only for whole-query equality to the reviewed anchored model after eligibility;different identifiers never gain fuzzy admission. No other source/owner gets this promotion automatically.",
+      "positiveCase": {
+        "id": "M-M05-P",
+        "input": "l210",
+        "expected": "Exact equality to this proposed owner-bound model anchor",
+        "executedPrimitive": {
+          "input": "l210",
+          "normalized": "l210",
+          "tokens": [
+            {
+              "protected": true,
+              "text": "l210"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-M05-N",
+        "input": "l210x",
+        "expected": "Not exact anchor equality;no rank7 from this anchor,no fuzzy. Existing prefix/partial rules are not redefined.",
+        "executedPrimitive": {
+          "input": "l210x",
+          "normalized": "l210x",
+          "tokens": [
+            {
+              "protected": true,
+              "text": "l210x"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV01",
+        "IV02",
+        "IV11",
+        "D01",
+        "D02",
+        "D11",
+        "D12"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "M06",
+      "term": "be2026",
+      "classification": "SOURCE_VERIFIED_MODEL_ANCHOR",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 128,
+          "parentAsin": "B08R7D4KZJ",
+          "proposedProductId": "a55c4f7c-8789-5a71-b4cd-55857956258c",
+          "nameExcerpt": "OnePlus Nord N10 5G Unlocked Smartphone, Midnight Ice​, 90Hz Refresh Rate, 6GB RAM + 128GB storage, US Version, Model BE2026",
+          "brandObservation": null,
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08R7D4KZJ",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Complete-query normalized equality with this exact Product-scoped device model token;reconcile actual owner identity first. Not a compatibility target/global substring.",
+      "expectedRanking": "Proposed rank7 only for whole-query equality to the reviewed anchored model after eligibility;different identifiers never gain fuzzy admission. No other source/owner gets this promotion automatically.",
+      "positiveCase": {
+        "id": "M-M06-P",
+        "input": "be2026",
+        "expected": "Exact equality to this proposed owner-bound model anchor",
+        "executedPrimitive": {
+          "input": "be2026",
+          "normalized": "be2026",
+          "tokens": [
+            {
+              "protected": true,
+              "text": "be2026"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-M06-N",
+        "input": "be2026x",
+        "expected": "Not exact anchor equality;no rank7 from this anchor,no fuzzy. Existing prefix/partial rules are not redefined.",
+        "executedPrimitive": {
+          "input": "be2026x",
+          "normalized": "be2026x",
+          "tokens": [
+            {
+              "protected": true,
+              "text": "be2026x"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV01",
+        "IV02",
+        "IV11",
+        "D01",
+        "D02",
+        "D11",
+        "D12"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A01",
+      "term": "core",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 94,
+          "parentAsin": "B0B6QQ9Q9V",
+          "proposedProductId": "7f17deb7-20a4-51c7-a932-9dc89d4ca031",
+          "nameExcerpt": "Samsung Galaxy A03 Core A032M Dual SIM GSM Unlocked Android Smartphone (Latin America Variant/US Compatible LTE) - Black",
+          "brandObservation": {
+            "code": "samsung",
+            "name": "Samsung",
+            "registry_id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B6QQ9Q9V",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 152,
+          "parentAsin": "B0BX3VK1Z6",
+          "proposedProductId": "502ff8ba-17ce-519a-b037-2b08718f051a",
+          "nameExcerpt": "Lenovo Chromebook Flex 5 13\" Laptop, FHD Touch Display, Intel Core i3-10110U, 4GB RAM, 64GB Storage, Chrome OS",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BX3VK1Z6",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 166,
+          "parentAsin": "B0BBKNHDRH",
+          "proposedProductId": "a25ebf46-8c0a-5b60-a2a8-09f9c3453ac2",
+          "nameExcerpt": "Acer Nitro 5 Gaming Laptop, 9th Gen Intel Core i5-9300H, NVIDIA GeForce GTX 1650, 15.6\" Full HD IPS Display, 8GB DDR4, 256GB NVMe SSD, Wi-Fi 6, Backlit Keyboard, Alexa Built-in, AN",
+          "brandObservation": {
+            "code": "acer",
+            "name": "Acer",
+            "registry_id": "b0017ad0-1021-5733-8f54-862426b5a5c4",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BBKNHDRH",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Only anchored Intel Core or Samsung Galaxy ... Core spans;not generic core/processor descriptions;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A01-P",
+        "input": "Intel Core i5-10110U",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "Intel Core i5-10110U",
+          "normalized": "intel core i5-10110u",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "intel"
+            },
+            {
+              "protected": false,
+              "text": "core"
+            },
+            {
+              "protected": true,
+              "text": "i5-10110u"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A01-N",
+        "input": "generic core description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic core description",
+          "normalized": "generic core description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "core"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A02",
+      "term": "pro",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 3,
+          "parentAsin": "B07Y8YWTFL",
+          "proposedProductId": "9d1e669c-1046-5d26-9ac9-21e14ee3543f",
+          "nameExcerpt": "Xiaomi Redmi Note8 Pro Smartphone, 6 GB + 64 GB, Grigio (Mineral Grey)",
+          "brandObservation": {
+            "code": "xiaomi",
+            "name": "Xiaomi",
+            "registry_id": "58d971fb-0688-5989-8646-631084b64163",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07Y8YWTFL",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 9,
+          "parentAsin": "B07ZL18B89",
+          "proposedProductId": "a13fb4d2-8442-569a-8da1-fdf2a1f7c79c",
+          "nameExcerpt": "Xiaomi Redmi Note 8 Pro 128GB Hybrid Dual-SIM GSM Unlocked Phone - Dark Grey",
+          "brandObservation": {
+            "code": "xiaomi",
+            "name": "Xiaomi",
+            "registry_id": "58d971fb-0688-5989-8646-631084b64163",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07ZL18B89",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 14,
+          "parentAsin": "B0B7NY1LFJ",
+          "proposedProductId": "a8f6fc05-1624-5eb3-95ba-cfb85c63e7fe",
+          "nameExcerpt": "Xiaomi Redmi Note 9 Pro 64GB + 6GB RAM, 6.67\" FHD+ DotDisplay, 64MP AI Quad Camera, Qualcomm Snapdragon 720G LTE Factory Unlocked Smartphone - International Version (Tropical Green",
+          "brandObservation": {
+            "code": "xiaomi",
+            "name": "Xiaomi",
+            "registry_id": "58d971fb-0688-5989-8646-631084b64163",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B7NY1LFJ",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Only qualifier inside a reviewed full model/family span;not standalone professional/audio prose;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A02-P",
+        "input": "Apple iPhone Pro",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "Apple iPhone Pro",
+          "normalized": "apple iphone pro",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "apple"
+            },
+            {
+              "protected": false,
+              "text": "iphone"
+            },
+            {
+              "protected": false,
+              "text": "pro"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A02-N",
+        "input": "generic pro description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic pro description",
+          "normalized": "generic pro description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "pro"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A03",
+      "term": "air",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 854,
+          "parentAsin": "B0BR6ZF28J",
+          "proposedProductId": "35881817-ae20-5ce9-af6b-725ee671931a",
+          "nameExcerpt": "Anker 3.3ft Premium Nylon Lightning Cable [2-Pack], Apple MFi Certified for iPhone Chargers, iPhone Xs/XS Max/XR/X / 8/8 Plus / 7/7 Plus / 6/6 Plus / 5s, iPad Pro Air 2, and More(B",
+          "brandObservation": {
+            "code": "anker",
+            "name": "Anker",
+            "registry_id": "b5b021a8-c35a-5382-ae4b-53d2393ef55e",
+            "status": "PROPOSED"
+          },
+          "category": "Charger & Power Bank",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BR6ZF28J",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 865,
+          "parentAsin": "B00EYXZI4M",
+          "proposedProductId": "d63a09b6-2fff-5ca4-91c6-d6e8e8f70bad",
+          "nameExcerpt": "Anker 7-Port USB 3.0 Data Hub with 36W Power Adapter and BC 1.2 Charging Port for iPhone 7/6s Plus, iPad Air 2, Galaxy S Series, Note Series, Mac, PC, USB Flash Drives and More",
+          "brandObservation": {
+            "code": "anker",
+            "name": "Anker",
+            "registry_id": "b5b021a8-c35a-5382-ae4b-53d2393ef55e",
+            "status": "PROPOSED"
+          },
+          "category": "Charger & Power Bank",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B00EYXZI4M",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 929,
+          "parentAsin": "B07BMVW62P",
+          "proposedProductId": "a2abffb9-8e7f-5d37-bcb8-1742ecb68dc1",
+          "nameExcerpt": "Belkin Ethernet & Power Adapter W/ Lightning Connector - Dual Port Ethernet Splitter for Apple iPad Pro, iPad Mini, iPad Air & iPhone Charger - 480 Mbps Ethernet speeds & 12W Power",
+          "brandObservation": {
+            "code": "belkin",
+            "name": "Belkin",
+            "registry_id": "0eaae3e6-4b91-5677-82d6-d092077b9a06",
+            "status": "PROPOSED"
+          },
+          "category": "Charger & Power Bank",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07BMVW62P",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Only qualifier inside reviewed Apple MacBook/iPad Air span;not airflow descriptions;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A03-P",
+        "input": "Apple MacBook Air",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "Apple MacBook Air",
+          "normalized": "apple macbook air",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "apple"
+            },
+            {
+              "protected": false,
+              "text": "macbook"
+            },
+            {
+              "protected": false,
+              "text": "air"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A03-N",
+        "input": "generic air description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic air description",
+          "normalized": "generic air description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "air"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A04",
+      "term": "note",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 5,
+          "parentAsin": "B084MD6Y5H",
+          "proposedProductId": "67281f6f-baaf-5e76-bcb3-d065f9be2d19",
+          "nameExcerpt": "Samsung Galaxy Note 10 Lite N770F, Dual SIM LTE, International Version (No US Warranty), 128GB, Aura Glow - GSM Unlocked",
+          "brandObservation": {
+            "code": "samsung",
+            "name": "Samsung",
+            "registry_id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B084MD6Y5H",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 9,
+          "parentAsin": "B07ZL18B89",
+          "proposedProductId": "a13fb4d2-8442-569a-8da1-fdf2a1f7c79c",
+          "nameExcerpt": "Xiaomi Redmi Note 8 Pro 128GB Hybrid Dual-SIM GSM Unlocked Phone - Dark Grey",
+          "brandObservation": {
+            "code": "xiaomi",
+            "name": "Xiaomi",
+            "registry_id": "58d971fb-0688-5989-8646-631084b64163",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07ZL18B89",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 14,
+          "parentAsin": "B0B7NY1LFJ",
+          "proposedProductId": "a8f6fc05-1624-5eb3-95ba-cfb85c63e7fe",
+          "nameExcerpt": "Xiaomi Redmi Note 9 Pro 64GB + 6GB RAM, 6.67\" FHD+ DotDisplay, 64MP AI Quad Camera, Qualcomm Snapdragon 720G LTE Factory Unlocked Smartphone - International Version (Tropical Green",
+          "brandObservation": {
+            "code": "xiaomi",
+            "name": "Xiaomi",
+            "registry_id": "58d971fb-0688-5989-8646-631084b64163",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B7NY1LFJ",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Only reviewed Samsung Galaxy Note/Redmi Note span;not note-taking prose;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A04-P",
+        "input": "Samsung Galaxy Note",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "Samsung Galaxy Note",
+          "normalized": "samsung galaxy note",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "samsung"
+            },
+            {
+              "protected": false,
+              "text": "galaxy"
+            },
+            {
+              "protected": false,
+              "text": "note"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A04-N",
+        "input": "generic note description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic note description",
+          "normalized": "generic note description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "note"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A05",
+      "term": "plus",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 11,
+          "parentAsin": "B0B8PD3H1W",
+          "proposedProductId": "8db6c55f-c7d8-59c1-bee1-524a55319852",
+          "nameExcerpt": "SAMSUNG Galaxy S21+ Plus 5G Factory Unlocked Android Cell Phone 128GB US Version Smartphone Pro-Grade Camera 8K Video 12MP High Res, Phantom Silver",
+          "brandObservation": {
+            "code": "samsung",
+            "name": "Samsung",
+            "registry_id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B8PD3H1W",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 32,
+          "parentAsin": "B08KWNJ26D",
+          "proposedProductId": "30820bbe-a643-591e-a82d-71e5d72bd837",
+          "nameExcerpt": "LG K22+ Plus LM-K200HAW Smartphone, US+LATIN 4G LTE, International Version (No US Warranty), 64GB, Titan - Unlocked w/ 64GB SD Bundle",
+          "brandObservation": {
+            "code": "lg",
+            "name": "LG",
+            "registry_id": "8eca9662-fdd9-51dd-99ef-0dc2fe751470",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08KWNJ26D",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 53,
+          "parentAsin": "B08FRS3R32",
+          "proposedProductId": "e317a350-9e35-5de8-8a76-9eb1f85b20a4",
+          "nameExcerpt": "SAMSUNG Galaxy S20+ Plus 5G Factory Unlocked Android Cell Phone SM-G986U US Version | 128GB | Fingerprint ID & Facial Recognition | Long-Lasting Battery (Cosmic Black, 128GB)",
+          "brandObservation": {
+            "code": "samsung",
+            "name": "Samsung",
+            "registry_id": "661af60f-b441-59ce-8ef0-42ff03f7c187",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08FRS3R32",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Only qualifier in reviewed device span;not generic additive description;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A05-P",
+        "input": "Samsung Galaxy Plus",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "Samsung Galaxy Plus",
+          "normalized": "samsung galaxy plus",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "samsung"
+            },
+            {
+              "protected": false,
+              "text": "galaxy"
+            },
+            {
+              "protected": false,
+              "text": "plus"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A05-N",
+        "input": "generic plus description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic plus description",
+          "normalized": "generic plus description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "plus"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A06",
+      "term": "max",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 673,
+          "parentAsin": "B0C58Q16MM",
+          "proposedProductId": "91698bac-4f41-576d-a12c-baf0c4fcb917",
+          "nameExcerpt": "WalkerFit M2 Max Smart Watch(Answer/Make Call), Reloj Inteligente, 1.95\" Military Fitness Tracker for Men with Heart Rate/Blood Pressure/SpO2/AI Voice Assistant,IP68 Waterproof Rel",
+          "brandObservation": null,
+          "category": "Smartwatch",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0C58Q16MM",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 792,
+          "parentAsin": "B0BC534ZG4",
+          "proposedProductId": "9936f8de-c9af-5725-bcac-8a9fbece78e3",
+          "nameExcerpt": "BOSS Audio Systems CH6930 Chaos Series 6 x 9 Inch Car Stereo Door Speakers - 400 Watts Max, 3 Way, Full Range Audio, Tweeters, Coaxial, Sold in Pairs",
+          "brandObservation": null,
+          "category": "Speaker",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BC534ZG4",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 818,
+          "parentAsin": "B000J1HDWI",
+          "proposedProductId": "bb6333fe-21ca-58be-8fbc-286d32a3a10c",
+          "nameExcerpt": "BOSS Audio Systems CH6520 Chaos Series 6.5 Inch Car Door Speakers - 250 Watts Max, 2 Way, Full Range, 1 Inch Tweeter, Coaxial, Sold in Pairs, Bocinas Para Carro",
+          "brandObservation": null,
+          "category": "Speaker",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B000J1HDWI",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Only qualifier in reviewed device span;not maximum-rating prose;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A06-P",
+        "input": "Apple iPhone Pro Max",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "Apple iPhone Pro Max",
+          "normalized": "apple iphone pro max",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "apple"
+            },
+            {
+              "protected": false,
+              "text": "iphone"
+            },
+            {
+              "protected": false,
+              "text": "pro"
+            },
+            {
+              "protected": false,
+              "text": "max"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A06-N",
+        "input": "generic max description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic max description",
+          "normalized": "generic max description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "max"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A07",
+      "term": "studio",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 406,
+          "parentAsin": "B00WSLYQ7C",
+          "proposedProductId": "fc4fcee1-7b9b-59bd-890b-9f2e2d3f9c5b",
+          "nameExcerpt": "Sony MDRV6 Studio Monitor Headphones with CCAW Voice Coil",
+          "brandObservation": {
+            "code": "sony",
+            "name": "Sony",
+            "registry_id": "6caee0e6-eab9-5895-ab63-ca8ef47d8382",
+            "status": "PROPOSED"
+          },
+          "category": "Headphone & Earbuds",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B00WSLYQ7C",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 511,
+          "parentAsin": "B07ZWNZKZD",
+          "proposedProductId": "8729c80d-0cf1-58c2-8edb-423f25932320",
+          "nameExcerpt": "Philips Wired Headphones Studio Monitor & Mixing DJ Stereo Headsets Over Ear Headphones Wired Noise Isolation with High Resolution Audio, Deep Bass and Superior Comfort",
+          "brandObservation": {
+            "code": "philips",
+            "name": "Philips",
+            "registry_id": "9af327c4-0558-5dcf-b8d5-fece6c362b68",
+            "status": "PROPOSED"
+          },
+          "category": "Headphone & Earbuds",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07ZWNZKZD",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 585,
+          "parentAsin": "B001RCD2DW",
+          "proposedProductId": "e41df36e-6aa1-5c8d-8397-7fcbe9a3052a",
+          "nameExcerpt": "AKG Pro Audio K702 Over-Ear, Open-Back, Flat-Wire, Reference Studio Headphones,Black",
+          "brandObservation": null,
+          "category": "Headphone & Earbuds",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B001RCD2DW",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "No global identifier rule from current evidence;observed use is descriptive audio/studio;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A07-P",
+        "input": "Sony studio monitor headphones",
+        "expected": "Generic/descriptive,not identifier",
+        "executedPrimitive": {
+          "input": "Sony studio monitor headphones",
+          "normalized": "sony studio monitor headphones",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "sony"
+            },
+            {
+              "protected": false,
+              "text": "studio"
+            },
+            {
+              "protected": false,
+              "text": "monitor"
+            },
+            {
+              "protected": false,
+              "text": "headphones"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A07-N",
+        "input": "generic studio description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic studio description",
+          "normalized": "generic studio description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "studio"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A08",
+      "term": "surface",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 1077,
+          "parentAsin": "B0BNCXKX3G",
+          "proposedProductId": "15def2ee-00c5-5639-b0a4-b94400544ff5",
+          "nameExcerpt": "Logitech MX Master 2S Wireless Mouse – Use on Any Surface, Hyper-Fast Scrolling, Ergonomic Shape, Rechargeable, Control Upto 3 Apple Mac and Windows Computers, Graphite (Discontinu",
+          "brandObservation": {
+            "code": "logitech",
+            "name": "Logitech",
+            "registry_id": "a85e20c7-0201-5895-b620-d465b564b228",
+            "status": "PROPOSED"
+          },
+          "category": "Computer Accessories",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BNCXKX3G",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 1171,
+          "parentAsin": "B07L9RJ957",
+          "proposedProductId": "3161f2db-84a7-525f-93cf-b4a02b69c947",
+          "nameExcerpt": "Fintie Case for Microsoft Surface Pro 7 Plus/Surface Pro 7 / Surface Pro 6 / Surface Pro 5 12.3 Inch Tablet, Hard Shell Slim Portfolio Cover Work with Type Cover Keyboard, Black",
+          "brandObservation": null,
+          "category": "Computer Accessories",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07L9RJ957",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 1213,
+          "parentAsin": "B07VRW61Y8",
+          "proposedProductId": "4036f9bb-44ca-5320-888f-7c1bfafdf2ba",
+          "nameExcerpt": "Fintie Case for 12.3 Inch Microsoft Surface Pro 7 Plus, Surface Pro 7, Surface Pro 6, Pro 5, Pro 4, Pro 3 - Portfolio Business Cover with Pocket, Compatible with Type Cover Keyboar",
+          "brandObservation": null,
+          "category": "Computer Accessories",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07VRW61Y8",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Microsoft Surface including compatibility references;not generic surface descriptions;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A08-P",
+        "input": "Microsoft Surface Pro",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "Microsoft Surface Pro",
+          "normalized": "microsoft surface pro",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "microsoft"
+            },
+            {
+              "protected": false,
+              "text": "surface"
+            },
+            {
+              "protected": false,
+              "text": "pro"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A08-N",
+        "input": "generic surface description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic surface description",
+          "normalized": "generic surface description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "surface"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A09",
+      "term": "pavilion",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 196,
+          "parentAsin": "B09ZTB9LDW",
+          "proposedProductId": "b3a1c9fc-c981-5298-99e8-f8ec2aba1f50",
+          "nameExcerpt": "HP Pavilion x360 14 Convertible 2-in-1 Laptop, 14” Full HD Touchscreen Display, Intel Core i5, 8 GB DDR4 RAM, 512 GB SSD Storage, Windows 10 Home, Backlit Keyboard (14-dh2011nr, 20",
+          "brandObservation": {
+            "code": "hp",
+            "name": "HP",
+            "registry_id": "b36c842d-6f15-5a89-b75d-946d5674761f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B09ZTB9LDW",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 228,
+          "parentAsin": "B07QRZJRKK",
+          "proposedProductId": "9584e669-816b-55bc-99c8-4c3486e7e8d2",
+          "nameExcerpt": "HP - Pavilion x360 2-in-1 11.6\" Touch-Screen Laptop - Intel Pentium - 4GB Memory - 128GB Solid State Drive - Ash Silver Keyboard Frame, Natural Silver",
+          "brandObservation": {
+            "code": "hp",
+            "name": "HP",
+            "registry_id": "b36c842d-6f15-5a89-b75d-946d5674761f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07QRZJRKK",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 241,
+          "parentAsin": "B08FC28CPR",
+          "proposedProductId": "d70a6bc8-bf71-5621-a5b9-958706c428ba",
+          "nameExcerpt": "2020 HP Pavilion 15.6\" 2-in-1 Convertible HD Touchscreen Laptop Intel Core i5-10210U 8GB DDR4 512GB M.2 SSD Windows 10",
+          "brandObservation": {
+            "code": "hp",
+            "name": "HP",
+            "registry_id": "b36c842d-6f15-5a89-b75d-946d5674761f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08FC28CPR",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "HP Pavilion;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A09-P",
+        "input": "HP Pavilion",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "HP Pavilion",
+          "normalized": "hp pavilion",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "hp"
+            },
+            {
+              "protected": false,
+              "text": "pavilion"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A09-N",
+        "input": "generic pavilion description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic pavilion description",
+          "normalized": "generic pavilion description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "pavilion"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A10",
+      "term": "aspire",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 163,
+          "parentAsin": "B0BLBY439T",
+          "proposedProductId": "90b17735-371b-5a48-8a32-fce4e97f4d29",
+          "nameExcerpt": "Acer Aspire 5 A515-46-R14K Slim Laptop | 15.6\" Full HD IPS | AMD Ryzen 3 3350U Quad-Core Mobile Processor | 4GB DDR4 | 128GB NVMe SSD | WiFi 6 | Backlit KB | Amazon Alexa | Windows",
+          "brandObservation": {
+            "code": "acer",
+            "name": "Acer",
+            "registry_id": "b0017ad0-1021-5733-8f54-862426b5a5c4",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BLBY439T",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 164,
+          "parentAsin": "B0C5DLJT1K",
+          "proposedProductId": "be04f7c5-3f9f-54ec-b873-8bc027a45f84",
+          "nameExcerpt": "Acer Aspire 5 A515-46-R3CZ Slim Laptop | 15.6\" Full HD IPS | AMD Ryzen 7 3700U Quad-Core Mobile Processor | 8GB DDR4 | 256GB NVMe SSD | WiFi 6 | Backlit KB | Fingerprint Reader | W",
+          "brandObservation": {
+            "code": "acer",
+            "name": "Acer",
+            "registry_id": "b0017ad0-1021-5733-8f54-862426b5a5c4",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0C5DLJT1K",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 168,
+          "parentAsin": "B07RF2123Z",
+          "proposedProductId": "cb01b7ee-174d-500f-beb6-b0045bc99ea1",
+          "nameExcerpt": "Acer Aspire 5 Slim Laptop, 15.6 Inches FHD IPS Display, 8th Gen Intel Core i5-8265U, 8GB DDR4, 256GB SSD, Fingerprint Reader, Windows 10 Home, A515-54-51DJ",
+          "brandObservation": {
+            "code": "acer",
+            "name": "Acer",
+            "registry_id": "b0017ad0-1021-5733-8f54-862426b5a5c4",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07RF2123Z",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Acer Aspire;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A10-P",
+        "input": "Acer Aspire",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "Acer Aspire",
+          "normalized": "acer aspire",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "acer"
+            },
+            {
+              "protected": false,
+              "text": "aspire"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A10-N",
+        "input": "generic aspire description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic aspire description",
+          "normalized": "generic aspire description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "aspire"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A11",
+      "term": "envy",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 242,
+          "parentAsin": "B092W6G2KR",
+          "proposedProductId": "41429951-e5eb-5616-8096-c83f42b64daf",
+          "nameExcerpt": "HP Envy x360 2-in-1 Flip Laptop, 15.6\" Full HD Touchscreen, AMD Ryzen 7 5700U 8-Core Processor, 16GB RAM, 512GB PCIe SSD, Backlit Keyboard, Number Pad, Wi-Fi 6, Windows 11 Home, St",
+          "brandObservation": {
+            "code": "hp",
+            "name": "HP",
+            "registry_id": "b36c842d-6f15-5a89-b75d-946d5674761f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B092W6G2KR",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 1206,
+          "parentAsin": "B077D7WVD6",
+          "proposedProductId": "05040fad-37f7-5149-83f3-217643050b84",
+          "nameExcerpt": "Keyboard Cover Skin Compatible HP Envy x360 15-DS1077NR 15M-DS0011DX,HP Pavilion 15-BS 15-BW 15-CC 15-CB 15-CD,HP 15 Laptop 15-DY 15-DW,17.3\" HP Pavilion 17-BS 17-by(Black)",
+          "brandObservation": null,
+          "category": "Computer Accessories",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B077D7WVD6",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "HP Envy;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A11-P",
+        "input": "HP Envy",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "HP Envy",
+          "normalized": "hp envy",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "hp"
+            },
+            {
+              "protected": false,
+              "text": "envy"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A11-N",
+        "input": "generic envy description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic envy description",
+          "normalized": "generic envy description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "envy"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A12",
+      "term": "spectre",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 245,
+          "parentAsin": "B087QVQY78",
+          "proposedProductId": "1d72d821-0511-59c6-9d04-3f217ee7f3eb",
+          "nameExcerpt": "HP Spectre x360 2-in-1 Laptop, 15.6\" 4K UHD Touchscreen, Intel Core i7-8565U Processor up to 4.6GHz, 16GB RAM. 256GB SSD, Backlit Keyboard, Wireless-AC, Windows 10 Home (15.6 Inch,",
+          "brandObservation": {
+            "code": "hp",
+            "name": "HP",
+            "registry_id": "b36c842d-6f15-5a89-b75d-946d5674761f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B087QVQY78",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "HP Spectre;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A12-P",
+        "input": "HP Spectre",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "HP Spectre",
+          "normalized": "hp spectre",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "hp"
+            },
+            {
+              "protected": false,
+              "text": "spectre"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A12-N",
+        "input": "generic spectre description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic spectre description",
+          "normalized": "generic spectre description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "spectre"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A13",
+      "term": "pixel",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 118,
+          "parentAsin": "B08JR6Y1KJ",
+          "proposedProductId": "aec6b6de-a259-5ff5-81b4-d5f8445339e6",
+          "nameExcerpt": "Google Pixel 5 - 5G Android Phone - Water Resistant - Unlocked Smartphone with Night Sight and Ultrawide Lens - Sorta Sage",
+          "brandObservation": null,
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08JR6Y1KJ",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 119,
+          "parentAsin": "B08Z4JTDVN",
+          "proposedProductId": "ece78729-dd68-5f02-baf1-e28b2815e2a0",
+          "nameExcerpt": "Google Pixel 4a - Unlocked Android Smartphone - 128 GB of Storage - Up to 24 Hour Battery - Barely Blue",
+          "brandObservation": null,
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08Z4JTDVN",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 125,
+          "parentAsin": "B08F7ZM2G4",
+          "proposedProductId": "09d0f029-e4cd-55b0-ba5f-8c2ad35ccd34",
+          "nameExcerpt": "Google Pixel 4a (4G) G025N 128GB, 5.8\" inch (GSM Only, No CDMA) Factory Unlocked 4G/LTE Smartphone (Just Black) - International Version",
+          "brandObservation": null,
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08F7ZM2G4",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Google Pixel;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A13-P",
+        "input": "Google Pixel",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "Google Pixel",
+          "normalized": "google pixel",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "google"
+            },
+            {
+              "protected": false,
+              "text": "pixel"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A13-N",
+        "input": "generic pixel description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic pixel description",
+          "normalized": "generic pixel description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "pixel"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A14",
+      "term": "nord",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 128,
+          "parentAsin": "B08R7D4KZJ",
+          "proposedProductId": "a55c4f7c-8789-5a71-b4cd-55857956258c",
+          "nameExcerpt": "OnePlus Nord N10 5G Unlocked Smartphone, Midnight Ice​, 90Hz Refresh Rate, 6GB RAM + 128GB storage, US Version, Model BE2026",
+          "brandObservation": null,
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08R7D4KZJ",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 134,
+          "parentAsin": "B09WR129MW",
+          "proposedProductId": "ea55222a-672e-50f6-bde8-db1246c044bf",
+          "nameExcerpt": "OnePlus Nord N100 Midnight Frost Unlocked Smartphone​, 4GB+64GB, US Version, Model BE2011",
+          "brandObservation": null,
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B09WR129MW",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 137,
+          "parentAsin": "B08BPJRK8Z",
+          "proposedProductId": "3ab25ba2-0963-51f5-bed3-b08200083913",
+          "nameExcerpt": "OnePlus Nord 5G AC2003 Dual SIM 128GB + 8GB RAM (GSM Only | No CDMA) Factory Unlocked 5G Smartphone (Blue Marble) - International Version",
+          "brandObservation": null,
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08BPJRK8Z",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "OnePlus Nord;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A14-P",
+        "input": "OnePlus Nord",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "OnePlus Nord",
+          "normalized": "oneplus nord",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "oneplus"
+            },
+            {
+              "protected": false,
+              "text": "nord"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A14-N",
+        "input": "generic nord description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic nord description",
+          "normalized": "generic nord description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "nord"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A15",
+      "term": "vega",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 162,
+          "parentAsin": "B0C6YGWC8R",
+          "proposedProductId": "5797f169-489d-5e48-8df5-231fb61dbbad",
+          "nameExcerpt": "Lenovo IdeaPad 3 14\" Laptop, 14.0\" FHD 1920 x 1080 Display, AMD Ryzen 5 3500U Processor, 8GB DDR4 RAM, 256GB SSD, AMD Radeon Vega 8 Graphics, Narrow Bezel, Windows 10, 81W0003QUS, ",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0C6YGWC8R",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 185,
+          "parentAsin": "B081D9HJ4P",
+          "proposedProductId": "fcc5f414-c4ca-5e80-9e29-dce654a4b45b",
+          "nameExcerpt": "HP 14\" Home and Business Laptop Ryzen 3-3200U, 8GB RAM, 128GB M.2 SSD, Dual-Core up to 3.50 GHz, Vega 3 Graphics, RJ-45, USB-C, 4K Output HDMI, Bluetooth, Webcam, 1366x768, Win 10",
+          "brandObservation": {
+            "code": "hp",
+            "name": "HP",
+            "registry_id": "b36c842d-6f15-5a89-b75d-946d5674761f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B081D9HJ4P",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 187,
+          "parentAsin": "B08NF7M7ZB",
+          "proposedProductId": "74aa9250-1203-567e-ab2f-ae722823528f",
+          "nameExcerpt": "Lenovo IdeaPad 3 15 Laptop, 15.6\" HD Display, AMD Ryzen 3 3250U, 4GB RAM, 128GB Storage, AMD Radeon Vega 3 Graphics, Windows 10 in S Mode",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08NF7M7ZB",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "AMD Radeon Vega;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A15-P",
+        "input": "AMD Radeon Vega",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "AMD Radeon Vega",
+          "normalized": "amd radeon vega",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "amd"
+            },
+            {
+              "protected": false,
+              "text": "radeon"
+            },
+            {
+              "protected": false,
+              "text": "vega"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A15-N",
+        "input": "generic vega description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic vega description",
+          "normalized": "generic vega description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "vega"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A16",
+      "term": "graphics",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 154,
+          "parentAsin": "B0B72PYMGX",
+          "proposedProductId": "2479f7b2-97f0-552f-ba10-e55b8a957783",
+          "nameExcerpt": "Lenovo IdeaPad 3 11 Chromebook Laptop,11.6\" HD Display,Intel Celeron N4020, 4GB RAM, 64GB Storage, UHD Graphics 600, Chrome OS, Onyx Black",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B72PYMGX",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 159,
+          "parentAsin": "B0C7H1XD7V",
+          "proposedProductId": "c20bc366-ffc9-5032-ba90-0f2dea1901d4",
+          "nameExcerpt": "Lenovo Flex 5 14 2-in-1 Laptop, 14.0\" FHD Touch Display, AMD Ryzen 5 4500U, 16GB RAM, 256GB Storage, AMD Radeon Graphics, Digital Pen Included, Win 10",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0C7H1XD7V",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 161,
+          "parentAsin": "B09B4MYG4F",
+          "proposedProductId": "c5486951-39d5-5c53-ba6b-3902aaf8350a",
+          "nameExcerpt": "Acer Swift 3 Thin & Light Laptop, 14\" Full HD IPS, AMD Ryzen 7 4700U Octa-Core with Radeon Graphics, 8GB LPDDR4, 512GB NVMe SSD, Wi-Fi 6, Backlit KB, Fingerprint Reader, Alexa Buil",
+          "brandObservation": {
+            "code": "acer",
+            "name": "Acer",
+            "registry_id": "b0017ad0-1021-5733-8f54-862426b5a5c4",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B09B4MYG4F",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "No global identifier rule;generic feature label,not a model identity;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A16-P",
+        "input": "Intel graphics feature",
+        "expected": "Generic/descriptive,not identifier",
+        "executedPrimitive": {
+          "input": "Intel graphics feature",
+          "normalized": "intel graphics feature",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "intel"
+            },
+            {
+              "protected": false,
+              "text": "graphics"
+            },
+            {
+              "protected": false,
+              "text": "feature"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A16-N",
+        "input": "generic graphics description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic graphics description",
+          "normalized": "generic graphics description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "graphics"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A17",
+      "term": "hd",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 18,
+          "parentAsin": "B07L4WRXXT",
+          "proposedProductId": "455639f9-4604-5240-b15b-aad9bc98bb53",
+          "nameExcerpt": "HUAWEI Honor 8X (64GB + 4GB RAM) 6.5\" HD 4G LTE GSM Factory Unlocked Smartphone - International Version No Warranty JSN-L23 (Blue)",
+          "brandObservation": {
+            "code": "huawei",
+            "name": "Huawei",
+            "registry_id": "d6d8dc9f-d16e-5e9b-ae03-6e56f0404fa6",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B07L4WRXXT",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 19,
+          "parentAsin": "B094CD74SD",
+          "proposedProductId": "0c144506-ce88-50cb-a83f-a4abd98dc975",
+          "nameExcerpt": "Xiaomi Redmi 9C Smartphone, 3 GB + 64 GB, 6.53 \"HD + Dot Drop Display 5000mAh (typ), con Sblocco Faccial AI, 13 MP, Tripla Fotocamera, Blu (Twilight Blue)",
+          "brandObservation": {
+            "code": "xiaomi",
+            "name": "Xiaomi",
+            "registry_id": "58d971fb-0688-5989-8646-631084b64163",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B094CD74SD",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 60,
+          "parentAsin": "B08B3QSVM6",
+          "proposedProductId": "193302ef-faa5-537a-ad39-3462ced5139e",
+          "nameExcerpt": "Xiaomi Redmi 9 64GB, 4GB RAM, 6.53\" Full HD + AI Quad Camera, LTE Factory Unlocked Smartphone - International Version (Carbon Grey)",
+          "brandObservation": {
+            "code": "xiaomi",
+            "name": "Xiaomi",
+            "registry_id": "58d971fb-0688-5989-8646-631084b64163",
+            "status": "PROPOSED"
+          },
+          "category": "Smartphone",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B08B3QSVM6",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Short token already non-fuzzy;not model identity;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A17-P",
+        "input": "HD display",
+        "expected": "Short-token protection independent of vocabulary",
+        "executedPrimitive": {
+          "input": "HD display",
+          "normalized": "hd display",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "hd"
+            },
+            {
+              "protected": false,
+              "text": "display"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A17-N",
+        "input": "generic hd description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic hd description",
+          "normalized": "generic hd description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "hd"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A18",
+      "term": "uhd",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 154,
+          "parentAsin": "B0B72PYMGX",
+          "proposedProductId": "2479f7b2-97f0-552f-ba10-e55b8a957783",
+          "nameExcerpt": "Lenovo IdeaPad 3 11 Chromebook Laptop,11.6\" HD Display,Intel Celeron N4020, 4GB RAM, 64GB Storage, UHD Graphics 600, Chrome OS, Onyx Black",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B72PYMGX",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 198,
+          "parentAsin": "B0BN7PCGX1",
+          "proposedProductId": "26d8fd4b-d7da-5d2b-9411-34ea5c5ff31a",
+          "nameExcerpt": "Dell Inspiron 3583 15â‚¬ Laptop Intel Celeron â‚¬\"œ 128GB SSD â‚¬\"œ 4GB DDR4 â‚¬\"œ 1.6GHz - UHD Graphics 610 - Windows 10 Home - Inspiron 15 3000 Series - New",
+          "brandObservation": {
+            "code": "dell",
+            "name": "Dell",
+            "registry_id": "323abafb-8706-56f3-8745-3e69eb7ba831",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BN7PCGX1",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 202,
+          "parentAsin": "B0BNQRNH8D",
+          "proposedProductId": "e1f7a158-1337-5afd-82af-6550cf13c4cd",
+          "nameExcerpt": "Lenovo IdeaPad 1 Laptop, 14.0\" HD Display, Intel Celeron N4020, 4GB RAM, 64GB Storage, Intel UHD Graphics 600, Windows 11 in S Mode, Ice Blue",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BNQRNH8D",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Short token already non-fuzzy;not model identity;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A18-P",
+        "input": "UHD display",
+        "expected": "Short-token protection independent of vocabulary",
+        "executedPrimitive": {
+          "input": "UHD display",
+          "normalized": "uhd display",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "uhd"
+            },
+            {
+              "protected": false,
+              "text": "display"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A18-N",
+        "input": "generic uhd description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic uhd description",
+          "normalized": "generic uhd description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "uhd"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A19",
+      "term": "rog",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 538,
+          "parentAsin": "B0C1GLYVLV",
+          "proposedProductId": "d09775ae-ee36-58bb-8bee-d0e95b8ea466",
+          "nameExcerpt": "ASUS ROG Cetra True Wireless Gaming Earbuds, Low-Latency Bluetooth Earbuds, Active Noise Cancelation, 27-Hour Battery Life, IPX4 Water Resistance, Headphone with Wireless Charging",
+          "brandObservation": {
+            "code": "asus",
+            "name": "ASUS",
+            "registry_id": "ec6322d6-d332-5f24-8465-165cc6868146",
+            "status": "PROPOSED"
+          },
+          "category": "Headphone & Earbuds",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0C1GLYVLV",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 1127,
+          "parentAsin": "B0C46Q997Y",
+          "proposedProductId": "afcf87aa-ae58-5b90-939d-fa60c1f95e7a",
+          "nameExcerpt": "ASUS ROG STRIX Arion Lite External Portable M.2 PCIe NVMe SSD Enclosure featuring up to 10 Gbps transfer speeds with USB 3.2 Gen 2 Type-C Cable (ESD-S1CL)",
+          "brandObservation": {
+            "code": "asus",
+            "name": "ASUS",
+            "registry_id": "ec6322d6-d332-5f24-8465-165cc6868146",
+            "status": "PROPOSED"
+          },
+          "category": "Computer Accessories",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0C46Q997Y",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 1160,
+          "parentAsin": "B0B9BG2DN9",
+          "proposedProductId": "39373271-48ec-50ae-94b6-2eb6ec2defd7",
+          "nameExcerpt": "ASUS ROG Falchion Wireless 65% Mechanical Gaming Keyboard | 68 Keys, Aura Sync RGB, Extended Battery Life, Interactive Touch Panel, PBT Keycaps, Cherry MX Red Switches, Keyboard Co",
+          "brandObservation": {
+            "code": "asus",
+            "name": "ASUS",
+            "registry_id": "ec6322d6-d332-5f24-8465-165cc6868146",
+            "status": "PROPOSED"
+          },
+          "category": "Computer Accessories",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0B9BG2DN9",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Short token already non-fuzzy;ASUS context is family,not automatic rank7;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A19-P",
+        "input": "ASUS ROG family",
+        "expected": "Short-token protection independent of vocabulary",
+        "executedPrimitive": {
+          "input": "ASUS ROG family",
+          "normalized": "asus rog family",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "asus"
+            },
+            {
+              "protected": false,
+              "text": "rog"
+            },
+            {
+              "protected": false,
+              "text": "family"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A19-N",
+        "input": "generic rog description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic rog description",
+          "normalized": "generic rog description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "rog"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A20",
+      "term": "tuf",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 195,
+          "parentAsin": "B0BZJZKQQQ",
+          "proposedProductId": "15c2c0ad-8b63-5e72-857b-2dc77ebe44bc",
+          "nameExcerpt": "ASUS TUF F15 Gaming Laptop, 15.6\" 144Hz FHD IPS-Type Display, Intel Core i5-10300H Processor, GeForce GTX 1650, 8GB DDR4 RAM, 512GB PCIe SSD, Wi-Fi 6, Windows 11 Home, FX506LH-AS51",
+          "brandObservation": {
+            "code": "asus",
+            "name": "ASUS",
+            "registry_id": "ec6322d6-d332-5f24-8465-165cc6868146",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BZJZKQQQ",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 251,
+          "parentAsin": "B086TMWGXY",
+          "proposedProductId": "a4fe4918-80b9-5701-affd-4110fb5cd29e",
+          "nameExcerpt": "ASUS TUF Gaming A15 Gaming Laptop, 15.6” 144Hz FHD IPS-Type, AMD Ryzen 7 4800H, GeForce GTX 1660 Ti, 16GB DDR4, 512GB PCIe SSD, Gigabit Wi-Fi 5, Windows 10 Home, Metal, TUF506IU-ES",
+          "brandObservation": {
+            "code": "asus",
+            "name": "ASUS",
+            "registry_id": "ec6322d6-d332-5f24-8465-165cc6868146",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B086TMWGXY",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        },
+        {
+          "sourceFile": "products.jsonl",
+          "line": 271,
+          "parentAsin": "B09BC1BMTV",
+          "proposedProductId": "917dda79-c461-5d2c-9138-c2f75427677f",
+          "nameExcerpt": "ASUS TUF Gaming Laptop, 15.6” 144Hz Full HD IPS-Type Display, Intel Core i7-9750H Processor,Gigabit Wi-Fi 5, Windows 10 Home, FX505GT-AB73",
+          "brandObservation": {
+            "code": "asus",
+            "name": "ASUS",
+            "registry_id": "ec6322d6-d332-5f24-8465-165cc6868146",
+            "status": "PROPOSED"
+          },
+          "category": "Laptop",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B09BC1BMTV",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Short token already non-fuzzy;ASUS context is family,not automatic rank7;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A20-P",
+        "input": "ASUS TUF family",
+        "expected": "Short-token protection independent of vocabulary",
+        "executedPrimitive": {
+          "input": "ASUS TUF family",
+          "normalized": "asus tuf family",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "asus"
+            },
+            {
+              "protected": false,
+              "text": "tuf"
+            },
+            {
+              "protected": false,
+              "text": "family"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A20-N",
+        "input": "generic tuf description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic tuf description",
+          "normalized": "generic tuf description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "tuf"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    },
+    {
+      "id": "A21",
+      "term": "legion",
+      "classification": "CONTEXT_DEPENDENT_AMBIGUOUS",
+      "sourceEvidence": [
+        {
+          "sourceFile": "products.jsonl",
+          "line": 1052,
+          "parentAsin": "B0BDVMFQP8",
+          "proposedProductId": "7d3a21de-8462-5904-b7cd-d9a60a2c04c0",
+          "nameExcerpt": "Lenovo GX30M39704 300 - Mouse - Right And Left-Handed - Wired - Usb - For 320 Touch-15, 320-14, 320-17, 520-22, 520-24, 520-27, 720-18, Legion Y520-15, V110-15 black",
+          "brandObservation": {
+            "code": "lenovo",
+            "name": "Lenovo",
+            "registry_id": "b679dc86-98ee-5407-bd73-4059873afa6f",
+            "status": "PROPOSED"
+          },
+          "category": "Computer Accessories",
+          "skuFromImportApprovalFile": "DEMO-AMZ-B0BDVMFQP8",
+          "skuPolicyApproval": "APPROVED",
+          "publicationApproval": "PENDING_APPROVAL"
+        }
+      ],
+      "recognitionRule": "Lenovo Legion;query/candidate context is checked independently. Never assume missing context is a verified model.",
+      "expectedRanking": "No model-rank7 promotion;ordinary whole-name/phrase/token/prefix/partial rules remain R3. Eligibility/publication/same-variant constraints first.",
+      "positiveCase": {
+        "id": "M-A21-P",
+        "input": "Lenovo Legion",
+        "expected": "Context-only exclusion proposal;not a verified classifier result",
+        "executedPrimitive": {
+          "input": "Lenovo Legion",
+          "normalized": "lenovo legion",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "lenovo"
+            },
+            {
+              "protected": false,
+              "text": "legion"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "negativeCase": {
+        "id": "M-A21-N",
+        "input": "generic legion description",
+        "expected": "No automatic global model identity or rank7;generic/short uses follow their documented rules",
+        "executedPrimitive": {
+          "input": "generic legion description",
+          "normalized": "generic legion description",
+          "tokens": [
+            {
+              "protected": false,
+              "text": "generic"
+            },
+            {
+              "protected": false,
+              "text": "legion"
+            },
+            {
+              "protected": false,
+              "text": "description"
+            }
+          ],
+          "accepted": true
+        },
+        "policyOutcome": "EXPECTED_PROPOSAL_ONLY;classifier/fuzzy/ranking execution deferred"
+      },
+      "relatedCases": [
+        "IV05",
+        "IV06",
+        "IV07",
+        "IV08",
+        "IV09",
+        "IV10",
+        "IV12",
+        "IV14"
+      ],
+      "sourceEvidenceVerified": true,
+      "finalSignOff": null
+    }
+  ]
+}

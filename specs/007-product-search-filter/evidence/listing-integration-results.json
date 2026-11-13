@@ -1,0 +1,140 @@
+{
+  "task": "T018",
+  "status": "PASS",
+  "capturedUTC": "2026-11-09T09:12:51.727245+00:00",
+  "branch": "features/SearchAndFilter",
+  "head": "c5bd4e7eeb39d9b06a0c7e36af9a65635058613f",
+  "dirtyWorktree": true,
+  "prerequisites": {
+    "T012": {
+      "file": "parser-listing-results.json",
+      "sha256": "32b1b61640fc569a24dab58c1bcfa0de2af7a0d4062e05778669826bc6a47483"
+    },
+    "T007": {
+      "file": "primitive-foundation-results.json",
+      "sha256": "47f7fd3ef52306380e79e1927b2af2541ce01b40e58de88cb38a515d6dabafd4"
+    },
+    "T016": {
+      "file": "baseline-repository-results.json",
+      "sha256": "4f8f977ae0cc633a797abf4925a8d31a207d601dfa9138f5a3cef36c9af95add"
+    },
+    "T017": {
+      "file": "parser-listing-results.json",
+      "sha256": "32b1b61640fc569a24dab58c1bcfa0de2af7a0d4062e05778669826bc6a47483"
+    },
+    "T006": {
+      "file": "openapi-semantic-verification.json",
+      "sha256": "43d0fba81ac13b929a60d2c125c2e00f4f76c872b1c8e09958a17e405e40774c"
+    }
+  },
+  "command": "mvn -o -f demo/pom.xml -Dtest=ProductCatalogServiceImplTest,ProductListingControllerTest,ProductDetailControllerTest,ProductCatalogConverterTest,ProductSearchParameterParserTest,ProductSearchRequestTest,ProductSearchNormalizerTest,TechnicalSpecificationValidatorTest,WishlistServiceImplTest,WishlistConverterTest,WishlistControllerTest test",
+  "exitCode": 0,
+  "totals": {
+    "tests": 99,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "name": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+      "tests": "15",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.example.demo.catalog.controller.ProductDetailControllerTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.example.demo.wishlist.converter.WishlistConverterTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.example.demo.wishlist.controller.WishlistControllerTest",
+      "tests": "31",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "sourceSHA256": {
+    "demo/src/main/java/com/example/demo/catalog/service/ProductCatalogService.java": "c7ec025c85d635c025c8b335063de81c16ee07abc0142d47e7e72b2fcdddfeeb",
+    "demo/src/main/java/com/example/demo/catalog/service/ProductCatalogServiceImpl.java": "782a160b04e9c7ae111029603f08aa41ea10bbca67068f4908d89895d7e737c6",
+    "demo/src/main/java/com/example/demo/catalog/controller/ProductCatalogController.java": "32e3088f6f6de8e7ece42c6e020779c843ddaa03da8d2f50fa3071ae48b592a7",
+    "demo/src/test/java/com/example/demo/catalog/service/ProductCatalogServiceImplTest.java": "a497dd03cc69622273cfee040edb1b2d2207e4c17df2931d5f571f9802288402",
+    "demo/src/test/java/com/example/demo/catalog/controller/ProductListingControllerTest.java": "003433a681c56836cef021321f9925c7befd257025872383bb737b20550808ca",
+    "demo/src/test/java/com/example/demo/catalog/controller/ProductDetailControllerTest.java": "8a3e0838f4ada3c7bee4427373a5bf0ede33e114b05fe7f14cafbb4ccf5a9cea"
+  },
+  "preservation": {
+    "onlySelectedSourceFilesChanged": true,
+    "appliedMigrationsUnchanged": true,
+    "detailWishlistImplementationUnchanged": true,
+    "BrandSpecificationsChangesPreserved": true,
+    "foundationComponentsUnchanged": true
+  },
+  "limits": [
+    "No PostgreSQL integration run in T018;actual DB baseline proof remains T016",
+    "T019/G1 not run or marked complete",
+    "No keyword/fuzzy/ranking/filter implementation",
+    "T003 and T004 remain blocked",
+    "No migration/commit/push"
+  ],
+  "T019DependencyReady": true
+}

@@ -1,0 +1,1774 @@
+{
+  "capturedUTC": "2026-11-08T19:21:09.059574+00:00",
+  "scope": "D2 structural parity,not vocabulary/search/production index approval",
+  "identity": {
+    "Id": "c5f79ea65cae75d1004e773a6c49719a78491502c8db315d783951c2b020bccc",
+    "Image": "sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b",
+    "Name": "/speckit007-t013-parity",
+    "Created": "2026-11-08T19:16:17.619244242Z",
+    "HostConfig": {
+      "NetworkMode": "none",
+      "Tmpfs": {
+        "/var/lib/postgresql/data": "rw,noexec,nosuid,size=256m"
+      },
+      "Binds": null,
+      "PortBindings": {}
+    }
+  },
+  "prototypeSHA256": "40bed751a9bb6e935ec7617fdabbfc5895e23cb558c47f32e7fd5e056d348c0e",
+  "javaNormalizerSHA256": "a4538c4efb61347a01a82337b4e1598f5f43f1846b475a833ffbfd5df472efaa",
+  "caseCount": 53,
+  "matched": 53,
+  "cases": [
+    {
+      "input": "Điện thoại ĐẸP",
+      "java": {
+        "input": "Điện thoại ĐẸP",
+        "normalized": "dien thoai dep",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          },
+          {
+            "text": "dep",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai dep",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          },
+          {
+            "text": "dep",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "WH-1000XM5",
+      "java": {
+        "input": "WH-1000XM5",
+        "normalized": "wh-1000xm5",
+        "tokens": [
+          {
+            "text": "wh-1000xm5",
+            "protected": true
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "wh-1000xm5",
+        "tokens": [
+          {
+            "text": "wh-1000xm5",
+            "protected": true
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "i7-1360P",
+      "java": {
+        "input": "i7-1360P",
+        "normalized": "i7-1360p",
+        "tokens": [
+          {
+            "text": "i7-1360p",
+            "protected": true
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "i7-1360p",
+        "tokens": [
+          {
+            "text": "i7-1360p",
+            "protected": true
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "USB-C",
+      "java": {
+        "input": "USB-C",
+        "normalized": "usb-c",
+        "tokens": [
+          {
+            "text": "usb-c",
+            "protected": true
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "usb-c",
+        "tokens": [
+          {
+            "text": "usb-c",
+            "protected": true
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "USB C",
+      "java": {
+        "input": "USB C",
+        "normalized": "usb c",
+        "tokens": [
+          {
+            "text": "usb",
+            "protected": false
+          },
+          {
+            "text": "c",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "usb c",
+        "tokens": [
+          {
+            "text": "usb",
+            "protected": false
+          },
+          {
+            "text": "c",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "3.50mm",
+      "java": {
+        "input": "3.50mm",
+        "normalized": "3.50mm",
+        "tokens": [
+          {
+            "text": "3.50mm",
+            "protected": true
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "3.50mm",
+        "tokens": [
+          {
+            "text": "3.50mm",
+            "protected": true
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "3.50 mm",
+      "java": {
+        "input": "3.50 mm",
+        "normalized": "3.50 mm",
+        "tokens": [
+          {
+            "text": "3.50",
+            "protected": true
+          },
+          {
+            "text": "mm",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "3.50 mm",
+        "tokens": [
+          {
+            "text": "3.50",
+            "protected": true
+          },
+          {
+            "text": "mm",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "A_B/C.D+E",
+      "java": {
+        "input": "A_B/C.D+E",
+        "normalized": "a_b/c.d+e",
+        "tokens": [
+          {
+            "text": "a_b/c.d+e",
+            "protected": true
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "a_b/c.d+e",
+        "tokens": [
+          {
+            "text": "a_b/c.d+e",
+            "protected": true
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "C++",
+      "java": {
+        "input": "C++",
+        "normalized": "c++",
+        "tokens": [
+          {
+            "text": "c++",
+            "protected": true
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "c++",
+        "tokens": [
+          {
+            "text": "c++",
+            "protected": true
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "C+++",
+      "java": {
+        "input": "C+++",
+        "normalized": "c+++",
+        "tokens": [
+          {
+            "text": "c",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "c+++",
+        "tokens": [
+          {
+            "text": "c",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "O'Neil",
+      "java": {
+        "input": "O'Neil",
+        "normalized": "o'neil",
+        "tokens": [
+          {
+            "text": "o'neil",
+            "protected": true
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "o'neil",
+        "tokens": [
+          {
+            "text": "o'neil",
+            "protected": true
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "O’Neil",
+      "java": {
+        "input": "O’Neil",
+        "normalized": "o’neil",
+        "tokens": [
+          {
+            "text": "o",
+            "protected": false
+          },
+          {
+            "text": "neil",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "o’neil",
+        "tokens": [
+          {
+            "text": "o",
+            "protected": false
+          },
+          {
+            "text": "neil",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "A--B",
+      "java": {
+        "input": "A--B",
+        "normalized": "a--b",
+        "tokens": [
+          {
+            "text": "a",
+            "protected": false
+          },
+          {
+            "text": "b",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "a--b",
+        "tokens": [
+          {
+            "text": "a",
+            "protected": false
+          },
+          {
+            "text": "b",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "1,000",
+      "java": {
+        "input": "1,000",
+        "normalized": "1,000",
+        "tokens": [
+          {
+            "text": "1",
+            "protected": true
+          },
+          {
+            "text": "000",
+            "protected": true
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "1,000",
+        "tokens": [
+          {
+            "text": "1",
+            "protected": true
+          },
+          {
+            "text": "000",
+            "protected": true
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "-1.50 +16 .5 -.5",
+      "java": {
+        "input": "-1.50 +16 .5 -.5",
+        "normalized": "-1.50 +16 .5 -.5",
+        "tokens": [
+          {
+            "text": "-1.50",
+            "protected": true
+          },
+          {
+            "text": "+16",
+            "protected": true
+          },
+          {
+            "text": ".5",
+            "protected": true
+          },
+          {
+            "text": "-.5",
+            "protected": true
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "-1.50 +16 .5 -.5",
+        "tokens": [
+          {
+            "text": "-1.50",
+            "protected": true
+          },
+          {
+            "text": "+16",
+            "protected": true
+          },
+          {
+            "text": ".5",
+            "protected": true
+          },
+          {
+            "text": "-.5",
+            "protected": true
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "16 16.0 16GB 1e3",
+      "java": {
+        "input": "16 16.0 16GB 1e3",
+        "normalized": "16 16.0 16gb 1e3",
+        "tokens": [
+          {
+            "text": "16",
+            "protected": true
+          },
+          {
+            "text": "16.0",
+            "protected": true
+          },
+          {
+            "text": "16gb",
+            "protected": true
+          },
+          {
+            "text": "1e3",
+            "protected": true
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "16 16.0 16gb 1e3",
+        "tokens": [
+          {
+            "text": "16",
+            "protected": true
+          },
+          {
+            "text": "16.0",
+            "protected": true
+          },
+          {
+            "text": "16gb",
+            "protected": true
+          },
+          {
+            "text": "1e3",
+            "protected": true
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": null,
+      "java": {
+        "input": null,
+        "normalized": "",
+        "tokens": [],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "",
+        "tokens": []
+      },
+      "equal": true
+    },
+    {
+      "input": "",
+      "java": {
+        "input": "",
+        "normalized": "",
+        "tokens": [],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "",
+        "tokens": []
+      },
+      "equal": true
+    },
+    {
+      "input": " \t",
+      "java": {
+        "input": " \t",
+        "normalized": "",
+        "tokens": [],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "",
+        "tokens": []
+      },
+      "equal": true
+    },
+    {
+      "input": "ĐẮNG điện thoại Ờ Ự Ỷ",
+      "java": {
+        "input": "ĐẮNG điện thoại Ờ Ự Ỷ",
+        "normalized": "dang dien thoai o u y",
+        "tokens": [
+          {
+            "text": "dang",
+            "protected": false
+          },
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          },
+          {
+            "text": "o",
+            "protected": false
+          },
+          {
+            "text": "u",
+            "protected": false
+          },
+          {
+            "text": "y",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dang dien thoai o u y",
+        "tokens": [
+          {
+            "text": "dang",
+            "protected": false
+          },
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          },
+          {
+            "text": "o",
+            "protected": false
+          },
+          {
+            "text": "u",
+            "protected": false
+          },
+          {
+            "text": "y",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "ĐẮNG điện thoại Ờ Ự Ỷ",
+      "java": {
+        "input": "ĐẮNG điện thoại Ờ Ự Ỷ",
+        "normalized": "dang dien thoai o u y",
+        "tokens": [
+          {
+            "text": "dang",
+            "protected": false
+          },
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          },
+          {
+            "text": "o",
+            "protected": false
+          },
+          {
+            "text": "u",
+            "protected": false
+          },
+          {
+            "text": "y",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dang dien thoai o u y",
+        "tokens": [
+          {
+            "text": "dang",
+            "protected": false
+          },
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          },
+          {
+            "text": "o",
+            "protected": false
+          },
+          {
+            "text": "u",
+            "protected": false
+          },
+          {
+            "text": "y",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "samsung samsung",
+      "java": {
+        "input": "samsung samsung",
+        "normalized": "samsung samsung",
+        "tokens": [
+          {
+            "text": "samsung",
+            "protected": false
+          },
+          {
+            "text": "samsung",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "samsung samsung",
+        "tokens": [
+          {
+            "text": "samsung",
+            "protected": false
+          },
+          {
+            "text": "samsung",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "𐐀",
+      "java": {
+        "input": "𐐀",
+        "normalized": "𐐨",
+        "tokens": [
+          {
+            "text": "𐐨",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "𐐨",
+        "tokens": [
+          {
+            "text": "𐐨",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "İ ΣΟΣ",
+      "java": {
+        "input": "İ ΣΟΣ",
+        "normalized": "i̇ σος",
+        "tokens": [
+          {
+            "text": "i",
+            "protected": false
+          },
+          {
+            "text": "σος",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "i̇ σος",
+        "tokens": [
+          {
+            "text": "i",
+            "protected": false
+          },
+          {
+            "text": "σος",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "٣.٥",
+      "java": {
+        "input": "٣.٥",
+        "normalized": "٣.٥",
+        "tokens": [
+          {
+            "text": "٣.٥",
+            "protected": true
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "٣.٥",
+        "tokens": [
+          {
+            "text": "٣.٥",
+            "protected": true
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "a\u0001b",
+      "java": {
+        "input": "a\u0001b",
+        "accepted": false
+      },
+      "postgresql": {
+        "accepted": false,
+        "error": "ERROR:  Invalid control character in search text\nCONTEXT:  PL/pgSQL function catalog_search_normalize_v1(text) line 16 at RAISE"
+      },
+      "equal": true
+    },
+    {
+      "input": "ab",
+      "java": {
+        "input": "ab",
+        "accepted": false
+      },
+      "postgresql": {
+        "accepted": false,
+        "error": "ERROR:  Invalid control character in search text\nCONTEXT:  PL/pgSQL function catalog_search_normalize_v1(text) line 16 at RAISE"
+      },
+      "equal": true
+    },
+    {
+      "input": "***",
+      "java": {
+        "input": "***",
+        "normalized": "***",
+        "tokens": [],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "***",
+        "tokens": []
+      },
+      "equal": true
+    },
+    {
+      "input": "\tĐiện\tTHOẠI\t",
+      "java": {
+        "input": "\tĐiện\tTHOẠI\t",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "\nĐiện\nTHOẠI\n",
+      "java": {
+        "input": "\nĐiện\nTHOẠI\n",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "\u000bĐiện\u000bTHOẠI\u000b",
+      "java": {
+        "input": "\u000bĐiện\u000bTHOẠI\u000b",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "\fĐiện\fTHOẠI\f",
+      "java": {
+        "input": "\fĐiện\fTHOẠI\f",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "\rĐiện\rTHOẠI\r",
+      "java": {
+        "input": "\rĐiện\rTHOẠI\r",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "ĐiệnTHOẠI",
+      "java": {
+        "input": "ĐiệnTHOẠI",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": " Điện THOẠI ",
+      "java": {
+        "input": " Điện THOẠI ",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    },
+    {
+      "input": "　Điện　THOẠI　",
+      "java": {
+        "input": "　Điện　THOẠI　",
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ],
+        "accepted": true
+      },
+      "postgresql": {
+        "accepted": true,
+        "normalized": "dien thoai",
+        "tokens": [
+          {
+            "text": "dien",
+            "protected": false
+          },
+          {
+            "text": "thoai",
+            "protected": false
+          }
+        ]
+      },
+      "equal": true
+    }
+  ],
+  "audit": {
+    "version": "PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+    "encoding": "UTF8",
+    "collation": {
+      "collname": "und-x-icu",
+      "collprovider": "i",
+      "collisdeterministic": true,
+      "collversion": "153.136",
+      "actual_version": "153.136"
+    },
+    "functions": [
+      {
+        "signature": "textregexeq(text,text)",
+        "provolatile": "i",
+        "proparallel": "s"
+      },
+      {
+        "signature": "textcat(text,text)",
+        "provolatile": "i",
+        "proparallel": "s"
+      },
+      {
+        "signature": "catalog_search_normalize_v1(text)",
+        "provolatile": "i",
+        "proparallel": "s"
+      },
+      {
+        "signature": "catalog_search_alnum_v1(text)",
+        "provolatile": "i",
+        "proparallel": "s"
+      },
+      {
+        "signature": "catalog_search_digit_v1(text)",
+        "provolatile": "i",
+        "proparallel": "s"
+      },
+      {
+        "signature": "catalog_search_decimal_start_v1(text,integer)",
+        "provolatile": "i",
+        "proparallel": "s"
+      },
+      {
+        "signature": "char_length(text)",
+        "provolatile": "i",
+        "proparallel": "s"
+      },
+      {
+        "signature": "ascii(text)",
+        "provolatile": "i",
+        "proparallel": "s"
+      },
+      {
+        "signature": "chr(integer)",
+        "provolatile": "i",
+        "proparallel": "s"
+      },
+      {
+        "signature": "lower(text)",
+        "provolatile": "i",
+        "proparallel": "s"
+      },
+      {
+        "signature": "substr(text,integer,integer)",
+        "provolatile": "i",
+        "proparallel": "s"
+      },
+      {
+        "signature": "catalog_search_tokens_v1(text)",
+        "provolatile": "i",
+        "proparallel": "s"
+      },
+      {
+        "signature": "\"normalize\"(text,text)",
+        "provolatile": "i",
+        "proparallel": "s"
+      }
+    ]
+  },
+  "immutableAuditPass": true,
+  "expressionIndexProbe": {
+    "exitCode": 0,
+    "stdout": "CREATE TABLE\nINSERT 0 2\nCREATE INDEX\nt\n"
+  },
+  "cleanup": "Task-owned container removed successfully;network none,tmpfs only,no shared database accessed",
+  "reproduction": {
+    "containerId": "71e403151285554ea34882f4ddcbf92eac55dc3f18db1bb33266ab571828d049",
+    "caseCount": 53,
+    "matched": 53,
+    "immutableAuditPass": true,
+    "cleanup": "removed task-owned replay container"
+  }
+}

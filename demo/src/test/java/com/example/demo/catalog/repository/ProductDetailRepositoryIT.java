@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.example.demo.catalog.CatalogFixtures;
 import com.example.demo.catalog.CatalogFixtures.ProductFixture;
 import com.example.demo.catalog.entity.ProductImage;
+import com.example.demo.catalog.entity.Brand;
+import org.hibernate.Hibernate;
 import com.example.demo.catalog.entity.ProductStatus;
 import com.example.demo.catalog.entity.ProductVariant;
 import jakarta.persistence.EntityManager;
@@ -43,7 +45,7 @@ class ProductDetailRepositoryIT {
 	@BeforeEach
 	@AfterEach
 	void clearData() {
-		jdbc.execute("TRUNCATE TABLE product_image_uploads, product_images, product_variants, products, categories CASCADE");
+		jdbc.execute("TRUNCATE TABLE product_image_uploads, product_images, product_variants, products, categories, brands CASCADE");
 	}
 
 	@Test
@@ -60,6 +62,25 @@ class ProductDetailRepositoryIT {
 		List<ProductImage> gallery = images.findByProduct_IdOrderByDisplayOrderAsc(published);
 		assertThat(gallery).extracting(ProductImage::getDisplayOrder).containsExactly(0, 3);
 		assertThat(gallery).extracting(ProductImage::isPrimary).containsExactly(true, false);
+	}
+
+	@Test
+	void detailLookupFetchesBrandAndPreservesProductWithoutBrand() {
+		UUID branded = transactions.execute(transaction -> {
+			ProductFixture fixture = CatalogFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+			Brand brand = new Brand("repository-brand", "Repository Brand");
+			entityManager.persist(brand);
+			fixture.product().setBrand(brand);
+			entityManager.flush();
+			return fixture.product().getId();
+		});
+		// The repository transaction has ended: mapping must not depend on lazy loading.
+		var product = products.findByIdAndStatusWithCategory(branded, ProductStatus.PUBLISHED).orElseThrow();
+		assertThat(Hibernate.isInitialized(product.getBrand())).isTrue();
+		assertThat(product.getBrand().getCode()).isEqualTo("repository-brand");
+		UUID unbranded = persistSimple(ProductStatus.PUBLISHED);
+		assertThat(products.findByIdAndStatusWithCategory(unbranded, ProductStatus.PUBLISHED)
+				.orElseThrow().getBrand()).isNull();
 	}
 
 	@Test

@@ -1,0 +1,71 @@
+{
+  "capturedUTC": "2026-11-09T12:25:25.171443+00:00",
+  "branch": "features/SearchAndFilter",
+  "head": "c5bd4e7eeb39d9b06a0c7e36af9a65635058613f",
+  "dirtyWorktree": true,
+  "prerequisite": {
+    "task": "T019",
+    "file": "foundation-results.json",
+    "sha256": "b6c33bbeede5e70ab67aacd12d389d1731c508a68309172d054a360dcd8f1a0e",
+    "status": "PASS;165 tests;recorded source/migration hashes verified"
+  },
+  "writeSetReview": {
+    "T020": [
+      "demo/src/test/java/com/example/demo/catalog/controller/ProductListingControllerTest.java",
+      "task-specific evidence",
+      "tasks.md"
+    ],
+    "T022": [
+      "demo/src/test/java/com/example/demo/catalog/service/ProductKeywordSearchServiceImplTest.java",
+      "task-specific evidence",
+      "tasks.md"
+    ],
+    "overlap": [
+      "tasks.md",
+      "shared test build/report directories"
+    ],
+    "execution": "SEQUENTIAL:T020 author/run completed before T022 author/run;regression after both"
+  },
+  "limits": [
+    "Test authoring only;no production behavior implemented",
+    "No T003/T004 approval assumed;structural synthetic identifiers only",
+    "No PostgreSQL/shared DB/migration commands or commit/push"
+  ],
+  "task": "T022",
+  "status": "PASS",
+  "taskComplete": true,
+  "command": "mvn -o -f demo/pom.xml -Dtest=ProductKeywordSearchServiceImplTest -Djunit.jupiter.execution.parallel.enabled=false test",
+  "exitCode": 0,
+  "totals": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    "listProducts_shouldFollowCandidateOrder_whenBatchRowsArriveInDifferentOrder",
+    "listProducts_shouldAvoidLocksAndRetry_whenSignerPreparationFails",
+    "listProducts_shouldMapCheapestEligibleProjection_whenKeywordIsProductOnly",
+    "listProducts_shouldKeepPairedNullMetadata_whenRepositoryReturnsSharedOnlyOrphan",
+    "listProducts_shouldPrepareThenLockAndSignOnlyPublishedCandidate_whenStatusChanges",
+    "listProducts_shouldKeepCostlierSkuEligibleVariant_insteadOfReloadingCheapestOverall",
+    "listProducts_shouldCloseSignerAndPropagateFailure_whenLocalSigningFails",
+    "listProducts_shouldNormalizeAndDeduplicateMembership_withoutLosingPhraseSequence"
+  ],
+  "sourceSHA256": {
+    "demo/src/test/java/com/example/demo/catalog/service/ProductKeywordSearchServiceImplTest.java": "c31f833312b51adda9513129eb93ab3be9bce842d160875de0fe915d7f580e66"
+  },
+  "noSpringApplicationContext": true,
+  "repositoryEligibility": "MOCKED_BOUNDARY;actual membership/fuzzy/ranking not verified or approved",
+  "coverage": [
+    "Product-only cheapest eligible projection",
+    "SKU-specific costlier eligible projection;no cheapest-overall reload",
+    "Candidate order vs shuffled batch rows",
+    "Actual service normalization;phrase sequence vs deduplicated tokens;empty later page totals",
+    "D7 shared-only paired-null projection",
+    "Prepare signer before publication locks;hidden candidate never signed",
+    "Prepare failure takes no lock/retry",
+    "Local signing failure closes signer and propagates"
+  ],
+  "noReselectionProof": "All eight cases verify no ProductVariantRepository interaction;actual DTO converter used,selected pair/value asserted"
+}

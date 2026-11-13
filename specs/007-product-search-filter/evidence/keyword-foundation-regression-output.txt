@@ -1,0 +1,129 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/usr/share/maven/lib/guava.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[INFO]
+[INFO] --------------------------< com.example:demo >--------------------------
+[INFO] Building demo 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- maven-resources-plugin:3.5.0:resources (default-resources) @ demo ---
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] Copying 15 resources from src/main/resources to target/classes
+[INFO]
+[INFO] --- maven-compiler-plugin:3.15.0:compile (default-compile) @ demo ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- maven-resources-plugin:3.5.0:testResources (default-testResources) @ demo ---
+[INFO] Copying 12 resources from src/test/resources to target/test-classes
+[INFO]
+[INFO] --- maven-compiler-plugin:3.15.0:testCompile (default-testCompile) @ demo ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- maven-surefire-plugin:3.5.6:test (default-test) @ demo ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.example.demo.wishlist.controller.WishlistControllerTest
+19:24:15.147 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.demo.wishlist.controller.WishlistControllerTest]: WishlistControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+19:24:15.262 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.wishlist.controller.WishlistControllerTest
+19:24:15.264 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.demo.wishlist.controller.WishlistControllerTest]: WishlistControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+19:24:15.276 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.wishlist.controller.WishlistControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T19:24:15.511+07:00  INFO 104384 --- [demo] [           main] c.e.d.w.c.WishlistControllerTest         : Starting WishlistControllerTest using Java 25.0.4.1 with PID 104384 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T19:24:15.512+07:00  INFO 104384 --- [demo] [           main] c.e.d.w.c.WishlistControllerTest         : No active profile set, falling back to 1 default profile: "default"
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+WARNING: A Java agent has been loaded dynamically (/home/hza/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.15/byte-buddy-agent-1.18.15.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+2026-11-09T19:24:16.947+07:00  INFO 104384 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name com.example.demo.auth.security.DomainUserDetailsService
+2026-11-09T19:24:17.223+07:00  INFO 104384 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-09T19:24:17.223+07:00  INFO 104384 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-09T19:24:17.224+07:00  INFO 104384 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-11-09T19:24:17.259+07:00  INFO 104384 --- [demo] [           main] c.e.d.w.c.WishlistControllerTest         : Started WishlistControllerTest in 1.941 seconds (process running for 2.69)
+[INFO] Tests run: 31, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.742 s -- in com.example.demo.wishlist.controller.WishlistControllerTest
+[INFO] Running com.example.demo.wishlist.converter.WishlistConverterTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.045 s -- in com.example.demo.wishlist.converter.WishlistConverterTest
+[INFO] Running com.example.demo.wishlist.service.WishlistServiceImplTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.235 s -- in com.example.demo.wishlist.service.WishlistServiceImplTest
+[INFO] Running com.example.demo.catalog.validator.ProductSearchRequestTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.152 s -- in com.example.demo.catalog.validator.ProductSearchRequestTest
+[INFO] Running com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 s -- in com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest
+[INFO] Running com.example.demo.catalog.controller.ProductDetailControllerTest
+2026-11-09T19:24:18.271+07:00  INFO 104384 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.controller.ProductDetailControllerTest
+2026-11-09T19:24:18.279+07:00  INFO 104384 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.controller.ProductDetailControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T19:24:18.317+07:00  INFO 104384 --- [demo] [           main] c.e.d.c.c.ProductDetailControllerTest    : Starting ProductDetailControllerTest using Java 25.0.4.1 with PID 104384 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T19:24:18.317+07:00  INFO 104384 --- [demo] [           main] c.e.d.c.c.ProductDetailControllerTest    : No active profile set, falling back to 1 default profile: "default"
+2026-11-09T19:24:18.706+07:00  INFO 104384 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-09T19:24:18.706+07:00  INFO 104384 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-09T19:24:18.707+07:00  INFO 104384 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-11-09T19:24:18.730+07:00  INFO 104384 --- [demo] [           main] c.e.d.c.c.ProductDetailControllerTest    : Started ProductDetailControllerTest in 0.443 seconds (process running for 4.161)
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.559 s -- in com.example.demo.catalog.controller.ProductDetailControllerTest
+[INFO] Running com.example.demo.catalog.controller.CatalogSecurityBaselineTest
+2026-11-09T19:24:18.787+07:00  INFO 104384 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.catalog.controller.CatalogSecurityBaselineTest]: CatalogSecurityBaselineTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T19:24:18.790+07:00  INFO 104384 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.controller.CatalogSecurityBaselineTest
+2026-11-09T19:24:18.790+07:00  INFO 104384 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.catalog.controller.CatalogSecurityBaselineTest]: CatalogSecurityBaselineTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T19:24:18.793+07:00  INFO 104384 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.controller.CatalogSecurityBaselineTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T19:24:18.807+07:00  INFO 104384 --- [demo] [           main] c.e.d.c.c.CatalogSecurityBaselineTest    : Starting CatalogSecurityBaselineTest using Java 25.0.4.1 with PID 104384 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T19:24:18.807+07:00  INFO 104384 --- [demo] [           main] c.e.d.c.c.CatalogSecurityBaselineTest    : No active profile set, falling back to 1 default profile: "default"
+2026-11-09T19:24:18.979+07:00  INFO 104384 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-09T19:24:18.979+07:00  INFO 104384 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-09T19:24:18.979+07:00  INFO 104384 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-11-09T19:24:18.986+07:00  INFO 104384 --- [demo] [           main] c.e.d.c.c.CatalogSecurityBaselineTest    : Started CatalogSecurityBaselineTest in 0.19 seconds (process running for 4.418)
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.279 s -- in com.example.demo.catalog.controller.CatalogSecurityBaselineTest
+[INFO] Running com.example.demo.catalog.converter.ProductCatalogConverterTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.032 s -- in com.example.demo.catalog.converter.ProductCatalogConverterTest
+[INFO] Running com.example.demo.catalog.service.ProductCatalogServiceImplTest
+[INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.273 s -- in com.example.demo.catalog.service.ProductCatalogServiceImplTest
+[INFO] Running com.example.demo.catalog.service.ProductKeywordSearchServiceImplTest
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.030 s -- in com.example.demo.catalog.service.ProductKeywordSearchServiceImplTest
+[INFO] Running com.example.demo.catalog.search.ProductSearchParameterParserTest
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.071 s -- in com.example.demo.catalog.search.ProductSearchParameterParserTest
+[INFO] Running com.example.demo.catalog.search.ProductSearchNormalizerTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.018 s -- in com.example.demo.catalog.search.ProductSearchNormalizerTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 109, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  5.895 s
+[INFO] Finished at: 2026-11-09T19:24:19+07:00
+[INFO] ------------------------------------------------------------------------

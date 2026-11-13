@@ -18,9 +18,7 @@ import com.example.demo.storage.dto.response.StoredObjectContent;
 import com.example.demo.storage.dto.response.StoredObjectMetadata;
 import com.example.demo.storage.dto.response.PreparedUpload;
 import com.example.demo.storage.exception.StoredObjectChangedException;
-import com.example.demo.storage.exception.StorageUnavailableException;
 import com.example.demo.storage.service.ObjectStorageService;
-import java.io.IOException;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.UUID;
@@ -71,7 +69,7 @@ public class MediaCommandServiceImpl implements MediaCommandService {
             if (!observed.getEtag().equals(content.getMetadata().getEtag())) throw new StoredObjectChangedException();
             contentValidator.validate(content, image.getContentType());
             storage.copyIfMatch(image.getStagingKey(), content.getMetadata().getEtag(), target, image.getContentType());
-        } catch (IOException failure) { throw new StorageUnavailableException(); }
+        }
         if (!clock.instant().isBefore(image.getExpiresAt())) return expire(image);
         image.complete(target);
         repository.flush();

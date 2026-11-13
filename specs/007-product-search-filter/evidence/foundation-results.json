@@ -1,0 +1,1259 @@
+{
+  "task": "T019",
+  "gate": "G1",
+  "status": "PASS",
+  "capturedUTC": "2026-11-09T09:47:00.911530+00:00",
+  "branch": "features/SearchAndFilter",
+  "head": "c5bd4e7eeb39d9b06a0c7e36af9a65635058613f",
+  "dirtyWorktree": true,
+  "command": "mvn -o -f demo/pom.xml -Dtest=ProductCatalogServiceImplTest,ProductListingControllerTest,ProductDetailControllerTest,ProductCatalogConverterTest,ProductSearchParameterParserTest,ProductSearchRequestTest,ProductSearchNormalizerTest,TechnicalSpecificationValidatorTest,CatalogSecurityBaselineTest,WishlistServiceImplTest,WishlistConverterTest,WishlistControllerTest -Dit.test=CatalogSearchMigrationIT,ProductSearchBaselineRepositoryIT,CatalogContractIT,CatalogQueryCountIT,ProductListingApiIT,ProductDetailApiIT,ProductDetailRepositoryIT,ProductListingRepositoryIT,CatalogReadFlowIT,WishlistControllerIT,WishlistServiceIT -Djunit.jupiter.execution.parallel.enabled=false -DforkCount=1 -DreuseForks=true verify",
+  "exitCode": 0,
+  "discovery": {
+    "surefirePlugin": "3.5.6",
+    "failsafePlugin": "3.5.6",
+    "unitClasses": [
+      "ProductCatalogServiceImplTest",
+      "ProductListingControllerTest",
+      "ProductDetailControllerTest",
+      "ProductCatalogConverterTest",
+      "ProductSearchParameterParserTest",
+      "ProductSearchRequestTest",
+      "ProductSearchNormalizerTest",
+      "TechnicalSpecificationValidatorTest",
+      "CatalogSecurityBaselineTest",
+      "WishlistServiceImplTest",
+      "WishlistConverterTest",
+      "WishlistControllerTest"
+    ],
+    "integrationClasses": [
+      "CatalogSearchMigrationIT",
+      "ProductSearchBaselineRepositoryIT",
+      "CatalogContractIT",
+      "CatalogQueryCountIT",
+      "ProductListingApiIT",
+      "ProductDetailApiIT",
+      "ProductDetailRepositoryIT",
+      "ProductListingRepositoryIT",
+      "CatalogReadFlowIT",
+      "WishlistControllerIT",
+      "WishlistServiceIT"
+    ],
+    "execution": "SERIAL;one reused fork per phase;test-internal controlled races retained"
+  },
+  "totals": {
+    "unitMvc": 105,
+    "integration": 60,
+    "all": 165,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "phase": "surefire",
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.service.ProductCatalogServiceImplTest.xml",
+      "reportSHA256": "f5a912e7ee9a2acff6a38196dec40d1a791f299fa6c261f01b6fb030f077ba5f",
+      "name": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+      "tests": "15",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.242",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "getProductSummaries_shouldExcludeLateHiddenProduct_whenFinalRevalidationFails",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.003"
+        },
+        {
+          "name": "getPublishedProductEntity_shouldRejectUnavailableProduct_whenNotPublicOrMissing",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.001"
+        },
+        {
+          "name": "getProductSummaries_shouldPropagateSafeFailure_whenSignerPreparationFails",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.001"
+        },
+        {
+          "name": "listingValidatesDirectRequestsAndForwardsCriteriaWithoutActivatingFilters",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.006"
+        },
+        {
+          "name": "listingPreparesSignerBeforeLocksAndSuppressesLateHiddenProduct",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.038"
+        },
+        {
+          "name": "getProductSummaries_shouldReturnNullImageWithoutDetailFetch_whenProductHasNoImage",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.001"
+        },
+        {
+          "name": "getProductSummaries_shouldNotSignUnpublishedImage_whenLockedStatusChanged",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.001"
+        },
+        {
+          "name": "getPublishedProductEntity_shouldReturnReference_whenPublished",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.0"
+        },
+        {
+          "name": "listingEmptyLaterPageRetainsSnapshotCountWithoutBatchLoads",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.004"
+        },
+        {
+          "name": "getProductSummaries_shouldReturnSignedSummary_whenLockedProductIsPublished",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.001"
+        },
+        {
+          "name": "listingUsesSelectedMetadataAndQueryOrderWithBatchedLoading",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.005"
+        },
+        {
+          "name": "getProductSummaries_shouldAvoidFetching_whenInputIsEmpty",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.0"
+        },
+        {
+          "name": "listingSuppressesProductHiddenDuringBatchLoading",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.004"
+        },
+        {
+          "name": "getProductSummaries_shouldRejectUnboundedInput_whenMoreThanOneHundredIds",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.001"
+        },
+        {
+          "name": "listingSignerPreparationFailureDoesNotTakeLocks",
+          "className": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+          "time": "0.004"
+        }
+      ]
+    },
+    {
+      "phase": "surefire",
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.controller.ProductListingControllerTest.xml",
+      "reportSHA256": "2b478b3e8219c60b9574e9e4fd9c4737481689d4ffed112f349a3e5fef493185",
+      "name": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.286",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "acceptsSizeBoundaryValues",
+          "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+          "time": "0.017"
+        },
+        {
+          "name": "rejectsInvalidDuplicateAndUnapprovedParametersAsProblemDetail",
+          "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+          "time": "0.018"
+        },
+        {
+          "name": "listingSerializesOnlyAdditiveMetadataIncludingPairedNulls",
+          "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+          "time": "0.007"
+        },
+        {
+          "name": "anonymousDefaultAndOutOfRangePagesUseCanonicalResponse",
+          "className": "com.example.demo.catalog.controller.ProductListingControllerTest",
+          "time": "0.005"
+        }
+      ]
+    },
+    {
+      "phase": "surefire",
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.controller.ProductDetailControllerTest.xml",
+      "reportSHA256": "b4f6857006433ecc857f0c27af5ed0369a7efbd755d3e3939a52a55cf103bbb9",
+      "name": "com.example.demo.catalog.controller.ProductDetailControllerTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.436",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "invalidAndNoncanonicalIdsReturn400ProblemDetail",
+          "className": "com.example.demo.catalog.controller.ProductDetailControllerTest",
+          "time": "0.018"
+        },
+        {
+          "name": "unknownCanonicalIdReturns404ProblemDetail",
+          "className": "com.example.demo.catalog.controller.ProductDetailControllerTest",
+          "time": "0.004"
+        },
+        {
+          "name": "anonymousCanonicalIdReturnsDetailDto",
+          "className": "com.example.demo.catalog.controller.ProductDetailControllerTest",
+          "time": "0.015"
+        }
+      ]
+    },
+    {
+      "phase": "surefire",
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.converter.ProductCatalogConverterTest.xml",
+      "reportSHA256": "65865673f1c8f53d8bc39308d2497c1cb66cbeccdc7331ec98a5ea8b18a11fc8",
+      "name": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.031",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "singleVariantEmptyOptionsAndNoImagesRemainRepresentable",
+          "className": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+          "time": "0.005"
+        },
+        {
+          "name": "listingMapsOnlySelectedPairAndKeepsSharedSummaryUnchanged",
+          "className": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+          "time": "0.005"
+        },
+        {
+          "name": "summaryContainsOnlyApprovedFieldsAndImmediateCategory",
+          "className": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+          "time": "0.008"
+        },
+        {
+          "name": "orphanListingHasExplicitNullPairAndMixedPairsAreRejected",
+          "className": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+          "time": "0.002"
+        },
+        {
+          "name": "detailMapsEachVariantAndImageOnceUsingOnlySuppliedUrls",
+          "className": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+          "time": "0.011"
+        }
+      ]
+    },
+    {
+      "phase": "surefire",
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.search.ProductSearchParameterParserTest.xml",
+      "reportSHA256": "877d9e797327b11298ca4e06e414077953fd995573c23af42f26c786db75c40f",
+      "name": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.044",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "legacyDefaultsAndRepeatedBrandsPreserveCompatibility",
+          "className": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+          "time": "0.004"
+        },
+        {
+          "name": "rejectsUnknownNullAndDuplicateSingletonParameters",
+          "className": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+          "time": "0.001"
+        },
+        {
+          "name": "validatesKeywordsAndSortWithoutSelectingAnyResults",
+          "className": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+          "time": "0.001"
+        },
+        {
+          "name": "enforcesLexicalAndNumericBoundsBeforeConversion",
+          "className": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+          "time": "0.002"
+        },
+        {
+          "name": "rawGroupAlternativeLimitsAndDuplicateKeysAreNotHiddenByDeduplication",
+          "className": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+          "time": "0.003"
+        },
+        {
+          "name": "acceptsAllTypedOperatorShapesAndPreservesExactDecimals",
+          "className": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+          "time": "0.021"
+        },
+        {
+          "name": "rejectsDuplicateMembersAtEachLevelEvenWhenValuesAgree",
+          "className": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+          "time": "0.001"
+        },
+        {
+          "name": "rejectsMalformedStructuresUnknownFieldsAndExplicitNulls",
+          "className": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+          "time": "0.002"
+        },
+        {
+          "name": "decodesTransportExactlyOnceAndLeavesOtherMappersUnchanged",
+          "className": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+          "time": "0.001"
+        },
+        {
+          "name": "rejectsBadOperatorShapesAndPrecisionWithoutRegistryApproval",
+          "className": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+          "time": "0.003"
+        }
+      ]
+    },
+    {
+      "phase": "surefire",
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.validator.ProductSearchRequestTest.xml",
+      "reportSHA256": "49273f074cb0f1e3f3dafb54a8764e487a85a09bcbba2a6fbd435d1562a481de",
+      "name": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.128",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "fixedSortValuesAndCriteriaRetainExactAmounts",
+          "className": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+          "time": "0.007"
+        },
+        {
+          "name": "omittedValuesKeepLegacyDefaultsButExplicitNullIsInvalid",
+          "className": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+          "time": "0.066"
+        },
+        {
+          "name": "textBooleanAndDecodedJsonHaveDocumentedBounds",
+          "className": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+          "time": "0.009"
+        },
+        {
+          "name": "nestedGroupsAndAlternativesEnforceShapeAndLimits",
+          "className": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+          "time": "0.023"
+        },
+        {
+          "name": "exactPriceAmountsHaveThirtyDigitBoundWithoutDoubleCoercion",
+          "className": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+          "time": "0.002"
+        },
+        {
+          "name": "numericOperandsAreExactAndPrecisionBoundedIncludingExponentNotation",
+          "className": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+          "time": "0.002"
+        },
+        {
+          "name": "uuidAndRawCollectionBoundsArePreservedBeforeDeduplication",
+          "className": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+          "time": "0.002"
+        },
+        {
+          "name": "rangesAndExplicitNullOperandMembersKeepTheirPresenceSemantics",
+          "className": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+          "time": "0.001"
+        },
+        {
+          "name": "pageSizeAndKeywordBoundariesAreValidated",
+          "className": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+          "time": "0.005"
+        }
+      ]
+    },
+    {
+      "phase": "surefire",
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.search.ProductSearchNormalizerTest.xml",
+      "reportSHA256": "85d5315e583a07873544948873464fd39c2a6b681ce89c5aafffa05b5b6c185f",
+      "name": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.011",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "matchesDocumentedD2GoldenCases",
+          "className": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+          "time": "0.004"
+        },
+        {
+          "name": "nfcNfdAndVietnameseMarksHaveSameNormalization",
+          "className": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+          "time": "0.0"
+        },
+        {
+          "name": "limitsRawTokensBeforeDeduplication",
+          "className": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+          "time": "0.001"
+        },
+        {
+          "name": "queryLengthCountsUnicodeCodePointsBeforeNormalization",
+          "className": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+          "time": "0.001"
+        },
+        {
+          "name": "doesNotApplyQueryLimitsToCandidateFieldsOrInventVocabulary",
+          "className": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+          "time": "0.001"
+        },
+        {
+          "name": "deduplicatesMembershipButKeepsPhraseAndSequence",
+          "className": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+          "time": "0.001"
+        },
+        {
+          "name": "consumesExactlyTheDocumentedUnicodeWhitespace",
+          "className": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+          "time": "0.0"
+        },
+        {
+          "name": "rejectsControlsAndNonblankZeroTokensButBlankIsOmitted",
+          "className": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+          "time": "0.0"
+        },
+        {
+          "name": "lowercaseDoesNotDependOnHostLocale",
+          "className": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+          "time": "0.0"
+        }
+      ]
+    },
+    {
+      "phase": "surefire",
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest.xml",
+      "reportSHA256": "de02dcb8820268726081a85c1335590af67a42efa559c16b81be94a1e2310b45",
+      "name": "com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.002",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "validate_shouldAcceptKnownFalseAndTypedQuantities",
+          "className": "com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest",
+          "time": "0.0"
+        },
+        {
+          "name": "validate_shouldRejectUnknownVersionMissingEnvelopeAndInvalidValues",
+          "className": "com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest",
+          "time": "0.001"
+        }
+      ]
+    },
+    {
+      "phase": "surefire",
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.catalog.controller.CatalogSecurityBaselineTest.xml",
+      "reportSHA256": "78933b2aee54281b2a78220fb2648c55a62c1550064f52e632c20a26c90d2e99",
+      "name": "com.example.demo.catalog.controller.CatalogSecurityBaselineTest",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.256",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "mockAdministratorCannotAttachWithoutVerifiedJwt",
+          "className": "com.example.demo.catalog.controller.CatalogSecurityBaselineTest",
+          "time": "0.011"
+        },
+        {
+          "name": "customerAttachmentReceivesFilterChain403",
+          "className": "com.example.demo.catalog.controller.CatalogSecurityBaselineTest",
+          "time": "0.004"
+        },
+        {
+          "name": "anonymousAttachmentReceivesFilterChain401",
+          "className": "com.example.demo.catalog.controller.CatalogSecurityBaselineTest",
+          "time": "0.005"
+        },
+        {
+          "name": "sharedCorsAllowsArbitraryOriginsAndPreflightMethods",
+          "className": "com.example.demo.catalog.controller.CatalogSecurityBaselineTest",
+          "time": "0.005"
+        },
+        {
+          "name": "anonymousCatalogReadsArePermitted",
+          "className": "com.example.demo.catalog.controller.CatalogSecurityBaselineTest",
+          "time": "0.004"
+        },
+        {
+          "name": "mvcAdviceHandlesSafeApplicationFailuresSeparately",
+          "className": "com.example.demo.catalog.controller.CatalogSecurityBaselineTest",
+          "time": "0.007"
+        }
+      ]
+    },
+    {
+      "phase": "surefire",
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.wishlist.service.WishlistServiceImplTest.xml",
+      "reportSHA256": "8ac51ecda1c042cf953a41a63810cd777a016f153b9bd2449e368ea7c96ba83e",
+      "name": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.181",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "addProduct_shouldReturnCreatedItem_whenFirstInsertionSucceeds",
+          "className": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+          "time": "0.048"
+        },
+        {
+          "name": "addProduct_shouldRejectLateHiddenProduct_whenSummaryIsUnavailable",
+          "className": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+          "time": "0.006"
+        },
+        {
+          "name": "removeProduct_shouldRejectUntrustedOwner_whenIdentityIsAbsent",
+          "className": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+          "time": "0.007"
+        },
+        {
+          "name": "addProduct_shouldSurfaceSafeSigningFailure_whenPreparationFails",
+          "className": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+          "time": "0.002"
+        },
+        {
+          "name": "addProduct_shouldReportConflict_whenWinningMembershipWasRemoved",
+          "className": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+          "time": "0.002"
+        },
+        {
+          "name": "addProduct_shouldRejectMissingCurrentAccount_whenUserDisappears",
+          "className": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+          "time": "0.001"
+        },
+        {
+          "name": "addProduct_shouldPreserveOriginalTime_whenDuplicateIsIgnored",
+          "className": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+          "time": "0.002"
+        },
+        {
+          "name": "addProduct_shouldRejectUnavailableProductBeforeInsert_whenHiddenOrMissing",
+          "className": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+          "time": "0.001"
+        },
+        {
+          "name": "removeProduct_shouldDeleteOnlyOwnedReferenceWithoutCatalogLookup_whenEntryIsHiddenOrMissing",
+          "className": "com.example.demo.wishlist.service.WishlistServiceImplTest",
+          "time": "0.001"
+        }
+      ]
+    },
+    {
+      "phase": "surefire",
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.wishlist.converter.WishlistConverterTest.xml",
+      "reportSHA256": "92eca6105ed97dc25f7f4b7ac8b31a80206421f987e9b235054bbc2b2fe22492",
+      "name": "com.example.demo.wishlist.converter.WishlistConverterTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.047",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "toItem_shouldPreservePreparedSummaryAndTimestamp_whenImageIsAbsent",
+          "className": "com.example.demo.wishlist.converter.WishlistConverterTest",
+          "time": "0.043"
+        },
+        {
+          "name": "toPage_shouldPreserveOrderAndMetadataWithoutMutableAlias_whenItemsArePrepared",
+          "className": "com.example.demo.wishlist.converter.WishlistConverterTest",
+          "time": "0.003"
+        }
+      ]
+    },
+    {
+      "phase": "surefire",
+      "report": "demo/target/surefire-reports/TEST-com.example.demo.wishlist.controller.WishlistControllerTest.xml",
+      "reportSHA256": "f0db4997e7e1efa6b21224829e251fa54cf26ec1093a9178fcb8373ad72eff72",
+      "name": "com.example.demo.wishlist.controller.WishlistControllerTest",
+      "tests": "31",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "2.347",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "removeProduct_shouldEnforcePermissionAndInputContract_whenRequestIsInvalid",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.117"
+        },
+        {
+          "name": "addProduct_shouldRetainBearerChallenge_whenCurrentUserDisappearsAfterAuthentication",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.012"
+        },
+        {
+          "name": "addProduct_shouldRejectOwnerSelectionAndMissingPermission_whenUnauthorized",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.008"
+        },
+        {
+          "name": "removeProduct_shouldReturnEmptySuccess_whenOwnedOrAbsent",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.016"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[1]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.017"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[2]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.005"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[3]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.006"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[4]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.006"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[5]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.005"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[6]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.005"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[7]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.005"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[8]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.004"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[9]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.005"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[10]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.004"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[11]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.004"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[12]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.004"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[13]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.005"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[14]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.005"
+        },
+        {
+          "name": "listWishlist_shouldRejectAmbiguousOrInvalidInput_whenQueryIsInvalid(String)[15]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.005"
+        },
+        {
+          "name": "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[1]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.02"
+        },
+        {
+          "name": "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[2]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.006"
+        },
+        {
+          "name": "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[3]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.006"
+        },
+        {
+          "name": "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[4]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.005"
+        },
+        {
+          "name": "addProduct_shouldRejectSuppliedBody_whenMutationIsBodyless(String)[5]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.006"
+        },
+        {
+          "name": "listWishlist_shouldAcceptSizeBoundsAndBeyondLastPage_whenQueryIsValid",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.021"
+        },
+        {
+          "name": "listWishlist_shouldUseDefaultsAndEmptyPageContract_whenParametersAreOmitted",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.005"
+        },
+        {
+          "name": "addProduct_shouldRejectInvalidIdentifier_whenNotCanonical(String)[1]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.005"
+        },
+        {
+          "name": "addProduct_shouldRejectInvalidIdentifier_whenNotCanonical(String)[2]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.005"
+        },
+        {
+          "name": "addProduct_shouldRejectInvalidIdentifier_whenNotCanonical(String)[3]",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.004"
+        },
+        {
+          "name": "addProduct_shouldPreserveProblemDetails_whenDomainFails",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.007"
+        },
+        {
+          "name": "addProduct_shouldReturnOneItemWithCorrectStatus_whenCreatedOrDuplicate",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerTest",
+          "time": "0.011"
+        }
+      ]
+    },
+    {
+      "phase": "failsafe",
+      "report": "demo/target/failsafe-reports/TEST-com.example.demo.catalog.repository.CatalogSearchMigrationIT.xml",
+      "reportSHA256": "bd08467db8f892a020c0814fa007a183d287c9a7fb0e08b0b51a5b795073ae9a",
+      "name": "com.example.demo.catalog.repository.CatalogSearchMigrationIT",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "13.929",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "missingExtensionPackageBlocksV15WithoutFallback",
+          "className": "com.example.demo.catalog.repository.CatalogSearchMigrationIT",
+          "time": "1.627"
+        },
+        {
+          "name": "v14UpgradePreservesEveryBusinessRowHistoryAndConstraint",
+          "className": "com.example.demo.catalog.repository.CatalogSearchMigrationIT",
+          "time": "5.203"
+        },
+        {
+          "name": "freshFlywayInstallProvidesImmutablePrimitivesAndExtension",
+          "className": "com.example.demo.catalog.repository.CatalogSearchMigrationIT",
+          "time": "3.859"
+        },
+        {
+          "name": "missingInstallationPrivilegeBlocksV15WithoutInstallingObjects",
+          "className": "com.example.demo.catalog.repository.CatalogSearchMigrationIT",
+          "time": "1.579"
+        },
+        {
+          "name": "missingPinnedCollationBlocksV15BeforeAnyInstall",
+          "className": "com.example.demo.catalog.repository.CatalogSearchMigrationIT",
+          "time": "1.658"
+        }
+      ]
+    },
+    {
+      "phase": "failsafe",
+      "report": "demo/target/failsafe-reports/TEST-com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT.xml",
+      "reportSHA256": "4621810d92c97ae006115f0c18074facd9c575cfe868f0391f3fdb95b49ad349",
+      "name": "com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.598",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "selectsCheapestVariantWithUuidTieAndPreservesExactAmount",
+          "className": "com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT",
+          "time": "0.04"
+        },
+        {
+          "name": "rejectsUnimplementedCriteriaBeforeExecutingSqlAndHasNoApprovedProvider",
+          "className": "com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT",
+          "time": "0.034"
+        },
+        {
+          "name": "legacyMembershipOrderAndCountsUseOneStatementPerPage",
+          "className": "com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT",
+          "time": "0.069"
+        },
+        {
+          "name": "representativeMetadataDoesNotMultiplyWithVariantsOrImages",
+          "className": "com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT",
+          "time": "0.03"
+        },
+        {
+          "name": "deferredOrphanFixtureRetainsLegacyMembershipWithoutWeakeningConstraints",
+          "className": "com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT",
+          "time": "0.011"
+        },
+        {
+          "name": "emptyAndBeyondLastPagesKeepAccurateTotalsIncludingMaxOffset",
+          "className": "com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT",
+          "time": "0.042"
+        }
+      ]
+    },
+    {
+      "phase": "failsafe",
+      "report": "demo/target/failsafe-reports/TEST-com.example.demo.catalog.CatalogContractIT.xml",
+      "reportSHA256": "74dfd4568cc9e18b0601f34274638373990e190ceb85cc4d0d22c9636e0c8437",
+      "name": "com.example.demo.catalog.CatalogContractIT",
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.934",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "getProduct_shouldReturnNullAndEmptyOptionalRepresentations_withoutImages",
+          "className": "com.example.demo.catalog.CatalogContractIT",
+          "time": "0.056"
+        },
+        {
+          "name": "listProducts_shouldRejectUnsupportedCriteria_withoutIgnoringParsedValues",
+          "className": "com.example.demo.catalog.CatalogContractIT",
+          "time": "0.05"
+        },
+        {
+          "name": "getProduct_shouldMatchOpenApiContract_forPublishedProduct",
+          "className": "com.example.demo.catalog.CatalogContractIT",
+          "time": "0.052"
+        },
+        {
+          "name": "listProducts_shouldPreservePairedNullOrphan_whenDeferredFixtureRollsBack",
+          "className": "com.example.demo.catalog.CatalogContractIT",
+          "time": "0.014"
+        },
+        {
+          "name": "listProducts_shouldMatchOpenApiContract_forAnonymousPublishedPage",
+          "className": "com.example.demo.catalog.CatalogContractIT",
+          "time": "0.077"
+        },
+        {
+          "name": "getProduct_shouldReturnRfc9457Problems_forInvalidHiddenAndMissingIds",
+          "className": "com.example.demo.catalog.CatalogContractIT",
+          "time": "0.05"
+        },
+        {
+          "name": "listProducts_shouldEnforceOpenApiPaginationAndApprovedParameters",
+          "className": "com.example.demo.catalog.CatalogContractIT",
+          "time": "0.055"
+        }
+      ]
+    },
+    {
+      "phase": "failsafe",
+      "report": "demo/target/failsafe-reports/TEST-com.example.demo.catalog.CatalogQueryCountIT.xml",
+      "reportSHA256": "e74e88c4fa4e7410e22e2d43b23ba5c95faeb7aa28623ab621d396e31fdd6fe2",
+      "name": "com.example.demo.catalog.CatalogQueryCountIT",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "1.293",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "pageOfOneHundredImagesAndManyRelatedRowsUsesBoundedQueries",
+          "className": "com.example.demo.catalog.CatalogQueryCountIT",
+          "time": "0.47"
+        },
+        {
+          "name": "jdbcCapture_shouldObserveDirectJdbcOutsideHibernate",
+          "className": "com.example.demo.catalog.CatalogQueryCountIT",
+          "time": "0.036"
+        },
+        {
+          "name": "detailWithSeveralVariantsAndMaximumGalleryUsesBoundedQueries",
+          "className": "com.example.demo.catalog.CatalogQueryCountIT",
+          "time": "0.05"
+        }
+      ]
+    },
+    {
+      "phase": "failsafe",
+      "report": "demo/target/failsafe-reports/TEST-com.example.demo.catalog.ProductListingApiIT.xml",
+      "reportSHA256": "59498409d1a1b2c2791329d227baf561a7fad751c51cc09df01e7e3fefedc472",
+      "name": "com.example.demo.catalog.ProductListingApiIT",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.923",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "twentyImageSummariesUseBoundedRelationshipQueries",
+          "className": "com.example.demo.catalog.ProductListingApiIT",
+          "time": "0.126"
+        },
+        {
+          "name": "committedUnpublishBeforeFinalLockPreventsNewSignedUrl",
+          "className": "com.example.demo.catalog.ProductListingApiIT",
+          "time": "0.057"
+        },
+        {
+          "name": "unchangedMixedCatalogHasStableOrderedIdsAndCountsAcrossEveryPage",
+          "className": "com.example.demo.catalog.ProductListingApiIT",
+          "time": "0.139"
+        },
+        {
+          "name": "emptyOutOfRangeAndRepeatedPagesHaveAccurateStableMetadata",
+          "className": "com.example.demo.catalog.ProductListingApiIT",
+          "time": "0.037"
+        },
+        {
+          "name": "anonymousListingShowsOnlyPublishedSummariesWithSignedOrNullPrimaryUrl",
+          "className": "com.example.demo.catalog.ProductListingApiIT",
+          "time": "0.036"
+        }
+      ]
+    },
+    {
+      "phase": "failsafe",
+      "report": "demo/target/failsafe-reports/TEST-com.example.demo.catalog.ProductDetailApiIT.xml",
+      "reportSHA256": "aa2d1507adce2faf1357e65e545e17673b33db1d44bab567f13682959ddf63d9",
+      "name": "com.example.demo.catalog.ProductDetailApiIT",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.924",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "publishedDetailContainsOnlyOwnCategoryVariantsAndOrderedSignedImages",
+          "className": "com.example.demo.catalog.ProductDetailApiIT",
+          "time": "0.128"
+        },
+        {
+          "name": "productWithoutImagesHasNullPrimaryUrlAndEmptyGallery",
+          "className": "com.example.demo.catalog.ProductDetailApiIT",
+          "time": "0.036"
+        },
+        {
+          "name": "committedUnpublishBeforeFinalLockPreventsGallerySigning",
+          "className": "com.example.demo.catalog.ProductDetailApiIT",
+          "time": "0.053"
+        },
+        {
+          "name": "draftArchivedAndUnknownProductsAreIndistinguishable404Problems",
+          "className": "com.example.demo.catalog.ProductDetailApiIT",
+          "time": "0.043"
+        }
+      ]
+    },
+    {
+      "phase": "failsafe",
+      "report": "demo/target/failsafe-reports/TEST-com.example.demo.catalog.repository.ProductDetailRepositoryIT.xml",
+      "reportSHA256": "3ff56d47499f07a48e1c6adbb2e9403551c77bed854df9b61beae5c9e40757af",
+      "name": "com.example.demo.catalog.repository.ProductDetailRepositoryIT",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.499",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "detailLookupFetchesBrandAndPreservesProductWithoutBrand",
+          "className": "com.example.demo.catalog.repository.ProductDetailRepositoryIT",
+          "time": "0.068"
+        },
+        {
+          "name": "unpublishedAndUnknownIdsShareAbsentPublishedLookup",
+          "className": "com.example.demo.catalog.repository.ProductDetailRepositoryIT",
+          "time": "0.03"
+        },
+        {
+          "name": "publishedLookupIncludesImmediateCategoryAndOnlyOwnedVariantsAndOrderedImages",
+          "className": "com.example.demo.catalog.repository.ProductDetailRepositoryIT",
+          "time": "0.041"
+        }
+      ]
+    },
+    {
+      "phase": "failsafe",
+      "report": "demo/target/failsafe-reports/TEST-com.example.demo.catalog.repository.ProductListingRepositoryIT.xml",
+      "reportSHA256": "cb6faab73c27025306c18c687e611851da02980b456be6dd4cea82c2d97d8e02",
+      "name": "com.example.demo.catalog.repository.ProductListingRepositoryIT",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "0.087",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "emptyPublishedSetReturnsZeroTotals",
+          "className": "com.example.demo.catalog.repository.ProductListingRepositoryIT",
+          "time": "0.032"
+        },
+        {
+          "name": "pagesOnlyPublishedIdsInStableAscendingOrderAndCountsOnlyThem",
+          "className": "com.example.demo.catalog.repository.ProductListingRepositoryIT",
+          "time": "0.036"
+        }
+      ]
+    },
+    {
+      "phase": "failsafe",
+      "report": "demo/target/failsafe-reports/TEST-com.example.demo.catalog.CatalogReadFlowIT.xml",
+      "reportSHA256": "55e623910a04b3959224f463b4205b58191b87a7f71143bcf0f85acad1d062f8",
+      "name": "com.example.demo.catalog.CatalogReadFlowIT",
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "7.94",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "anonymousListingThenDetailFetchesPrivateBytesOnlyThroughSignedReadUrls",
+          "className": "com.example.demo.catalog.CatalogReadFlowIT",
+          "time": "0.858"
+        }
+      ]
+    },
+    {
+      "phase": "failsafe",
+      "report": "demo/target/failsafe-reports/TEST-com.example.demo.wishlist.controller.WishlistControllerIT.xml",
+      "reportSHA256": "bf3ff69ec1a2637ccb00bda22bcda56696595f718002559e56dc37dcdbe9c356",
+      "name": "com.example.demo.wishlist.controller.WishlistControllerIT",
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "13.565",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "addProduct_shouldReturnOneCreationAndOneDuplicate_whenTwoApiCallsStartTogether",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerIT",
+          "time": "0.944"
+        },
+        {
+          "name": "addProduct_shouldNotDiscloseNonpublicProducts_whenMissingDraftOrArchived",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerIT",
+          "time": "0.248"
+        },
+        {
+          "name": "addProduct_shouldUseCurrentAuthorities_whenPermissionIsRevokedAndRestored",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerIT",
+          "time": "0.226"
+        },
+        {
+          "name": "addProduct_shouldCreateOneMembership_whenRequestsOverlapAtDatabase",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerIT",
+          "time": "0.266"
+        },
+        {
+          "name": "removeProduct_shouldKeepOtherUsersEntryAndAllowReAdd_whenProductWasHidden",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerIT",
+          "time": "0.521"
+        },
+        {
+          "name": "addProduct_shouldPreserveSavedItemAcrossLogoutLogin_whenRealUserRegisters",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerIT",
+          "time": "0.35"
+        },
+        {
+          "name": "addProduct_shouldRejectIneligibleAccountAndSession_whenCurrentStateChanges",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerIT",
+          "time": "0.249"
+        },
+        {
+          "name": "listWishlist_shouldTraverseOnlyOwnedVisibleEntries_whenPagesIncludeHiddenTimestampTies",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerIT",
+          "time": "2.239"
+        },
+        {
+          "name": "addProduct_shouldDenyUnrelatedPermissions_whenCustomRoleHasNoWishlistGrant",
+          "className": "com.example.demo.wishlist.controller.WishlistControllerIT",
+          "time": "0.196"
+        }
+      ]
+    },
+    {
+      "phase": "failsafe",
+      "report": "demo/target/failsafe-reports/TEST-com.example.demo.wishlist.service.WishlistServiceIT.xml",
+      "reportSHA256": "6b0ad5a341f901287ac55c5f1e192c5bee4a7a950b7b098761f0d36707687e07",
+      "name": "com.example.demo.wishlist.service.WishlistServiceIT",
+      "tests": "15",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "3.054",
+      "timestamp": null,
+      "cases": [
+        {
+          "name": "addProduct_shouldTranslateRealForeignKeyFailureAfterRollback_whenParentDisappears",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.136"
+        },
+        {
+          "name": "removeProduct_shouldRollbackMembershipDeletion_whenDatabaseRejectsOperation",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.095"
+        },
+        {
+          "name": "listWishlist_shouldUseBoundedQueriesAndDetachedResponses_whenPageContainsOneHundredImages",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.401"
+        },
+        {
+          "name": "addProduct_shouldCommitOnceAndPreserveTime_whenDuplicate",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.073"
+        },
+        {
+          "name": "listWishlist_shouldReturnConflictWithoutPartialPage_whenSelectedProductBecomesHidden",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.075"
+        },
+        {
+          "name": "addProduct_shouldRetainExistingMembership_whenProductBecomesHidden",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.065"
+        },
+        {
+          "name": "addProduct_shouldRollbackAndHideMetadata_whenFinalPublicationCheckFails",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.068"
+        },
+        {
+          "name": "listWishlist_shouldRetainAndRestoreMembership_whenProductVisibilityChanges",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.081"
+        },
+        {
+          "name": "removeProduct_shouldPreserveParentsAndOtherMembership_whenProductHasAnyVisibility(String)[1]",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.077"
+        },
+        {
+          "name": "removeProduct_shouldPreserveParentsAndOtherMembership_whenProductHasAnyVisibility(String)[2]",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.078"
+        },
+        {
+          "name": "removeProduct_shouldPreserveParentsAndOtherMembership_whenProductHasAnyVisibility(String)[3]",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.082"
+        },
+        {
+          "name": "addProduct_shouldRollbackNewMembership_whenSigningFails",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.079"
+        },
+        {
+          "name": "addProduct_shouldSampleFreshTimeWithoutStrictIncrease_whenReAddedAfterRemoval(long)[1]",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.077"
+        },
+        {
+          "name": "addProduct_shouldSampleFreshTimeWithoutStrictIncrease_whenReAddedAfterRemoval(long)[2]",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.08"
+        },
+        {
+          "name": "addProduct_shouldReportSafeConflict_whenMembershipIsRemovedBeforeLookup",
+          "className": "com.example.demo.wishlist.service.WishlistServiceIT",
+          "time": "0.062"
+        }
+      ]
+    }
+  ],
+  "prerequisites": {
+    "T018": {
+      "file": "listing-integration-results.json",
+      "sha256": "261ec762e24da47b47989ee6d5d321187dad3667171d05051fafb5db25329bd6"
+    },
+    "T015": {
+      "file": "search-support-migration-results.json",
+      "sha256": "a1432d15f7be8e18e3a641d2d5bd688bad5b2da65f5cff52942981404439621c"
+    }
+  },
+  "sourceSHA256": {
+    "demo/src/test/java/com/example/demo/catalog/CatalogQueryCountIT.java": "c5ee9157fabd217f77760477442b08bf929b5a81feff1ebf481af81ebcbae345",
+    "demo/src/test/java/com/example/demo/catalog/CatalogContractIT.java": "c6b26b2986d66a969ef76c83d4d22a2ec5c431d5c84d02e58d5f1a65d8521cdd"
+  },
+  "migrationSHA256": {
+    "demo/src/main/resources/db/migration/V4__create_users.sql": "dd065d0c85e93a87573a9396ec8b427c9a4a9e7a80df272d279c5e412497f628",
+    "demo/src/main/resources/db/migration/V9__user_profile_images.sql": "795c2571d9ad36ca95f2c9f4a230d9d2ab05a2dcee90e9c83188d2c3db99a5ac",
+    "demo/src/main/resources/db/migration/V1__create_catalog_core.sql": "57335af270525b03f723a14bcadf17c16a2b23c3ce2181061660b17193ddc613",
+    "demo/src/main/resources/db/migration/V3__enforce_catalog_relationships.sql": "d3ad76330c02dba1f9f2a1a973664441986d422ac7a57e1c8e4dd1a8c599d454",
+    "demo/src/main/resources/db/migration/V13__email_google_auth.sql": "8051bb28f137088b0816476fb82373641e10c059f933383deff806a42c3b6085",
+    "demo/src/main/resources/db/migration/V6__authorities_and_username_policy.sql": "976182f523d5f8910477ff81ede01d770313204f7109293eaa42f75763a4d6bf",
+    "demo/src/main/resources/db/migration/V5__create_addresses.sql": "a303f220e2c59feb0fc538648ace280a954723e5c89c43ed58fdf7597fb787a2",
+    "demo/src/main/resources/db/migration/V14__remove_request_rate_limiting.sql": "79bb9bd5dcc159bd85073d84d3d78736e1cbd008e8a6626d4ef28f65720c55d6",
+    "demo/src/main/resources/db/migration/V8__image_uploads.sql": "3e142dc5084141fd3808b40f0b29de14408380b3c5694d2768738037a1114723",
+    "demo/src/main/resources/db/migration/V11__catalog_data_enhancement.sql": "8d69dc8b8bc5b648c4fd6cfc5e95574c3ebe6c3f29acedcc63f0f459d3d783cd",
+    "demo/src/main/resources/db/migration/V2__create_product_images.sql": "87e45d16aecb62f4c31c53a71d01173f31e415a9430684dce2d60bcc2c275e09",
+    "demo/src/main/resources/db/migration/V12__product_image_attachments.sql": "26b01726a537c448b617e3cba8e76f49c88d92216f03c4b5d10c24e8316574ed",
+    "demo/src/main/resources/db/migration/V10__create_wishlist_items.sql": "4643e4fdfeccaf2339dcb922cf3315ffa5973e73833a8a5d0f49ba4b1d9aef47",
+    "demo/src/main/resources/db/migration/V7__authentication_sessions.sql": "a063ab4e474da4b63187af2653b7b83be9dc1b7b8083da89426479a6fdbf36f0",
+    "demo/src/main/resources/db/migration/V15__catalog_search_support.sql": "6c2192d788a0fd19fb6085f4dff08f892fb50c4b67139f753beb3a5b09ad1ef6"
+  },
+  "preservation": {
+    "allApplicationSourceUnchanged": true,
+    "V1ToV15Unchanged": true,
+    "BrandSpecificationsAndWishlistChangesPreserved": true,
+    "contractFilesUnchanged": true,
+    "noPriorEvidenceOverwritten": true
+  },
+  "criteria": {
+    "freshUpgradeAndFlywayValidation": "PASS",
+    "legacyPublishedPaginationDistinctTotals": "PASS",
+    "representativeVariantExactPriceAndUuidTie": "PASS",
+    "pairedNullOrphanHttpAndRepository": "PASS rollback-only exceptional fixtures;constraints enabled",
+    "publicationRaceAndSignedImage": "PASS",
+    "unsupportedCriteriaFailClosed": "PASS",
+    "queryBudget": "PASS:4 data statements each size20/100;JDBC calibration2/2",
+    "detailBrandSpecificationsWishlistRegression": "PASS"
+  },
+  "cleanup": "All final-run Testcontainers IDs no longer exist",
+  "limits": [
+    "G1 baseline only;no keyword/fuzzy/ranking/filter implementation or full feature acceptance",
+    "T003 registry approval and T004 model vocabulary final sign-off remain BLOCKED",
+    "No shared/development database,migration edit,commit or push",
+    "No performance p95 claim or deployment approval"
+  ],
+  "nextDependencyReadyTasks": [
+    "T020",
+    "T022"
+  ]
+}

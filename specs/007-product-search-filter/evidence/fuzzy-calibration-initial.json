@@ -1,0 +1,251 @@
+{
+  "pairs": [
+    {
+      "q": "samsnug",
+      "c": "samsung",
+      "label": true,
+      "score": 0.33333334,
+      "prefilter_score": 0.33333334
+    },
+    {
+      "q": "samsng",
+      "c": "samsung",
+      "label": true,
+      "score": 0.5,
+      "prefilter_score": 0.5
+    },
+    {
+      "q": "samzung",
+      "c": "samsung",
+      "label": true,
+      "score": 0.45454547,
+      "prefilter_score": 0.45454547
+    },
+    {
+      "q": "sonny",
+      "c": "sony",
+      "label": true,
+      "score": 0.5714286,
+      "prefilter_score": 0.5714286
+    },
+    {
+      "q": "appel",
+      "c": "apple",
+      "label": true,
+      "score": 0.33333334,
+      "prefilter_score": 0.33333334
+    },
+    {
+      "q": "lenvo",
+      "c": "lenovo",
+      "label": true,
+      "score": 0.44444445,
+      "prefilter_score": 0.44444445
+    },
+    {
+      "q": "lenov",
+      "c": "lenovo",
+      "label": true,
+      "score": 0.625,
+      "prefilter_score": 0.625
+    },
+    {
+      "q": "logitec",
+      "c": "logitech",
+      "label": true,
+      "score": 0.7,
+      "prefilter_score": 0.7
+    },
+    {
+      "q": "microsof",
+      "c": "microsoft",
+      "label": true,
+      "score": 0.72727275,
+      "prefilter_score": 0.72727275
+    },
+    {
+      "q": "panasonc",
+      "c": "panasonic",
+      "label": true,
+      "score": 0.5833333,
+      "prefilter_score": 0.5833333
+    },
+    {
+      "q": "sansung",
+      "c": "samsung",
+      "label": true,
+      "score": 0.45454547,
+      "prefilter_score": 0.45454547
+    },
+    {
+      "q": "delll",
+      "c": "dell",
+      "label": true,
+      "score": 0.8333333,
+      "prefilter_score": 0.8333333
+    },
+    {
+      "q": "asuss",
+      "c": "asus",
+      "label": true,
+      "score": 0.5714286,
+      "prefilter_score": 0.5714286
+    },
+    {
+      "q": "headphons",
+      "c": "headphones",
+      "label": true,
+      "score": 0.61538464,
+      "prefilter_score": 0.61538464
+    },
+    {
+      "q": "wirless",
+      "c": "wireless",
+      "label": true,
+      "score": 0.54545456,
+      "prefilter_score": 0.54545456
+    },
+    {
+      "q": "samsung",
+      "c": "samson",
+      "label": false,
+      "score": 0.36363637,
+      "prefilter_score": 0.36363637
+    },
+    {
+      "q": "sony",
+      "c": "sonic",
+      "label": false,
+      "score": 0.375,
+      "prefilter_score": 0.375
+    },
+    {
+      "q": "apple",
+      "c": "maple",
+      "label": false,
+      "score": 0.2,
+      "prefilter_score": 0.2
+    },
+    {
+      "q": "dell",
+      "c": "bell",
+      "label": false,
+      "score": 0.25,
+      "prefilter_score": 0.25
+    },
+    {
+      "q": "acer",
+      "c": "anker",
+      "label": false,
+      "score": 0.22222222,
+      "prefilter_score": 0.22222222
+    },
+    {
+      "q": "canon",
+      "c": "canyon",
+      "label": false,
+      "score": 0.44444445,
+      "prefilter_score": 0.44444445
+    },
+    {
+      "q": "lenovo",
+      "c": "lenox",
+      "label": false,
+      "score": 0.44444445,
+      "prefilter_score": 0.44444445
+    },
+    {
+      "q": "intel",
+      "c": "inter",
+      "label": false,
+      "score": 0.5,
+      "prefilter_score": 0.5
+    },
+    {
+      "q": "huawei",
+      "c": "hawaii",
+      "label": false,
+      "score": 0.07692308,
+      "prefilter_score": 0.07692308
+    }
+  ],
+  "metrics": [
+    {
+      "threshold": 0.15,
+      "tp": 15,
+      "fp": 8,
+      "fn": 0,
+      "precision": 0.6521739130434783,
+      "recall": 1.0
+    },
+    {
+      "threshold": 0.2,
+      "tp": 15,
+      "fp": 7,
+      "fn": 0,
+      "precision": 0.6818181818181818,
+      "recall": 1.0
+    },
+    {
+      "threshold": 0.25,
+      "tp": 15,
+      "fp": 5,
+      "fn": 0,
+      "precision": 0.75,
+      "recall": 1.0
+    },
+    {
+      "threshold": 0.3,
+      "tp": 15,
+      "fp": 5,
+      "fn": 0,
+      "precision": 0.75,
+      "recall": 1.0
+    },
+    {
+      "threshold": 0.35,
+      "tp": 13,
+      "fp": 5,
+      "fn": 2,
+      "precision": 0.7222222222222222,
+      "recall": 0.8666666666666667
+    },
+    {
+      "threshold": 0.4,
+      "tp": 13,
+      "fp": 3,
+      "fn": 2,
+      "precision": 0.8125,
+      "recall": 0.8666666666666667
+    },
+    {
+      "threshold": 0.45,
+      "tp": 12,
+      "fp": 1,
+      "fn": 3,
+      "precision": 0.9230769230769231,
+      "recall": 0.8
+    },
+    {
+      "threshold": 0.5,
+      "tp": 9,
+      "fp": 0,
+      "fn": 6,
+      "precision": 1.0,
+      "recall": 0.6
+    }
+  ],
+  "chosenOperatingPoint": {
+    "threshold": 0.32,
+    "selection": "Largest tested two-decimal threshold preserving controlled-positive recall,including required samsnug/Samsung;not manually judged full-source relevance",
+    "tp": 15,
+    "fp": 5,
+    "fn": 0,
+    "precision": 0.75,
+    "recall": 1.0,
+    "knownLimitations": "Confusable natural names remain false-positive candidates;exact matches outrank fuzzy;protected model/family pairs excluded regardless of score",
+    "humanSourceRelevanceJudgments": 0
+  },
+  "labels": "Author-defined controlled typo-intention and distinct-name negative fixtures;not owner-reviewed relevance labels for all catalog",
+  "measuredDatabase": "Disposable network-none postgres17-alpine pg_trgm1.6"
+}

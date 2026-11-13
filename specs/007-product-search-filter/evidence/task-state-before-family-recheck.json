@@ -1,0 +1,398 @@
+{
+  "T001": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T002": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T003": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS (approved local definition scope) — owner MISSION receipt registry-approval.json;four keys/five bindings. Actual Backend fixture UUIDs exercised;deployment taxonomy remains T063 NOT_VERIFIED.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T004": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS (approved Vocabulary v1 scope) — owner AR2 authorization/version/hash in vocabulary-approval-v1.json. All46 terms/30 source-primitive expectations retained;runtime family/context tests executed. Source anchors remain model-rank7 DEFERRED,not falsely owned.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T005": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS (controlled local corpus) — unchanged approved RK expectations packaged in search-evaluation-corpus.json;fixture-owned expected IDs precede queries. Source candidates/token diagnostics are not human relevance ground truth.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T006": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T007": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T008": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — version/schema/approval/key/unit/operator/category/flag validation and duplicate-definition negative controls executed;only approved four-definition resource is active.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T009": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T010": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T011": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T012": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T013": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T014": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS (measured operating point) — threshold0.32 plus one-edit guard:15TP,2FP,0FN;precision88.24%,recall100% on24 controlled pairs;source-token prefilter loss0. See fuzzy-calibration-v2.json. No claim of perfect real relevance.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T015": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T016": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T017": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T018": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T019": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T020": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — original mode-header assertions remain enabled and green;see final JUnit suite evidence.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T021": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T022": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T023": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — common CatalogSearchSql implements core fields and approved contributor semantics in one safe relation;reported consolidation replaces separate SPI writer;no unsupported technical field is searched.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T024": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T025": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T026": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T027": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T028": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T029": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T030": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS (approved four-key scope) — common safe_facts relation provides guarded typed keywords and same-variant linkage;no unapproved number/boolean key is invented. Planned separate SPI implementation consolidated as reported in mission-scope.md.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T031": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T032": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T033": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T034": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T035": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T036": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T037": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T038": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T039": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T040": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T041": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T042": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T043": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T044": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T045": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T046": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T047": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T048": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T049": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T050": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T051": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T052": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T053": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T054": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — real mixed-page imageless race reproduced RED,then fixed GREEN with one final bounded batch recheck;existing pictured race/signing assertions preserved.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T055": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T056": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T057": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — implementation and focused/regression acceptance executed in the consolidated files;see implementation-coverage.md,test-results-final.json and the story acceptance evidence. Closure is current,not backdated.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T058": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS (required1500 scope) — actual-source plans,controlled1500 baseline and exploratory10000 fanout1/5/20 plans recorded.10k is not an MVP timing gate under resumed owner policy.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T059": {
+    "status": "DEFERRED",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "DEFERRED — no additional index has demonstrated a required benefit at1500. Existing indexes retained;measured hotspot fixed with generated description tokens in V19. Activate only after a representative plan proves index benefit;no speculative index migration created.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T060": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS (MVP fresh/V15 upgrade) — V16–V19 fresh/upgrade,normalization/generated backfill/update,business-field snapshots,capability failures and transactional successor/retry/checksum-stop evidence executed. Original V14→V15 proof retained;no claim of a populated-target upgrade.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T061": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS (retained1s acceptance) — all3 timing classes executed serially with20 warmups/100 samples;1500 source broad-keyword practical500ms goal remains unmet/non-blocking and10-reader contention is diagnostic. Full metrics in source-workload-performance-final.json/performance-final.json.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T062": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — full serial342 unit/MVC +357 non-performance IT run,plus final repository/HTTP supplements and4 timing tests;latest suite union704 tests,0 failures/errors/skips. See test-results-final.json;no hidden exclusion.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T063": {
+    "status": "BLOCKED",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "BLOCKED — no approved intended deployment target/access. Target capabilities,taxonomy/imported distribution and rollout readiness remain NOT_VERIFIED. This is not a local acceptance prerequisite.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T064": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS — both OAS3.1 documents revalidated with approved isolated0.9.0 tooling;41 probes/60 refs,actual API shape/mode/error regressions green. See contract-implementation-validation.md.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T065": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS (authorized local MVP scope) — all20FR/6SC mapped to executed local evidence;all RK01–RK10/partitions covered. T059 conditional index branch deferred;T063 deployment BLOCKED. Reviewer-owned checklist markers unchanged.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  },
+  "T066": {
+    "status": "PASS",
+    "scope": "Owner-authorized local MVP",
+    "evidence": "PASS (local handoff) — working four-story MVP,actual files/results/commands/limits documented in evidence/handoff.md;no commit,push,deployment or shared DB migration.",
+    "recordedUTC": "2026-11-09T18:25:16.078784+00:00"
+  }
+}

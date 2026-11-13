@@ -1,0 +1,1184 @@
+{
+  "task": "T015",
+  "status": "PASS",
+  "capturedUTC": "2026-11-09T07:24:13.120149+00:00",
+  "branch": "features/SearchAndFilter",
+  "head": "c5bd4e7eeb39d9b06a0c7e36af9a65635058613f",
+  "dirtyWorktree": true,
+  "prerequisiteEvidenceSHA256": {
+    "foundation-entry.md": "42bced74f82908fbbe5466f1d6fb7a91e93e0fbfafff07e05292c94afbb11008",
+    "postgres-capabilities.md": "61b57890ccc2a8e27f3455956dff96188ca1740e4a553eb1c28d81a4503a070f",
+    "normalization-verification.md": "050f3f3ef8c5a41d46f09cbc2f62e27eb102563d0929c6a726726049f8e70d90",
+    "normalization-parity-results.json": "757099c2566dd4c4bc98e93666c451c1e8a2abde374bd1c1b3a65c20e21e06c1",
+    "primitive-foundation.md": "e31d623c13c4811fbe8be2903335250b7271686cbea44abdfd394b51417d947f"
+  },
+  "command": "mvn -o -f demo/pom.xml -Dtest=ProductSearchNormalizerTest,ProductSearchRequestTest,ProductSearchParameterParserTest,ProductCatalogConverterTest,ProductListingControllerTest,ProductDetailControllerTest,ProductCatalogServiceImplTest,WishlistConverterTest -Dit.test=CatalogSearchMigrationIT,CatalogEnhancementMappingsIT,ProductDetailRepositoryIT,ProductListingRepositoryIT test failsafe:integration-test failsafe:verify",
+  "exitCode": 0,
+  "suites": [
+    {
+      "kind": "surefire",
+      "class": "com.example.demo.catalog.search.ProductSearchNormalizerTest",
+      "counts": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "matchesDocumentedD2GoldenCases",
+        "nfcNfdAndVietnameseMarksHaveSameNormalization",
+        "limitsRawTokensBeforeDeduplication",
+        "queryLengthCountsUnicodeCodePointsBeforeNormalization",
+        "doesNotApplyQueryLimitsToCandidateFieldsOrInventVocabulary",
+        "deduplicatesMembershipButKeepsPhraseAndSequence",
+        "consumesExactlyTheDocumentedUnicodeWhitespace",
+        "rejectsControlsAndNonblankZeroTokensButBlankIsOmitted",
+        "lowercaseDoesNotDependOnHostLocale"
+      ],
+      "reportSHA256": "01831d71642706c342c07d3dfd29625fefbcfb5209db5a11eff0c576774b2401"
+    },
+    {
+      "kind": "surefire",
+      "class": "com.example.demo.catalog.validator.ProductSearchRequestTest",
+      "counts": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "fixedSortValuesAndCriteriaRetainExactAmounts",
+        "omittedValuesKeepLegacyDefaultsButExplicitNullIsInvalid",
+        "textBooleanAndDecodedJsonHaveDocumentedBounds",
+        "nestedGroupsAndAlternativesEnforceShapeAndLimits",
+        "exactPriceAmountsHaveThirtyDigitBoundWithoutDoubleCoercion",
+        "numericOperandsAreExactAndPrecisionBoundedIncludingExponentNotation",
+        "uuidAndRawCollectionBoundsArePreservedBeforeDeduplication",
+        "rangesAndExplicitNullOperandMembersKeepTheirPresenceSemantics",
+        "pageSizeAndKeywordBoundariesAreValidated"
+      ],
+      "reportSHA256": "632a49a03470a1dafa4c946e7de5c2f653053c6bd7e0e9f08eda9e0725cc9df0"
+    },
+    {
+      "kind": "surefire",
+      "class": "com.example.demo.catalog.search.ProductSearchParameterParserTest",
+      "counts": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "legacyDefaultsAndRepeatedBrandsPreserveCompatibility",
+        "rejectsUnknownNullAndDuplicateSingletonParameters",
+        "validatesKeywordsAndSortWithoutSelectingAnyResults",
+        "enforcesLexicalAndNumericBoundsBeforeConversion",
+        "rawGroupAlternativeLimitsAndDuplicateKeysAreNotHiddenByDeduplication",
+        "acceptsAllTypedOperatorShapesAndPreservesExactDecimals",
+        "rejectsDuplicateMembersAtEachLevelEvenWhenValuesAgree",
+        "rejectsMalformedStructuresUnknownFieldsAndExplicitNulls",
+        "decodesTransportExactlyOnceAndLeavesOtherMappersUnchanged",
+        "rejectsBadOperatorShapesAndPrecisionWithoutRegistryApproval"
+      ],
+      "reportSHA256": "a46a4a18b4a0149a376e723995944ef0270540e280508d628889e8917abf9c65"
+    },
+    {
+      "kind": "surefire",
+      "class": "com.example.demo.catalog.converter.ProductCatalogConverterTest",
+      "counts": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "singleVariantEmptyOptionsAndNoImagesRemainRepresentable",
+        "listingMapsOnlySelectedPairAndKeepsSharedSummaryUnchanged",
+        "summaryContainsOnlyApprovedFieldsAndImmediateCategory",
+        "orphanListingHasExplicitNullPairAndMixedPairsAreRejected",
+        "detailMapsEachVariantAndImageOnceUsingOnlySuppliedUrls"
+      ],
+      "reportSHA256": "63d5d30912bab7967e6c5ee365c3c51eafeda2090f89f1b4ffbf5a7ea239c27f"
+    },
+    {
+      "kind": "surefire",
+      "class": "com.example.demo.catalog.controller.ProductListingControllerTest",
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "acceptsSizeBoundaryValues",
+        "rejectsInvalidDuplicateAndUnapprovedParametersAsProblemDetail",
+        "anonymousDefaultAndOutOfRangePagesUseCanonicalResponse"
+      ],
+      "reportSHA256": "22e5dcbcd3918a0d7acddd45a6785e598cabd22688dfe4f3fe1968d1b5a7500d"
+    },
+    {
+      "kind": "surefire",
+      "class": "com.example.demo.catalog.controller.ProductDetailControllerTest",
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "invalidAndNoncanonicalIdsReturn400ProblemDetail",
+        "unknownCanonicalIdReturns404ProblemDetail",
+        "anonymousCanonicalIdReturnsDetailDto"
+      ],
+      "reportSHA256": "2cd4956dab8f5aef62aeee14c285a81f88f72b6dff0d74fd14cd5f01f813bc59"
+    },
+    {
+      "kind": "surefire",
+      "class": "com.example.demo.catalog.service.ProductCatalogServiceImplTest",
+      "counts": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "getProductSummaries_shouldExcludeLateHiddenProduct_whenFinalRevalidationFails",
+        "getPublishedProductEntity_shouldRejectUnavailableProduct_whenNotPublicOrMissing",
+        "getProductSummaries_shouldPropagateSafeFailure_whenSignerPreparationFails",
+        "getProductSummaries_shouldReturnNullImageWithoutDetailFetch_whenProductHasNoImage",
+        "getProductSummaries_shouldNotSignUnpublishedImage_whenLockedStatusChanged",
+        "getPublishedProductEntity_shouldReturnReference_whenPublished",
+        "getProductSummaries_shouldReturnSignedSummary_whenLockedProductIsPublished",
+        "getProductSummaries_shouldAvoidFetching_whenInputIsEmpty",
+        "getProductSummaries_shouldRejectUnboundedInput_whenMoreThanOneHundredIds"
+      ],
+      "reportSHA256": "37166350e41578140172eee263e6a637015d7c4b58926b6bc642a09ad3bf08e0"
+    },
+    {
+      "kind": "surefire",
+      "class": "com.example.demo.wishlist.converter.WishlistConverterTest",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "toItem_shouldPreservePreparedSummaryAndTimestamp_whenImageIsAbsent",
+        "toPage_shouldPreserveOrderAndMetadataWithoutMutableAlias_whenItemsArePrepared"
+      ],
+      "reportSHA256": "c795e91ce10f6ff7d2a4865d16b1c4881934fd4398afcb008a281f5b0de0bd97"
+    },
+    {
+      "kind": "failsafe",
+      "class": "com.example.demo.catalog.repository.CatalogSearchMigrationIT",
+      "counts": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "missingExtensionPackageBlocksV15WithoutFallback",
+        "v14UpgradePreservesEveryBusinessRowHistoryAndConstraint",
+        "freshFlywayInstallProvidesImmutablePrimitivesAndExtension",
+        "missingInstallationPrivilegeBlocksV15WithoutInstallingObjects",
+        "missingPinnedCollationBlocksV15BeforeAnyInstall"
+      ],
+      "reportSHA256": "b909271297136bd318ca6d8e9e0231db19eaaa7c1a44dba3a027c566dcd646b1"
+    },
+    {
+      "kind": "failsafe",
+      "class": "com.example.demo.catalog.entity.CatalogEnhancementMappingsIT",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "repositories_shouldRoundTripBrandSpecificationAndReceiptWithoutChangingOptions"
+      ],
+      "reportSHA256": "bde0a21931fd4aa732216260a362c554b0e0609e37fc2bcfc07bf5a79df8caf3"
+    },
+    {
+      "kind": "failsafe",
+      "class": "com.example.demo.catalog.repository.ProductDetailRepositoryIT",
+      "counts": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "detailLookupFetchesBrandAndPreservesProductWithoutBrand",
+        "unpublishedAndUnknownIdsShareAbsentPublishedLookup",
+        "publishedLookupIncludesImmediateCategoryAndOnlyOwnedVariantsAndOrderedImages"
+      ],
+      "reportSHA256": "8b14c78706d3aac4c2e279436e198cdce7d77534e2db03f07d258d8f8603b202"
+    },
+    {
+      "kind": "failsafe",
+      "class": "com.example.demo.catalog.repository.ProductListingRepositoryIT",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "testCases": [
+        "emptyPublishedSetReturnsZeroTotals",
+        "pagesOnlyPublishedIdsInStableAscendingOrderAndCountsOnlyThem"
+      ],
+      "reportSHA256": "df9fe86b6c61dd23d7e47f2ebefd51164eb181c983751659e0a82d9528d2858c"
+    }
+  ],
+  "totals": {
+    "tests": 61,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "unitTests": 50,
+  "integrationTests": 11,
+  "migrationSHA256": "6c2192d788a0fd19fb6085f4dff08f892fb50c4b67139f753beb3a5b09ad1ef6",
+  "testSHA256": "b28e4ad6f9d0fbf655e4b81e71a270476bb9e97a1b1b42e1cc93bdf0fbfed617",
+  "oldMigrationFiles": {
+    "V1__create_catalog_core.sql": {
+      "sha256": "57335af270525b03f723a14bcadf17c16a2b23c3ce2181061660b17193ddc613",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V2__create_product_images.sql": {
+      "sha256": "87e45d16aecb62f4c31c53a71d01173f31e415a9430684dce2d60bcc2c275e09",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V3__enforce_catalog_relationships.sql": {
+      "sha256": "d3ad76330c02dba1f9f2a1a973664441986d422ac7a57e1c8e4dd1a8c599d454",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V4__create_users.sql": {
+      "sha256": "dd065d0c85e93a87573a9396ec8b427c9a4a9e7a80df272d279c5e412497f628",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V5__create_addresses.sql": {
+      "sha256": "a303f220e2c59feb0fc538648ace280a954723e5c89c43ed58fdf7597fb787a2",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V6__authorities_and_username_policy.sql": {
+      "sha256": "976182f523d5f8910477ff81ede01d770313204f7109293eaa42f75763a4d6bf",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V7__authentication_sessions.sql": {
+      "sha256": "a063ab4e474da4b63187af2653b7b83be9dc1b7b8083da89426479a6fdbf36f0",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V8__image_uploads.sql": {
+      "sha256": "3e142dc5084141fd3808b40f0b29de14408380b3c5694d2768738037a1114723",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V9__user_profile_images.sql": {
+      "sha256": "795c2571d9ad36ca95f2c9f4a230d9d2ab05a2dcee90e9c83188d2c3db99a5ac",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V10__create_wishlist_items.sql": {
+      "sha256": "4643e4fdfeccaf2339dcb922cf3315ffa5973e73833a8a5d0f49ba4b1d9aef47",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V11__catalog_data_enhancement.sql": {
+      "sha256": "8d69dc8b8bc5b648c4fd6cfc5e95574c3ebe6c3f29acedcc63f0f459d3d783cd",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V12__product_image_attachments.sql": {
+      "sha256": "26b01726a537c448b617e3cba8e76f49c88d92216f03c4b5d10c24e8316574ed",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V13__email_google_auth.sql": {
+      "sha256": "8051bb28f137088b0816476fb82373641e10c059f933383deff806a42c3b6085",
+      "unchangedFromPreTaskAndHEAD": true
+    },
+    "V14__remove_request_rate_limiting.sql": {
+      "sha256": "79bb9bd5dcc159bd85073d84d3d78736e1cbd008e8a6626d4ef28f65720c55d6",
+      "unchangedFromPreTaskAndHEAD": true
+    }
+  },
+  "isolatedCases": {
+    "missing-collation": {
+      "migrationBlocked": true,
+      "containerId": "e1f9b3c63dcfc7ef0bc8cad1d0696d6f1a56539de8d65bbb367761900f348f95",
+      "image": "postgres:17-alpine",
+      "version": "PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "encoding": "UTF8",
+      "imageId": "sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b",
+      "mounts": [],
+      "collation": [],
+      "history": [
+        {
+          "installed_rank": 1,
+          "version": "1",
+          "checksum": 1465354838,
+          "script": "V1__create_catalog_core.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 2,
+          "version": "2",
+          "checksum": -381686089,
+          "script": "V2__create_product_images.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 3,
+          "version": "3",
+          "checksum": -1556433633,
+          "script": "V3__enforce_catalog_relationships.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 4,
+          "version": "4",
+          "checksum": -1454285628,
+          "script": "V4__create_users.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 5,
+          "version": "5",
+          "checksum": 1471133392,
+          "script": "V5__create_addresses.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 6,
+          "version": "6",
+          "checksum": -1818920388,
+          "script": "V6__authorities_and_username_policy.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 7,
+          "version": "7",
+          "checksum": 2064659438,
+          "script": "V7__authentication_sessions.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 8,
+          "version": "8",
+          "checksum": -1972120639,
+          "script": "V8__image_uploads.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 9,
+          "version": "9",
+          "checksum": 1027214722,
+          "script": "V9__user_profile_images.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 10,
+          "version": "10",
+          "checksum": -271996647,
+          "script": "V10__create_wishlist_items.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 11,
+          "version": "11",
+          "checksum": 421746174,
+          "script": "V11__catalog_data_enhancement.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 12,
+          "version": "12",
+          "checksum": 1912594192,
+          "script": "V12__product_image_attachments.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 13,
+          "version": "13",
+          "checksum": 1524374580,
+          "script": "V13__email_google_auth.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 14,
+          "version": "14",
+          "checksum": -1490235424,
+          "script": "V14__remove_request_rate_limiting.sql",
+          "success": true
+        }
+      ],
+      "functions": []
+    },
+    "fresh": {
+      "parityCases": 53,
+      "containerId": "f62c0c6f578e8ea6deb2e2a2e4e611ba39bc06666a25509d27ddd990094f4c65",
+      "image": "postgres:17-alpine",
+      "version": "PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "encoding": "UTF8",
+      "imageId": "sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b",
+      "mounts": [],
+      "collation": [
+        {
+          "collname": "und-x-icu",
+          "collprovider": "i",
+          "collisdeterministic": true,
+          "collversion": "153.136",
+          "actual_version": "153.136"
+        }
+      ],
+      "history": [
+        {
+          "installed_rank": 1,
+          "version": "1",
+          "checksum": 1465354838,
+          "script": "V1__create_catalog_core.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 2,
+          "version": "2",
+          "checksum": -381686089,
+          "script": "V2__create_product_images.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 3,
+          "version": "3",
+          "checksum": -1556433633,
+          "script": "V3__enforce_catalog_relationships.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 4,
+          "version": "4",
+          "checksum": -1454285628,
+          "script": "V4__create_users.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 5,
+          "version": "5",
+          "checksum": 1471133392,
+          "script": "V5__create_addresses.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 6,
+          "version": "6",
+          "checksum": -1818920388,
+          "script": "V6__authorities_and_username_policy.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 7,
+          "version": "7",
+          "checksum": 2064659438,
+          "script": "V7__authentication_sessions.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 8,
+          "version": "8",
+          "checksum": -1972120639,
+          "script": "V8__image_uploads.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 9,
+          "version": "9",
+          "checksum": 1027214722,
+          "script": "V9__user_profile_images.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 10,
+          "version": "10",
+          "checksum": -271996647,
+          "script": "V10__create_wishlist_items.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 11,
+          "version": "11",
+          "checksum": 421746174,
+          "script": "V11__catalog_data_enhancement.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 12,
+          "version": "12",
+          "checksum": 1912594192,
+          "script": "V12__product_image_attachments.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 13,
+          "version": "13",
+          "checksum": 1524374580,
+          "script": "V13__email_google_auth.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 14,
+          "version": "14",
+          "checksum": -1490235424,
+          "script": "V14__remove_request_rate_limiting.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 15,
+          "version": "15",
+          "checksum": 1357434404,
+          "script": "V15__catalog_search_support.sql",
+          "success": true
+        }
+      ],
+      "functions": [
+        {
+          "proname": "catalog_search_alnum_v1",
+          "provolatile": "i",
+          "proparallel": "s",
+          "proconfig": "{\"search_path=pg_catalog, public\"}"
+        },
+        {
+          "proname": "catalog_search_decimal_start_v1",
+          "provolatile": "i",
+          "proparallel": "s",
+          "proconfig": "{\"search_path=pg_catalog, public\"}"
+        },
+        {
+          "proname": "catalog_search_digit_v1",
+          "provolatile": "i",
+          "proparallel": "s",
+          "proconfig": "{\"search_path=pg_catalog, public\"}"
+        },
+        {
+          "proname": "catalog_search_natural_name_v1",
+          "provolatile": "i",
+          "proparallel": "s",
+          "proconfig": "{\"search_path=pg_catalog, public\"}"
+        },
+        {
+          "proname": "catalog_search_normalize_v1",
+          "provolatile": "i",
+          "proparallel": "s",
+          "proconfig": "{\"search_path=pg_catalog, public\"}"
+        },
+        {
+          "proname": "catalog_search_tokens_v1",
+          "provolatile": "i",
+          "proparallel": "s",
+          "proconfig": "{\"search_path=pg_catalog, public\"}"
+        }
+      ]
+    },
+    "missing-package": {
+      "migrationBlocked": true,
+      "containerId": "49759e579c12d8d3d970fd976892a2055ab5ed5f766091e008de8136e3d85206",
+      "image": "postgres:17-alpine",
+      "version": "PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "encoding": "UTF8",
+      "imageId": "sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b",
+      "mounts": [],
+      "collation": [
+        {
+          "collname": "und-x-icu",
+          "collprovider": "i",
+          "collisdeterministic": true,
+          "collversion": "153.136",
+          "actual_version": "153.136"
+        }
+      ],
+      "history": [
+        {
+          "installed_rank": 1,
+          "version": "1",
+          "checksum": 1465354838,
+          "script": "V1__create_catalog_core.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 2,
+          "version": "2",
+          "checksum": -381686089,
+          "script": "V2__create_product_images.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 3,
+          "version": "3",
+          "checksum": -1556433633,
+          "script": "V3__enforce_catalog_relationships.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 4,
+          "version": "4",
+          "checksum": -1454285628,
+          "script": "V4__create_users.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 5,
+          "version": "5",
+          "checksum": 1471133392,
+          "script": "V5__create_addresses.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 6,
+          "version": "6",
+          "checksum": -1818920388,
+          "script": "V6__authorities_and_username_policy.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 7,
+          "version": "7",
+          "checksum": 2064659438,
+          "script": "V7__authentication_sessions.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 8,
+          "version": "8",
+          "checksum": -1972120639,
+          "script": "V8__image_uploads.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 9,
+          "version": "9",
+          "checksum": 1027214722,
+          "script": "V9__user_profile_images.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 10,
+          "version": "10",
+          "checksum": -271996647,
+          "script": "V10__create_wishlist_items.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 11,
+          "version": "11",
+          "checksum": 421746174,
+          "script": "V11__catalog_data_enhancement.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 12,
+          "version": "12",
+          "checksum": 1912594192,
+          "script": "V12__product_image_attachments.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 13,
+          "version": "13",
+          "checksum": 1524374580,
+          "script": "V13__email_google_auth.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 14,
+          "version": "14",
+          "checksum": -1490235424,
+          "script": "V14__remove_request_rate_limiting.sql",
+          "success": true
+        }
+      ],
+      "functions": []
+    },
+    "upgrade": {
+      "parityCases": 53,
+      "oldHistory": [
+        {
+          "installed_rank": 1,
+          "version": "1",
+          "description": "create catalog core",
+          "type": "SQL",
+          "script": "V1__create_catalog_core.sql",
+          "checksum": 1465354838,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:06.898Z",
+          "execution_time": 10,
+          "success": true
+        },
+        {
+          "installed_rank": 2,
+          "version": "2",
+          "description": "create product images",
+          "type": "SQL",
+          "script": "V2__create_product_images.sql",
+          "checksum": -381686089,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:06.912Z",
+          "execution_time": 11,
+          "success": true
+        },
+        {
+          "installed_rank": 3,
+          "version": "3",
+          "description": "enforce catalog relationships",
+          "type": "SQL",
+          "script": "V3__enforce_catalog_relationships.sql",
+          "checksum": -1556433633,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:06.925Z",
+          "execution_time": 3,
+          "success": true
+        },
+        {
+          "installed_rank": 4,
+          "version": "4",
+          "description": "create users",
+          "type": "SQL",
+          "script": "V4__create_users.sql",
+          "checksum": -1454285628,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:06.933Z",
+          "execution_time": 3,
+          "success": true
+        },
+        {
+          "installed_rank": 5,
+          "version": "5",
+          "description": "create addresses",
+          "type": "SQL",
+          "script": "V5__create_addresses.sql",
+          "checksum": 1471133392,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:06.940Z",
+          "execution_time": 4,
+          "success": true
+        },
+        {
+          "installed_rank": 6,
+          "version": "6",
+          "description": "authorities and username policy",
+          "type": "SQL",
+          "script": "V6__authorities_and_username_policy.sql",
+          "checksum": -1818920388,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:06.948Z",
+          "execution_time": 13,
+          "success": true
+        },
+        {
+          "installed_rank": 7,
+          "version": "7",
+          "description": "authentication sessions",
+          "type": "SQL",
+          "script": "V7__authentication_sessions.sql",
+          "checksum": 2064659438,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:06.964Z",
+          "execution_time": 11,
+          "success": true
+        },
+        {
+          "installed_rank": 8,
+          "version": "8",
+          "description": "image uploads",
+          "type": "SQL",
+          "script": "V8__image_uploads.sql",
+          "checksum": -1972120639,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:06.978Z",
+          "execution_time": 4,
+          "success": true
+        },
+        {
+          "installed_rank": 9,
+          "version": "9",
+          "description": "user profile images",
+          "type": "SQL",
+          "script": "V9__user_profile_images.sql",
+          "checksum": 1027214722,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:06.985Z",
+          "execution_time": 3,
+          "success": true
+        },
+        {
+          "installed_rank": 10,
+          "version": "10",
+          "description": "create wishlist items",
+          "type": "SQL",
+          "script": "V10__create_wishlist_items.sql",
+          "checksum": -271996647,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:06.992Z",
+          "execution_time": 6,
+          "success": true
+        },
+        {
+          "installed_rank": 11,
+          "version": "11",
+          "description": "catalog data enhancement",
+          "type": "SQL",
+          "script": "V11__catalog_data_enhancement.sql",
+          "checksum": 421746174,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:07.002Z",
+          "execution_time": 7,
+          "success": true
+        },
+        {
+          "installed_rank": 12,
+          "version": "12",
+          "description": "product image attachments",
+          "type": "SQL",
+          "script": "V12__product_image_attachments.sql",
+          "checksum": 1912594192,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:07.013Z",
+          "execution_time": 2,
+          "success": true
+        },
+        {
+          "installed_rank": 13,
+          "version": "13",
+          "description": "email google auth",
+          "type": "SQL",
+          "script": "V13__email_google_auth.sql",
+          "checksum": 1524374580,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:07.018Z",
+          "execution_time": 55,
+          "success": true
+        },
+        {
+          "installed_rank": 14,
+          "version": "14",
+          "description": "remove request rate limiting",
+          "type": "SQL",
+          "script": "V14__remove_request_rate_limiting.sql",
+          "checksum": -1490235424,
+          "installed_by": "test",
+          "installed_on": "2026-11-09T07:21:07.078Z",
+          "execution_time": 12,
+          "success": true
+        }
+      ],
+      "businessRowsUnchanged": true,
+      "beforeAfterRowHashes": {
+        "addresses": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "authentication_sessions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "brands": "8674efa860c491db36d3ee9a2f977850145bc59827b31a3de60b2b3a5b8a6cbb",
+        "catalog_source_links": "53c83aa70c2dd17e94922adc16ccd772414383f6716aa29f8a1561ea4bf11050",
+        "categories": "7f9283b909d7fd0d19e0ea0a0d80864c49d0789edfff7e3b584a61cc190d1f01",
+        "email_verification_challenges": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "google_identities": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "image_uploads": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "oauth_browser_slots": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "oauth_handoffs": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "oauth_login_attempts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "pending_registrations": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "permissions": "dc2f33abf0350c0c24161d7c1e5b7b8db27860e65220b7c76cca8b0b3a4e2051",
+        "product_image_uploads": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "product_images": "6b80c62d1d995af60f4b35540581c89a6ad29255efdce4d90ea5edd507fe0b0b",
+        "product_variants": "6244e2e49a866fb7d478c3bc5a51138db51bf2d746cdfa7238635c9e6082dfb3",
+        "products": "fc6f832c1f6ea497847483eb0b7508fa841ee4628b6683472078d179b9bddfea",
+        "recent_auth_proofs": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "refresh_credentials": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "role_permissions": "0a6877cc1de652af0797fad12ef0dd7c2ebab639338b2f3e425ab324ae94d18a",
+        "roles": "f56acd5ff547ce741d371c275cab265aad18de6bd4a5bf4b3536e902402ec1ab",
+        "user_roles": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "users": "1eff38e1aa3a532dd7ef6c893349e5d96e1120ed934e23b8707f4319f0d10187",
+        "verification_mail_outbox": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "wishlist_items": "5c3f907b6299efaf919721c08ca37c5fdf4be654eed90825249abad3fbc6694a"
+      },
+      "v1ToV14HistoryUnchanged": true,
+      "constraintTriggerIndexDefinitionsUnchanged": true,
+      "containerId": "08cb695d44ce66a16a0eec14f4292fcc22b7502a769312a9f0a05943dea00dfb",
+      "image": "postgres:17-alpine",
+      "version": "PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "encoding": "UTF8",
+      "imageId": "sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b",
+      "mounts": [],
+      "collation": [
+        {
+          "collname": "und-x-icu",
+          "collprovider": "i",
+          "collisdeterministic": true,
+          "collversion": "153.136",
+          "actual_version": "153.136"
+        }
+      ],
+      "history": [
+        {
+          "installed_rank": 1,
+          "version": "1",
+          "checksum": 1465354838,
+          "script": "V1__create_catalog_core.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 2,
+          "version": "2",
+          "checksum": -381686089,
+          "script": "V2__create_product_images.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 3,
+          "version": "3",
+          "checksum": -1556433633,
+          "script": "V3__enforce_catalog_relationships.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 4,
+          "version": "4",
+          "checksum": -1454285628,
+          "script": "V4__create_users.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 5,
+          "version": "5",
+          "checksum": 1471133392,
+          "script": "V5__create_addresses.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 6,
+          "version": "6",
+          "checksum": -1818920388,
+          "script": "V6__authorities_and_username_policy.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 7,
+          "version": "7",
+          "checksum": 2064659438,
+          "script": "V7__authentication_sessions.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 8,
+          "version": "8",
+          "checksum": -1972120639,
+          "script": "V8__image_uploads.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 9,
+          "version": "9",
+          "checksum": 1027214722,
+          "script": "V9__user_profile_images.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 10,
+          "version": "10",
+          "checksum": -271996647,
+          "script": "V10__create_wishlist_items.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 11,
+          "version": "11",
+          "checksum": 421746174,
+          "script": "V11__catalog_data_enhancement.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 12,
+          "version": "12",
+          "checksum": 1912594192,
+          "script": "V12__product_image_attachments.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 13,
+          "version": "13",
+          "checksum": 1524374580,
+          "script": "V13__email_google_auth.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 14,
+          "version": "14",
+          "checksum": -1490235424,
+          "script": "V14__remove_request_rate_limiting.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 15,
+          "version": "15",
+          "checksum": 1357434404,
+          "script": "V15__catalog_search_support.sql",
+          "success": true
+        }
+      ],
+      "functions": [
+        {
+          "proname": "catalog_search_alnum_v1",
+          "provolatile": "i",
+          "proparallel": "s",
+          "proconfig": "{\"search_path=pg_catalog, public\"}"
+        },
+        {
+          "proname": "catalog_search_decimal_start_v1",
+          "provolatile": "i",
+          "proparallel": "s",
+          "proconfig": "{\"search_path=pg_catalog, public\"}"
+        },
+        {
+          "proname": "catalog_search_digit_v1",
+          "provolatile": "i",
+          "proparallel": "s",
+          "proconfig": "{\"search_path=pg_catalog, public\"}"
+        },
+        {
+          "proname": "catalog_search_natural_name_v1",
+          "provolatile": "i",
+          "proparallel": "s",
+          "proconfig": "{\"search_path=pg_catalog, public\"}"
+        },
+        {
+          "proname": "catalog_search_normalize_v1",
+          "provolatile": "i",
+          "proparallel": "s",
+          "proconfig": "{\"search_path=pg_catalog, public\"}"
+        },
+        {
+          "proname": "catalog_search_tokens_v1",
+          "provolatile": "i",
+          "proparallel": "s",
+          "proconfig": "{\"search_path=pg_catalog, public\"}"
+        }
+      ]
+    },
+    "missing-privilege": {
+      "migrationBlocked": true,
+      "containerId": "0833dc4a33695f733a4321a04d621446e34c0c67b6611d9c028b663ac8ced89f",
+      "image": "postgres:17-alpine",
+      "version": "PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+      "encoding": "UTF8",
+      "imageId": "sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b",
+      "mounts": [],
+      "collation": [
+        {
+          "collname": "und-x-icu",
+          "collprovider": "i",
+          "collisdeterministic": true,
+          "collversion": "153.136",
+          "actual_version": "153.136"
+        }
+      ],
+      "history": [
+        {
+          "installed_rank": 1,
+          "version": "1",
+          "checksum": 1465354838,
+          "script": "V1__create_catalog_core.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 2,
+          "version": "2",
+          "checksum": -381686089,
+          "script": "V2__create_product_images.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 3,
+          "version": "3",
+          "checksum": -1556433633,
+          "script": "V3__enforce_catalog_relationships.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 4,
+          "version": "4",
+          "checksum": -1454285628,
+          "script": "V4__create_users.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 5,
+          "version": "5",
+          "checksum": 1471133392,
+          "script": "V5__create_addresses.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 6,
+          "version": "6",
+          "checksum": -1818920388,
+          "script": "V6__authorities_and_username_policy.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 7,
+          "version": "7",
+          "checksum": 2064659438,
+          "script": "V7__authentication_sessions.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 8,
+          "version": "8",
+          "checksum": -1972120639,
+          "script": "V8__image_uploads.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 9,
+          "version": "9",
+          "checksum": 1027214722,
+          "script": "V9__user_profile_images.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 10,
+          "version": "10",
+          "checksum": -271996647,
+          "script": "V10__create_wishlist_items.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 11,
+          "version": "11",
+          "checksum": 421746174,
+          "script": "V11__catalog_data_enhancement.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 12,
+          "version": "12",
+          "checksum": 1912594192,
+          "script": "V12__product_image_attachments.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 13,
+          "version": "13",
+          "checksum": 1524374580,
+          "script": "V13__email_google_auth.sql",
+          "success": true
+        },
+        {
+          "installed_rank": 14,
+          "version": "14",
+          "checksum": -1490235424,
+          "script": "V14__remove_request_rate_limiting.sql",
+          "success": true
+        }
+      ],
+      "functions": []
+    }
+  },
+  "cleanup": "Confirmed:docker ps -a --filter label=speckit.task=T015 returned no containers after tests",
+  "limits": "Disposable local proof only;no target deployment,registry/vocabulary/OpenAPI approval,fuzzy calibration,catalog index/search implementation",
+  "preservation": "Pre/post file snapshot:only tasks.md modified among pre-existing files;4 authorized new files;all old application/tests/contracts/ignore/constitution/migration bytes unchanged"
+}

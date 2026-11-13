@@ -1,6 +1,13 @@
 package com.example.demo.catalog.service;
 
 import com.example.demo.catalog.converter.ProductCatalogConverter;
+import com.example.demo.catalog.dto.request.ProductSearchRequest;
+import com.example.demo.catalog.dto.response.ProductListingItem;
+import com.example.demo.catalog.search.ProductCandidatePage;
+import com.example.demo.catalog.search.ProductSearchCriteria;
+import com.example.demo.catalog.search.ProductSearchNormalizer;
+import jakarta.validation.Validator;
+import org.springframework.transaction.annotation.Isolation;
 import com.example.demo.catalog.dto.response.ProductPage;
 import com.example.demo.catalog.dto.response.ProductDetail;
 import com.example.demo.catalog.dto.response.ProductSummary;
@@ -25,8 +32,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +44,7 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 	private final ProductVariantRepository variants;
 	private final ProductImageStorage imageStorage;
 	private final ProductCatalogConverter converter;
+	private final Validator validator;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -103,13 +109,36 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 	}
 
 	@Override
-	@Transactional // FOR SHARE URL eligibility requires a write-capable transaction.
+	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public ProductPage listProducts(int page, int size) {
-		validatePage(page, size);
-		Page<UUID> idPage = products.findPublishedIdPage(PageRequest.of(page, size));
-		List<UUID> ids = idPage.getContent();
+		ProductSearchRequest request = new ProductSearchRequest();
+		request.setPage(page);
+		request.setSize(size);
+		return listProducts(request);
+	}
+
+	@Override
+	@Transactional(isolation = Isolation.READ_COMMITTED) // Publication signing needs FOR SHARE.
+	public ProductPage listProducts(ProductSearchRequest request) {
+		if (request == null || !validator.validate(request).isEmpty()
+				|| request.getSpecFilters() != null && request.getSpecificationGroups() == null) {
+			throw new InvalidCatalogRequestException("Invalid search request");
+		}
+		com.example.demo.catalog.validator.ProductSearchValidator.validate(request);
+		ProductSearchCriteria criteria = ProductSearchCriteria.builder()
+				.page(request.getPage()).size(request.getSize())
+				.keyword(new ProductSearchNormalizer().normalizeQuery(request.getQ()))
+				.categoryId(request.getCategoryId() == null ? null : UUID.fromString(request.getCategoryId()))
+				.brandIds(request.getBrandIds() == null ? null : request.getBrandIds().stream().map(UUID::fromString).toList())
+				.minPrice(request.getMinPrice()).maxPrice(request.getMaxPrice()).sort(request.getSort())
+				.specificationGroups(request.getSpecificationGroups()).build();
+		ProductCandidatePage candidatePage = products.findPublishedCandidates(criteria);
+		List<UUID> ids = candidatePage.getItems().stream().map(ProductCandidatePage.Candidate::getProductId).toList();
+		int totalPages = (int) Math.min(Integer.MAX_VALUE,
+				candidatePage.getTotalElements() / request.getSize()
+						+ (candidatePage.getTotalElements() % request.getSize() == 0 ? 0 : 1));
 		if (ids.isEmpty()) {
-			return page(List.of(), page, size, idPage);
+			return new ProductPage(List.of(), request.getPage(), request.getSize(), candidatePage.getTotalElements(), totalPages);
 		}
 
 		// Batch image metadata first, then recheck publication immediately before projection.
@@ -139,14 +168,25 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 			}
 		}
 
-		List<ProductSummary> summaries = new ArrayList<>();
-		for (UUID id : ids) {
+        // Signer credential resolution may block;revalidate imageless rows after it as one batch.
+        // Pictured rows are protected by the ordered publication locks above.
+        List<UUID> withoutImages=ids.stream().filter(id->!primaryByProduct.containsKey(id)).toList();
+        if(!withoutImages.isEmpty()){
+            Map<UUID,Product> revalidated=indexProducts(products.findAllByIdsAndStatusWithCategory(withoutImages,ProductStatus.PUBLISHED));
+            withoutImages.forEach(eligible::remove);eligible.putAll(revalidated);
+        }
+
+		List<ProductListingItem> summaries = new ArrayList<>();
+		for (ProductCandidatePage.Candidate candidate : candidatePage.getItems()) {
+			UUID id = candidate.getProductId();
 			Product product = eligible.get(id);
 			if (product != null) {
-				summaries.add(converter.toSummary(product, signedUrls.get(id)));
+				summaries.add(converter.toListingItem(converter.toSummary(product, signedUrls.get(id)),
+						candidate.getDisplayAmount(), candidate.getRepresentativeVariantId()));
 			}
 		}
-		return page(summaries, page, size, idPage);
+		return new ProductPage(List.copyOf(summaries), request.getPage(), request.getSize(),
+				candidatePage.getTotalElements(), totalPages);
 	}
 
 	@Override
@@ -179,15 +219,6 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 		return converter.toDetail(product, ownedVariants, gallery, urls);
 	}
 
-	private void validatePage(int page, int size) {
-		if (page < 0) {
-			throw new InvalidCatalogRequestException("Invalid page parameter");
-		}
-		if (size < 1 || size > MAX_SIZE) {
-			throw new InvalidCatalogRequestException("Invalid size parameter");
-		}
-	}
-
 	private Map<UUID, Product> indexProducts(List<Product> fetched) {
 		Map<UUID, Product> byId = new HashMap<>();
 		for (Product product : fetched) {
@@ -207,8 +238,4 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 		return published;
 	}
 
-	private ProductPage page(List<ProductSummary> summaries, int page, int size, Page<UUID> idPage) {
-		return new ProductPage(List.copyOf(summaries), page, size,
-				idPage.getTotalElements(), idPage.getTotalPages());
-	}
 }

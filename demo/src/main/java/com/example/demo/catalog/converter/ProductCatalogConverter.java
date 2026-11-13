@@ -1,9 +1,13 @@
 package com.example.demo.catalog.converter;
 
 import com.example.demo.catalog.dto.response.CategorySummary;
+import com.example.demo.catalog.dto.response.BrandSummary;
+import com.example.demo.catalog.entity.Brand;
 import com.example.demo.catalog.dto.response.ProductDetail;
 import com.example.demo.catalog.dto.response.ProductImageSummary;
 import com.example.demo.catalog.dto.response.ProductSummary;
+import com.example.demo.catalog.dto.response.ProductListingItem;
+import java.math.BigInteger;
 import com.example.demo.catalog.dto.response.SellingPrice;
 import com.example.demo.catalog.dto.response.VariantSummary;
 import com.example.demo.catalog.entity.Category;
@@ -26,6 +30,14 @@ public class ProductCatalogConverter {
 				new CategorySummary(category.getId(), category.getName()), primaryImageUrl);
 	}
 
+    /** All values have already been selected/loaded by the owning workflow; no variant selection here. */
+    public ProductListingItem toListingItem(ProductSummary summary, BigInteger displayAmount,
+            UUID representativeVariantId) {
+        SellingPrice price = displayAmount == null ? null : new SellingPrice(displayAmount, "VND");
+        return new ProductListingItem(summary.getId(), summary.getName(), summary.getCategory(),
+                summary.getPrimaryImageUrl(), price, representativeVariantId);
+    }
+
 	public ProductDetail toDetail(Product product, List<ProductVariant> variants,
 			List<ProductImage> images, Map<UUID, String> approvedImageUrls) {
 		String primaryImageUrl = null;
@@ -42,10 +54,14 @@ public class ProductCatalogConverter {
 		for (ProductVariant variant : variants) {
 			variantSummaries.add(new VariantSummary(variant.getId(), variant.getSku(),
 					Map.copyOf(variant.getOptionCombination()),
-					new SellingPrice(variant.getSellingPrice().toBigIntegerExact(), "VND")));
+					new SellingPrice(variant.getSellingPrice().toBigIntegerExact(), "VND"),
+					Map.copyOf(variant.getTechnicalSpecifications())));
 		}
 		ProductSummary summary = toSummary(product, primaryImageUrl);
+		Brand brand = product.getBrand();
+		BrandSummary brandSummary = brand == null ? null
+				: new BrandSummary(brand.getId(), brand.getCode(), brand.getName());
 		return new ProductDetail(summary.getId(), summary.getName(), summary.getCategory(),
-				summary.getPrimaryImageUrl(), product.getDescription(), variantSummaries, imageSummaries);
+				summary.getPrimaryImageUrl(), product.getDescription(), brandSummary, variantSummaries, imageSummaries);
 	}
 }

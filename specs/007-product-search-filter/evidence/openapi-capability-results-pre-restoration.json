@@ -1,0 +1,432 @@
+{
+  "task": "T006",
+  "status": "BLOCKED_PENDING_TOOL_OR_REVIEW",
+  "pythonTools": {
+    "PyYAML": "6.0.3",
+    "jsonschema": "4.26.0"
+  },
+  "specializedAvailable": {
+    "openapi_spec_validator": false,
+    "openapi_schema_validator": false
+  },
+  "contractSHA256": {
+    "feature": "1ea2e2aa9d9586522fbd2884e2a153c0089492f031ef5a314f710746abe35c76",
+    "catalog": "7a0062156c1637283772458ace4750d59b8834e5770c7eb2495263d80bce0f83"
+  },
+  "availableFormatChecks": [
+    "date",
+    "email",
+    "idn-email",
+    "idn-hostname",
+    "ipv4",
+    "ipv6",
+    "regex",
+    "time",
+    "uuid"
+  ],
+  "uriFormatActuallyEnforced": false,
+  "localRefsResolved": 60,
+  "instanceCases": [
+    {
+      "case": "listing_real_pair",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "listing_null_pair",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "mixed_pair_displayPrice",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "{'id': '00000000-0000-0000-0000-000000000001', 'name': 'Device', 'category': {'id': '00000000-0000-0000-0000-000000000001', 'name': 'Category'}, 'primaryImageUrl': None, 'displayPrice': None, 'representativeVariantId': '00000000-0000-0000-0000-000000000001'} i"
+        }
+      ]
+    },
+    {
+      "case": "missing_pair_displayPrice",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "'displayPrice' is a required property"
+        }
+      ]
+    },
+    {
+      "case": "mixed_pair_representativeVariantId",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "{'id': '00000000-0000-0000-0000-000000000001', 'name': 'Device', 'category': {'id': '00000000-0000-0000-0000-000000000001', 'name': 'Category'}, 'primaryImageUrl': None, 'displayPrice': {'amount': 10, 'currency': 'VND'}, 'representativeVariantId': None} is not"
+        }
+      ]
+    },
+    {
+      "case": "missing_pair_representativeVariantId",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "'representativeVariantId' is a required property"
+        }
+      ]
+    },
+    {
+      "case": "listing_extra_field",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "Additional properties are not allowed ('rawRank' was unexpected)"
+        }
+      ]
+    },
+    {
+      "case": "catalog_detail_allOf_unevaluatedProperties_nullable",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "catalog_detail_extra_field",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "Unevaluated properties are not allowed ('rawRank' was unexpected)"
+        }
+      ]
+    },
+    {
+      "case": "catalog_detail_missing_brand",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "Unevaluated properties are not allowed ('description', 'images', 'variants' were unexpected)"
+        },
+        {
+          "path": [],
+          "message": "'brand' is a required property"
+        }
+      ]
+    },
+    {
+      "case": "catalog_detail_missing_variants",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "Unevaluated properties are not allowed ('brand', 'description', 'images' were unexpected)"
+        },
+        {
+          "path": [],
+          "message": "'variants' is a required property"
+        }
+      ]
+    },
+    {
+      "case": "synthetic_allOf_positive",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "synthetic_unevaluated_extra",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "Unevaluated properties are not allowed ('c' was unexpected)"
+        }
+      ]
+    },
+    {
+      "case": "synthetic_allOf_wrong_type",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [
+            "a"
+          ],
+          "message": "'1' is not of type 'integer'"
+        },
+        {
+          "path": [],
+          "message": "Unevaluated properties are not allowed ('a' was unexpected)"
+        }
+      ]
+    },
+    {
+      "case": "oas31_null_union",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "oas30_nullable_not_a_31_type_union",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "None is not of type 'string'"
+        }
+      ]
+    },
+    {
+      "case": "parameter_page_16",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "parameter_page_17",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "-1 is less than the minimum of 0"
+        }
+      ]
+    },
+    {
+      "case": "parameter_size_18",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "101 is greater than the maximum of 100"
+        }
+      ]
+    },
+    {
+      "case": "parameter_categoryId_19",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "parameter_categoryId_20",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "'bad' is not a 'uuid'"
+        },
+        {
+          "path": [],
+          "message": "'bad' does not match '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'"
+        }
+      ]
+    },
+    {
+      "case": "parameter_brandId_21",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "parameter_brandId_22",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "['00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000001', '00000000-0000-0000"
+        }
+      ]
+    },
+    {
+      "case": "parameter_minPrice_23",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "'1e3' does not match '^(0|[1-9][0-9]{0,29})$'"
+        }
+      ]
+    },
+    {
+      "case": "parameter_minPrice_24",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "parameter_sort_25",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "'random' is not one of ['relevance', 'price-asc', 'price-desc', 'name-asc', 'name-desc']"
+        }
+      ]
+    },
+    {
+      "case": "specFilters_URL_roundtrip_shape",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "error_400",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "error_401",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "error_500",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "error_503",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "error_status_string",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [
+            "status"
+          ],
+          "message": "'503' is not of type 'integer'"
+        }
+      ]
+    },
+    {
+      "case": "error_missing_detail",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "'detail' is a required property"
+        }
+      ]
+    },
+    {
+      "case": "mode_header_valid",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "mode_header_invalid",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [],
+          "message": "'silent-fallback' is not one of ['fuzzy-enabled', 'exact-only']"
+        }
+      ]
+    },
+    {
+      "case": "feature_allows_weak_name",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "catalog_rejects_weak_name",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [
+            "name"
+          ],
+          "message": "'' should be non-empty"
+        }
+      ]
+    },
+    {
+      "case": "feature_allows_weak_category",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "catalog_rejects_weak_category",
+      "expectedSchemaValid": false,
+      "schemaValid": false,
+      "errors": [
+        {
+          "path": [
+            "category",
+            "name"
+          ],
+          "message": "'' should be non-empty"
+        }
+      ]
+    },
+    {
+      "case": "feature_allows_weak_primaryImageUrl",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    },
+    {
+      "case": "catalog_uri_checker_UNAVAILABLE",
+      "expectedSchemaValid": true,
+      "schemaValid": true,
+      "errors": []
+    }
+  ],
+  "caseCount": 41,
+  "urlEncodedSpecFiltersExample": "categoryId=00000000-0000-0000-0000-000000000001&specFilters=%5B%7B%22key%22%3A%22physical_ram%22%2C%22alternatives%22%3A%5B%7B%22op%22%3A%22gte%22%2C%22value%22%3A16%2C%22unit%22%3A%22GB%22%7D%5D%7D%5D",
+  "semanticOpenAPI": {
+    "status": "BLOCKED_TOOL_NOT_INSTALLED_OR_NOT_AUTHORIZED",
+    "toolApproved": false
+  },
+  "findings": [
+    {
+      "id": "T006-C01",
+      "kind": "compatibility-schema-gap",
+      "summary": "Feature overlay omits existing minLength1 for product/category names and URI format for primaryImageUrl;current examples prove widening",
+      "resolution": "Propose restoring baseline constraints;do not change contract without review"
+    }
+  ],
+  "limitations": [
+    "JSON Schema instance validation is not full OpenAPI document/operation semantics",
+    "categoryId dependence,registry authorization,duplicate raw JSON members,conditional headers/status congruence require prose/transport/runtime checks",
+    "Current jsonschema environment lacks URI format checker;URI rejection was NOT demonstrated",
+    "No contract/application/migration changed;no new tool installed without approval"
+  ]
+}

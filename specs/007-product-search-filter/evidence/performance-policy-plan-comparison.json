@@ -1,0 +1,17 @@
+{
+  "historicalExecutionMs": 600.003,
+  "historicalSharedHit": 4452,
+  "historicalSharedRead": 0,
+  "planShapeEqual": true,
+  "historicalSettings": {},
+  "conclusion": "Same fixture hash,fanout,measurement boundary,cache hits and node shape;DB execution accounts for most latency. Exact historical CPU/load/resource conditions were not captured;cannot assign causal blame to JVM warmup,code,or host contention.",
+  "currentRun1ExecutionMs": 604.922,
+  "currentRun1SharedHit": 4452,
+  "currentRun1SharedRead": 0,
+  "currentRun1Settings": {},
+  "previousIsolatedExecutionMsObservedBeforeRun1": 1042.521,
+  "previousPlanProvenance": "Read before rerun at Git finalization inspection;now overwritten by benchmark. Node timing copy retained under /tmp/search-plan-latest-nodes.json.",
+  "run2PlanExecutionMs": 1101.179,
+  "run2PlanSharedHit": 4452,
+  "run2PlanSharedRead": 0
+}

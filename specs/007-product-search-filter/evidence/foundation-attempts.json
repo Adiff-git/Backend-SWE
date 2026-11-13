@@ -1,0 +1,126 @@
+{
+  "initialRun": {
+    "command": "mvn -o -f demo/pom.xml -Dtest=ProductCatalogServiceImplTest,ProductListingControllerTest,ProductDetailControllerTest,ProductCatalogConverterTest,ProductSearchParameterParserTest,ProductSearchRequestTest,ProductSearchNormalizerTest,TechnicalSpecificationValidatorTest,CatalogSecurityBaselineTest,WishlistServiceImplTest,WishlistConverterTest,WishlistControllerTest -Dit.test=CatalogSearchMigrationIT,ProductSearchBaselineRepositoryIT,CatalogContractIT,CatalogQueryCountIT,ProductListingApiIT,ProductDetailApiIT,ProductDetailRepositoryIT,ProductListingRepositoryIT,CatalogReadFlowIT,WishlistControllerIT,WishlistServiceIT -Djunit.jupiter.execution.parallel.enabled=false -DforkCount=1 -DreuseForks=true verify",
+    "exitCode": 1,
+    "integrationSuites": [
+      {
+        "name": "com.example.demo.catalog.CatalogQueryCountIT",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "failedCases": []
+      },
+      {
+        "name": "com.example.demo.wishlist.service.WishlistServiceIT",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "failedCases": []
+      },
+      {
+        "name": "com.example.demo.catalog.ProductListingApiIT",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "failedCases": []
+      },
+      {
+        "name": "com.example.demo.catalog.CatalogContractIT",
+        "tests": 5,
+        "failures": 3,
+        "errors": 0,
+        "failedCases": [
+          {
+            "name": "getProduct_shouldReturnNullAndEmptyOptionalRepresentations_withoutImages",
+            "message": "\nExpecting actual:\n  [\"images\",\n    \"primaryImageUrl\",\n    \"name\",\n    \"description\",\n    \"id\",\n    \"variants\",\n    \"category\",\n    \"brand\"]\nto contain exactly in any order:\n  [\"id\",\n    \"primaryImageUrl\",\n    \"variants\",\n    \"description\",\n    \"name\",\n    \"images\",\n    \"category\"]\nbut the following elements were unexpected:\n  [\"brand\"]\n"
+          },
+          {
+            "name": "getProduct_shouldMatchOpenApiContract_forPublishedProduct",
+            "message": "\nExpecting actual:\n  [\"images\",\n    \"primaryImageUrl\",\n    \"name\",\n    \"description\",\n    \"id\",\n    \"variants\",\n    \"category\",\n    \"brand\"]\nto contain exactly in any order:\n  [\"id\",\n    \"primaryImageUrl\",\n    \"variants\",\n    \"description\",\n    \"name\",\n    \"images\",\n    \"category\"]\nbut the following elements were unexpected:\n  [\"brand\"]\n"
+          },
+          {
+            "name": "listProducts_shouldMatchOpenApiContract_forAnonymousPublishedPage",
+            "message": "\nExpecting actual:\n  [\"primaryImageUrl\",\n    \"displayPrice\",\n    \"name\",\n    \"representativeVariantId\",\n    \"id\",\n    \"category\"]\nto contain exactly in any order:\n  [\"name\", \"id\", \"primaryImageUrl\", \"category\"]\nbut the following elements were unexpected:\n  [\"displayPrice\", \"representativeVariantId\"]\n"
+          }
+        ]
+      },
+      {
+        "name": "com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "failedCases": []
+      },
+      {
+        "name": "com.example.demo.catalog.ProductDetailApiIT",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "failedCases": []
+      },
+      {
+        "name": "com.example.demo.wishlist.controller.WishlistControllerIT",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "failedCases": []
+      },
+      {
+        "name": "com.example.demo.catalog.repository.CatalogSearchMigrationIT",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "failedCases": []
+      },
+      {
+        "name": "com.example.demo.catalog.CatalogReadFlowIT",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "failedCases": []
+      },
+      {
+        "name": "com.example.demo.catalog.repository.ProductListingRepositoryIT",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "failedCases": []
+      },
+      {
+        "name": "com.example.demo.catalog.repository.ProductDetailRepositoryIT",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "failedCases": []
+      }
+    ],
+    "cause": "3 outdated exact-field expectations in CatalogContractIT;other54 ITs passed"
+  },
+  "focusedAttempts": [
+    {
+      "log": "/tmp/t019-focused.log",
+      "exitCode": 0,
+      "acceptanceEvidence": false,
+      "reason": "-DskipTests also skipped failsafe;compile-only,no executed tests credited"
+    },
+    {
+      "log": "/tmp/t019-focused-executed.log",
+      "exitCode": 1,
+      "reason": "new test expectations assumed null technical document and incorrectly accumulated Hibernate counters across sizes"
+    },
+    {
+      "log": "/tmp/t019-focused-corrected.log",
+      "exitCode": 1,
+      "reason": "remaining new empty-document assertion omitted existing schema_version/values envelope"
+    }
+  ],
+  "correction": "Use exact existing technical document envelope and reset statistics before each request;no production behavior or budget changed",
+  "finalRun": {
+    "command": "mvn -o -f demo/pom.xml -Dtest=ProductCatalogServiceImplTest,ProductListingControllerTest,ProductDetailControllerTest,ProductCatalogConverterTest,ProductSearchParameterParserTest,ProductSearchRequestTest,ProductSearchNormalizerTest,TechnicalSpecificationValidatorTest,CatalogSecurityBaselineTest,WishlistServiceImplTest,WishlistConverterTest,WishlistControllerTest -Dit.test=CatalogSearchMigrationIT,ProductSearchBaselineRepositoryIT,CatalogContractIT,CatalogQueryCountIT,ProductListingApiIT,ProductDetailApiIT,ProductDetailRepositoryIT,ProductListingRepositoryIT,CatalogReadFlowIT,WishlistControllerIT,WishlistServiceIT -Djunit.jupiter.execution.parallel.enabled=false -DforkCount=1 -DreuseForks=true verify",
+    "exitCode": 0,
+    "tests": 165,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

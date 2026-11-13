@@ -3,7 +3,9 @@ info:
   title: Backend Product Catalog
   version: 0.1.0
   description: >-
-    Current product catalog contract. Public reads include only PUBLISHED products.
+    Foundational product catalog contract. Public reads include only PUBLISHED products.
+    The implemented GET /api/products search/filter parameters, additive listing fields
+    and capability responses are specified in specs/007-product-search-filter/contracts/openapi.yaml.
     Image attachment requires a verified ADMIN principal.
     Signed image URLs are embedded in product responses and are valid for at
     most five minutes; clients refresh them by requesting the product again.
@@ -200,10 +202,29 @@ components:
           type: integer
           description: Exact whole đồng; no fractional rounding or business minimum is imposed.
         currency: { type: string, const: VND }
+    BrandSummary:
+      type: object
+      additionalProperties: false
+      required: [id, code, name]
+      properties:
+        id: { $ref: '#/components/schemas/Uuid' }
+        code: { type: string, pattern: '^[a-z0-9]+(-[a-z0-9]+)*$' }
+        name: { type: string, minLength: 1 }
+    TechnicalSpecifications:
+      type: object
+      additionalProperties: false
+      required: [schema_version, values]
+      description: Stored JSONB document, returned without value transformations; empty values means no known specifications.
+      properties:
+        schema_version: { type: integer, const: 1 }
+        values:
+          type: object
+          additionalProperties: true
+          description: Canonical specification keys with their original JSON values, including typed quantities.
     VariantSummary:
       type: object
       additionalProperties: false
-      required: [id, sku, options, sellingPrice]
+      required: [id, sku, options, sellingPrice, technicalSpecifications]
       properties:
         id: { $ref: '#/components/schemas/Uuid' }
         sku: { type: string, minLength: 1 }
@@ -212,6 +233,7 @@ components:
           additionalProperties: { type: string, minLength: 1 }
           description: Flat map; empty only for a product with one variant.
         sellingPrice: { $ref: '#/components/schemas/SellingPrice' }
+        technicalSpecifications: { $ref: '#/components/schemas/TechnicalSpecifications' }
     ProductImageSummary:
       type: object
       additionalProperties: false
@@ -225,12 +247,17 @@ components:
         displayOrder: { type: integer, minimum: 0 }
         isPrimary: { type: boolean }
     ProductDetail:
+      unevaluatedProperties: false
       allOf:
         - $ref: '#/components/schemas/ProductSummary'
         - type: object
-          required: [description, variants, images]
+          required: [description, brand, variants, images]
           properties:
             description: { type: [string, 'null'] }
+            brand:
+              oneOf:
+                - $ref: '#/components/schemas/BrandSummary'
+                - type: 'null'
             variants:
               type: array
               minItems: 1

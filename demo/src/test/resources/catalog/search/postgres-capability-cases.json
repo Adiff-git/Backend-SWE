@@ -1,0 +1,118 @@
+{
+  "task": "T002",
+  "scope": "isolated PostgreSQL infrastructure capability,not application/deployment acceptance",
+  "identity": {
+    "Id": "91f5c61479013c56cfa768a0db2ecaae0ee511585edc7b7cd233bb9d89e9502f",
+    "Name": "/speckit007-t002-20261109",
+    "Image": "sha256:266d3c257594e195b309ae9d1805e54c788f1d7b375f56bf6c367aac6c917e7b",
+    "Created": "2026-11-08T18:08:03.484452158Z",
+    "networkMode": "none",
+    "ports": {},
+    "mounts": [],
+    "tmpfs": {
+      "/var/lib/postgresql/data": "rw,noexec,nosuid,size=256m"
+    }
+  },
+  "capturedUTC": "2026-11-08T18:25:29.899302+00:00",
+  "cleanup": "all three task-owned containers removed successfully",
+  "cases": [
+    {
+      "case": "metadata",
+      "role": "postgres",
+      "sql": "SELECT version(),current_database(),current_user,pg_backend_pid(),inet_server_addr(),inet_server_port(); SHOW server_encoding; SHOW client_encoding; SHOW port; SELECT name,default_version,installed_version FROM pg_available_extensions WHERE name='pg_trgm'; SELECT name,version,superuser,trusted FROM pg_available_extension_versions WHERE name='pg_trgm'; SELECT has_database_privilege(current_user,current_database(),'CREATE');",
+      "exitCode": 0,
+      "stdout": "                                         version                                          | current_database  | current_user | pg_backend_pid | inet_server_addr | inet_server_port \n------------------------------------------------------------------------------------------+-------------------+--------------+----------------+------------------+------------------\n PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit | search_capability | postgres     |            102 |                  |                 \n(1 row)\n\n server_encoding \n-----------------\n UTF8\n(1 row)\n\n client_encoding \n-----------------\n UTF8\n(1 row)\n\n port \n------\n 5432\n(1 row)\n\n  name   | default_version | installed_version \n---------+-----------------+-------------------\n pg_trgm | 1.6             | \n(1 row)\n\n  name   | version | superuser | trusted \n---------+---------+-----------+---------\n pg_trgm | 1.3     | t         | t\n pg_trgm | 1.5     | t         | t\n pg_trgm | 1.6     | t         | t\n pg_trgm | 1.4     | t         | t\n(4 rows)\n\n has_database_privilege \n------------------------\n t\n(1 row)\n\n",
+      "stderr": "",
+      "expectedExit": 0,
+      "pass": true
+    },
+    {
+      "case": "missing_extension_preflight",
+      "role": "postgres",
+      "sql": "DO $$ BEGIN IF NOT EXISTS(SELECT 1 FROM pg_extension WHERE extname='pg_trgm') THEN RAISE EXCEPTION 'T002 preflight: required pg_trgm missing'; END IF; END $$;",
+      "exitCode": 3,
+      "stdout": "",
+      "stderr": "ERROR:  P0001: T002 preflight: required pg_trgm missing\nCONTEXT:  PL/pgSQL function inline_code_block line 1 at RAISE\nLOCATION:  exec_stmt_raise, pl_exec.c:3897\n",
+      "expectedExit": 3,
+      "pass": true
+    },
+    {
+      "case": "create_unprivileged_role",
+      "role": "postgres",
+      "sql": "CREATE ROLE cap_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE; GRANT CONNECT ON DATABASE search_capability TO cap_app;",
+      "exitCode": 0,
+      "stdout": "CREATE ROLE\nGRANT\n",
+      "stderr": "",
+      "expectedExit": 0,
+      "pass": true
+    },
+    {
+      "case": "role_privileges",
+      "role": "cap_app",
+      "sql": "SELECT current_user,has_database_privilege(current_user,current_database(),'CREATE');",
+      "exitCode": 0,
+      "stdout": " current_user | has_database_privilege \n--------------+------------------------\n cap_app      | f\n(1 row)\n\n",
+      "stderr": "",
+      "expectedExit": 0,
+      "pass": true
+    },
+    {
+      "case": "unprivileged_install",
+      "role": "cap_app",
+      "sql": "CREATE EXTENSION pg_trgm;",
+      "exitCode": 3,
+      "stdout": "",
+      "stderr": "ERROR:  42501: permission denied to create extension \"pg_trgm\"\nHINT:  Must have CREATE privilege on current database to create this extension.\nLOCATION:  execute_extension_script, extension.c:1025\n",
+      "expectedExit": 3,
+      "pass": true
+    },
+    {
+      "case": "owner_install",
+      "role": "postgres",
+      "sql": "CREATE EXTENSION pg_trgm; SELECT extname,extversion FROM pg_extension WHERE extname='pg_trgm';",
+      "exitCode": 0,
+      "stdout": "CREATE EXTENSION\n extname | extversion \n---------+------------\n pg_trgm | 1.6\n(1 row)\n\n",
+      "stderr": "",
+      "expectedExit": 0,
+      "pass": true
+    },
+    {
+      "case": "functions_operators",
+      "role": "postgres",
+      "sql": "SELECT similarity('sony','sont'),show_trgm('sony'), 'sony' % 'sont' AS candidate; SELECT 'dien thoai' LIKE 'dien%' AS prefix; SELECT proname FROM pg_proc WHERE proname IN('similarity','show_trgm','word_similarity') ORDER BY proname; SELECT oprname FROM pg_operator WHERE oprcode::text LIKE '%trgm%' ORDER BY oprname; BEGIN; SET LOCAL pg_trgm.similarity_threshold=0.42; SHOW pg_trgm.similarity_threshold; ROLLBACK; SHOW pg_trgm.similarity_threshold; SELECT 'Điện thoại Đ'::text;",
+      "exitCode": 0,
+      "stdout": " similarity |          show_trgm          | candidate \n------------+-----------------------------+-----------\n 0.42857143 | {\"  s\",\" so\",\"ny \",ony,son} | t\n(1 row)\n\n prefix \n--------\n t\n(1 row)\n\n     proname     \n-----------------\n show_trgm\n similarity\n word_similarity\n(3 rows)\n\n oprname \n---------\n(0 rows)\n\nBEGIN\nSET\n pg_trgm.similarity_threshold \n------------------------------\n 0.42\n(1 row)\n\nROLLBACK\n pg_trgm.similarity_threshold \n------------------------------\n 0.3\n(1 row)\n\n     text     \n--------------\n Điện thoại Đ\n(1 row)\n\n",
+      "stderr": "",
+      "expectedExit": 0,
+      "pass": true
+    },
+    {
+      "case": "app_can_use_installed",
+      "role": "cap_app",
+      "sql": "SELECT similarity('sony','sont'), 'sony' % 'sont';",
+      "exitCode": 0,
+      "stdout": " similarity | ?column? \n------------+----------\n 0.42857143 | t\n(1 row)\n\n",
+      "stderr": "",
+      "expectedExit": 0,
+      "pass": true
+    }
+  ],
+  "startupCases": [
+    {
+      "case": "missing",
+      "containerId": "c86f62361c0ffcfce6773bd5cf37a1983e59846ba3fdf1185ce55f02d6c24588",
+      "sql": "DO $$ BEGIN IF NOT EXISTS(SELECT 1 FROM pg_extension WHERE extname='pg_trgm') THEN RAISE EXCEPTION 'T002 startup preflight: required pg_trgm missing'; END IF; END $$;\n",
+      "exitCode": "3",
+      "logs": "The files belonging to this database system will be owned by user \"postgres\".\nThis user must also own the server process.\n\nThe database cluster will be initialized with locale \"en_US.utf8\".\nThe default database encoding has accordingly been set to \"UTF8\".\nThe default text search configuration will be set to \"english\".\n\nData page checksums are disabled.\n\nfixing permissions on existing directory /var/lib/postgresql/data ... ok\ncreating subdirectories ... ok\nselecting dynamic shared memory implementation ... posix\nselecting default \"max_connections\" ... 100\nselecting default \"shared_buffers\" ... 128MB\nselecting default time zone ... UTC\ncreating configuration files ... ok\nrunning bootstrap script ... ok\nperforming post-bootstrap initialization ... ok\nsyncing data to disk ... ok\n\n\nSuccess. You can now start the database server using:\n\n    pg_ctl -D /var/lib/postgresql/data -l logfile start\n\nwaiting for server to start....2026-11-08 18:39:21.313 UTC [42] LOG:  starting PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit\n2026-11-08 18:39:21.314 UTC [42] LOG:  listening on Unix socket \"/var/run/postgresql/.s.PGSQL.5432\"\n2026-11-08 18:39:21.316 UTC [45] LOG:  database system was shut down at 2026-11-08 18:39:21 UTC\n2026-11-08 18:39:21.320 UTC [42] LOG:  database system is ready to accept connections\n done\nserver started\n\n/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/01-capability.sql\n2026-11-08 18:39:21.436 UTC [53] ERROR:  T002 startup preflight: required pg_trgm missing\n2026-11-08 18:39:21.436 UTC [53] CONTEXT:  PL/pgSQL function inline_code_block line 1 at RAISE\n2026-11-08 18:39:21.436 UTC [53] STATEMENT:  DO $$ BEGIN IF NOT EXISTS(SELECT 1 FROM pg_extension WHERE extname='pg_trgm') THEN RAISE EXCEPTION 'T002 startup preflight: required pg_trgm missing'; END IF; END $$;\nsh: locale: not found\n2026-11-08 18:39:21.042 UTC [36] WARNING:  no usable system locales were found\ninitdb: warning: enabling \"trust\" authentication for local connections\ninitdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.\npsql:/docker-entrypoint-initdb.d/01-capability.sql:1: ERROR:  T002 startup preflight: required pg_trgm missing\nCONTEXT:  PL/pgSQL function inline_code_block line 1 at RAISE\n",
+      "pass": true
+    },
+    {
+      "case": "privilege",
+      "containerId": "ba688a4a256591924cf302f3d4c95d5024a6d6ff84f3ebbc6b746e82c3aaa716",
+      "sql": "CREATE ROLE cap_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE; SET ROLE cap_app; CREATE EXTENSION pg_trgm;\n",
+      "exitCode": "3",
+      "logs": "The files belonging to this database system will be owned by user \"postgres\".\nThis user must also own the server process.\n\nThe database cluster will be initialized with locale \"en_US.utf8\".\nThe default database encoding has accordingly been set to \"UTF8\".\nThe default text search configuration will be set to \"english\".\n\nData page checksums are disabled.\n\nfixing permissions on existing directory /var/lib/postgresql/data ... ok\ncreating subdirectories ... ok\nselecting dynamic shared memory implementation ... posix\nselecting default \"max_connections\" ... 100\nselecting default \"shared_buffers\" ... 128MB\nselecting default time zone ... UTC\ncreating configuration files ... ok\nrunning bootstrap script ... ok\nperforming post-bootstrap initialization ... ok\nsyncing data to disk ... ok\n\n\nSuccess. You can now start the database server using:\n\n    pg_ctl -D /var/lib/postgresql/data -l logfile start\n\nwaiting for server to start....2026-11-08 18:39:22.234 UTC [42] LOG:  starting PostgreSQL 17.11 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit\n2026-11-08 18:39:22.245 UTC [42] LOG:  listening on Unix socket \"/var/run/postgresql/.s.PGSQL.5432\"\n2026-11-08 18:39:22.247 UTC [45] LOG:  database system was shut down at 2026-11-08 18:39:22 UTC\n2026-11-08 18:39:22.251 UTC [42] LOG:  database system is ready to accept connections\n done\nserver started\n\n/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/01-capability.sql\nCREATE ROLE\nSET\n2026-11-08 18:39:22.344 UTC [53] ERROR:  permission denied to create extension \"pg_trgm\"\n2026-11-08 18:39:22.344 UTC [53] HINT:  Must have CREATE privilege on current database to create this extension.\n2026-11-08 18:39:22.344 UTC [53] STATEMENT:  CREATE EXTENSION pg_trgm;\nsh: locale: not found\n2026-11-08 18:39:21.966 UTC [36] WARNING:  no usable system locales were found\ninitdb: warning: enabling \"trust\" authentication for local connections\ninitdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.\npsql:/docker-entrypoint-initdb.d/01-capability.sql:1: ERROR:  permission denied to create extension \"pg_trgm\"\nHINT:  Must have CREATE privilege on current database to create this extension.\n",
+      "pass": true
+    }
+  ]
+}

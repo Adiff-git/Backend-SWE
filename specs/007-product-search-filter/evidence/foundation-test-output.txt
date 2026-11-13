@@ -1,0 +1,1233 @@
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/usr/share/maven/lib/guava.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[INFO]
+[INFO] --------------------------< com.example:demo >--------------------------
+[INFO] Building demo 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- maven-resources-plugin:3.5.0:resources (default-resources) @ demo ---
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] Copying 15 resources from src/main/resources to target/classes
+[INFO]
+[INFO] --- maven-compiler-plugin:3.15.0:compile (default-compile) @ demo ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO]
+[INFO] --- maven-resources-plugin:3.5.0:testResources (default-testResources) @ demo ---
+[INFO] Copying 12 resources from src/test/resources to target/test-classes
+[INFO]
+[INFO] --- maven-compiler-plugin:3.15.0:testCompile (default-testCompile) @ demo ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 164 source files with javac [debug parameters release 25] to target/test-classes
+[INFO] /home/hza/Downloads/SWE/Backend-SWE/demo/src/test/java/com/example/demo/auth/repository/IdentityMigrationIT.java: Some input files use or override a deprecated API.
+[INFO] /home/hza/Downloads/SWE/Backend-SWE/demo/src/test/java/com/example/demo/auth/repository/IdentityMigrationIT.java: Recompile with -Xlint:deprecation for details.
+[INFO] /home/hza/Downloads/SWE/Backend-SWE/demo/src/test/java/com/example/demo/catalog/service/ProductCatalogServiceImplTest.java: /home/hza/Downloads/SWE/Backend-SWE/demo/src/test/java/com/example/demo/catalog/service/ProductCatalogServiceImplTest.java uses unchecked or unsafe operations.
+[INFO] /home/hza/Downloads/SWE/Backend-SWE/demo/src/test/java/com/example/demo/catalog/service/ProductCatalogServiceImplTest.java: Recompile with -Xlint:unchecked for details.
+[INFO]
+[INFO] --- maven-surefire-plugin:3.5.6:test (default-test) @ demo ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.example.demo.wishlist.controller.WishlistControllerTest
+16:44:51.033 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.demo.wishlist.controller.WishlistControllerTest]: WishlistControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:44:51.130 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.wishlist.controller.WishlistControllerTest
+16:44:51.132 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.demo.wishlist.controller.WishlistControllerTest]: WishlistControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:44:51.140 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.wishlist.controller.WishlistControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:44:51.354+07:00  INFO 35458 --- [demo] [           main] c.e.d.w.c.WishlistControllerTest         : Starting WishlistControllerTest using Java 25.0.4.1 with PID 35458 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:44:51.355+07:00  INFO 35458 --- [demo] [           main] c.e.d.w.c.WishlistControllerTest         : No active profile set, falling back to 1 default profile: "default"
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+WARNING: A Java agent has been loaded dynamically (/home/hza/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.15/byte-buddy-agent-1.18.15.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+2026-11-09T16:44:52.593+07:00  INFO 35458 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name com.example.demo.auth.security.DomainUserDetailsService
+2026-11-09T16:44:52.826+07:00  INFO 35458 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-09T16:44:52.827+07:00  INFO 35458 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-09T16:44:52.828+07:00  INFO 35458 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-11-09T16:44:52.857+07:00  INFO 35458 --- [demo] [           main] c.e.d.w.c.WishlistControllerTest         : Started WishlistControllerTest in 1.676 seconds (process running for 2.403)
+[INFO] Tests run: 31, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.347 s -- in com.example.demo.wishlist.controller.WishlistControllerTest
+[INFO] Running com.example.demo.wishlist.converter.WishlistConverterTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.047 s -- in com.example.demo.wishlist.converter.WishlistConverterTest
+[INFO] Running com.example.demo.wishlist.service.WishlistServiceImplTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.181 s -- in com.example.demo.wishlist.service.WishlistServiceImplTest
+[INFO] Running com.example.demo.catalog.validator.ProductSearchRequestTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.128 s -- in com.example.demo.catalog.validator.ProductSearchRequestTest
+[INFO] Running com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 s -- in com.example.demo.catalog.validator.TechnicalSpecificationValidatorTest
+[INFO] Running com.example.demo.catalog.controller.ProductDetailControllerTest
+2026-11-09T16:44:53.683+07:00  INFO 35458 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.controller.ProductDetailControllerTest
+2026-11-09T16:44:53.692+07:00  INFO 35458 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.controller.ProductDetailControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:44:53.723+07:00  INFO 35458 --- [demo] [           main] c.e.d.c.c.ProductDetailControllerTest    : Starting ProductDetailControllerTest using Java 25.0.4.1 with PID 35458 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:44:53.724+07:00  INFO 35458 --- [demo] [           main] c.e.d.c.c.ProductDetailControllerTest    : No active profile set, falling back to 1 default profile: "default"
+2026-11-09T16:44:54.023+07:00  INFO 35458 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-09T16:44:54.023+07:00  INFO 35458 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-09T16:44:54.024+07:00  INFO 35458 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-11-09T16:44:54.037+07:00  INFO 35458 --- [demo] [           main] c.e.d.c.c.ProductDetailControllerTest    : Started ProductDetailControllerTest in 0.335 seconds (process running for 3.582)
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.436 s -- in com.example.demo.catalog.controller.ProductDetailControllerTest
+[INFO] Running com.example.demo.catalog.controller.CatalogSecurityBaselineTest
+2026-11-09T16:44:54.080+07:00  INFO 35458 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.catalog.controller.CatalogSecurityBaselineTest]: CatalogSecurityBaselineTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T16:44:54.084+07:00  INFO 35458 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.controller.CatalogSecurityBaselineTest
+2026-11-09T16:44:54.084+07:00  INFO 35458 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.catalog.controller.CatalogSecurityBaselineTest]: CatalogSecurityBaselineTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T16:44:54.087+07:00  INFO 35458 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.controller.CatalogSecurityBaselineTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:44:54.098+07:00  INFO 35458 --- [demo] [           main] c.e.d.c.c.CatalogSecurityBaselineTest    : Starting CatalogSecurityBaselineTest using Java 25.0.4.1 with PID 35458 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:44:54.098+07:00  INFO 35458 --- [demo] [           main] c.e.d.c.c.CatalogSecurityBaselineTest    : No active profile set, falling back to 1 default profile: "default"
+2026-11-09T16:44:54.282+07:00  INFO 35458 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-09T16:44:54.282+07:00  INFO 35458 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-09T16:44:54.283+07:00  INFO 35458 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-11-09T16:44:54.290+07:00  INFO 35458 --- [demo] [           main] c.e.d.c.c.CatalogSecurityBaselineTest    : Started CatalogSecurityBaselineTest in 0.201 seconds (process running for 3.836)
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.256 s -- in com.example.demo.catalog.controller.CatalogSecurityBaselineTest
+[INFO] Running com.example.demo.catalog.controller.ProductListingControllerTest
+2026-11-09T16:44:54.341+07:00  INFO 35458 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.controller.ProductListingControllerTest
+2026-11-09T16:44:54.343+07:00  INFO 35458 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.controller.ProductListingControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:44:54.354+07:00  INFO 35458 --- [demo] [           main] c.e.d.c.c.ProductListingControllerTest   : Starting ProductListingControllerTest using Java 25.0.4.1 with PID 35458 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:44:54.354+07:00  INFO 35458 --- [demo] [           main] c.e.d.c.c.ProductListingControllerTest   : No active profile set, falling back to 1 default profile: "default"
+2026-11-09T16:44:54.545+07:00  INFO 35458 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-09T16:44:54.545+07:00  INFO 35458 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-09T16:44:54.555+07:00  INFO 35458 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 9 ms
+2026-11-09T16:44:54.569+07:00  INFO 35458 --- [demo] [           main] c.e.d.c.c.ProductListingControllerTest   : Started ProductListingControllerTest in 0.223 seconds (process running for 4.114)
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.286 s -- in com.example.demo.catalog.controller.ProductListingControllerTest
+[INFO] Running com.example.demo.catalog.converter.ProductCatalogConverterTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 s -- in com.example.demo.catalog.converter.ProductCatalogConverterTest
+[INFO] Running com.example.demo.catalog.service.ProductCatalogServiceImplTest
+[INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.242 s -- in com.example.demo.catalog.service.ProductCatalogServiceImplTest
+[INFO] Running com.example.demo.catalog.search.ProductSearchParameterParserTest
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.044 s -- in com.example.demo.catalog.search.ProductSearchParameterParserTest
+[INFO] Running com.example.demo.catalog.search.ProductSearchNormalizerTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.011 s -- in com.example.demo.catalog.search.ProductSearchNormalizerTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 105, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO]
+[INFO] --- maven-jar-plugin:3.5.1:jar (default-jar) @ demo ---
+[INFO]
+[INFO] --- spring-boot-maven-plugin:4.1.2:repackage (repackage) @ demo ---
+[INFO] Replacing main artifact /home/hza/Downloads/SWE/Backend-SWE/demo/target/demo-0.0.1-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /home/hza/Downloads/SWE/Backend-SWE/demo/target/demo-0.0.1-SNAPSHOT.jar.original
+[INFO]
+[INFO] --- maven-failsafe-plugin:3.5.6:integration-test (default) @ demo ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.example.demo.wishlist.controller.WishlistControllerIT
+16:44:56.042 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.demo.wishlist.controller.WishlistControllerIT]: WishlistControllerIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:44:56.172 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.wishlist.controller.WishlistControllerIT
+16:44:56.231 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.demo.wishlist.controller.WishlistControllerIT]: WishlistControllerIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:44:56.234 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.wishlist.controller.WishlistControllerIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:44:56.453+07:00  INFO 35600 --- [demo] [           main] c.e.d.w.controller.WishlistControllerIT  : Starting WishlistControllerIT using Java 25.0.4.1 with PID 35600 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:44:56.454+07:00  INFO 35600 --- [demo] [           main] c.e.d.w.controller.WishlistControllerIT  : The following 1 profile is active: "test"
+2026-11-09T16:44:57.135+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-09T16:44:57.204+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 64 ms. Found 22 JPA repository interfaces.
+2026-11-09T16:44:57.579+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-11-09T16:44:57.600+07:00  INFO 35600 --- [demo] [           main] org.testcontainers.images.PullPolicy     : Image pull policy will be performed by: DefaultPullPolicy()
+2026-11-09T16:44:57.601+07:00  INFO 35600 --- [demo] [           main] o.t.utility.ImageNameSubstitutor         : Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2026-11-09T16:44:57.605+07:00  INFO 35600 --- [demo] [           main] org.testcontainers.DockerClientFactory   : Testcontainers version: 2.0.5
+2026-11-09T16:44:57.727+07:00  INFO 35600 --- [demo] [           main] o.t.d.DockerClientProviderStrategy       : Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+2026-11-09T16:44:57.910+07:00  INFO 35600 --- [demo] [           main] o.t.d.DockerClientProviderStrategy       : Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+2026-11-09T16:44:57.911+07:00  INFO 35600 --- [demo] [           main] org.testcontainers.DockerClientFactory   : Docker host IP address is localhost
+2026-11-09T16:44:57.922+07:00  INFO 35600 --- [demo] [           main] org.testcontainers.DockerClientFactory   : Connected to docker:
+  Server Version: 29.6.0
+  API Version: 1.55
+  Operating System: Ubuntu 24.04.4 LTS
+  Total Memory: 15673 MB
+2026-11-09T16:44:58.039+07:00  INFO 35600 --- [demo] [           main] tc.testcontainers/ryuk:0.14.0            : Creating container for image: testcontainers/ryuk:0.14.0
+2026-11-09T16:44:58.143+07:00  INFO 35600 --- [demo] [           main] tc.testcontainers/ryuk:0.14.0            : Container testcontainers/ryuk:0.14.0 is starting: 1e4f7dcf1b0ccba9b77b605781249b6fb9e96ac2fef6170e50f3a821e824d969
+2026-11-09T16:44:58.430+07:00  INFO 35600 --- [demo] [           main] tc.testcontainers/ryuk:0.14.0            : Container testcontainers/ryuk:0.14.0 started in PT0.390270786S
+2026-11-09T16:44:58.435+07:00  INFO 35600 --- [demo] [           main] o.t.utility.RyukResourceReaper           : Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+2026-11-09T16:44:58.435+07:00  INFO 35600 --- [demo] [           main] org.testcontainers.DockerClientFactory   : Checking the system...
+2026-11-09T16:44:58.435+07:00  INFO 35600 --- [demo] [           main] org.testcontainers.DockerClientFactory   : ✔︎ Docker server version should be at least 1.6.0
+2026-11-09T16:44:58.435+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Creating container for image: postgres:17-alpine
+2026-11-09T16:44:58.474+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container postgres:17-alpine is starting: a5d2ba5fc9a68b556476aad605788a389ad79e35dcf000bdb92f51b0ef8328d7
+2026-11-09T16:44:59.590+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container postgres:17-alpine started in PT1.154177005S
+2026-11-09T16:44:59.591+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container is started (JDBC URL: jdbc:postgresql://localhost:32785/backend_test?loggerLevel=OFF)
+2026-11-09T16:44:59.875+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-11-09T16:44:59.877+07:00  INFO 35600 --- [demo] [onnection-adder] tc.postgres:17-alpine                    : Creating container for image: postgres:17-alpine
+2026-11-09T16:44:59.914+07:00  INFO 35600 --- [demo] [onnection-adder] tc.postgres:17-alpine                    : Container postgres:17-alpine is starting: dc992171c64ad9710782c26c71a3d3b12f186785a7d9f669655417c63ae8c4bb
+2026-11-09T16:45:00.982+07:00  INFO 35600 --- [demo] [onnection-adder] tc.postgres:17-alpine                    : Container postgres:17-alpine started in PT1.105181593S
+2026-11-09T16:45:00.983+07:00  INFO 35600 --- [demo] [onnection-adder] tc.postgres:17-alpine                    : Container is started (JDBC URL: jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF)
+2026-11-09T16:45:01.031+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:01.076+07:00  INFO 35600 --- [demo] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-11-09T16:45:01.078+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.012s)
+2026-11-09T16:45:01.092+07:00  INFO 35600 --- [demo] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-11-09T16:45:01.134+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-11-09T16:45:01.141+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - create catalog core"
+2026-11-09T16:45:01.177+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - create product images"
+2026-11-09T16:45:01.195+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - enforce catalog relationships"
+2026-11-09T16:45:01.203+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - create users"
+2026-11-09T16:45:01.211+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - create addresses"
+2026-11-09T16:45:01.221+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - authorities and username policy"
+2026-11-09T16:45:01.244+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - authentication sessions"
+2026-11-09T16:45:01.256+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - image uploads"
+2026-11-09T16:45:01.270+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - user profile images"
+2026-11-09T16:45:01.280+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - create wishlist items"
+2026-11-09T16:45:01.291+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - catalog data enhancement"
+2026-11-09T16:45:01.308+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - product image attachments"
+2026-11-09T16:45:01.319+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - email google auth"
+2026-11-09T16:45:01.395+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - remove request rate limiting"
+2026-11-09T16:45:01.427+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - catalog search support"
+2026-11-09T16:45:01.478+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 15 migrations to schema "public", now at version v15 (execution time 00:00.237s)
+2026-11-09T16:45:01.547+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-09T16:45:01.579+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.13.Final
+2026-11-09T16:45:01.812+07:00  INFO 35600 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-09T16:45:01.863+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.11
+	Default catalog/schema: backend_test/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-09T16:45:02.556+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-09T16:45:02.584+07:00  INFO 35600 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-09T16:45:02.633+07:00  INFO 35600 --- [demo] [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-09T16:45:03.637+07:00  INFO 35600 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name domainUserDetailsService
+2026-11-09T16:45:04.185+07:00  INFO 35600 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-09T16:45:04.185+07:00  INFO 35600 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-09T16:45:04.187+07:00  INFO 35600 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-11-09T16:45:04.244+07:00  INFO 35600 --- [demo] [           main] c.e.d.w.controller.WishlistControllerIT  : Started WishlistControllerIT in 7.97 seconds (process running for 8.921)
+2026-11-09T16:45:04.246+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-11-09T16:45:04.246+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+WARNING: A Java agent has been loaded dynamically (/home/hza/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.15/byte-buddy-agent-1.18.15.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.56 s -- in com.example.demo.wishlist.controller.WishlistControllerIT
+[INFO] Running com.example.demo.wishlist.service.WishlistServiceIT
+2026-11-09T16:45:09.506+07:00  INFO 35600 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.wishlist.service.WishlistServiceIT]: WishlistServiceIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T16:45:09.516+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.wishlist.service.WishlistServiceIT
+2026-11-09T16:45:09.517+07:00  INFO 35600 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.wishlist.service.WishlistServiceIT]: WishlistServiceIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T16:45:09.517+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.wishlist.service.WishlistServiceIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:45:09.536+07:00  INFO 35600 --- [demo] [           main] c.e.d.w.service.WishlistServiceIT        : Starting WishlistServiceIT using Java 25.0.4.1 with PID 35600 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:45:09.536+07:00  INFO 35600 --- [demo] [           main] c.e.d.w.service.WishlistServiceIT        : The following 1 profile is active: "test"
+2026-11-09T16:45:09.689+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-09T16:45:09.712+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 22 JPA repository interfaces.
+2026-11-09T16:45:09.991+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-11-09T16:45:10.014+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-11-09T16:45:10.025+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:10.057+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.017s)
+2026-11-09T16:45:10.075+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 15
+2026-11-09T16:45:10.076+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-11-09T16:45:10.113+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-09T16:45:10.131+07:00  INFO 35600 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-09T16:45:10.137+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.11
+	Default catalog/schema: backend_test/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-09T16:45:10.250+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-09T16:45:10.267+07:00  INFO 35600 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-09T16:45:10.542+07:00  INFO 35600 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name domainUserDetailsService
+2026-11-09T16:45:10.980+07:00  INFO 35600 --- [demo] [           main] c.e.d.w.service.WishlistServiceIT        : Started WishlistServiceIT in 1.459 seconds (process running for 15.656)
+2026-11-09T16:45:10.981+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-11-09T16:45:10.981+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-11-09T16:45:11.087+07:00  WARN 35600 --- [demo] [           main] org.hibernate.orm.jdbc.error             : HHH000247: ErrorCode: 0, SQLState: 23503
+2026-11-09T16:45:11.087+07:00  WARN 35600 --- [demo] [           main] org.hibernate.orm.jdbc.error             : ERROR: insert or update on table "wishlist_items" violates foreign key constraint "fk_wishlist_items_product_id"
+  Detail: Key (product_id)=(a19faa61-51fd-487a-9cc8-f659d051e0b2) is not present in table "products".
+2026-11-09T16:45:11.190+07:00  WARN 35600 --- [demo] [           main] org.hibernate.orm.jdbc.error             : HHH000247: ErrorCode: 0, SQLState: 23514
+2026-11-09T16:45:11.190+07:00  WARN 35600 --- [demo] [           main] org.hibernate.orm.jdbc.error             : ERROR: Controlled test rejection
+  Where: PL/pgSQL function wishlist_test_reject_removal() line 1 at RAISE
+[INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.054 s -- in com.example.demo.wishlist.service.WishlistServiceIT
+[INFO] Running com.example.demo.catalog.CatalogQueryCountIT
+2026-11-09T16:45:12.574+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.CatalogQueryCountIT
+2026-11-09T16:45:12.575+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.CatalogQueryCountIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:45:12.586+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.CatalogQueryCountIT     : Starting CatalogQueryCountIT using Java 25.0.4.1 with PID 35600 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:45:12.586+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.CatalogQueryCountIT     : The following 1 profile is active: "test"
+2026-11-09T16:45:12.721+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-09T16:45:12.760+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 38 ms. Found 22 JPA repository interfaces.
+2026-11-09T16:45:12.813+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2026-11-09T16:45:12.824+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2026-11-09T16:45:12.845+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:12.862+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.006s)
+2026-11-09T16:45:12.881+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 15
+2026-11-09T16:45:12.881+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-11-09T16:45:12.895+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-09T16:45:12.904+07:00  INFO 35600 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-09T16:45:12.908+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.11
+	Default catalog/schema: backend_test/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-09T16:45:12.977+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-09T16:45:12.989+07:00  INFO 35600 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-09T16:45:13.102+07:00  INFO 35600 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name domainUserDetailsService
+2026-11-09T16:45:13.293+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.CatalogQueryCountIT     : Started CatalogQueryCountIT in 0.716 seconds (process running for 17.969)
+2026-11-09T16:45:13.293+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-11-09T16:45:13.294+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.293 s -- in com.example.demo.catalog.CatalogQueryCountIT
+[INFO] Running com.example.demo.catalog.ProductDetailApiIT
+2026-11-09T16:45:13.857+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.ProductDetailApiIT
+2026-11-09T16:45:13.858+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.ProductDetailApiIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:45:13.869+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.ProductDetailApiIT      : Starting ProductDetailApiIT using Java 25.0.4.1 with PID 35600 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:45:13.870+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.ProductDetailApiIT      : The following 1 profile is active: "test"
+2026-11-09T16:45:13.985+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-09T16:45:14.005+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19 ms. Found 22 JPA repository interfaces.
+2026-11-09T16:45:14.048+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
+2026-11-09T16:45:14.060+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.
+2026-11-09T16:45:14.071+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:14.085+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.004s)
+2026-11-09T16:45:14.116+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 15
+2026-11-09T16:45:14.116+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-11-09T16:45:14.130+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-09T16:45:14.140+07:00  INFO 35600 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-09T16:45:14.144+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.11
+	Default catalog/schema: backend_test/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-09T16:45:14.207+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-09T16:45:14.222+07:00  INFO 35600 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-09T16:45:14.348+07:00  INFO 35600 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name domainUserDetailsService
+2026-11-09T16:45:14.500+07:00  INFO 35600 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-09T16:45:14.500+07:00  INFO 35600 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-09T16:45:14.501+07:00  INFO 35600 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-11-09T16:45:14.514+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.ProductDetailApiIT      : Started ProductDetailApiIT in 0.654 seconds (process running for 19.19)
+2026-11-09T16:45:14.515+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-11-09T16:45:14.515+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.924 s -- in com.example.demo.catalog.ProductDetailApiIT
+[INFO] Running com.example.demo.catalog.repository.ProductDetailRepositoryIT
+2026-11-09T16:45:14.781+07:00  INFO 35600 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.catalog.repository.ProductDetailRepositoryIT]: ProductDetailRepositoryIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T16:45:14.796+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.repository.ProductDetailRepositoryIT
+2026-11-09T16:45:14.796+07:00  INFO 35600 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.catalog.repository.ProductDetailRepositoryIT]: ProductDetailRepositoryIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T16:45:14.800+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.repository.ProductDetailRepositoryIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:45:14.810+07:00  INFO 35600 --- [demo] [           main] c.e.d.c.r.ProductDetailRepositoryIT      : Starting ProductDetailRepositoryIT using Java 25.0.4.1 with PID 35600 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:45:14.810+07:00  INFO 35600 --- [demo] [           main] c.e.d.c.r.ProductDetailRepositoryIT      : The following 1 profile is active: "test"
+2026-11-09T16:45:14.859+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-09T16:45:14.884+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 23 ms. Found 22 JPA repository interfaces.
+2026-11-09T16:45:14.908+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2026-11-09T16:45:14.918+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2026-11-09T16:45:14.929+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:14.944+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.004s)
+2026-11-09T16:45:14.971+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 15
+2026-11-09T16:45:14.971+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-11-09T16:45:14.981+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-09T16:45:14.990+07:00  INFO 35600 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-09T16:45:14.994+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.11
+	Default catalog/schema: backend_test/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-09T16:45:15.046+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-09T16:45:15.057+07:00  INFO 35600 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-09T16:45:15.138+07:00  INFO 35600 --- [demo] [           main] c.e.d.c.r.ProductDetailRepositoryIT      : Started ProductDetailRepositoryIT in 0.336 seconds (process running for 19.814)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into brands (code,name,id) values (?,?,?)
+Hibernate: update products set brand_id=?,category_id=?,description=?,name=?,status=? where id=?
+Hibernate: select p1_0.id,b1_0.id,b1_0.code,b1_0.name,p1_0.category_id,c1_0.id,c1_0.name,c1_0.parent_category_id,p1_0.description,p1_0.name,p1_0.status from products p1_0 join categories c1_0 on c1_0.id=p1_0.category_id left join brands b1_0 on b1_0.id=p1_0.brand_id where p1_0.id=? and p1_0.status=?
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: select p1_0.id,b1_0.id,b1_0.code,b1_0.name,p1_0.category_id,c1_0.id,c1_0.name,c1_0.parent_category_id,p1_0.description,p1_0.name,p1_0.status from products p1_0 join categories c1_0 on c1_0.id=p1_0.category_id left join brands b1_0 on b1_0.id=p1_0.brand_id where p1_0.id=? and p1_0.status=?
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: select p1_0.id,b1_0.id,b1_0.code,b1_0.name,p1_0.category_id,c1_0.id,c1_0.name,c1_0.parent_category_id,p1_0.description,p1_0.name,p1_0.status from products p1_0 join categories c1_0 on c1_0.id=p1_0.category_id left join brands b1_0 on b1_0.id=p1_0.brand_id where p1_0.id=? and p1_0.status=?
+Hibernate: select p1_0.id,b1_0.id,b1_0.code,b1_0.name,p1_0.category_id,c1_0.id,c1_0.name,c1_0.parent_category_id,p1_0.description,p1_0.name,p1_0.status from products p1_0 join categories c1_0 on c1_0.id=p1_0.category_id left join brands b1_0 on b1_0.id=p1_0.brand_id where p1_0.id=? and p1_0.status=?
+Hibernate: select p1_0.id,b1_0.id,b1_0.code,b1_0.name,p1_0.category_id,c1_0.id,c1_0.name,c1_0.parent_category_id,p1_0.description,p1_0.name,p1_0.status from products p1_0 join categories c1_0 on c1_0.id=p1_0.category_id left join brands b1_0 on b1_0.id=p1_0.brand_id where p1_0.id=? and p1_0.status=?
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_images (alt_text,byte_size,content_type,created_at,display_order,height,object_key,is_primary,product_id,width,id) values (?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: insert into product_images (alt_text,byte_size,content_type,created_at,display_order,height,object_key,is_primary,product_id,width,id) values (?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: select p1_0.id,b1_0.id,b1_0.code,b1_0.name,p1_0.category_id,c1_0.id,c1_0.name,c1_0.parent_category_id,p1_0.description,p1_0.name,p1_0.status from products p1_0 join categories c1_0 on c1_0.id=p1_0.category_id left join brands b1_0 on b1_0.id=p1_0.brand_id where p1_0.id=? and p1_0.status=?
+Hibernate: select pv1_0.id,pv1_0.option_combination,pv1_0.product_id,pv1_0.selling_price,pv1_0.sku,pv1_0.technical_specifications from product_variants pv1_0 where pv1_0.product_id=? order by pv1_0.id
+Hibernate: select pv1_0.id,pv1_0.option_combination,pv1_0.product_id,pv1_0.selling_price,pv1_0.sku,pv1_0.technical_specifications from product_variants pv1_0 where pv1_0.product_id=? order by pv1_0.id
+Hibernate: select pi1_0.id,pi1_0.alt_text,pi1_0.byte_size,pi1_0.content_type,pi1_0.created_at,pi1_0.display_order,pi1_0.height,pi1_0.object_key,pi1_0.is_primary,pi1_0.product_id,pi1_0.width from product_images pi1_0 where pi1_0.product_id=? order by pi1_0.display_order
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.499 s -- in com.example.demo.catalog.repository.ProductDetailRepositoryIT
+[INFO] Running com.example.demo.catalog.repository.CatalogSearchMigrationIT
+2026-11-09T16:45:15.281+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Creating container for image: postgres:17-alpine
+2026-11-09T16:45:15.319+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container postgres:17-alpine is starting: 63223a837f88809cb3a3f8ba784e32847c76ffc92d35660bb812d1215fbad03d
+2026-11-09T16:45:16.244+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container postgres:17-alpine started in PT0.963232977S
+2026-11-09T16:45:16.245+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container is started (JDBC URL: jdbc:postgresql://localhost:32787/t015_disposable?loggerLevel=OFF)
+2026-11-09T16:45:16.265+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32787/t015_disposable?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:16.275+07:00  INFO 35600 --- [demo] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-11-09T16:45:16.275+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.003s)
+2026-11-09T16:45:16.280+07:00  INFO 35600 --- [demo] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-11-09T16:45:16.299+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-11-09T16:45:16.303+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - create catalog core"
+2026-11-09T16:45:16.322+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - create product images"
+2026-11-09T16:45:16.337+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - enforce catalog relationships"
+2026-11-09T16:45:16.342+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - create users"
+2026-11-09T16:45:16.347+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - create addresses"
+2026-11-09T16:45:16.352+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - authorities and username policy"
+2026-11-09T16:45:16.365+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - authentication sessions"
+2026-11-09T16:45:16.381+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - image uploads"
+2026-11-09T16:45:16.392+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - user profile images"
+2026-11-09T16:45:16.400+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - create wishlist items"
+2026-11-09T16:45:16.408+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - catalog data enhancement"
+2026-11-09T16:45:16.419+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - product image attachments"
+2026-11-09T16:45:16.428+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - email google auth"
+2026-11-09T16:45:16.492+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - remove request rate limiting"
+2026-11-09T16:45:16.511+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 14 migrations to schema "public", now at version v14 (execution time 00:00.152s)
+2026-11-09T16:45:16.635+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32787/t015_disposable?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:16.646+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.004s)
+2026-11-09T16:45:16.658+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 14
+2026-11-09T16:45:16.662+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - catalog search support"
+2026-11-09T16:45:16.681+07:00 ERROR 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migration of schema "public" to version "15 - catalog search support" failed! Changes successfully rolled back.
+2026-11-09T16:45:16.910+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Creating container for image: postgres:17-alpine
+2026-11-09T16:45:16.948+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container postgres:17-alpine is starting: 76614a9c5b411d410b16683ee2a2c768c88fe48abe18fe2d7b24afbea9506e04
+2026-11-09T16:45:17.939+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container postgres:17-alpine started in PT1.028943432S
+2026-11-09T16:45:17.939+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container is started (JDBC URL: jdbc:postgresql://localhost:32788/t015_disposable?loggerLevel=OFF)
+2026-11-09T16:45:17.971+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32788/t015_disposable?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:17.981+07:00  INFO 35600 --- [demo] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-11-09T16:45:17.981+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.002s)
+2026-11-09T16:45:17.985+07:00  INFO 35600 --- [demo] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-11-09T16:45:17.999+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-11-09T16:45:18.001+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - create catalog core"
+2026-11-09T16:45:18.023+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - create product images"
+2026-11-09T16:45:18.037+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - enforce catalog relationships"
+2026-11-09T16:45:18.043+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - create users"
+2026-11-09T16:45:18.048+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - create addresses"
+2026-11-09T16:45:18.056+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - authorities and username policy"
+2026-11-09T16:45:18.076+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - authentication sessions"
+2026-11-09T16:45:18.091+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - image uploads"
+2026-11-09T16:45:18.100+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - user profile images"
+2026-11-09T16:45:18.106+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - create wishlist items"
+2026-11-09T16:45:18.112+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - catalog data enhancement"
+2026-11-09T16:45:18.121+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - product image attachments"
+2026-11-09T16:45:18.126+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - email google auth"
+2026-11-09T16:45:18.177+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - remove request rate limiting"
+2026-11-09T16:45:18.191+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 14 migrations to schema "public", now at version v14 (execution time 00:00.143s)
+2026-11-09T16:45:18.518+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32788/t015_disposable?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:18.532+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.005s)
+2026-11-09T16:45:18.545+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 14
+2026-11-09T16:45:18.547+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - catalog search support"
+2026-11-09T16:45:18.596+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 1 migration to schema "public", now at version v15 (execution time 00:00.044s)
+2026-11-09T16:45:18.613+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32788/t015_disposable?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:18.623+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.003s)
+2026-11-09T16:45:22.114+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Creating container for image: postgres:17-alpine
+2026-11-09T16:45:22.142+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container postgres:17-alpine is starting: 53f8b301cd129b334bb53823e16fc70d711632853f1920f567e7e72b5d39c312
+2026-11-09T16:45:23.139+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container postgres:17-alpine started in PT1.025540595S
+2026-11-09T16:45:23.139+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container is started (JDBC URL: jdbc:postgresql://localhost:32789/t015_disposable?loggerLevel=OFF)
+2026-11-09T16:45:23.165+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32789/t015_disposable?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:23.173+07:00  INFO 35600 --- [demo] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-11-09T16:45:23.174+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.002s)
+2026-11-09T16:45:23.177+07:00  INFO 35600 --- [demo] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-11-09T16:45:23.189+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-11-09T16:45:23.190+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - create catalog core"
+2026-11-09T16:45:23.202+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - create product images"
+2026-11-09T16:45:23.215+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - enforce catalog relationships"
+2026-11-09T16:45:23.218+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - create users"
+2026-11-09T16:45:23.223+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - create addresses"
+2026-11-09T16:45:23.229+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - authorities and username policy"
+2026-11-09T16:45:23.242+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - authentication sessions"
+2026-11-09T16:45:23.255+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - image uploads"
+2026-11-09T16:45:23.261+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - user profile images"
+2026-11-09T16:45:23.264+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - create wishlist items"
+2026-11-09T16:45:23.272+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - catalog data enhancement"
+2026-11-09T16:45:23.284+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - product image attachments"
+2026-11-09T16:45:23.293+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - email google auth"
+2026-11-09T16:45:23.341+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - remove request rate limiting"
+2026-11-09T16:45:23.354+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - catalog search support"
+2026-11-09T16:45:23.374+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 15 migrations to schema "public", now at version v15 (execution time 00:00.139s)
+2026-11-09T16:45:23.390+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32789/t015_disposable?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:23.407+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.006s)
+2026-11-09T16:45:25.973+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Creating container for image: postgres:17-alpine
+2026-11-09T16:45:26.013+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container postgres:17-alpine is starting: 6ce10fbad13ffe9791d9ac3c9963fa2ecf7556dc334df034ec19dba83abf5246
+2026-11-09T16:45:26.962+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container postgres:17-alpine started in PT0.989601144S
+2026-11-09T16:45:26.962+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container is started (JDBC URL: jdbc:postgresql://localhost:32790/t015_disposable?loggerLevel=OFF)
+2026-11-09T16:45:26.983+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32790/t015_disposable?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:26.991+07:00  INFO 35600 --- [demo] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-11-09T16:45:26.992+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.002s)
+2026-11-09T16:45:26.996+07:00  INFO 35600 --- [demo] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-11-09T16:45:27.013+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-11-09T16:45:27.014+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - create catalog core"
+2026-11-09T16:45:27.030+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - create product images"
+2026-11-09T16:45:27.054+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - enforce catalog relationships"
+2026-11-09T16:45:27.063+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - create users"
+2026-11-09T16:45:27.070+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - create addresses"
+2026-11-09T16:45:27.078+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - authorities and username policy"
+2026-11-09T16:45:27.089+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - authentication sessions"
+2026-11-09T16:45:27.099+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - image uploads"
+2026-11-09T16:45:27.109+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - user profile images"
+2026-11-09T16:45:27.116+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - create wishlist items"
+2026-11-09T16:45:27.123+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - catalog data enhancement"
+2026-11-09T16:45:27.131+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - product image attachments"
+2026-11-09T16:45:27.135+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - email google auth"
+2026-11-09T16:45:27.188+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - remove request rate limiting"
+2026-11-09T16:45:27.200+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 14 migrations to schema "public", now at version v14 (execution time 00:00.143s)
+2026-11-09T16:45:27.245+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32790/t015_disposable?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:27.254+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.003s)
+2026-11-09T16:45:27.263+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 14
+2026-11-09T16:45:27.264+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - catalog search support"
+2026-11-09T16:45:27.274+07:00 ERROR 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migration of schema "public" to version "15 - catalog search support" failed! Changes successfully rolled back.
+2026-11-09T16:45:27.551+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Creating container for image: postgres:17-alpine
+2026-11-09T16:45:27.585+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container postgres:17-alpine is starting: 25e67c5058ceb164f1be39ce24606f0dd952420c60229e651a8d48d13920ef6a
+2026-11-09T16:45:28.491+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container postgres:17-alpine started in PT0.939829326S
+2026-11-09T16:45:28.492+07:00  INFO 35600 --- [demo] [           main] tc.postgres:17-alpine                    : Container is started (JDBC URL: jdbc:postgresql://localhost:32791/t015_disposable?loggerLevel=OFF)
+2026-11-09T16:45:28.521+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32791/t015_disposable?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:28.534+07:00  INFO 35600 --- [demo] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-11-09T16:45:28.535+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.004s)
+2026-11-09T16:45:28.546+07:00  INFO 35600 --- [demo] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-11-09T16:45:28.571+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-11-09T16:45:28.575+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - create catalog core"
+2026-11-09T16:45:28.607+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - create product images"
+2026-11-09T16:45:28.637+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - enforce catalog relationships"
+2026-11-09T16:45:28.648+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - create users"
+2026-11-09T16:45:28.662+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - create addresses"
+2026-11-09T16:45:28.671+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - authorities and username policy"
+2026-11-09T16:45:28.687+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - authentication sessions"
+2026-11-09T16:45:28.709+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - image uploads"
+2026-11-09T16:45:28.725+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - user profile images"
+2026-11-09T16:45:28.732+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - create wishlist items"
+2026-11-09T16:45:28.743+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - catalog data enhancement"
+2026-11-09T16:45:28.752+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - product image attachments"
+2026-11-09T16:45:28.760+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - email google auth"
+2026-11-09T16:45:28.803+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - remove request rate limiting"
+2026-11-09T16:45:28.817+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 14 migrations to schema "public", now at version v14 (execution time 00:00.183s)
+2026-11-09T16:45:28.846+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32791/t015_disposable?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:28.859+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.005s)
+2026-11-09T16:45:28.872+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 14
+2026-11-09T16:45:28.874+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - catalog search support"
+2026-11-09T16:45:28.879+07:00 ERROR 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Migration of schema "public" to version "15 - catalog search support" failed! Changes successfully rolled back.
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.93 s -- in com.example.demo.catalog.repository.CatalogSearchMigrationIT
+[INFO] Running com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT
+2026-11-09T16:45:29.212+07:00  INFO 35600 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT]: ProductSearchBaselineRepositoryIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T16:45:29.221+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT
+2026-11-09T16:45:29.222+07:00  INFO 35600 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT]: ProductSearchBaselineRepositoryIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T16:45:29.226+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:45:29.236+07:00  INFO 35600 --- [demo] [           main] .d.c.r.ProductSearchBaselineRepositoryIT : Starting ProductSearchBaselineRepositoryIT using Java 25.0.4.1 with PID 35600 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:45:29.236+07:00  INFO 35600 --- [demo] [           main] .d.c.r.ProductSearchBaselineRepositoryIT : The following 1 profile is active: "test"
+2026-11-09T16:45:29.303+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-09T16:45:29.324+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 20 ms. Found 22 JPA repository interfaces.
+2026-11-09T16:45:29.346+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Starting...
+2026-11-09T16:45:29.356+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Start completed.
+2026-11-09T16:45:29.364+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:29.374+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.003s)
+2026-11-09T16:45:29.405+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 15
+2026-11-09T16:45:29.405+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-11-09T16:45:29.428+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-09T16:45:29.437+07:00  INFO 35600 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-09T16:45:29.441+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.11
+	Default catalog/schema: backend_test/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-09T16:45:29.492+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-09T16:45:29.503+07:00  INFO 35600 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-09T16:45:29.578+07:00  INFO 35600 --- [demo] [           main] .d.c.r.ProductSearchBaselineRepositoryIT : Started ProductSearchBaselineRepositoryIT in 0.35 seconds (process running for 34.254)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: update product_variants set option_combination=?,product_id=?,selling_price=?,sku=?,technical_specifications=? where id=?
+Hibernate: WITH published_products AS (
+    SELECT id FROM products WHERE status = ?
+), eligible_variants AS (
+    SELECT p.id AS product_id, v.id AS variant_id, v.selling_price AS display_amount
+    FROM published_products p
+    JOIN product_variants v ON v.product_id = p.id
+    UNION ALL
+    SELECT p.id, CAST(NULL AS uuid), CAST(NULL AS numeric)
+    FROM published_products p
+    WHERE ? = true
+      AND NOT EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id)
+), eligible_products AS (
+    SELECT DISTINCT ON (product_id) product_id, variant_id, display_amount
+    FROM eligible_variants
+    ORDER BY product_id ASC, display_amount ASC NULLS LAST, variant_id ASC NULLS LAST
+), totals AS (
+    SELECT count(*) AS total_elements FROM eligible_products
+), candidate_page AS (
+    SELECT product_id, variant_id, display_amount
+    FROM eligible_products
+    ORDER BY product_id ASC
+    LIMIT ? OFFSET ?
+)
+SELECT p.product_id, p.variant_id, p.display_amount, t.total_elements
+FROM totals t
+LEFT JOIN candidate_page p ON true
+ORDER BY p.product_id ASC NULLS LAST
+
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: WITH published_products AS (
+    SELECT id FROM products WHERE status = ?
+), eligible_variants AS (
+    SELECT p.id AS product_id, v.id AS variant_id, v.selling_price AS display_amount
+    FROM published_products p
+    JOIN product_variants v ON v.product_id = p.id
+    UNION ALL
+    SELECT p.id, CAST(NULL AS uuid), CAST(NULL AS numeric)
+    FROM published_products p
+    WHERE ? = true
+      AND NOT EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id)
+), eligible_products AS (
+    SELECT DISTINCT ON (product_id) product_id, variant_id, display_amount
+    FROM eligible_variants
+    ORDER BY product_id ASC, display_amount ASC NULLS LAST, variant_id ASC NULLS LAST
+), totals AS (
+    SELECT count(*) AS total_elements FROM eligible_products
+), candidate_page AS (
+    SELECT product_id, variant_id, display_amount
+    FROM eligible_products
+    ORDER BY product_id ASC
+    LIMIT ? OFFSET ?
+)
+SELECT p.product_id, p.variant_id, p.display_amount, t.total_elements
+FROM totals t
+LEFT JOIN candidate_page p ON true
+ORDER BY p.product_id ASC NULLS LAST
+
+Hibernate: WITH published_products AS (
+    SELECT id FROM products WHERE status = ?
+), eligible_variants AS (
+    SELECT p.id AS product_id, v.id AS variant_id, v.selling_price AS display_amount
+    FROM published_products p
+    JOIN product_variants v ON v.product_id = p.id
+    UNION ALL
+    SELECT p.id, CAST(NULL AS uuid), CAST(NULL AS numeric)
+    FROM published_products p
+    WHERE ? = true
+      AND NOT EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id)
+), eligible_products AS (
+    SELECT DISTINCT ON (product_id) product_id, variant_id, display_amount
+    FROM eligible_variants
+    ORDER BY product_id ASC, display_amount ASC NULLS LAST, variant_id ASC NULLS LAST
+), totals AS (
+    SELECT count(*) AS total_elements FROM eligible_products
+), candidate_page AS (
+    SELECT product_id, variant_id, display_amount
+    FROM eligible_products
+    ORDER BY product_id ASC
+    LIMIT ? OFFSET ?
+)
+SELECT p.product_id, p.variant_id, p.display_amount, t.total_elements
+FROM totals t
+LEFT JOIN candidate_page p ON true
+ORDER BY p.product_id ASC NULLS LAST
+
+Hibernate: SELECT id FROM products WHERE status = 'PUBLISHED' ORDER BY id ASC fetch first ? rows only
+Hibernate: SELECT COUNT(*) FROM products WHERE status = 'PUBLISHED'
+Hibernate: WITH published_products AS (
+    SELECT id FROM products WHERE status = ?
+), eligible_variants AS (
+    SELECT p.id AS product_id, v.id AS variant_id, v.selling_price AS display_amount
+    FROM published_products p
+    JOIN product_variants v ON v.product_id = p.id
+    UNION ALL
+    SELECT p.id, CAST(NULL AS uuid), CAST(NULL AS numeric)
+    FROM published_products p
+    WHERE ? = true
+      AND NOT EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id)
+), eligible_products AS (
+    SELECT DISTINCT ON (product_id) product_id, variant_id, display_amount
+    FROM eligible_variants
+    ORDER BY product_id ASC, display_amount ASC NULLS LAST, variant_id ASC NULLS LAST
+), totals AS (
+    SELECT count(*) AS total_elements FROM eligible_products
+), candidate_page AS (
+    SELECT product_id, variant_id, display_amount
+    FROM eligible_products
+    ORDER BY product_id ASC
+    LIMIT ? OFFSET ?
+)
+SELECT p.product_id, p.variant_id, p.display_amount, t.total_elements
+FROM totals t
+LEFT JOIN candidate_page p ON true
+ORDER BY p.product_id ASC NULLS LAST
+
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_images (alt_text,byte_size,content_type,created_at,display_order,height,object_key,is_primary,product_id,width,id) values (?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: insert into product_images (alt_text,byte_size,content_type,created_at,display_order,height,object_key,is_primary,product_id,width,id) values (?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: update product_variants set option_combination=?,product_id=?,selling_price=?,sku=?,technical_specifications=? where id=?
+Hibernate: WITH published_products AS (
+    SELECT id FROM products WHERE status = ?
+), eligible_variants AS (
+    SELECT p.id AS product_id, v.id AS variant_id, v.selling_price AS display_amount
+    FROM published_products p
+    JOIN product_variants v ON v.product_id = p.id
+    UNION ALL
+    SELECT p.id, CAST(NULL AS uuid), CAST(NULL AS numeric)
+    FROM published_products p
+    WHERE ? = true
+      AND NOT EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id)
+), eligible_products AS (
+    SELECT DISTINCT ON (product_id) product_id, variant_id, display_amount
+    FROM eligible_variants
+    ORDER BY product_id ASC, display_amount ASC NULLS LAST, variant_id ASC NULLS LAST
+), totals AS (
+    SELECT count(*) AS total_elements FROM eligible_products
+), candidate_page AS (
+    SELECT product_id, variant_id, display_amount
+    FROM eligible_products
+    ORDER BY product_id ASC
+    LIMIT ? OFFSET ?
+)
+SELECT p.product_id, p.variant_id, p.display_amount, t.total_elements
+FROM totals t
+LEFT JOIN candidate_page p ON true
+ORDER BY p.product_id ASC NULLS LAST
+
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: WITH published_products AS (
+    SELECT id FROM products WHERE status = ?
+), eligible_variants AS (
+    SELECT p.id AS product_id, v.id AS variant_id, v.selling_price AS display_amount
+    FROM published_products p
+    JOIN product_variants v ON v.product_id = p.id
+    UNION ALL
+    SELECT p.id, CAST(NULL AS uuid), CAST(NULL AS numeric)
+    FROM published_products p
+    WHERE ? = true
+      AND NOT EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id)
+), eligible_products AS (
+    SELECT DISTINCT ON (product_id) product_id, variant_id, display_amount
+    FROM eligible_variants
+    ORDER BY product_id ASC, display_amount ASC NULLS LAST, variant_id ASC NULLS LAST
+), totals AS (
+    SELECT count(*) AS total_elements FROM eligible_products
+), candidate_page AS (
+    SELECT product_id, variant_id, display_amount
+    FROM eligible_products
+    ORDER BY product_id ASC
+    LIMIT ? OFFSET ?
+)
+SELECT p.product_id, p.variant_id, p.display_amount, t.total_elements
+FROM totals t
+LEFT JOIN candidate_page p ON true
+ORDER BY p.product_id ASC NULLS LAST
+
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: WITH published_products AS (
+    SELECT id FROM products WHERE status = ?
+), eligible_variants AS (
+    SELECT p.id AS product_id, v.id AS variant_id, v.selling_price AS display_amount
+    FROM published_products p
+    JOIN product_variants v ON v.product_id = p.id
+    UNION ALL
+    SELECT p.id, CAST(NULL AS uuid), CAST(NULL AS numeric)
+    FROM published_products p
+    WHERE ? = true
+      AND NOT EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id)
+), eligible_products AS (
+    SELECT DISTINCT ON (product_id) product_id, variant_id, display_amount
+    FROM eligible_variants
+    ORDER BY product_id ASC, display_amount ASC NULLS LAST, variant_id ASC NULLS LAST
+), totals AS (
+    SELECT count(*) AS total_elements FROM eligible_products
+), candidate_page AS (
+    SELECT product_id, variant_id, display_amount
+    FROM eligible_products
+    ORDER BY product_id ASC
+    LIMIT ? OFFSET ?
+)
+SELECT p.product_id, p.variant_id, p.display_amount, t.total_elements
+FROM totals t
+LEFT JOIN candidate_page p ON true
+ORDER BY p.product_id ASC NULLS LAST
+
+Hibernate: WITH published_products AS (
+    SELECT id FROM products WHERE status = ?
+), eligible_variants AS (
+    SELECT p.id AS product_id, v.id AS variant_id, v.selling_price AS display_amount
+    FROM published_products p
+    JOIN product_variants v ON v.product_id = p.id
+    UNION ALL
+    SELECT p.id, CAST(NULL AS uuid), CAST(NULL AS numeric)
+    FROM published_products p
+    WHERE ? = true
+      AND NOT EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id)
+), eligible_products AS (
+    SELECT DISTINCT ON (product_id) product_id, variant_id, display_amount
+    FROM eligible_variants
+    ORDER BY product_id ASC, display_amount ASC NULLS LAST, variant_id ASC NULLS LAST
+), totals AS (
+    SELECT count(*) AS total_elements FROM eligible_products
+), candidate_page AS (
+    SELECT product_id, variant_id, display_amount
+    FROM eligible_products
+    ORDER BY product_id ASC
+    LIMIT ? OFFSET ?
+)
+SELECT p.product_id, p.variant_id, p.display_amount, t.total_elements
+FROM totals t
+LEFT JOIN candidate_page p ON true
+ORDER BY p.product_id ASC NULLS LAST
+
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: WITH published_products AS (
+    SELECT id FROM products WHERE status = ?
+), eligible_variants AS (
+    SELECT p.id AS product_id, v.id AS variant_id, v.selling_price AS display_amount
+    FROM published_products p
+    JOIN product_variants v ON v.product_id = p.id
+    UNION ALL
+    SELECT p.id, CAST(NULL AS uuid), CAST(NULL AS numeric)
+    FROM published_products p
+    WHERE ? = true
+      AND NOT EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id)
+), eligible_products AS (
+    SELECT DISTINCT ON (product_id) product_id, variant_id, display_amount
+    FROM eligible_variants
+    ORDER BY product_id ASC, display_amount ASC NULLS LAST, variant_id ASC NULLS LAST
+), totals AS (
+    SELECT count(*) AS total_elements FROM eligible_products
+), candidate_page AS (
+    SELECT product_id, variant_id, display_amount
+    FROM eligible_products
+    ORDER BY product_id ASC
+    LIMIT ? OFFSET ?
+)
+SELECT p.product_id, p.variant_id, p.display_amount, t.total_elements
+FROM totals t
+LEFT JOIN candidate_page p ON true
+ORDER BY p.product_id ASC NULLS LAST
+
+Hibernate: WITH published_products AS (
+    SELECT id FROM products WHERE status = ?
+), eligible_variants AS (
+    SELECT p.id AS product_id, v.id AS variant_id, v.selling_price AS display_amount
+    FROM published_products p
+    JOIN product_variants v ON v.product_id = p.id
+    UNION ALL
+    SELECT p.id, CAST(NULL AS uuid), CAST(NULL AS numeric)
+    FROM published_products p
+    WHERE ? = true
+      AND NOT EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id)
+), eligible_products AS (
+    SELECT DISTINCT ON (product_id) product_id, variant_id, display_amount
+    FROM eligible_variants
+    ORDER BY product_id ASC, display_amount ASC NULLS LAST, variant_id ASC NULLS LAST
+), totals AS (
+    SELECT count(*) AS total_elements FROM eligible_products
+), candidate_page AS (
+    SELECT product_id, variant_id, display_amount
+    FROM eligible_products
+    ORDER BY product_id ASC
+    LIMIT ? OFFSET ?
+)
+SELECT p.product_id, p.variant_id, p.display_amount, t.total_elements
+FROM totals t
+LEFT JOIN candidate_page p ON true
+ORDER BY p.product_id ASC NULLS LAST
+
+Hibernate: WITH published_products AS (
+    SELECT id FROM products WHERE status = ?
+), eligible_variants AS (
+    SELECT p.id AS product_id, v.id AS variant_id, v.selling_price AS display_amount
+    FROM published_products p
+    JOIN product_variants v ON v.product_id = p.id
+    UNION ALL
+    SELECT p.id, CAST(NULL AS uuid), CAST(NULL AS numeric)
+    FROM published_products p
+    WHERE ? = true
+      AND NOT EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id)
+), eligible_products AS (
+    SELECT DISTINCT ON (product_id) product_id, variant_id, display_amount
+    FROM eligible_variants
+    ORDER BY product_id ASC, display_amount ASC NULLS LAST, variant_id ASC NULLS LAST
+), totals AS (
+    SELECT count(*) AS total_elements FROM eligible_products
+), candidate_page AS (
+    SELECT product_id, variant_id, display_amount
+    FROM eligible_products
+    ORDER BY product_id ASC
+    LIMIT ? OFFSET ?
+)
+SELECT p.product_id, p.variant_id, p.display_amount, t.total_elements
+FROM totals t
+LEFT JOIN candidate_page p ON true
+ORDER BY p.product_id ASC NULLS LAST
+
+Hibernate: WITH published_products AS (
+    SELECT id FROM products WHERE status = ?
+), eligible_variants AS (
+    SELECT p.id AS product_id, v.id AS variant_id, v.selling_price AS display_amount
+    FROM published_products p
+    JOIN product_variants v ON v.product_id = p.id
+    UNION ALL
+    SELECT p.id, CAST(NULL AS uuid), CAST(NULL AS numeric)
+    FROM published_products p
+    WHERE ? = true
+      AND NOT EXISTS (SELECT 1 FROM product_variants v WHERE v.product_id = p.id)
+), eligible_products AS (
+    SELECT DISTINCT ON (product_id) product_id, variant_id, display_amount
+    FROM eligible_variants
+    ORDER BY product_id ASC, display_amount ASC NULLS LAST, variant_id ASC NULLS LAST
+), totals AS (
+    SELECT count(*) AS total_elements FROM eligible_products
+), candidate_page AS (
+    SELECT product_id, variant_id, display_amount
+    FROM eligible_products
+    ORDER BY product_id ASC
+    LIMIT ? OFFSET ?
+)
+SELECT p.product_id, p.variant_id, p.display_amount, t.total_elements
+FROM totals t
+LEFT JOIN candidate_page p ON true
+ORDER BY p.product_id ASC NULLS LAST
+
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.598 s -- in com.example.demo.catalog.repository.ProductSearchBaselineRepositoryIT
+[INFO] Running com.example.demo.catalog.repository.ProductListingRepositoryIT
+2026-11-09T16:45:29.811+07:00  INFO 35600 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.catalog.repository.ProductListingRepositoryIT]: ProductListingRepositoryIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T16:45:29.819+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.repository.ProductListingRepositoryIT
+2026-11-09T16:45:29.820+07:00  INFO 35600 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.catalog.repository.ProductListingRepositoryIT]: ProductListingRepositoryIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T16:45:29.824+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.repository.ProductListingRepositoryIT
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: SELECT id FROM products WHERE status = 'PUBLISHED' ORDER BY id ASC fetch first ? rows only
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: insert into categories (name,parent_category_id,id) values (?,?,?)
+Hibernate: insert into products (brand_id,category_id,description,name,status,id) values (?,?,?,?,?,?)
+Hibernate: insert into product_variants (option_combination,product_id,selling_price,sku,technical_specifications,id) values (?,?,?,?,?,?)
+Hibernate: SELECT id FROM products WHERE status = 'PUBLISHED' ORDER BY id ASC fetch first ? rows only
+Hibernate: SELECT COUNT(*) FROM products WHERE status = 'PUBLISHED'
+Hibernate: SELECT id FROM products WHERE status = 'PUBLISHED' ORDER BY id ASC offset ? rows fetch next ? rows only
+Hibernate: SELECT id FROM products WHERE status = 'PUBLISHED' ORDER BY id ASC offset ? rows fetch next ? rows only
+Hibernate: SELECT COUNT(*) FROM products WHERE status = 'PUBLISHED'
+Hibernate: SELECT id FROM products WHERE status = 'PUBLISHED' ORDER BY id ASC fetch first ? rows only
+Hibernate: SELECT COUNT(*) FROM products WHERE status = 'PUBLISHED'
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.087 s -- in com.example.demo.catalog.repository.ProductListingRepositoryIT
+[INFO] Running com.example.demo.catalog.CatalogReadFlowIT
+2026-11-09T16:45:29.899+07:00  INFO 35600 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.catalog.CatalogReadFlowIT]: CatalogReadFlowIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T16:45:29.900+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.CatalogReadFlowIT
+2026-11-09T16:45:29.901+07:00  INFO 35600 --- [demo] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.demo.catalog.CatalogReadFlowIT]: CatalogReadFlowIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-11-09T16:45:29.901+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.CatalogReadFlowIT
+2026-11-09T16:45:29.904+07:00  INFO 35600 --- [demo] [           main] tc.localstack/localstack:4.14.0          : Creating container for image: localstack/localstack:4.14.0
+2026-11-09T16:45:30.160+07:00  INFO 35600 --- [demo] [           main] tc.localstack/localstack:4.14.0          : Container localstack/localstack:4.14.0 is starting: 594b2e4cc107b6d10d2049647b4e042d45230e6f7ab3827b2ce7c11a7a93b321
+2026-11-09T16:45:36.194+07:00  INFO 35600 --- [demo] [           main] tc.localstack/localstack:4.14.0          : Container localstack/localstack:4.14.0 started in PT6.289905161S
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:45:36.203+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.CatalogReadFlowIT       : Starting CatalogReadFlowIT using Java 25.0.4.1 with PID 35600 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:45:36.203+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.CatalogReadFlowIT       : The following 1 profile is active: "test"
+2026-11-09T16:45:36.299+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-09T16:45:36.316+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15 ms. Found 22 JPA repository interfaces.
+2026-11-09T16:45:36.350+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Starting...
+2026-11-09T16:45:36.366+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Start completed.
+2026-11-09T16:45:36.374+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:36.387+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.007s)
+2026-11-09T16:45:36.415+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 15
+2026-11-09T16:45:36.416+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-11-09T16:45:36.433+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-09T16:45:36.442+07:00  INFO 35600 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-09T16:45:36.446+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.11
+	Default catalog/schema: backend_test/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-09T16:45:36.497+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-09T16:45:36.508+07:00  INFO 35600 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-09T16:45:36.613+07:00  INFO 35600 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name domainUserDetailsService
+2026-11-09T16:45:36.727+07:00  INFO 35600 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-09T16:45:36.727+07:00  INFO 35600 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-09T16:45:36.728+07:00  INFO 35600 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-11-09T16:45:36.739+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.CatalogReadFlowIT       : Started CatalogReadFlowIT in 0.543 seconds (process running for 41.415)
+2026-11-09T16:45:36.740+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-11-09T16:45:36.740+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.940 s -- in com.example.demo.catalog.CatalogReadFlowIT
+[INFO] Running com.example.demo.catalog.CatalogContractIT
+2026-11-09T16:45:37.842+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.CatalogContractIT
+2026-11-09T16:45:37.843+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.CatalogContractIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:45:37.852+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.CatalogContractIT       : Starting CatalogContractIT using Java 25.0.4.1 with PID 35600 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:45:37.852+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.CatalogContractIT       : The following 1 profile is active: "test"
+2026-11-09T16:45:37.960+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-09T16:45:37.977+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15 ms. Found 22 JPA repository interfaces.
+2026-11-09T16:45:38.010+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Starting...
+2026-11-09T16:45:38.019+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Start completed.
+2026-11-09T16:45:38.028+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:38.044+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.007s)
+2026-11-09T16:45:38.072+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 15
+2026-11-09T16:45:38.072+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-11-09T16:45:38.086+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-09T16:45:38.095+07:00  INFO 35600 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-09T16:45:38.099+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.11
+	Default catalog/schema: backend_test/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-09T16:45:38.158+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-09T16:45:38.173+07:00  INFO 35600 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-09T16:45:38.288+07:00  INFO 35600 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name domainUserDetailsService
+2026-11-09T16:45:38.401+07:00  INFO 35600 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-09T16:45:38.401+07:00  INFO 35600 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-09T16:45:38.401+07:00  INFO 35600 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-11-09T16:45:38.412+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.CatalogContractIT       : Started CatalogContractIT in 0.567 seconds (process running for 43.088)
+2026-11-09T16:45:38.413+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-11-09T16:45:38.413+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.934 s -- in com.example.demo.catalog.CatalogContractIT
+[INFO] Running com.example.demo.catalog.ProductListingApiIT
+2026-11-09T16:45:38.776+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.ProductListingApiIT
+2026-11-09T16:45:38.777+07:00  INFO 35600 --- [demo] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.demo.DemoApplication for test class com.example.demo.catalog.ProductListingApiIT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.2)
+
+2026-11-09T16:45:38.785+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.ProductListingApiIT     : Starting ProductListingApiIT using Java 25.0.4.1 with PID 35600 (started by hza in /home/hza/Downloads/SWE/Backend-SWE/demo)
+2026-11-09T16:45:38.785+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.ProductListingApiIT     : The following 1 profile is active: "test"
+2026-11-09T16:45:38.871+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-09T16:45:38.887+07:00  INFO 35600 --- [demo] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15 ms. Found 22 JPA repository interfaces.
+2026-11-09T16:45:38.921+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Starting...
+2026-11-09T16:45:38.930+07:00  INFO 35600 --- [demo] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Start completed.
+2026-11-09T16:45:38.939+07:00  INFO 35600 --- [demo] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF (PostgreSQL 17.11)
+2026-11-09T16:45:38.953+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 15 migrations (execution time 00:00.004s)
+2026-11-09T16:45:38.981+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 15
+2026-11-09T16:45:38.981+07:00  INFO 35600 --- [demo] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+2026-11-09T16:45:38.992+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-09T16:45:39.001+07:00  INFO 35600 --- [demo] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-09T16:45:39.004+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:32786/backend_test?loggerLevel=OFF]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.11
+	Default catalog/schema: backend_test/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-09T16:45:39.051+07:00  INFO 35600 --- [demo] [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-09T16:45:39.062+07:00  INFO 35600 --- [demo] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-09T16:45:39.187+07:00  INFO 35600 --- [demo] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name domainUserDetailsService
+2026-11-09T16:45:39.288+07:00  INFO 35600 --- [demo] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-09T16:45:39.288+07:00  INFO 35600 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-09T16:45:39.288+07:00  INFO 35600 --- [demo] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-11-09T16:45:39.299+07:00  INFO 35600 --- [demo] [           main] c.e.demo.catalog.ProductListingApiIT     : Started ProductListingApiIT in 0.519 seconds (process running for 43.975)
+2026-11-09T16:45:39.299+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-11-09T16:45:39.299+07:00  WARN 35600 --- [demo] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.923 s -- in com.example.demo.catalog.ProductListingApiIT
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 60, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO]
+[INFO] --- maven-failsafe-plugin:3.5.6:verify (default) @ demo ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  54.601 s
+[INFO] Finished at: 2026-11-09T16:45:40+07:00
+[INFO] ------------------------------------------------------------------------

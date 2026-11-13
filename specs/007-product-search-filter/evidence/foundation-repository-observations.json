@@ -1,0 +1,150 @@
+[
+  {
+    "page": 0,
+    "totalElements": 1,
+    "items": [
+      {
+        "productId": "48dc155b-2a22-463d-892f-67d7d0c1c72f",
+        "representativeVariantId": "6d3fc1a0-e980-4232-9a47-0329dab70f8a",
+        "displayAmount": 123456789012345678901234567890
+      }
+    ],
+    "scenario": "legacy-page",
+    "size": 20,
+    "preparedStatements": 1
+  },
+  {
+    "rejectedCriteria": 11,
+    "activeSpecificationProviders": 0,
+    "scenario": "unsupported-criteria",
+    "preparedStatements": 0
+  },
+  {
+    "page": 0,
+    "totalElements": 3,
+    "items": [
+      {
+        "productId": "517d02fd-b528-4cf9-a082-39eb1a131ccf",
+        "representativeVariantId": "a7715bc4-3844-4150-a7b4-eaa2a6caf82d",
+        "displayAmount": 1000
+      },
+      {
+        "productId": "90cca4b5-de68-41d7-bc2d-793d14ca7726",
+        "representativeVariantId": "fb7ae544-3bcd-43b8-aa31-f254074eb53c",
+        "displayAmount": 1000
+      }
+    ],
+    "scenario": "legacy-page",
+    "size": 2,
+    "preparedStatements": 1
+  },
+  {
+    "page": 1,
+    "totalElements": 3,
+    "items": [
+      {
+        "productId": "a4e946b0-3af3-4b75-94ea-0e8004755148",
+        "representativeVariantId": "46caacb0-18f0-454d-b130-0ab60852ccda",
+        "displayAmount": 1000
+      }
+    ],
+    "scenario": "legacy-page",
+    "size": 2,
+    "preparedStatements": 1
+  },
+  {
+    "page": 0,
+    "totalElements": 3,
+    "items": [
+      {
+        "productId": "517d02fd-b528-4cf9-a082-39eb1a131ccf",
+        "representativeVariantId": "a7715bc4-3844-4150-a7b4-eaa2a6caf82d",
+        "displayAmount": 1000
+      },
+      {
+        "productId": "90cca4b5-de68-41d7-bc2d-793d14ca7726",
+        "representativeVariantId": "fb7ae544-3bcd-43b8-aa31-f254074eb53c",
+        "displayAmount": 1000
+      }
+    ],
+    "scenario": "legacy-page",
+    "size": 2,
+    "preparedStatements": 1
+  },
+  {
+    "page": 0,
+    "totalElements": 1,
+    "items": [
+      {
+        "productId": "7fd4b0ee-53c2-4069-93bb-f6489a5acd65",
+        "representativeVariantId": "7be23b15-e7e3-4473-a181-7bd571cec62e",
+        "displayAmount": 0
+      }
+    ],
+    "scenario": "legacy-page",
+    "size": 100,
+    "preparedStatements": 1
+  },
+  {
+    "page": 0,
+    "totalElements": 1,
+    "items": [
+      {
+        "productId": "ba97104a-8e82-4f84-8b4c-ca14834db248",
+        "representativeVariantId": null,
+        "displayAmount": null
+      }
+    ],
+    "scenario": "legacy-page",
+    "size": 20,
+    "preparedStatements": 1
+  },
+  {
+    "page": 0,
+    "totalElements": 0,
+    "items": [],
+    "scenario": "legacy-page",
+    "size": 20,
+    "preparedStatements": 1
+  },
+  {
+    "page": 0,
+    "totalElements": 0,
+    "items": [],
+    "scenario": "legacy-page",
+    "size": 20,
+    "preparedStatements": 1
+  },
+  {
+    "page": 8,
+    "totalElements": 1,
+    "items": [],
+    "scenario": "legacy-page",
+    "size": 20,
+    "preparedStatements": 1
+  },
+  {
+    "page": 8,
+    "totalElements": 1,
+    "items": [],
+    "scenario": "legacy-page",
+    "size": 20,
+    "preparedStatements": 1
+  },
+  {
+    "page": 2147483647,
+    "totalElements": 1,
+    "items": [],
+    "scenario": "legacy-page",
+    "size": 100,
+    "preparedStatements": 1
+  },
+  {
+    "page": 2147483647,
+    "totalElements": 1,
+    "items": [],
+    "scenario": "legacy-page",
+    "size": 100,
+    "preparedStatements": 1
+  }
+]
