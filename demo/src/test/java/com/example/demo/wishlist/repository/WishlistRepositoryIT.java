@@ -150,8 +150,13 @@ class WishlistRepositoryIT {
     @Test
     @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void migration_shouldGrantOnlyUserRole_whenUpgradingExistingAssignments() {
-        String schema = "wishlist_upgrade_" + UUID.randomUUID().toString().replace("-", "");
-        try {
+        // V15+ creates public search functions, so a V9-to-V21 upgrade needs its own database.
+        String schema = "public";
+        try (var database = new org.testcontainers.containers.PostgreSQLContainer<>("postgres:17-alpine")) {
+            database.start();
+            var dataSource = new org.springframework.jdbc.datasource.DriverManagerDataSource(
+                    database.getJdbcUrl(), database.getUsername(), database.getPassword());
+            var jdbc = new JdbcTemplate(dataSource);
             Flyway.configure().dataSource(dataSource).schemas(schema).defaultSchema(schema)
                     .target("9").load().migrate();
             jdbc.update("INSERT INTO " + schema + ".users(username, password, account_status, joined_at) "
@@ -162,9 +167,11 @@ class WishlistRepositoryIT {
                     + ".roles r WHERE r.name = 'USER'");
             Long assignments = jdbc.queryForObject("SELECT COUNT(*) FROM " + schema + ".user_roles", Long.class);
             Long grants = jdbc.queryForObject("SELECT COUNT(*) FROM " + schema + ".role_permissions", Long.class);
-            // This schema-isolated regression owns V9→V10 permission upgrade only.
-            // Catalog search V15+ explicitly owns public functions and is verified in dedicated databases.
+            // Verify the wishlist grant at V10 before checking the later cart grant at V21.
             Flyway.configure().dataSource(dataSource).schemas(schema).defaultSchema(schema).target("10").load().migrate();
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM " + schema + ".role_permissions", Long.class))
+                    .isEqualTo(grants + 1);
+            Flyway.configure().dataSource(dataSource).schemas(schema).defaultSchema(schema).target("21").load().migrate();
             assertThat(jdbc.queryForList("SELECT r.name FROM " + schema + ".roles r JOIN " + schema
                     + ".role_permissions rp ON r.id = rp.role_id JOIN " + schema
                     + ".permissions p ON p.id = rp.permission_id WHERE p.name = 'MANAGE_WISHLIST'",
@@ -177,9 +184,6 @@ class WishlistRepositoryIT {
                     + ".role_permissions rp ON r.id = rp.role_id JOIN " + schema
                     + ".permissions p ON p.id = rp.permission_id WHERE p.name = 'MANAGE_CART'",
                     String.class)).containsExactly("USER");
-        } finally {
-            // The identifier is a fixed prefix plus generated hex, never external input.
-            jdbc.execute("DROP SCHEMA IF EXISTS " + schema + " CASCADE");
         }
     }
 
