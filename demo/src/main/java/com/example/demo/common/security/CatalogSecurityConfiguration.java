@@ -22,7 +22,7 @@ public class CatalogSecurityConfiguration {
 			// The planned catalog API uses Bearer credentials, not cookie authentication.
 			.csrf(csrf -> csrf.ignoringRequestMatchers("/api/products/**"))
 			.authorizeHttpRequests(authorize -> authorize
-				.requestMatchers(HttpMethod.GET, "/api/products", "/api/products/{id}").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/products", "/api/products/{id}", "/api/products/{id}/similar").permitAll()
 				// Roles come from current database state through the shared JWT converter.
 				.requestMatchers(HttpMethod.POST, "/api/products/{id}/images").access((authentication, context) -> {
                             var actor = authentication.get();
