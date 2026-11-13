@@ -104,4 +104,18 @@ class UserImageApiIT extends SeededMediaTestSupport {
         mvc.perform(put("/api/me").header("Authorization", token).contentType("application/json").content("{}"))
                 .andExpect(status().isForbidden());
     }
+
+    @Test void profileReads_shouldNotInspectStorage_whileNewAttachmentStillVerifiesObject() throws Exception {
+        String token = register("Owner");
+        java.util.UUID image = completed(id("Owner"));
+        mvc.perform(put("/api/me").header("Authorization", token).contentType("application/json").content(select(image)))
+                .andExpect(status().isOk());
+        doThrow(new StorageUnavailableException()).when(storage).verifyFinalExists(any());
+        mvc.perform(get("/api/me").header("Authorization", token))
+                .andExpect(status().isOk()).andExpect(jsonPath("profileImageUrl").isString());
+        mvc.perform(get("/api/image-uploads/" + image + "/download-url").header("Authorization", token))
+                .andExpect(status().isOk()).andExpect(jsonPath("finalUrl").isString());
+        mvc.perform(put("/api/me").header("Authorization", token).contentType("application/json").content(select(image)))
+                .andExpect(status().isServiceUnavailable());
+    }
 }
