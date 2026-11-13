@@ -79,6 +79,11 @@ public class AuthSecurityConfiguration {
             .logout(c->c.disable())
             .exceptionHandling(e->e.authenticationEntryPoint(entry).accessDeniedHandler(denied))
         .authorizeHttpRequests(a->a
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/me/cart").hasAuthority("MANAGE_CART")
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/me/cart/items").hasAuthority("MANAGE_CART")
+                .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/me/cart/items/*").hasAuthority("MANAGE_CART")
+                .requestMatchers(org.springframework.http.HttpMethod.DELETE,"/api/me/cart/items/*").hasAuthority("MANAGE_CART")
+                .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/me/cart/items/*/selection","/api/me/cart/selection").hasAuthority("MANAGE_CART")
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/me/wishlist").hasAuthority("MANAGE_WISHLIST")
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/me/wishlist/*").hasAuthority("MANAGE_WISHLIST")
                 .requestMatchers(org.springframework.http.HttpMethod.DELETE,"/api/me/wishlist/*").hasAuthority("MANAGE_WISHLIST")
