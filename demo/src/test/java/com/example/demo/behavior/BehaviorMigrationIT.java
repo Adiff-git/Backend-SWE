@@ -17,7 +17,7 @@ class BehaviorMigrationIT {
             jdbc.update("INSERT INTO users(username,password,account_status,joined_at) VALUES ('upgrade','test','ACTIVE',CURRENT_TIMESTAMP)");
             var history = jdbc.queryForList("SELECT version,checksum FROM flyway_schema_history WHERE success ORDER BY installed_rank");
             var rows = jdbc.queryForList("SELECT * FROM users");
-            var flyway = Flyway.configure().dataSource(ds).load();
+            var flyway = Flyway.configure().dataSource(ds).target("20").load();
             assertThat(flyway.migrate().migrationsExecuted).isEqualTo(1);
             flyway.validate();
             assertThat(jdbc.queryForList("SELECT version,checksum FROM flyway_schema_history WHERE success AND version<>'20' ORDER BY installed_rank")).isEqualTo(history);

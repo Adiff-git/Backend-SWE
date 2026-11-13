@@ -122,18 +122,19 @@ class CatalogSearchMigrationIT {
     @Test
     void transactionalSuccessorFailure_shouldRetainSearchPrefix_thenRetryIdenticalArtifactWithoutRepair() throws Exception {
         Path temporary=Files.createTempDirectory("catalog-search-recovery-");
-        Path successor=temporary.resolve("V21__transient_recovery_fixture.sql");
+        Path successor=temporary.resolve("V22__transient_recovery_fixture.sql");
         String artifact="CREATE TABLE recovery_successor(id integer); INSERT INTO recovery_successor VALUES (1); SELECT 1 / CASE WHEN allowed THEN 1 ELSE 0 END FROM recovery_condition;";
         Files.writeString(successor,artifact);
         try (PostgreSQLContainer<?> database=database()) {
             database.start();var source=source(database);var jdbc=new JdbcTemplate(source);
-            flyway(source,"15").migrate();seed(source);var before=businessRows(jdbc);
+            flyway(source,"15").migrate();seed(source);
+            flyway(source,"21").migrate();var before=businessRows(jdbc);
             jdbc.execute("CREATE TABLE recovery_condition(allowed boolean)");jdbc.execute("INSERT INTO recovery_condition VALUES(false)");
             var migration=Flyway.configure().dataSource(source).locations("classpath:db/migration","filesystem:"+temporary).load();
             assertThatThrownBy(migration::migrate).hasStackTraceContaining("division by zero");
-            assertThat(jdbc.queryForObject("SELECT version FROM flyway_schema_history WHERE success ORDER BY installed_rank DESC LIMIT 1",String.class)).isEqualTo("20");
+            assertThat(jdbc.queryForObject("SELECT version FROM flyway_schema_history WHERE success ORDER BY installed_rank DESC LIMIT 1",String.class)).isEqualTo("21");
             assertThat(jdbc.queryForObject("SELECT to_regclass('public.recovery_successor') IS NULL",Boolean.class)).isTrue();
-            assertThat(jdbc.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE version='21'",Integer.class)).isZero();
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE version='22'",Integer.class)).isZero();
             for(var entry:before.entrySet())assertThat(businessRows(jdbc).get(entry.getKey())).isEqualTo(entry.getValue());
             jdbc.execute("UPDATE recovery_condition SET allowed=true");
             assertThat(Files.readString(successor)).isEqualTo(artifact);
