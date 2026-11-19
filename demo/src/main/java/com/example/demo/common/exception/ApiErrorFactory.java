@@ -9,6 +9,10 @@ public class ApiErrorFactory {
         return new ApiError(status,message,path,fields);
     }
     public ApiError from(Throwable failure,String path) {
+        // The existing global cart advice delegates other domains' media errors here.
+        if (failure instanceof org.springframework.web.HttpMediaTypeNotSupportedException
+                && path != null && (path.equals("/api/me/orders") || path.startsWith("/api/me/orders/")))
+            return create(415,"Unsupported request media type",path,Map.of());
         if(failure instanceof ApplicationException app) {
             ApiError error=create(app.getStatus(),app.getMessage(),path,Map.of());if(app.getCode()!=null)error.setProperty("code",app.getCode());return error;
         }

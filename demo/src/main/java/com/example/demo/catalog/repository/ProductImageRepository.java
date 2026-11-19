@@ -12,6 +12,12 @@ import com.example.demo.catalog.entity.ProductImage;
 public interface ProductImageRepository extends JpaRepository<ProductImage, UUID> {
 
     @Query("SELECT i.product.id, i.objectKey FROM ProductImage i WHERE i.product.id IN :ids AND i.primary = true")
+    List<Object[]> findOrderPrimaryImages(@Param("ids") Collection<UUID> ids);
+
+    @Query(value = "SELECT set_config('lock_timeout', :duration, TRUE)", nativeQuery = true)
+    String setOrderReadLockTimeout(@Param("duration") String duration);
+
+    @Query("SELECT i.product.id, i.objectKey FROM ProductImage i WHERE i.product.id IN :ids AND i.primary = true")
     List<Object[]> findCartPrimaryImages(@Param("ids") Collection<UUID> ids);
 
 	@Query("SELECT i FROM ProductImage i WHERE i.product.id IN :productIds AND i.primary = true")
