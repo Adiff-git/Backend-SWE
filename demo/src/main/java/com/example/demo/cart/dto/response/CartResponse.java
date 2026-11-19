@@ -7,6 +7,7 @@ import lombok.Value;
 @Value
 public class CartResponse {
     List<CartItemResponse> items;
+    long totalItemCount;
     long selectedItemCount;
     long selectedTotalQuantity;
     SellingPrice selectedSubtotal;
@@ -15,6 +16,7 @@ public class CartResponse {
     public CartResponse(List<CartItemResponse> items, long selectedItemCount, long selectedTotalQuantity,
             SellingPrice selectedSubtotal, SellingPrice finalTotal) {
         this.items = List.copyOf(items);
+        this.totalItemCount = this.items.size();
         this.selectedItemCount = selectedItemCount;
         this.selectedTotalQuantity = selectedTotalQuantity;
         this.selectedSubtotal = selectedSubtotal;

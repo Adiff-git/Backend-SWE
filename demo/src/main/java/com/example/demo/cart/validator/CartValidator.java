@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CartValidator {
     public static final int MIN_QUANTITY = 1;
-    public static final int MAX_QUANTITY = 1000;
+    public static final int MAX_QUANTITY = 999;
 
     public void owner(Long owner) {
         if (owner == null || owner <= 0) throw new IdentityUnavailableException();

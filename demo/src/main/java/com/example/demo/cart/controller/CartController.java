@@ -1,15 +1,14 @@
 package com.example.demo.cart.controller;
 
 import com.example.demo.cart.dto.request.AddCartItemRequest;
-import com.example.demo.cart.dto.request.UpdateCartItemRequest;
+import com.example.demo.cart.dto.request.UpdateCartQuantityRequest;
+import com.example.demo.cart.dto.request.ChangeCartVariantRequest;
 import com.example.demo.cart.dto.request.CartSelectionRequest;
-import com.example.demo.cart.dto.response.AddCartResult;
 import com.example.demo.cart.dto.response.CartResponse;
 import com.example.demo.cart.service.CartService;
 import com.example.demo.common.identity.CurrentUserIdProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,18 +33,23 @@ public class CartController {
         return service.getCart(identity.getCurrentUserId());
     }
 
+    // A business-action POST may either create a row or increment one; both return 200.
     @PostMapping(value = "/items", consumes = "application/json")
-    public ResponseEntity<CartResponse> addItem(@Valid @RequestBody AddCartItemRequest body, HttpServletRequest request) {
+    public CartResponse addItem(@Valid @RequestBody AddCartItemRequest body, HttpServletRequest request) {
         reader.noQuery(request);
-        AddCartResult result = service.addItem(identity.getCurrentUserId(), body);
-        return result.isCreated() ? ResponseEntity.created(URI.create("/api/me/cart/items/" + result.getItemId())).body(result.getResponse())
-                : ResponseEntity.ok(result.getResponse());
+        return service.addItem(identity.getCurrentUserId(), body).getResponse();
     }
 
-    @PutMapping(value = "/items/{itemId}", consumes = "application/json")
-    public CartResponse updateItem(@PathVariable Long itemId, @Valid @RequestBody UpdateCartItemRequest body, HttpServletRequest request) {
+    @PutMapping(value = "/items/{itemId}/quantity", consumes = "application/json")
+    public CartResponse updateQuantity(@PathVariable Long itemId, @Valid @RequestBody UpdateCartQuantityRequest body, HttpServletRequest request) {
         reader.noQuery(request);
-        return service.updateItem(identity.getCurrentUserId(), itemId, body);
+        return service.updateQuantity(identity.getCurrentUserId(), itemId, body);
+    }
+
+    @PutMapping(value = "/items/{itemId}/variant", consumes = "application/json")
+    public CartResponse changeVariant(@PathVariable Long itemId, @Valid @RequestBody ChangeCartVariantRequest body, HttpServletRequest request) {
+        reader.noQuery(request);
+        return service.changeVariant(identity.getCurrentUserId(), itemId, body);
     }
 
     @DeleteMapping("/items/{itemId}")

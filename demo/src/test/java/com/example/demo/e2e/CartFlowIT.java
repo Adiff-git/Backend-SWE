@@ -58,12 +58,14 @@ class CartFlowIT {
         mvc.perform(get("/api/me/cart").header("Authorization", token)).andExpect(status().isOk());
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM carts", Long.class)).isZero();
         MvcResult first = mvc.perform(post("/api/me/cart/items").header("Authorization", token).contentType("application/json")
-                .content(json.writeValueAsString(Map.of("variantId", variants[0], "quantity", 2)))).andExpect(status().isCreated()).andReturn();
+                .content(json.writeValueAsString(Map.of("productVariantId", variants[0], "quantity", 2)))).andExpect(status().isOk()).andReturn();
         long item = body(first).get("items").get(0).get("id").asLong();
         mvc.perform(post("/api/me/cart/items").header("Authorization", token).contentType("application/json")
-                .content(json.writeValueAsString(Map.of("variantId", variants[0], "quantity", 3)))).andExpect(status().isOk());
-        mvc.perform(put("/api/me/cart/items/" + item).header("Authorization", token).contentType("application/json")
-                .content(json.writeValueAsString(Map.of("variantId", variants[1], "quantity", 4)))).andExpect(status().isOk());
+                .content(json.writeValueAsString(Map.of("productVariantId", variants[0], "quantity", 3)))).andExpect(status().isOk());
+        mvc.perform(put("/api/me/cart/items/" + item + "/variant").header("Authorization", token).contentType("application/json")
+                .content(json.writeValueAsString(Map.of("productVariantId", variants[1])))).andExpect(status().isOk());
+        mvc.perform(put("/api/me/cart/items/" + item + "/quantity").header("Authorization", token).contentType("application/json")
+                .content("{\"quantity\":4}")).andExpect(status().isOk());
         JsonNode deselected = body(mvc.perform(put("/api/me/cart/items/" + item + "/selection").header("Authorization", token)
                 .contentType("application/json").content("{\"selected\":false}")).andExpect(status().isOk()).andReturn());
         assertThat(deselected.get("finalTotal").get("amount").asLong()).isZero();
@@ -100,15 +102,15 @@ class CartFlowIT {
             http(client, "GET", "/api/me/cart", null, null, 401);
             http(client, "GET", "/api/me/cart", token, null, 200);
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM carts", Long.class)).isZero();
-            String request = json.writeValueAsString(Map.of("variantId", variant, "quantity", 2));
-            var created = http(client, "POST", "/api/me/cart/items", token, request, 201);
+            String request = json.writeValueAsString(Map.of("productVariantId", variant, "quantity", 2));
+            var created = http(client, "POST", "/api/me/cart/items", token, request, 200);
             long item = json.readTree(created.body()).get("items").get(0).get("id").asLong();
-            assertThat(created.headers().firstValue("Location")).hasValue("/api/me/cart/items/" + item);
+            assertThat(created.headers().firstValue("Location")).isEmpty();
             var repeated = http(client, "POST", "/api/me/cart/items", token, request, 200);
             assertThat(json.readTree(repeated.body()).get("selectedTotalQuantity").asLong()).isEqualTo(4);
             assertThat(json.readTree(repeated.body()).get("finalTotal").get("amount").asLong()).isEqualTo(4000);
-            http(client, "PUT", "/api/me/cart/items/" + item, token, "{\"quantity\":1001}", 400);
-            http(client, "PUT", "/api/me/cart/items/" + item, token, "{\"quantity\":1000}", 200);
+            http(client, "PUT", "/api/me/cart/items/" + item + "/quantity", token, "{\"quantity\":1000}", 400);
+            http(client, "PUT", "/api/me/cart/items/" + item + "/quantity", token, "{\"quantity\":999}", 200);
             http(client, "POST", "/api/me/cart/items", token, request, 422);
             var deselected = http(client, "PUT", "/api/me/cart/selection", token, "{\"selected\":false}", 200);
             assertThat(json.readTree(deselected.body()).get("finalTotal").get("amount").asLong()).isZero();

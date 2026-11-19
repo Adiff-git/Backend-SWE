@@ -37,12 +37,12 @@ class CartCalculatorTest {
         UUID variant = UUID.randomUUID();
         UUID product = UUID.randomUUID();
         BigInteger price = BigInteger.TEN.pow(40);
-        CartReadSeed row = new CartReadSeed(1L, product, variant, 1000, true, Instant.EPOCH, "P", "S", Map.of());
-        CartReadSeed second = new CartReadSeed(2L, product, variant, 1000, true, Instant.EPOCH, "P", "S", Map.of());
+        CartReadSeed row = new CartReadSeed(1L, product, variant, 999, true, Instant.EPOCH, "P", "S", Map.of());
+        CartReadSeed second = new CartReadSeed(2L, product, variant, 999, true, Instant.EPOCH, "P", "S", Map.of());
         PreparedCart result = new CartCalculator().calculate(List.of(row, second),
                 Map.of(variant, new CartVariantState(variant, product, true, price, "P", "S", Map.of(), null)));
-        assertThat(result.getSelectedSubtotal()).isEqualTo(price.multiply(BigInteger.valueOf(2000)));
-        assertThat(result.getSelectedTotalQuantity()).isEqualTo(2000);
+        assertThat(result.getSelectedSubtotal()).isEqualTo(price.multiply(BigInteger.valueOf(1998)));
+        assertThat(result.getSelectedTotalQuantity()).isEqualTo(1998);
         assertThat(new CartCalculator().calculate(List.of(), Map.of()).getSelectedSubtotal()).isZero();
     }
 }

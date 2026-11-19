@@ -46,13 +46,13 @@ class CartItemRepositoryIT {
                 cart, product, variant, quantity);
     }
 
-    @ParameterizedTest @ValueSource(ints = {1, 1000})
+    @ParameterizedTest @ValueSource(ints = {1, 999})
     void schema_shouldAcceptBoundaryQuantity(int quantity) {
         insert(quantity);
         assertThat(jdbc.queryForObject("SELECT quantity FROM cart_items WHERE cart_id=?", Integer.class, cart)).isEqualTo(quantity);
     }
 
-    @ParameterizedTest @ValueSource(ints = {0, 1001})
+    @ParameterizedTest @ValueSource(ints = {0, 1000, 1001})
     void schema_shouldRejectOutsideQuantity(int quantity) {
         assertThatThrownBy(() -> insert(quantity)).hasMessageContaining("ck_cart_items_quantity");
     }

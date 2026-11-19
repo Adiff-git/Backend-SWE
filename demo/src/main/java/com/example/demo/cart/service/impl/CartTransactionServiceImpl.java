@@ -3,7 +3,8 @@ package com.example.demo.cart.service.impl;
 import com.example.demo.cart.calculator.CartCalculator;
 import com.example.demo.cart.converter.CartConverter;
 import com.example.demo.cart.dto.request.AddCartItemRequest;
-import com.example.demo.cart.dto.request.UpdateCartItemRequest;
+import com.example.demo.cart.dto.request.UpdateCartQuantityRequest;
+import com.example.demo.cart.dto.request.ChangeCartVariantRequest;
 import com.example.demo.cart.dto.request.CartSelectionRequest;
 import com.example.demo.cart.exception.InvalidCartRequestException;
 import jakarta.annotation.PostConstruct;
@@ -61,13 +62,13 @@ public class CartTransactionServiceImpl implements CartTransactionService {
     @Override
     public AddCartResult addItem(Long owner, AddCartItemRequest request, PreparedImageUrls urls) {
         validator.owner(owner);
-        if (request == null || request.getVariantId() == null) throw new InvalidCartRequestException();
+        if (request == null || request.getProductVariantId() == null) throw new InvalidCartRequestException();
         int quantity = validator.quantity(request.getQuantity());
         Cart cart = lockCart(owner, true);
         List<CartItem> rows = rows(cart);
-        CartVariantState state = catalog.getVariantStates(List.of(request.getVariantId())).get(request.getVariantId());
+        CartVariantState state = catalog.getVariantStates(List.of(request.getProductVariantId())).get(request.getProductVariantId());
         validator.eligible(state);
-        CartItem item = rows.stream().filter(row -> row.getProductVariantId().equals(request.getVariantId())).findFirst().orElse(null);
+        CartItem item = rows.stream().filter(row -> row.getProductVariantId().equals(request.getProductVariantId())).findFirst().orElse(null);
         boolean created = item == null;
         if (created) {
             item = new CartItem(cart.getId(), clock.instant());
@@ -77,30 +78,42 @@ public class CartTransactionServiceImpl implements CartTransactionService {
             item.setQuantity(validator.addedQuantity(item.getQuantity(), quantity));
         }
         items.saveAndFlush(item);
-        CartResponse response = response(rows(cart), urls, request.getVariantId());
+        CartResponse response = response(rows(cart), urls, request.getProductVariantId());
         return new AddCartResult(created, item.getId(), response);
     }
 
-    @Override public CartResponse updateItem(Long owner, Long itemId, UpdateCartItemRequest request, PreparedImageUrls urls) {
+    @Override public CartResponse updateQuantity(Long owner, Long itemId, UpdateCartQuantityRequest request, PreparedImageUrls urls) {
         validator.owner(owner);
-        if (request == null || request.isVariantIdPresent() && request.getVariantId() == null) throw new InvalidCartRequestException();
+        if (request == null) throw new InvalidCartRequestException();
         int quantity = validator.quantity(request.getQuantity());
+        Cart cart = lockCart(owner, false);
+        CartItem source = validator.ownedItem(cart == null ? List.of() : rows(cart), itemId);
+        UUID variantId = source.getProductVariantId();
+        validator.eligible(catalog.getVariantStates(List.of(variantId)).get(variantId));
+        source.setQuantity(quantity);
+        items.flush();
+        return response(rows(cart), urls, variantId);
+    }
+
+    @Override public CartResponse changeVariant(Long owner, Long itemId, ChangeCartVariantRequest request, PreparedImageUrls urls) {
+        validator.owner(owner);
+        if (request == null || request.getProductVariantId() == null) throw new InvalidCartRequestException();
         Cart cart = lockCart(owner, false);
         List<CartItem> rows = cart == null ? List.of() : rows(cart);
         CartItem source = validator.ownedItem(rows, itemId);
-        UUID targetId = request.getVariantId() == null ? source.getProductVariantId() : request.getVariantId();
+        UUID targetId = request.getProductVariantId();
         CartVariantState target = catalog.getVariantStates(List.of(targetId)).get(targetId);
         validator.eligible(target);
         validator.sameProduct(source.getProductId(), target.getProductId());
-        CartItem existing = rows.stream().filter(row -> row.getProductVariantId().equals(targetId)).findFirst().orElse(null);
-        if (existing != null && existing != source) {
-            int merged = validator.addedQuantity(existing.getQuantity(), quantity);
-            existing.setQuantity(merged);
-            snapshot(existing, target);
-            items.delete(source);
-        } else {
-            source.setQuantity(quantity);
-            snapshot(source, target);
+        if (!source.getProductVariantId().equals(targetId)) {
+            CartItem existing = rows.stream().filter(row -> row.getProductVariantId().equals(targetId)).findFirst().orElse(null);
+            if (existing != null) {
+                // Existing target is unchanged: quantity, selection, snapshots and time all survive.
+                items.delete(source);
+            } else {
+                source.setQuantity(CartValidator.MIN_QUANTITY);
+                snapshot(source, target);
+            }
         }
         items.flush();
         return response(rows(cart), urls, targetId);

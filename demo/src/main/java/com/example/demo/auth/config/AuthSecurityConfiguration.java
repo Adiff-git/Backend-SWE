@@ -91,7 +91,7 @@ public class AuthSecurityConfiguration {
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/behavior/overview").hasAuthority("ROLE_ADMIN")
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/me/cart").hasAuthority("MANAGE_CART")
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/me/cart/items").hasAuthority("MANAGE_CART")
-                .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/me/cart/items/*").hasAuthority("MANAGE_CART")
+                .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/me/cart/items/*/quantity","/api/me/cart/items/*/variant").hasAuthority("MANAGE_CART")
                 .requestMatchers(org.springframework.http.HttpMethod.DELETE,"/api/me/cart/items/*").hasAuthority("MANAGE_CART")
                 .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/me/cart/items/*/selection","/api/me/cart/selection").hasAuthority("MANAGE_CART")
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/me/wishlist").hasAuthority("MANAGE_WISHLIST")
