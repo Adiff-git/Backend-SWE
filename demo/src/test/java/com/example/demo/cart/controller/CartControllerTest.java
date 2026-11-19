@@ -50,12 +50,12 @@ class CartControllerTest {
     @MockitoBean UserService users;
     @MockitoBean AuthSessionService sessions;
     @MockitoBean CurrentUserIdProvider identity;
-    final String valid = "{\"variantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":2}";
+    final String valid = "{\"productVariantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":2}";
     final CartResponse empty = new CartResponse(List.of(), 0, 0, new SellingPrice(BigInteger.ZERO, "VND"), new SellingPrice(BigInteger.ZERO, "VND"));
 
     @BeforeEach void prepare() { when(identity.getCurrentUserId()).thenReturn(1L); }
 
-    @Test void getAndAdd_shouldReturnPrivateCartAndCreationLocation() throws Exception {
+    @Test void getAndAdd_shouldReturnPrivateCartAndUniform200() throws Exception {
         when(cart.getCart(1L)).thenReturn(empty);
         mvc.perform(get("/api/me/cart").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_CART"))))
                 .andExpect(status().isOk()).andExpect(header().string("Cache-Control", "private, no-store"))
@@ -63,21 +63,21 @@ class CartControllerTest {
         for (boolean created : new boolean[]{true, false}) {
             when(cart.addItem(eq(1L), any())).thenReturn(new AddCartResult(created, 9L, empty));
             var result = mvc.perform(post("/api/me/cart/items").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_CART")))
-                    .contentType("application/json").content(valid)).andExpect(status().is(created ? 201 : 200));
-            if (created) result.andExpect(header().string("Location", "/api/me/cart/items/9"));
+                    .contentType("application/json").content(valid)).andExpect(status().isOk());
+            result.andExpect(header().doesNotExist("Location"));
         }
     }
 
     @ParameterizedTest
-    @ValueSource(strings={"", "null", "[]", "{}", "{\"quantity\":2}", "{\"variantId\":null,\"quantity\":2}",
-            "{\"variantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":\"2\"}",
-            "{\"variantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":2.0}",
-            "{\"variantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":2e0}",
-            "{\"variantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":0}",
-            "{\"variantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":1001}",
-            "{\"variantId\":\"00000000-0000-4000-8000-00000000000A\",\"quantity\":2}",
-            "{\"variantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":2,\"quantity\":3}",
-            "{\"variantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":2,\"price\":1}"})
+    @ValueSource(strings={"", "null", "[]", "{}", "{\"quantity\":2}", "{\"productVariantId\":null,\"quantity\":2}",
+            "{\"productVariantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":\"2\"}",
+            "{\"productVariantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":2.0}",
+            "{\"productVariantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":2e0}",
+            "{\"productVariantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":0}",
+            "{\"productVariantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":1000}",
+            "{\"productVariantId\":\"00000000-0000-4000-8000-00000000000A\",\"quantity\":2}",
+            "{\"productVariantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":2,\"quantity\":3}",
+            "{\"productVariantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":2,\"price\":1}"})
     void add_shouldRejectInvalidShapeWithoutCallingService(String body) throws Exception {
         mvc.perform(post("/api/me/cart/items").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_CART")))
                 .contentType("application/json").content(body)).andExpect(status().isBadRequest());
@@ -100,10 +100,10 @@ class CartControllerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings={"{}", "{\"quantity\":2,\"variantId\":null}", "{\"quantity\":\"2\"}",
-            "{\"quantity\":2.0}", "{\"quantity\":2,\"quantity\":3}", "{\"quantity\":1001}", "{\"quantity\":2,\"owner\":1}"})
+    @ValueSource(strings={"{}", "{\"quantity\":2,\"productVariantId\":null}", "{\"quantity\":\"2\"}",
+            "{\"quantity\":2.0}", "{\"quantity\":2,\"quantity\":3}", "{\"quantity\":1000}", "{\"quantity\":2,\"owner\":1}"})
     void update_shouldRejectInvalidBody(String body) throws Exception {
-        mvc.perform(put("/api/me/cart/items/1").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_CART")))
+        mvc.perform(put("/api/me/cart/items/1/quantity").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_CART")))
                 .contentType("application/json").content(body)).andExpect(status().isBadRequest());
         verifyNoInteractions(cart);
     }
@@ -113,6 +113,29 @@ class CartControllerTest {
                 .content("{}")).andExpect(status().isBadRequest());
         mvc.perform(delete("/api/me/cart/items/9223372036854775808").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_CART"))))
                 .andExpect(status().isBadRequest());
+        verifyNoInteractions(cart);
+    }
+
+    @Test void separateQuantityAndVariantRoutes_shouldAcceptOnlyTheirOwnFields() throws Exception {
+        when(cart.updateQuantity(eq(1L), eq(1L), any())).thenReturn(empty);
+        when(cart.changeVariant(eq(1L), eq(1L), any())).thenReturn(empty);
+        mvc.perform(put("/api/me/cart/items/1/quantity").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_CART")))
+                .contentType("application/json").content("{\"quantity\":999}"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.totalItemCount").value(0));
+        mvc.perform(put("/api/me/cart/items/1/variant").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_CART")))
+                .contentType("application/json").content("{\"productVariantId\":\"00000000-0000-4000-8000-000000000001\"}"))
+                .andExpect(status().isOk());
+        mvc.perform(put("/api/me/cart/items/1").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_CART")))
+                .contentType("application/json").content(valid)).andExpect(status().isForbidden());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings={"{}", "null", "{\"productVariantId\":null}", "{\"variantId\":\"00000000-0000-4000-8000-000000000001\"}",
+            "{\"productVariantId\":\"00000000-0000-4000-8000-000000000001\",\"quantity\":1}",
+            "{\"productVariantId\":\"00000000-0000-4000-8000-000000000001\",\"productVariantId\":\"00000000-0000-4000-8000-000000000002\"}"})
+    void changeVariant_shouldRejectMissingNullLegacyDuplicateOrConflictingQuantity(String body) throws Exception {
+        mvc.perform(put("/api/me/cart/items/1/variant").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_CART")))
+                .contentType("application/json").content(body)).andExpect(status().isBadRequest());
         verifyNoInteractions(cart);
     }
 

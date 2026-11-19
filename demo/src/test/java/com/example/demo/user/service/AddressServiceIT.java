@@ -1,4 +1,5 @@
-package com.example.demo.user.integration;
+package com.example.demo.user.service;
+import com.example.demo.user.integration.PostgresTestSupport;
 import com.example.demo.user.repository.UserRepository;
 import com.example.demo.user.repository.AddressRepository;
 import com.example.demo.user.service.AddressService;
@@ -25,6 +26,18 @@ class AddressServiceIT extends PostgresTestSupport {
     @Autowired AddressRepository addresses;
     @Autowired AddressService service;
     @Autowired PlatformTransactionManager transactions;
+    @Test
+    void getCheckoutAddressSnapshot_shouldPreserveCompleteOwnedAddressAndHideForeign() {
+        Long owner=users.saveAndFlush(UserTestData.user("Snapshot Owner")).getId();
+        Long other=users.saveAndFlush(UserTestData.user("Snapshot Other")).getId();
+        Long id=service.createAddress(owner,AddressTestData.request(true)).getId();
+        com.example.demo.user.dto.response.CheckoutAddressSnapshot snapshot=service.getCheckoutAddressSnapshot(owner,id);
+        assertThat(snapshot.getRecipientName()).isEqualTo("Recipient");
+        assertThat(snapshot.getRecipientPhone()).isEqualTo("0123456789");
+        assertThat(snapshot.getDeliveryAddress()).isEqualTo(service.getAddress(owner,id).getAddressText());
+        assertThatThrownBy(()->service.getCheckoutAddressSnapshot(other,id)).isInstanceOf(ResourceNotFoundException.class);
+        assertThatThrownBy(()->service.getCheckoutAddressSnapshot(owner,Long.MAX_VALUE)).isInstanceOf(ResourceNotFoundException.class);
+    }
     @AfterEach void cleanup() {
         addresses.deleteAll();
         users.deleteAll();

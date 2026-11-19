@@ -3,7 +3,7 @@ package com.example.demo.cart.service;
 import com.example.demo.cart.calculator.CartCalculator;
 import com.example.demo.cart.converter.CartConverter;
 import com.example.demo.cart.dto.request.AddCartItemRequest;
-import com.example.demo.cart.dto.request.UpdateCartItemRequest;
+import com.example.demo.cart.dto.request.ChangeCartVariantRequest;
 import com.example.demo.cart.entity.Cart;
 import com.example.demo.cart.entity.CartItem;
 import com.example.demo.cart.repository.CartItemRepository;
@@ -53,7 +53,7 @@ class CartTransactionServiceImplTest {
         var service = new CartTransactionServiceImpl(carts, items, users, catalog,
                 new CartValidator(), new CartCalculator(), new CartConverter(), Clock.systemUTC());
         ReflectionTestUtils.setField(service, "lockTimeoutMs", 5000L);
-        var request = new AddCartItemRequest(); request.setVariantId(variant); request.setQuantity(2);
+        var request = new AddCartItemRequest(); request.setProductVariantId(variant); request.setQuantity(2);
         assertThat(service.addItem(1L, request, null).getResponse().getItems()).hasSize(1);
         InOrder order = inOrder(carts, users, items);
         order.verify(carts).setLockTimeout("5000ms"); order.verify(carts).findOwnedForUpdate(1L);
@@ -62,7 +62,7 @@ class CartTransactionServiceImplTest {
         order.verify(items).findByCartIdOrderByAddedAtDescIdAsc(7L);
         verify(carts, never()).saveAndFlush(any(Cart.class));
     }
-    @Test void updateItem_shouldMergeOnlyTargetAndRequestKeepingTargetSelectionAndTime() {
+    @Test void changeVariant_shouldRemoveSourceWithoutChangingExistingTarget() {
         CartRepository carts = mock(CartRepository.class);
         CartItemRepository items = mock(CartItemRepository.class);
         CatalogCartReadService catalog = mock(CatalogCartReadService.class);
@@ -76,6 +76,7 @@ class CartTransactionServiceImplTest {
         CartItem target = new CartItem(7L, java.time.Instant.EPOCH.plusSeconds(1));
         ReflectionTestUtils.setField(target, "id", 9L);
         target.setProductId(parent); target.setProductVariantId(second); target.setQuantity(600); target.setSelected(false);
+        target.setPublicProductName("Prior target name"); target.setPublicSku("Prior target SKU"); target.setPublicOptions(Map.of());
         when(items.findByCartIdOrderByAddedAtDescIdAsc(7L)).thenReturn(List.of(source, target), List.of(target));
         CartVariantState state = new CartVariantState(second, parent, true, BigInteger.TEN, "P", "S", Map.of(), null);
         when(catalog.getVariantStates(anyCollection())).thenReturn(Map.of(second, state));
@@ -83,9 +84,11 @@ class CartTransactionServiceImplTest {
         CartTransactionServiceImpl service = new CartTransactionServiceImpl(carts, items, mock(UserService.class), catalog,
                 new CartValidator(), new CartCalculator(), new CartConverter(), Clock.systemUTC());
         ReflectionTestUtils.setField(service, "lockTimeoutMs", 5000L);
-        UpdateCartItemRequest request = new UpdateCartItemRequest(); request.setVariantId(second); request.setQuantity(400);
-        var response = service.updateItem(1L, 8L, request, null);
-        assertThat(target.getQuantity()).isEqualTo(1000);
+        ChangeCartVariantRequest request = new ChangeCartVariantRequest(); request.setProductVariantId(second);
+        var response = service.changeVariant(1L, 8L, request, null);
+        assertThat(target.getQuantity()).isEqualTo(600);
+        assertThat(target.getPublicProductName()).isEqualTo("Prior target name");
+        assertThat(target.getPublicSku()).isEqualTo("Prior target SKU");
         assertThat(target.isSelected()).isFalse();
         assertThat(target.getAddedAt()).isEqualTo(java.time.Instant.EPOCH.plusSeconds(1));
         assertThat(response.getItems()).hasSize(1);
@@ -107,7 +110,7 @@ class CartTransactionServiceImplTest {
                 catalog, new CartValidator(), new CartCalculator(), new CartConverter(), Clock.systemUTC());
         ReflectionTestUtils.setField(service, "lockTimeoutMs", 5000L);
         AddCartItemRequest request = new AddCartItemRequest();
-        request.setVariantId(variant);
+        request.setProductVariantId(variant);
         request.setQuantity(1);
         service.addItem(1L, request, null);
         InOrder order = inOrder(carts, items);

@@ -19,14 +19,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CartValidatorTest {
     CartValidator validator = new CartValidator();
 
-    @ParameterizedTest @NullSource @ValueSource(ints = {-1, 0, 1001, Integer.MAX_VALUE})
+    @ParameterizedTest @NullSource @ValueSource(ints = {-1, 0, 1000, 1001, Integer.MAX_VALUE})
     void quantity_shouldRejectInvalidInput(Integer quantity) {
         assertThatThrownBy(() -> validator.quantity(quantity)).isInstanceOf(InvalidCartRequestException.class);
     }
 
     @Test void addedQuantity_shouldCheckResultWithoutWrappingOrCapping() {
-        assertThat(validator.addedQuantity(999, 1)).isEqualTo(1000);
-        assertThatThrownBy(() -> validator.addedQuantity(1000, 1)).isInstanceOf(CartQuantityLimitException.class);
+        assertThat(validator.addedQuantity(998, 1)).isEqualTo(999);
+        assertThatThrownBy(() -> validator.addedQuantity(998, 2)).isInstanceOf(CartQuantityLimitException.class);
     }
 
     @Test void sameProduct_shouldRejectCrossProductSwitch() {

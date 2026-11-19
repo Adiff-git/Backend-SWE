@@ -72,6 +72,11 @@ public class AddressServiceImpl implements AddressService {
     public Address getAddressEntity(Long actorId,Long id) {
         return repository.findByIdAndUserId(id,actorId).orElseThrow(ResourceNotFoundException::new);
     }
+    public com.example.demo.user.dto.response.CheckoutAddressSnapshot getCheckoutAddressSnapshot(Long actorId, Long id) {
+        Address address = getAddressEntity(actorId, id);
+        return new com.example.demo.user.dto.response.CheckoutAddressSnapshot(
+                address.getRecipientName(), address.getRecipientPhone(), address.getAddressText());
+    }
     private void clearDefault(List<Address> addresses) {
         addresses.stream().filter(a->Boolean.TRUE.equals(a.getIsDefault())).forEach(a->a.setIsDefault(false));
         repository.flush();

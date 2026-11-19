@@ -89,9 +89,12 @@ public class AuthSecurityConfiguration {
                     return new org.springframework.security.authorization.AuthorizationDecision(grants.contains("ROLE_USER") && !grants.contains("ROLE_ADMIN"));
                 })
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/admin/behavior/overview").hasAuthority("ROLE_ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/me/orders","/api/me/orders/*").hasAuthority("MANAGE_ORDER")
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/me/orders/*/cancel").hasAuthority("MANAGE_ORDER")
+                .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/me/cart/checkout").hasAuthority("MANAGE_CHECKOUT")
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/me/cart").hasAuthority("MANAGE_CART")
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/me/cart/items").hasAuthority("MANAGE_CART")
-                .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/me/cart/items/*").hasAuthority("MANAGE_CART")
+                .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/me/cart/items/*/quantity","/api/me/cart/items/*/variant").hasAuthority("MANAGE_CART")
                 .requestMatchers(org.springframework.http.HttpMethod.DELETE,"/api/me/cart/items/*").hasAuthority("MANAGE_CART")
                 .requestMatchers(org.springframework.http.HttpMethod.PUT,"/api/me/cart/items/*/selection","/api/me/cart/selection").hasAuthority("MANAGE_CART")
                 .requestMatchers(org.springframework.http.HttpMethod.GET,"/api/me/wishlist").hasAuthority("MANAGE_WISHLIST")

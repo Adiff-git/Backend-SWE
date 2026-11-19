@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface CartItemRepository extends JpaRepository<CartItem, Long> {
+public interface CartItemRepository extends JpaRepository<CartItem, Long>, CartCheckoutRepository {
+    List<CartItem> findByCartIdAndSelectedTrueOrderByIdAsc(Long cartId);
     List<CartItem> findByCartIdOrderByAddedAtDescIdAsc(Long cartId);
     Optional<CartItem> findByIdAndCartId(Long id, Long cartId);
     @Query("SELECT i.productVariantId FROM CartItem i, Cart c WHERE i.cartId = c.id AND c.userId = :owner")
