@@ -5,6 +5,7 @@ import com.example.demo.user.dto.response.AddressResponse;
 import java.util.List;
 import jakarta.validation.Valid;
 public interface AddressService {
+    com.example.demo.user.dto.response.CheckoutAddressSnapshot getCheckoutAddressSnapshot(Long actorId, Long addressId);
     List<AddressResponse> getAddresses(Long actorId);
     AddressResponse getAddress(Long actorId,Long addressId);
     AddressResponse createAddress(Long actorId,@Valid CreateAddressRequest request);

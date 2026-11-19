@@ -18,6 +18,15 @@ public class CartValidator {
     public static final int MIN_QUANTITY = 1;
     public static final int MAX_QUANTITY = 999;
 
+    public void checkoutConsumption(Long owner, com.example.demo.cart.dto.response.CheckoutCartSeed seed,
+            List<com.example.demo.cart.dto.response.CheckoutCartSeed.Row> included) {
+        owner(owner);
+        if (seed == null || !java.util.Objects.equals(owner,seed.getOwnerId()) || seed.getCartId() == null
+                || included == null || included.stream().map(com.example.demo.cart.dto.response.CheckoutCartSeed.Row::getId).distinct().count() != included.size()
+                || !seed.getRows().containsAll(included) || included.stream().anyMatch(row -> !row.isSelected()))
+            throw new com.example.demo.cart.exception.CartConflictException();
+    }
+
     public void owner(Long owner) {
         if (owner == null || owner <= 0) throw new IdentityUnavailableException();
     }

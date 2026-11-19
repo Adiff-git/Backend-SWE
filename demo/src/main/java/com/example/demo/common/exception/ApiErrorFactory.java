@@ -14,7 +14,13 @@ public class ApiErrorFactory {
                 && path != null && (path.equals("/api/me/orders") || path.startsWith("/api/me/orders/")))
             return create(415,"Unsupported request media type",path,Map.of());
         if(failure instanceof ApplicationException app) {
-            ApiError error=create(app.getStatus(),app.getMessage(),path,Map.of());if(app.getCode()!=null)error.setProperty("code",app.getCode());return error;
+            ApiError error=create(app.getStatus(),app.getMessage(),path,Map.of());
+            if(app.getCode()!=null)error.setProperty("code",app.getCode());
+            app.getProperties().forEach(error::setProperty);
+            if ("/api/me/cart/checkout".equals(path) && app.getStatus()==409
+                    && (app.getCode()==null || !app.getCode().startsWith("CHECKOUT_")))
+                error.setProperty("code","CHECKOUT_CONFLICT");
+            return error;
         }
         if(failure instanceof org.springframework.dao.OptimisticLockingFailureException
                 || failure instanceof jakarta.persistence.OptimisticLockException)
@@ -33,6 +39,10 @@ public class ApiErrorFactory {
                     return create(404,"Product not found",path,Map.of());
             }
             if(cause instanceof SQLException sql) {
+                if ("/api/me/cart/checkout".equals(path) && "23505".equals(sql.getSQLState())
+                        && sql.getMessage()!=null && (sql.getMessage().contains("uk_checkout_receipts_customer_id_operation_idempotency_key")
+                        || sql.getMessage().contains("uk_checkout_receipts_order_id") || sql.getMessage().contains("uk_orders_order_number")))
+                    return conflict(path);
                 if("55P03".equals(sql.getSQLState()) || "40P01".equals(sql.getSQLState())) return conflict(path);
                 if("23505".equals(sql.getSQLState()) && sql.getMessage()!=null
                         && (sql.getMessage().contains("uk_carts_user_id") || sql.getMessage().contains("uk_cart_items_cart_id_product_variant_id")))
@@ -44,7 +54,8 @@ public class ApiErrorFactory {
     }
     private ApiError conflict(String path) {
         ApiError error=create(409,"Concurrent update; you may retry",path,Map.of());
-        if(path!=null && (path.equals("/api/me/cart") || path.startsWith("/api/me/cart/")))
+        if ("/api/me/cart/checkout".equals(path)) error.setProperty("code","CHECKOUT_CONFLICT");
+        else if(path!=null && (path.equals("/api/me/cart") || path.startsWith("/api/me/cart/")))
             error.setProperty("code","CART_CONFLICT");
         return error;
     }
