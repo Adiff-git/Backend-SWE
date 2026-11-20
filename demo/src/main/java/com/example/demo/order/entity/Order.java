@@ -25,6 +25,9 @@ import lombok.NoArgsConstructor;
 public class Order {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Builder.Default
+    @Column(nullable = false, updatable = false)
+    private boolean inventoryManaged = true;
     @Column(nullable = false, updatable = false)
     private Long customerId;
     @Column(nullable = false, updatable = false, columnDefinition = "TEXT")
@@ -43,8 +46,13 @@ public class Order {
     private BigDecimal merchandiseTotal;
     @Column(nullable = false, updatable = false, columnDefinition = "NUMERIC")
     private BigDecimal payableTotal;
+    @Builder.Default
+    @Column(nullable=false,updatable=false,columnDefinition="NUMERIC")
+    private BigDecimal voucherDiscount=BigDecimal.ZERO;
+    @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.JSON)
+    @Column(updatable=false,columnDefinition="JSONB")
+    private String voucherSnapshot;
     private Instant cancelledAt;
-    @Column(updatable = false)
     private Instant completedAt;
     @Column(columnDefinition = "TEXT")
     private String cancellationReason;
@@ -54,5 +62,11 @@ public class Order {
         status = OrderStatus.CANCELLED;
         cancelledAt = at;
         cancellationReason = reason;
+    }
+
+    /** Called only by the guarded internal first-completion workflow. */
+    public void complete(Instant at) {
+        status = OrderStatus.COMPLETED;
+        completedAt = at;
     }
 }

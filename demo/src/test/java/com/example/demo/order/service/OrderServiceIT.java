@@ -51,13 +51,40 @@ class OrderServiceIT {
     @Autowired com.example.demo.common.exception.ApiErrorFactory errors;
     @MockitoBean ProductImageStorage storage;
     Long owner;
+    @Autowired com.example.demo.inventory.service.InventoryService inventory;
+
+    @Test void cancelOrder_shouldReleaseOwnAllocationAndPreserveOtherOrderAndTerminalRepeat() {
+        long[] orders = transactions.execute(s -> {
+            var product = CatalogFixtures.persistProduct(entities, ProductStatus.DRAFT);
+            entities.flush();
+            com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, product.variant().getId(), 10);
+            long[] ids = new long[2];
+            for (int index = 0; index < 2; index++) {
+                int quantity = index == 0 ? 3 : 4;
+                ids[index] = com.example.demo.fixture.inventory.InventoryFixtures.order(jdbc, owner, true, product.variant().getId(), quantity);
+                long item = jdbc.queryForObject("SELECT id FROM order_items WHERE order_id=?", Long.class, ids[index]);
+                inventory.reserveReservations(new com.example.demo.inventory.dto.request.ReservationCommand(ids[index], OrderTestData.PLACED,
+                        java.util.List.of(new com.example.demo.inventory.dto.request.ReservationLine(item, product.variant().getId(), quantity))));
+            }
+            return ids;
+        });
+        service.cancelOrder(owner, orders[0], new CancelOrderRequest("first"));
+        assertThat(jdbc.queryForObject("SELECT SUM(stock) FROM inventory_balances", Long.class)).isEqualTo(10);
+        assertThat(jdbc.queryForObject("SELECT SUM(reserved) FROM inventory_balances", Long.class)).isEqualTo(4);
+        assertThat(jdbc.queryForObject("SELECT state FROM inventory_reservations WHERE order_id=?", String.class, orders[1])).isEqualTo("ACTIVE");
+        var terminal = jdbc.queryForMap("SELECT * FROM orders WHERE id=?", orders[0]);
+        clock.set(OrderTestData.PLACED.minusSeconds(1));
+        service.cancelOrder(owner, orders[0], new CancelOrderRequest("second"));
+        assertThat(jdbc.queryForMap("SELECT * FROM orders WHERE id=?", orders[0])).isEqualTo(terminal);
+        assertThat(jdbc.queryForObject("SELECT SUM(reserved) FROM inventory_balances", Long.class)).isEqualTo(4);
+    }
 
     @BeforeEach void prepare() {
         cleanup();
         clock.set(OrderTestData.PLACED.plusSeconds(60));
         owner = transactions.execute(s -> OrderFixtures.customer(entities).getId());
     }
-    @AfterEach void cleanup() { jdbc.execute("TRUNCATE TABLE users,categories CASCADE"); }
+    @AfterEach void cleanup() { com.example.demo.fixture.inventory.InventoryFixtures.cleanRetainedInventory(jdbc); }
 
     @Test void listOrders_shouldCountOnlyForEmptyAndLargeBeyondLastPage() {
         Statistics statistics = factory.unwrap(SessionFactory.class).getStatistics();
@@ -140,7 +167,7 @@ class OrderServiceIT {
         for (OrderStatus status : OrderStatus.values()) {
             Long id = transactions.execute(s -> OrderFixtures.persist(entities,owner,status,2).getId());
             java.util.Map<String,Object> before = jdbc.queryForMap("SELECT * FROM orders WHERE id=?",id);
-            if (status == OrderStatus.SHIPPING || status == OrderStatus.COMPLETED) {
+            if (status == OrderStatus.SHIPPING || status == OrderStatus.COMPLETED || status == OrderStatus.FAILED) {
                 org.assertj.core.api.Assertions.assertThatThrownBy(() -> service.cancelOrder(owner,id,new CancelOrderRequest("reason")))
                         .isInstanceOf(com.example.demo.order.exception.OrderConflictException.class);
                 assertThat(jdbc.queryForMap("SELECT * FROM orders WHERE id=?",id)).isEqualTo(before);

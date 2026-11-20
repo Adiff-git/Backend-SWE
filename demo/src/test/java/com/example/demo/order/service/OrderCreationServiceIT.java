@@ -14,11 +14,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OrderCreationServiceIT extends CheckoutIntegrationSupport {
     @Autowired OrderCreationService service;
+    @Autowired com.example.demo.inventory.service.InventoryService inventory;
 
     @Test void createOrder_shouldCommitCompletePendingHistoricalAggregate() {
         CreateOrderCommand.Item item = new CreateOrderCommand.Item(fixture.item(),fixture.product(),fixture.variant(),"Product","SKU",Map.of(),2,BigInteger.valueOf(100),BigInteger.valueOf(200));
         CreateOrderCommand command = new CreateOrderCommand(fixture.owner(),CheckoutFixtures.PLACED_AT,"Recipient","0123456789","Address",List.of(item),BigInteger.valueOf(200));
-        com.example.demo.order.dto.response.CreatedOrderSeed created = service.createOrder(command);
+        com.example.demo.order.dto.response.CreatedOrderSeed created = transactions.execute(s -> {
+            var result = service.createOrder(command);
+            inventory.reserveReservations(new com.example.demo.inventory.dto.request.ReservationCommand(result.getId(), command.getPlacedAt(),
+                    result.getItems().stream().map(line -> new com.example.demo.inventory.dto.request.ReservationLine(line.getId(), line.getSnapshot().getVariantId(), line.getSnapshot().getQuantity())).toList()));
+            return result;
+        });
         assertThat(created.getOrderNumber()).isEqualTo("ORD-"+created.getId());
         assertThat(jdbc.queryForMap("SELECT status,merchandise_total,payable_total FROM orders WHERE id=?",created.getId()))
                 .containsEntry("status","PENDING");

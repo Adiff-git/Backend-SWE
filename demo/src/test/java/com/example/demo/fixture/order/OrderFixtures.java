@@ -30,7 +30,8 @@ public final class OrderFixtures {
 
     public static List<Order> corpus(EntityManager entities, Long owner, int count) {
         List<Order> orders = new ArrayList<>();
-        for (int i = 0; i < count; i++) orders.add(persist(entities, owner, OrderStatus.values()[i % 5], 5));
+        OrderStatus[] statuses = OrderStatus.values();
+        for (int i = 0; i < count; i++) orders.add(persist(entities, owner, statuses[i % statuses.length], 5));
         return orders;
     }
 

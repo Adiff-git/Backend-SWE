@@ -15,17 +15,28 @@ public class CreateOrderCommand {
     String recipientPhone;
     String deliveryAddress;
     List<Item> items;
-    BigInteger total;
+    BigInteger merchandiseTotal;
+    BigInteger voucherDiscount;
+    BigInteger payableTotal;
+    com.example.demo.voucher.dto.response.VoucherSnapshot voucherSnapshot;
 
     public CreateOrderCommand(Long customerId, Instant placedAt, String name, String phone, String address,
             List<Item> items, BigInteger total) {
+        this(customerId, placedAt, name, phone, address, items, total, BigInteger.ZERO, total, null);
+    }
+    public CreateOrderCommand(Long customerId, Instant placedAt, String name, String phone, String address,
+            List<Item> items, BigInteger total, BigInteger discount, BigInteger payable,
+            com.example.demo.voucher.dto.response.VoucherSnapshot snapshot) {
+        this.voucherDiscount=discount;
+        this.payableTotal=payable;
+        this.voucherSnapshot=snapshot;
         this.customerId = customerId;
         this.placedAt = placedAt;
         this.recipientName = name;
         this.recipientPhone = phone;
         this.deliveryAddress = address;
         this.items = List.copyOf(items);
-        this.total = total;
+        this.merchandiseTotal = total;
     }
 
     @Value

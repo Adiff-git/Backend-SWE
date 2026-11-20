@@ -25,14 +25,14 @@ class OrderMigrationIT {
             jdbc.update("INSERT INTO user_roles(user_id,role_id) SELECT ?,id FROM roles WHERE name='USER'",owner);
             jdbc.update("INSERT INTO carts(user_id) VALUES (?)",owner);
             java.util.List<Map<String,Object>> rolesBefore = jdbc.queryForList("SELECT * FROM user_roles ORDER BY user_id,role_id");
-            java.util.List<Map<String,Object>> cartsBefore = jdbc.queryForList("SELECT * FROM carts ORDER BY id");
+            java.util.List<Map<String,Object>> cartsBefore = jdbc.queryForList("SELECT id,user_id FROM carts ORDER BY id");
             Map<String, Object> original = jdbc.queryForMap("SELECT * FROM users WHERE id=?", owner);
             Flyway migration = Flyway.configure().dataSource(source).load();
             migration.migrate();
             migration.validate();
             assertThat(jdbc.queryForMap("SELECT * FROM users WHERE id=?", owner)).isEqualTo(original);
             assertThat(jdbc.queryForList("SELECT * FROM user_roles ORDER BY user_id,role_id")).isEqualTo(rolesBefore);
-            assertThat(jdbc.queryForList("SELECT * FROM carts ORDER BY id")).isEqualTo(cartsBefore);
+            assertThat(jdbc.queryForList("SELECT id,user_id FROM carts ORDER BY id")).isEqualTo(cartsBefore);
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM user_roles ur JOIN role_permissions rp ON ur.role_id=rp.role_id JOIN permissions p ON p.id=rp.permission_id WHERE ur.user_id=? AND p.name='MANAGE_ORDER'",Long.class,owner)).isEqualTo(1);
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM orders", Long.class)).isZero();
             assertThat(jdbc.queryForList("SELECT r.name FROM roles r JOIN role_permissions rp ON r.id=rp.role_id JOIN permissions p ON p.id=rp.permission_id WHERE p.name='MANAGE_ORDER'", String.class)).containsExactly("USER");
@@ -68,6 +68,6 @@ class OrderMigrationIT {
     }
 
     private Long insertOrder(JdbcTemplate jdbc, Long owner) {
-        return jdbc.queryForObject("INSERT INTO orders(customer_id,order_number,placed_at,status,recipient_name_snapshot,recipient_phone_snapshot,delivery_address_snapshot,merchandise_total,payable_total) VALUES (?,'HISTORICAL-'||gen_random_uuid(),CURRENT_TIMESTAMP,'PENDING','Recipient','0123456789','Old address',100,90) RETURNING id", Long.class, owner);
+        return jdbc.queryForObject("INSERT INTO orders(customer_id,order_number,placed_at,status,recipient_name_snapshot,recipient_phone_snapshot,delivery_address_snapshot,merchandise_total,payable_total,inventory_managed) VALUES (?,'HISTORICAL-'||gen_random_uuid(),CURRENT_TIMESTAMP,'PENDING','Recipient','0123456789','Old address',100,90,false) RETURNING id", Long.class, owner);
     }
 }

@@ -40,6 +40,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         ApiAuthenticationEntryPoint.class,ApiAccessDeniedHandler.class,ApiErrorFactory.class,OrderRequestReader.class})
 @TestPropertySource(properties={"security.jwt.secret=controlled-test-key-with-at-least-32-bytes","security.jwt.issuer=urn:test"})
 class OrderControllerTest {
+    @Test void cancelOrder_shouldReturnSafeInventoryConflictWithoutStockOrOwnershipDetails() throws Exception {
+        org.mockito.Mockito.doThrow(new com.example.demo.inventory.exception.InventoryConflictException()).when(service)
+                .cancelOrder(eq(1L),eq(7L),any());
+        mvc.perform(post("/api/me/orders/7/cancel").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_ORDER"))))
+                .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("INVENTORY_CONFLICT"))
+                .andExpect(jsonPath("$.inventoryBalanceId").doesNotExist()).andExpect(jsonPath("$.ownerId").doesNotExist())
+                .andExpect(header().string("Cache-Control", "private, no-store"));
+    }
+
+    @Test void orderErrors_shouldKeepPrivateNoStoreBeforeAuthenticationAndMediaParsing() throws Exception {
+        mvc.perform(post("/api/me/orders/7/cancel")).andExpect(status().isUnauthorized())
+                .andExpect(header().string("Cache-Control", "private, no-store"));
+        mvc.perform(post("/api/me/orders/7/cancel").with(jwt())).andExpect(status().isForbidden())
+                .andExpect(header().string("Cache-Control", "private, no-store"));
+        mvc.perform(post("/api/me/orders/7/cancel").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_ORDER")))
+                .contentType("text/plain").content("{}"))
+                .andExpect(status().isUnsupportedMediaType()).andExpect(header().string("Cache-Control", "private, no-store"));
+    }
     @Autowired MockMvc mvc;
     @MockitoBean OrderService service;
     @MockitoBean UserService users;

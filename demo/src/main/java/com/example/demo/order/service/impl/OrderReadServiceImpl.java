@@ -18,7 +18,8 @@ import tools.jackson.databind.json.JsonMapper;
 public class OrderReadServiceImpl implements OrderReadService {
     private final OrderRepository orders;
     private final OrderItemRepository items;
-    private final JsonMapper json = JsonMapper.builder().build();
+    private final JsonMapper json = JsonMapper.builder(tools.jackson.core.json.JsonFactory.builder().streamReadConstraints(
+            tools.jackson.core.StreamReadConstraints.builder().maxNumberLength(131072).build()).build()).build();
 
     @Override @Transactional(readOnly = true)
     public OrderReadSeed.Page getOrderPageSeed(Long owner, OrderListRequest request) {
@@ -28,6 +29,7 @@ public class OrderReadServiceImpl implements OrderReadService {
         List<OrderReadSeed.Header> headers = offset <= Integer.MAX_VALUE
                 ? orders.findOwnedHeaders(owner,request.getStatus(),request.toPageable())
                 : orders.findOwnedHeadersLong(owner,request.getStatus(),offset,request.getSize(),request.getSort());
+        headers=headers.stream().map(this::prepareHeader).toList();
         List<OrderReadSeed.Item> previews = headers.isEmpty() ? List.of()
                 : items.findPreviews(headers.stream().map(OrderReadSeed.Header::getId).toList()).stream().map(this::prepareItem).toList();
         return new OrderReadSeed.Page(headers,previews,request.getPage(),request.getSize(),count);
@@ -36,9 +38,14 @@ public class OrderReadServiceImpl implements OrderReadService {
     @Override @Transactional(readOnly = true)
     public OrderReadSeed.Detail getOrderSeed(Long owner, Long id) {
         OrderReadSeed.Header header = orders.findOwnedHeader(owner,id).orElseThrow(OrderNotFoundException::new);
-        return new OrderReadSeed.Detail(header,items.findDetails(id).stream().map(this::prepareItem).toList());
+        return new OrderReadSeed.Detail(prepareHeader(header),items.findDetails(id).stream().map(this::prepareItem).toList());
     }
 
+    private OrderReadSeed.Header prepareHeader(OrderReadSeed.Header row) {
+        if(row.getVoucherSnapshotJson()==null) return row;
+        var snapshot=json.readValue(row.getVoucherSnapshotJson(),com.example.demo.voucher.dto.response.VoucherSnapshot.class);
+        return new OrderReadSeed.Header(row.getId(),row.getOrderNumber(),row.getPlacedAt(),row.getStatus(),row.getPayableTotal(),row.getMerchandiseTotal(),row.getRecipientNameSnapshot(),row.getRecipientPhoneSnapshot(),row.getDeliveryAddressSnapshot(),row.getCancelledAt(),row.getCompletedAt(),row.getCancellationReason(),row.getVoucherDiscount(),snapshot);
+    }
     private OrderReadSeed.Item prepareItem(OrderItemRepository.ItemView row) {
         Map<String, String> options = json.readValue(row.getOptionsJson(),new TypeReference<Map<String,String>>() { });
         return new OrderReadSeed.Item(row.getId(),row.getOrderId(),row.getProductId(),row.getProductVariantId(),

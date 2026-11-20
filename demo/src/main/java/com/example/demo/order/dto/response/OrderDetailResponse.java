@@ -21,4 +21,6 @@ public class OrderDetailResponse {
     Instant cancelledAt;
     Instant completedAt;
     String cancellationReason;
+    SellingPrice voucherDiscount;
+    com.example.demo.voucher.dto.response.VoucherSnapshot voucher;
 }

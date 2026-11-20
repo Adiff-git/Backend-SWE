@@ -17,6 +17,17 @@ class OrderRequestReaderTest {
     private final OrderRequestReader reader = new OrderRequestReader(factory.getValidator());
     @AfterEach void close() { factory.close(); }
 
+    @Test void readList_shouldAcceptExactFailedStatusWithoutInventingOtherTerminalVocabulary() {
+        MockHttpServletRequest valid = new MockHttpServletRequest();
+        valid.addParameter("status", "FAILED");
+        assertThat(reader.readList(valid).getStatus()).isEqualTo(com.example.demo.order.entity.OrderStatus.FAILED);
+        for (String status : new String[]{"failed", "EXPIRED", "RECEIVED", "FAILED "}) {
+            MockHttpServletRequest invalid = new MockHttpServletRequest();
+            invalid.addParameter("status", status);
+            assertThatThrownBy(() -> reader.readList(invalid)).isInstanceOf(InvalidOrderRequestException.class);
+        }
+    }
+
     @Test void readCancellation_shouldNormalizeAndCountCodePointsRatherThanUtf16() throws Exception {
         String emoji = new String(Character.toChars(0x1F600));
         assertThat(reader.readCancellation(request("{\"reason\":\"  changed  \"}","application/json")).getReason()).isEqualTo("changed");
