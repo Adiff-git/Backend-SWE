@@ -1,5 +1,7 @@
 # Feature Specification: Customer Checkout
 
+**Inventory follow-up (2026-11-20):** [Inventory Management](../010-inventory-management/spec.md) supersedes the earlier Inventory exclusions only for the implemented deltas below. See its [validation record](../010-inventory-management/implementation-validation.md). Existing routes, strict inputs, authorization, money and immutable historical receipts remain unchanged. Admin supply, public receipt confirmation, FAILED processing, payment and expiry producers remain deferred.
+
 **Feature Branch**: `draft/version-1` (existing branch; no branch hook configured)
 
 **Created**: 2026-11-18
@@ -16,7 +18,7 @@ As an authenticated customer, I place one order using selected eligible cart row
 
 **Why this priority**: Establishes the complete single-vendor purchase entry point.
 
-**Independent Test**: Prepare an owned address and selected eligible cart rows; place an order and compare the committed order, response and remaining cart without payment, stock or shipping workflows.
+**Independent Test**: Prepare an owned address and selected eligible cart rows; place an order and compare the committed order, response and remaining cart without payment or shipping workflows; feature010 supplies real test stock and verifies atomic reservation.
 
 **Acceptance Scenarios**:
 
@@ -78,7 +80,7 @@ As a customer whose response is lost or whose cart is open on multiple devices, 
 - A changed/deleted address after success cannot invalidate an otherwise authorized replay; a new attempt must validate an owned current address. Initial address capture must represent one coherent saved address, never mixed fields from concurrent updates.
 - Missing optional images do not invalidate a purchase or alter durable snapshots; durable receipts must not contain expiring URLs as identifiers.
 - Monetary arithmetic or representation bounds must be validated before commit; failure creates no order and deletes no rows.
-- Cancellation after checkout does not re-add cart rows, release stock or refund payment. Replay does not reset order status or undo cancellation.
+- Cancellation after checkout does not re-add cart rows or refund payment. Feature010 releases exact managed ACTIVE reservations by decreasing reserved only; legacy cancellation skips Inventory. Replay does not reset order status or undo cancellation.
 - Rejected or rolled-back initial attempts leave their keys reusable against current state. Successful receipts have no time-based expiry or key reuse during the order lifetime; processing requests return 409 CHECKOUT_IN_PROGRESS.
 
 ## Requirements *(mandatory)*
@@ -88,7 +90,7 @@ As a customer whose response is lost or whose cart is open on multiple devices, 
 - **FR-001**: Resolve customer solely from existing authenticated identity, checking current active account/session and current permissions on every request including replay. Never accept an owner override or disclose another customer's cart, address or outcome.
 - **FR-002**: Follow established feature permission naming/default USER assignment and explicit custom-role grants. Require MANAGE_CHECKOUT, assigned to existing/future USER role assignments; custom roles require an explicit grant. Checkout requires no additional MANAGE_CART, MANAGE_ADDRESS or MANAGE_ORDER grant. ROLE_ADMIN alone never bypasses permission or ownership; existing order routes retain their own MANAGE_ORDER gate.
 - **FR-003**: Require one addressId of the existing positive numeric Long identifier type and a checkout idempotency key. Resolve an owned saved address; no implicit default-address fallback for omitted/null input. Unknown and foreign addresses use identical safe not-found behavior.
-- **FR-004**: Consider stored selected cart rows only. An included row requires an existing variant and product, PUBLISHED product, integer quantity 1–999 and valid current nonnegative whole-VND selling price. Do not evaluate inventory.
+- **FR-004**: Consider stored selected cart rows only. An included row requires an existing variant and product, PUBLISHED product, integer quantity 1–999 and valid current nonnegative whole-VND selling price. After these checks, feature010 locks live Inventory balances and requires the full quantity. Missing balances yield INVENTORY_UNAVAILABLE; insufficient stock yields INSUFFICIENT_STOCK. Skip the entire row, never reduce its quantity; reserve included actual order items atomically.
 - **FR-005**: Include every eligible selected row in one order, preserving quantity exactly. Skip and preserve business-ineligible selected rows; preserve every unselected row unchanged. Never use stale cart display snapshots as authoritative current purchase data.
 - **FR-006**: Classify skipped rows with safe stable codes: VARIANT_UNAVAILABLE, PRODUCT_UNAVAILABLE, PRODUCT_NOT_FOR_SALE, INVALID_QUANTITY or INVALID_PRICE. Evaluate missing references before publication, then quantity, then price; return one first-applicable reason per row. When a missing variant prevents parent resolution, report VARIANT_UNAVAILABLE; report PRODUCT_UNAVAILABLE only when a known parent reference cannot resolve. Do not reveal unpublished metadata.
 - **FR-007**: No eligible selected rows means rejection without any empty order, deletion or successful receipt. Infrastructure/unknown failures abort checkout; they are never converted into skips or apparent success.
@@ -104,7 +106,7 @@ As a customer whose response is lost or whose cart is open on multiple devices, 
 - **FR-017**: Use existing private response/error and historical order-summary/detail responsibilities. First success and successful replay return 201 with Location referencing owned order detail; return created-order information and original skipped-row outcomes. Malformed/unauthorized/rejected/failed operations never return apparent success.
 - **FR-018**: Errors use safe existing ProblemDetail handling, revealing no SQL, stack traces, secrets or hidden catalog/address details. Responses containing private order/address/skipped data must be private and non-cacheable under established order/cart conventions.
 - **FR-019**: Existing list, PENDING filter and owned detail must show created orders. Keep cancellation eligibility/repeat behavior unchanged; introduce no customer receipt confirmation or automatic CONFIRMED/SHIPPING/COMPLETED progression.
-- **FR-020**: Require deterministic synchronized independent-transaction tests for same-key requests, different-key cart consumption, checkout versus every cart mutation category (add, quantity replacement, variant change, individual/bulk selection and removal), and coherent address/catalog publication/price changes. Include concurrent completed replays, commits between initial lookup and fence acquisition, commits before busy-fence rechecks and genuinely in-progress originals; assert zero duplicate orders/repeated cart consumption and no stock/voucher calls or mutations, without adding excluded implementations. Execute these tests in the normal integration verification gate before feature completion; sequential retries do not establish overlap safety. This is feature-local, not a new global testing policy.
+- **FR-020**: Require deterministic synchronized independent-transaction tests for same-key requests, different-key cart consumption, checkout versus every cart mutation category (add, quantity replacement, variant change, individual/bulk selection and removal), and coherent address/catalog publication/price changes. Include concurrent completed replays, commits between initial lookup and fence acquisition, commits before busy-fence rechecks and genuinely in-progress originals; assert zero duplicate orders/repeated cart consumption and no additional Inventory calls/mutations on replay and no voucher work. Initial successful execution reserves once through the shared Inventory service; failed attempts roll back all reservations. Execute these tests in the normal integration verification gate before feature completion; sequential retries do not establish overlap safety. This is feature-local, not a new global testing policy.
 - **FR-021**: Respect current domain/service/validator/converter responsibilities, repository ownership, lazy use-case fetches, custom errors and additive migrations. No separate Checkout aggregate merely to copy a multi-order design; durable idempotency data is justified by FR-013–015. No generic workflow engine, messaging or distributed transaction infrastructure.
 
 ### Request, result and error decisions
@@ -119,7 +121,7 @@ The result is the immutable purchase receipt specified in FR-016, with Location 
 
 - **Customer/cart/selected row**: Existing owned persistent cart and row identities, stored selection, variant and quantity; only successfully ordered rows are consumed.
 - **Delivery address**: Existing owned numeric ID and recipient name/phone/address text, captured coherently into history.
-- **Catalog purchase state**: Current publication, variant identity/name/SKU/options and valid authoritative price, independent of stock.
+- **Catalog purchase state**: Current publication, variant identity/name/SKU/options and valid authoritative price, followed by separate Inventory availability classification without changing catalog publication/price precedence.
 - **Order and order item**: Existing historical aggregate with numeric Long IDs, optional UUID catalog references, exact VND totals and immutable purchase/address snapshots.
 - **Idempotency outcome**: Customer/operation/key, command fingerprint and durable original order reference/skipped outcome, retained for the order lifetime, with processing conflicts and reusable unsuccessful keys as specified in FR-015. This is a required recovery concept, not a separate multi-order checkout model.
 
@@ -133,7 +135,7 @@ The result is the immutable purchase receipt specified in FR-016, with Location 
 - **SC-004**: Every ownership/permission test denies unauthorized access without disclosing foreign address/cart/order/receipt data or mutating state.
 - **SC-005**: Every injected pre-commit failure leaves zero partial orders/orphan items/successful receipts and preserves all original cart rows; competing operations commit no duplicate consumption or lost accepted edits.
 - **SC-006**: Every created order is discoverable through the existing list/PENDING filter/detail; all purchase/address snapshots remain unchanged after later catalog/address modifications or deletion.
-- **SC-007**: Customers can place and recover a purchase using only an owned address, selected cart rows and a key, without supplying prices/owner/status or invoking inventory, payment, vouchers, shipping or preview workflows.
+- **SC-007**: Customers can place and recover a purchase using only an owned address, selected cart rows and a key, without supplying prices/owner/status or invoking a separate Inventory, payment, voucher, shipping or preview API. The server reserves internally through feature010.
 
 ## Assumptions
 
@@ -141,7 +143,7 @@ The result is the immutable purchase receipt specified in FR-016, with Location 
 - Existing code, rather than stale implementation-status prose in earlier specs, establishes current integration availability. Cart and order behavior exists in the working tree; this step does not implement checkout.
 - Existing user/order/cart identities are Long; product/variant identities are UUID; addresses contain recipientName, recipientPhone and addressText. Product PUBLISHED and valid nonnegative integral price establish current sale eligibility; free items are valid.
 - Dependencies: current-state bearer identity/session, owned address access, selected cart state, catalog prices/publication and historical order storage/read services. Planning must preserve acyclic service boundaries and the constitution; no new dependencies are preapproved.
-- Exclude stock checks/reservation/deduction/release, vouchers/promotions/discounts, payment methods/records/processing/refunds, shipping fees/shipments/tracking, multi-vendor grouping, guest checkout, separate preview, notifications and receipt confirmation. No excluded placeholders.
+- Feature010 implements stock validation/reservation and owned terminal release/consumption; these earlier exclusions are superseded only for those deltas. Continue to exclude vouchers/promotions/discounts, payment methods/records/processing/refunds, shipping fees/shipments/tracking, multi-vendor grouping, guest checkout, separate preview, notifications and receipt confirmation. No excluded placeholders.
 - Key lifecycle, immutable receipt/201 replay, exact errors, MANAGE_CHECKOUT and normal-gate synchronized concurrency tests were explicitly approved together; no remaining clarification blocks planning.
 
 ## Clarifications
@@ -153,4 +155,9 @@ The result is the immutable purchase receipt specified in FR-016, with Location 
 - **Q3: A — Concurrency verification**: Deterministic synchronized independent-transaction tests cover same-key, different-key, every cart mutation category and coherent address/catalog eligibility/price changes; execute in normal integration verification.
 ### Accepted analysis remediation — C1 and I1
 
-Move the existing AddressServiceIT responsibility to user/service during implementation, preserving every assertion and coverage, with no duplicate class. Receipt-first lookup, post-acquisition recheck and busy-fence recheck are mandatory; current authorization and successful-command mismatch checks apply at every receipt hit. Synchronized race proofs remain in the normal integration gate. These refinements preserve all approved business rules; stock/voucher operations remain excluded, not newly introduced for tests.
+Move the existing AddressServiceIT responsibility to user/service during implementation, preserving every assertion and coverage, with no duplicate class. Receipt-first lookup, post-acquisition recheck and busy-fence recheck are mandatory; current authorization and successful-command mismatch checks apply at every receipt hit. Synchronized race proofs remain in the normal integration gate. These refinements preserve all approved business rules; voucher operations remain excluded. Feature010 adds the shared Inventory implementation and real reservation assertions; successful replay still performs zero Inventory work.
+
+
+## Voucher integration follow-up — feature011
+
+The earlier first-execution Voucher exclusion is superseded by feature011: captured Cart grant is independently validated after definition→usage→grant locks, then one authoritative event timestamps order, Inventory reservation, grant/redemption and receipt. Selected grant/quota/discount/order/Inventory/Cart/version2 receipt commit atomically. Receipt-first/fresh rechecks and address-only fingerprint remain; old version1 bodies are unchanged and every replay bypasses Voucher and Inventory mutations. Verified targeted deltas and the separately tracked unrestricted completion gate are recorded in [Voucher execution evidence](../011-voucher-support/implementation-validation.md). Earlier completed tasks and their historical execution records are preserved; this follow-up adds no admin/code/public-discovery/cancellation-quota contract.

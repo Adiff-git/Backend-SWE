@@ -1,5 +1,7 @@
 # Feature Specification: Customer Order Management
 
+**Inventory follow-up (2026-11-20):** [Inventory Management](../010-inventory-management/spec.md) supersedes the earlier Inventory exclusions only for the implemented deltas below. See its [validation record](../010-inventory-management/implementation-validation.md). Existing routes, strict inputs, authorization, money and immutable historical receipts remain unchanged. Admin supply, public receipt confirmation, FAILED processing, payment and expiry producers remain deferred.
+
 **Feature Branch**: Existing `draft/version-1`; no branch created.
 **Created**: 2026-11-17
 **Status**: Implemented and validated; completion evidence and full-run/targeted-rerun details are in [implementation-validation.md](implementation-validation.md). Completed 2026-11-18.
@@ -12,13 +14,13 @@
 As a customer, I identify my purchases and find orders in a particular state.
 
 **Why this priority**: Private order visibility enables all other order operations.
-**Independent Test**: Prepare orders for two customers in all five states, including timestamp ties; browse without an order-creation API.
+**Independent Test**: Prepare orders for two customers in all six states, including timestamp ties; browse without an order-creation API.
 
 **Acceptance Scenarios**:
 
 1. **Given** no owned orders, **When** listing, **Then** return empty items and zero totals without creating data.
 2. **Given** multiple customers' orders, **When** listing without a filter, **Then** return only the current customer's orders across all statuses.
-3. **Given** each of the five valid statuses, **When** filtered, **Then** ownership/status filtering precedes pagination/counting; unmatched filters return an empty page.
+3. **Given** each of the six valid statuses, **When** filtered, **Then** ownership/status filtering precedes pagination/counting; unmatched filters return an empty page.
 4. **Given** unchanged orders with timestamp/amount ties, **When** traversing supported sorts at sizes 1, 20 and 100, **Then** each matching order appears exactly once with accurate filtered totals.
 5. **Given** a beyond-last page, **When** listed, **Then** return empty items with matching totals preserved.
 6. **Given** invalid pagination, status or sort input, **When** listed, **Then** return validation failure without changes.
@@ -51,7 +53,7 @@ As a customer, I cancel an order when the approved policy permits it.
 2. **Given** an incompatible state, **When** cancellation is requested, **Then** conflict leaves every field unchanged.
 3. **Given** CANCELLED, **When** cancellation repeats, **Then** return 204 success without changing the first timestamp or reason.
 4. **Given** action input, **When** validated, **Then** apply the optional-reason input contract below and reject invalid input without changes.
-5. **Given** SHIPPING or COMPLETED, **When** cancellation is requested, **Then** return 409 with every field unchanged.
+5. **Given** SHIPPING, COMPLETED or FAILED, **When** cancellation is requested, **Then** return 409 with every field unchanged.
 6. **Given** synchronized cancellations of one owned PENDING or CONFIRMED order in independent transactions, **When** both finish, **Then** exactly one initial transition is committed; the other returns idempotent 204 after the winning cancellation is visible (a separate recognized concurrency failure may return 409), with one unchanged winning timestamp/reason and intact historical snapshots.
 7. **Given** an order with any status, **When** a customer attempts to confirm receipt or set an arbitrary status, **Then** no supported customer operation performs that transition and no order data changes.
 
@@ -71,7 +73,7 @@ As a customer, I cancel an order when the approved policy permits it.
 - **FR-001**: Provide only current-customer list, detail and cancellation; derive owner from authenticated identity and reject client owner overrides.
 - **FR-002**: Use feature-local `MANAGE_ORDER`, adapting MANAGE_CART/MANAGE_WISHLIST naming and USER assignment policy. Existing/future USER assignments inherit it; custom roles need an explicit grant. Unrelated permissions or ROLE_ADMIN alone do not grant access or bypass ownership. No admin endpoints.
 - **FR-003**: Enforce ownership on reads and writes; unknown/foreign identifiers return identical safe 404 outcomes.
-- **FR-004**: Support exactly PENDING, CONFIRMED, SHIPPING, COMPLETED, CANCELLED. No generic status setter or progression into CONFIRMED/SHIPPING is provided.
+- **FR-004**: Support exactly PENDING, CONFIRMED, SHIPPING, COMPLETED, CANCELLED and FAILED. No generic status setter or progression into CONFIRMED/SHIPPING is provided.
 - **FR-005**: Omitted status returns all owned orders; one exact uppercase status filters before pagination/counting. Blank, null-like text, lowercase, unknown and repeated values are invalid.
 - **FR-006**: Default page 0, size 20; canonical integer page 0..2147483647 and size 1..100. Return `items`, `page`, `size`, `totalItems`, `totalPages` in an application-owned page representation. Count matching owned/status-filtered orders first as totalElements (public totalItems) and calculate offset using long arithmetic before multiplication. If offset >= totalElements, return an empty page with accurate requested page/size and filtered totals, without executing the paginated content or preview query. If offset > Integer.MAX_VALUE and offset < totalElements, use an explicit long-offset query path preserving the same filtering/sorting/metadata; never narrow, wrap, clamp, reject an otherwise valid page solely for its offset, or pass an invalid offset to JPA. Zero results mean zero totalPages. Preserve the existing totalPages representation/overflow safeguard described in contracts/api.md.
 - **FR-007**: Allow one `sort` value: `placedAt,asc`, `placedAt,desc`, `payableTotal,asc` or `payableTotal,desc`. Default placedAt descending; append order ID ascending as unique tie-breaker. Reject unsupported fields/directions, repeated sorts and unknown parameters; never expose arbitrary persistence-property sorting.
@@ -79,8 +81,8 @@ As a customer, I cancel an order when the approved policy permits it.
 - **FR-009**: Historical recipient/product/SKU/options/price snapshots and totals never follow later profile/catalog changes. Order viewing never requires current purchasability/publication.
 - **FR-010**: Preserve orders/items when catalog records are removed; live references may become null while snapshots remain. No catalog/account deletion cascade may erase history. Broader account retention/anonymization is excluded; restrict deletion where necessary to retain historical ownership.
 - **FR-011**: Use exact nonnegative whole-VND monetary values with established `{amount, currency: "VND"}` representation. Positive integer quantities; stored lineTotal equals unitPriceSnapshot times quantity; merchandiseTotal equals sum of line totals. Stored payableTotal remains authoritative, with no current-price recalculation or invented fees/discounts.
-- **FR-012**: Allow cancellation only from PENDING or CONFIRMED, with an optional reason; successful cancellation sets CANCELLED/cancelledAt atomically, retains history and performs no inventory release, refund or external notification. For an otherwise eligible first cancellation, if the current Clock sample precedes placedAt, return HTTP 409 without changes. Classify already-CANCELLED first: valid repeats remain 204 without sampling the clock or altering the original timestamp/reason.
-- **FR-013**: Defer customer receipt confirmation and all SHIPPING-to-COMPLETED/received transitions to a later feature. Provide no confirm-receipt endpoint, generic status mutation or placeholder. SHIPPING and COMPLETED remain readable/filterable fixture states; completedAt is historical data only.
+- **FR-012**: Allow cancellation only from PENDING or CONFIRMED, with an optional reason; successful cancellation sets CANCELLED/cancelledAt atomically, retains history and, for inventory-managed orders, releases the exact owned ACTIVE allocations in the same transaction by decreasing reserved only. Explicit legacy orders skip Inventory. No refund or external notification. For an otherwise eligible first cancellation, if the current Clock sample precedes placedAt, return HTTP 409 without changes. Classify already-CANCELLED first: valid repeats remain 204 without sampling the clock, calling Inventory or altering the original timestamp/reason.
+- **FR-013**: Defer customer receipt confirmation and public SHIPPING-to-COMPLETED/received transitions. Provide no confirm-receipt endpoint, generic status mutation or placeholder. Feature010 implements guarded internal completion with exact managed consumption and completedAt; it is not customer-accessible.
 - **FR-014**: Validate owner/current state before mutation and protect the complete state/timestamp change against competing requests. Rejections change nothing; recognized competing-state conflicts return 409. Planning selects transaction/concurrency mechanisms.
 - **FR-015**: Repeated cancellation of an owned CANCELLED order returns 204 success without refreshing cancelledAt, replacing cancellationReason or rewriting snapshots. Validate authentication, permission, ownership and request shape on repeats; invalid repeated requests still return the applicable error.
 - **FR-016**: Use established safe ProblemDetail errors and private no-store responses; never expose infrastructure internals or foreign data.
@@ -95,8 +97,9 @@ As a customer, I cancel an order when the approved policy permits it.
 | SHIPPING | Being delivered; tracking is not implemented | Read/filter only; receipt confirmation deferred |
 | COMPLETED | Receipt confirmed | Read/filter only |
 | CANCELLED | Cancelled | Repeated cancellation returns 204 without changes |
+| FAILED | Future refusal to receive | Read/filter only; no transition or processing |
 
-Only PENDING-to-CANCELLED and CONFIRMED-to-CANCELLED are included. Customer receipt confirmation is deferred; no SHIPPING-to-COMPLETED transition is exposed. Terminal states cannot be reversed. No DELIVERED/payment states.
+Only PENDING-to-CANCELLED and CONFIRMED-to-CANCELLED are customer mutations. Feature010 adds internal guarded SHIPPING-to-COMPLETED with atomic Inventory consumption. Customer receipt confirmation is deferred; no SHIPPING-to-COMPLETED transition is exposed. Terminal states cannot be reversed. No DELIVERED/payment states.
 
 ### Summary and Detail Definitions
 
@@ -153,7 +156,7 @@ Optional reason contract (documented specification defaults): cancellation accep
 
 Depend on existing current-state identity/authorization, catalog/media service boundaries and PostgreSQL fixture infrastructure. Future creation must supply valid snapshots but is not needed for fixture-driven acceptance.
 
-Exclude admin order management, order-creation API, checkout/cart conversion, inventory validation/deduction/reservation/release, payment/status/refunds, shipping entities/carriers/tracking, shops, vouchers/discount workflows, returns/exchanges/deletion, notifications, customer receipt confirmation and automatic progression. No placeholder code or excluded infrastructure.
+Exclude admin order management, public order-creation override, payment/status/refunds, shipping entities/carriers/tracking, shops, vouchers/discount workflows, returns/exchanges/deletion, notifications, customer receipt confirmation and automatic progression. Features009/010 separately implement Checkout conversion, reservation, managed cancellation release and guarded internal SHIPPING-to-COMPLETED consumption. FAILED is a sixth readable/filterable status for future refusal only; cancellation/internal completion reject it, with no SHIPPING-to-FAILED transition, timestamp or processing. No placeholder code or excluded infrastructure.
 
 Verify all three stories, each status, empty/no-order pages, supported sort directions/ties, invalid inputs, summary/detail separation, historical changes/unavailability/deletion, missing images, every ownership boundary, current permission grant/revocation, approved/rejected/repeated actions, unchanged rejected mutations and atomic terminal timestamps. Synchronized competing-cancellation verification with independent transactions is required; sequential repetitions do not prove competing-request safety. Verify no receipt-confirmation route or customer completion capability is introduced.
 
@@ -161,16 +164,16 @@ Verify all three stories, each status, empty/no-order pages, supported sort dire
 
 ### Measurable Outcomes
 
-- **SC-001**: With 125 owned and 25 foreign orders, all five filters and supported sorts traverse exactly the owned matching set once at sizes 1, 20 and 100 on unchanged data, with exact totals. Boundary tests prove count-first empty-page short-circuit at offset=totalElements and offset>totalElements, exact widened arithmetic through page=2147483647/size=100, and correct nonempty dispatch below/at/above Integer.MAX_VALUE without narrowing or invalid JPA offsets; synthetic counts are allowed for impractically large datasets.
+- **SC-001**: With 125 owned and 25 foreign orders, all six filters and supported sorts traverse exactly the owned matching set once at sizes 1, 20 and 100 on unchanged data, with exact totals. Boundary tests prove count-first empty-page short-circuit at offset=totalElements and offset>totalElements, exact widened arithmetic through page=2147483647/size=100, and correct nonempty dispatch below/at/above Integer.MAX_VALUE without narrowing or invalid JPA offsets; synthetic counts are allowed for impractically large datasets.
 - **SC-002**: Every foreign/unknown detail/mutation pair has the same safe not-found outcome, zero protected disclosure and zero changes.
 - **SC-003**: Every historical-data scenario preserves 100% of recipient/item/amount snapshots after profile/catalog changes or catalog/image removal.
 - **SC-004**: Every approved transition records exactly its matching terminal timestamp; rejected actions change zero fields; valid repeats on owned CANCELLED orders return 204 and preserve the first timestamp and reason.
 - **SC-005**: Every summary excludes full address/item detail and respects approved preview/count bounds; every detail includes all historical rows without requiring images.
-- **SC-006**: All three workflows complete with existing orders without checkout/inventory/payment/shipping services or a client owner override.
+- **SC-006**: Historical reads and explicit legacy cancellation remain independent of Inventory mutations. Managed cancellation uses the shared Inventory service; no payment/shipping workflow or client owner override is required.
 
 ## Assumptions
 
-- Confirmed scope/ownership/status/history/atomicity decisions come from the brief. Q1–Q3 and repeated-cancellation answers above are confirmed; no business clarifications remain.
+- Confirmed scope/ownership/status/history/atomicity decisions come from the brief. Q1â€“Q3 and repeated-cancellation answers above are confirmed; no business clarifications remain.
 - Pagination/sort rules are feature-local specification defaults using bounded private pagination conventions; they do not alter existing endpoints.
 - MANAGE_ORDER/USER rollout adapts the existing permission policy; the permission is not claimed to exist today.
 - Constitution establishes no mandatory global concurrency-test policy; the user explicitly requires synchronized competing-cancellation coverage for this feature.
@@ -180,4 +183,9 @@ Verify all three stories, each status, empty/no-order pages, supported sort dire
 
 ## Subsequent order-creation scope
 
-The creation/checkout/number-generation exclusions above apply to this historical read/cancel increment. [Customer Checkout](../009-customer-checkout/spec.md) separately authorizes specifying one PENDING order from eligible selected cart rows with owned address and historical snapshots, atomic cart consumption and idempotent recovery. It will define order-number generation during planning. Existing cancellation, historical reads and deferred receipt confirmation remain unchanged. Checkout policies are pending clarification; this specification step adds no production creation service.
+The creation/checkout/number-generation exclusions above apply to this historical read/cancel increment. [Customer Checkout](../009-customer-checkout/spec.md) separately authorizes specifying one PENDING order from eligible selected cart rows with owned address and historical snapshots, atomic cart consumption and idempotent recovery. It implements server-owned order-number generation, receipt-first replay and atomic creation/cart consumption. Feature010 adds exact reservations, managed cancellation release and internal completion consumption. Historical snapshots/receipts and the deferred public confirmation policy remain unchanged.
+
+
+## Voucher integration follow-up — feature011
+
+The earlier Voucher exclusion is superseded by feature011: summary/detail add stored original voucherDiscount and nullable immutable snapshots; payable sorting and historical items remain unchanged. Legacy zero/null history retains original payable amounts. Cancellation/completion contain no Voucher policy calls or status-driven quota reconciliation. Verified targeted deltas and the separately tracked unrestricted completion gate are recorded in [Voucher execution evidence](../011-voucher-support/implementation-validation.md). Earlier completed tasks and their historical execution records are preserved; this follow-up adds no admin/code/public-discovery/cancellation-quota contract.

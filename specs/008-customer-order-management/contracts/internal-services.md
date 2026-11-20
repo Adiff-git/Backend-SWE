@@ -1,6 +1,8 @@
 # Internal Service and Persistence Contracts
 
-Planned interfaces; these names do not assert existing implementation. All paths are under demo/src/main/java/com/example/demo unless stated otherwise.
+**Inventory follow-up (2026-11-20):** [Inventory Management](../../010-inventory-management/spec.md) supersedes the earlier Inventory exclusions only for the implemented deltas below. See its [validation record](../../010-inventory-management/implementation-validation.md). Existing routes, strict inputs, authorization, money and immutable historical receipts remain unchanged. Admin supply, public receipt confirmation, FAILED processing, payment and expiry producers remain deferred.
+
+Implemented boundaries, with Inventory follow-up as documented below. All paths are under demo/src/main/java/com/example/demo unless stated otherwise.
 
 ## OrderController and OrderRequestReader
 
@@ -14,7 +16,7 @@ Controller derives Long ownerId from common.identity.CurrentUserIdProvider, pars
 
 Read facade methods have no encompassing transaction: call OrderReadService, collect distinct non-null product IDs from only the returned preview/detail rows, call CatalogOrderReadService, then invoke OrderConverter using immutable snapshots and prepared URLs. No catalog metadata rewrites, entity lazy loads or data access inside converter. Ownership-scoped seeds must be obtained before asking catalog for images. No lazy entity survives the read boundary.
 
-Public cancelOrder is @Transactional REQUIRED/READ_COMMITTED, activated by controller/service proxy (not self-invocation). Validate input before locking; set transaction-local order lock timeout, fetch owned row FOR UPDATE, validate state. PENDING/CONFIRMED: set CANCELLED, one Clock sample, normalized reason. CANCELLED: no-op return. SHIPPING/COMPLETED: OrderConflictException. Unknown/foreign: OrderNotFoundException. Commit failure propagates before controller returns 204. No response-signing/network call, catalog lookup or item load on this path. No generic updateStatus method or receipt-confirmation stub.
+Public cancelOrder is @Transactional REQUIRED/READ_COMMITTED, activated by controller/service proxy (not self-invocation). Validate input before locking; set transaction-local order lock timeout, fetch owned row FOR UPDATE, validate state. PENDING/CONFIRMED: sample one microsecond UTC event, validate it, prepare owned item seeds, release exact managed ACTIVE allocations and set CANCELLED/reason atomically. Explicit legacy skips Inventory. CANCELLED: no-op return before Clock or Inventory. SHIPPING/COMPLETED/FAILED: OrderConflictException. Unknown/foreign: OrderNotFoundException. Commit failure propagates before controller returns 204. No response-signing/network call or catalog lookup. Managed first cancellation uses one owned item projection for the prepared resolution command; legacy/repeat performs no allocation/item work. No generic updateStatus method or receipt-confirmation stub.
 
 Use injected existing Clock bean and validate configured order.lock-timeout-ms>0. Cancellation timestamps must meet placedAt constraint; fixtures use a controlled clock after placement. Classify CANCELLED as idempotent before sampling Clock; a valid repeat returns 204 even if the clock now precedes placement. For an eligible PENDING/CONFIRMED first cancellation, sample once; if that sample precedes placement, return 409 OrderConflictException/ORDER_CONFLICT without changing anything. Domain OrderValidator owns this persisted-state decision.
 
@@ -66,3 +68,12 @@ AuthSecurityConfiguration adds exact MANAGE_ORDER matchers for GET /api/me/order
 - Service IT: committed cancellation and rollback, sequential repeats with different reasons, synchronized competitors and lock timeout, missing/foreign parity, snapshot immutability and image-failure nonfatal behavior. Separate fixture transactions and fresh verification reads; no test-level @Transactional.
 - Catalog image unit/IT: chunks/duplicates, absent/unpublished/deleted images, prepare/sign/close failures, ordered locks/publication race, no hidden URLs or exposed keys; isolated LocalStack only where actual signed access is tested.
 - OrderFlowIT: real bearer/current-state permissions -> list/detail -> first/repeat cancellation -> later-session read; no receipt-confirmation capability. Add fresh order helpers in testdata.order/fixture.order, using existing account/catalog factories without putting order logic in them.
+
+## Guarded internal completion (feature010)
+
+OrderCompletionService/Impl has no controller or customer grant. Lock the owned order with its existing timeout; only first SHIPPING may complete, COMPLETED repeats return before Clock/Inventory, and all other states (including FAILED) conflict. Sample/validate one microsecond event, prepare exact owned item seeds, consume managed allocations by decrementing both stock and reserved, then set COMPLETED/completedAt in the same transaction. Explicit legacy skips Inventory. Existing-order actions lock Order then balances sorted by original UUID then allocations; no network under these locks. Unknown/foreign remains the same safe404. The OrderCacheFilter applies private,no-store to success and security/media/business errors. Reads and pagination are unchanged.
+
+
+## Voucher integration follow-up — feature011
+
+The earlier Voucher exclusion is superseded by feature011: summary/detail add stored original voucherDiscount and nullable immutable snapshots; payable sorting and historical items remain unchanged. Legacy zero/null history retains original payable amounts. Cancellation/completion contain no Voucher policy calls or status-driven quota reconciliation. Verified targeted deltas and the separately tracked unrestricted completion gate are recorded in [Voucher execution evidence](../../011-voucher-support/implementation-validation.md). Earlier completed tasks and their historical execution records are preserved; this follow-up adds no admin/code/public-discovery/cancellation-quota contract.

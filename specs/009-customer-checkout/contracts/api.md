@@ -1,5 +1,7 @@
 # Checkout HTTP Contract
 
+**Inventory follow-up (2026-11-20):** [Inventory Management](../../010-inventory-management/spec.md) supersedes the earlier Inventory exclusions only for the implemented deltas below. See its [validation record](../../010-inventory-management/implementation-validation.md). Existing routes, strict inputs, authorization, money and immutable historical receipts remain unchanged. Admin supply, public receipt confirmation, FAILED processing, payment and expiry producers remain deferred.
+
 Binding design for [spec.md](../spec.md), with approved Q1:A/Q2:A/Q3:A. Only new route: POST `/api/me/cart/checkout`.
 
 Implemented contract: see [validation evidence](../implementation-validation.md) for strict MVC input checks, real bearer authorization/recovery, and real HTTP checkout-to-history/cancellation flow. Application-facing media errors remain415; receipt, cart/catalog lock and recognized database conflicts remain409 as specified below. No additional endpoint or workflow was introduced.
@@ -41,6 +43,8 @@ Each skipped entry has cartItemId (positive Long) and reason. Codes, first-appli
 3. PRODUCT_NOT_FOR_SALE: parent exists but not PUBLISHED.
 4. INVALID_QUANTITY: stored quantity not an integer1–999.
 5. INVALID_PRICE: current price missing/nonfinite/negative/fractional.
+6. INVENTORY_UNAVAILABLE: no live Inventory balance for an otherwise eligible row.
+7. INSUFFICIENT_STOCK: stock-reserved is less than the full requested quantity.
 
 One reason per skipped selected row; do not disclose hidden name/SKU/options/image. Unselected rows are neither ordered nor reported. No eligible selected rows return422 and no receipt; its ProblemDetail may contain skippedItems using exactly the same safe entries (empty for empty/no-selected cart). No failed outcome is saved for replay.
 
@@ -48,7 +52,7 @@ One reason per skipped selected row; do not disclose hidden name/SKU/options/ima
 
 After current access and input validation, query the exact owned committed successful receipt first. At every receipt hit, compare canonical addressId and fingerprint: matching command returns original201/Location/immutable body; different command returns409 CHECKOUT_KEY_CONFLICT. If the first lookup misses, try the nonblocking scoped transaction fence. After acquisition, perform a fresh committed-receipt lookup before any checkout work; a hit resolves exactly as above. If acquisition fails, perform a fresh committed-receipt lookup before any processing response: return the found matching receipt as201, or the established command-mismatch409. Return409 CHECKOUT_IN_PROGRESS only after a failed fence attempt and no committed receipt visible on this recheck. Only a fence holder with no successful receipt may execute checkout. All lookups remain customer/operation/key scoped and precede mutable cart/address/catalog evaluation. Key/fingerprint never contain mutable cart state, address contents, prices or optional images.
 
-Receipt lifetime equals order lifetime; no age-based expiry, recycling or replay repricing. After cancellation the receipt still says PENDING while current detail says CANCELLED. New cart rows, address edits/deletion and catalog disappearance do not invalidate replay. Failed validation/rollback reserves no key; later valid attempts may reuse it with a changed command. Concurrent completed replays return201 without taking a mutation fence. Pending requests receive processing409 only when the busy-path committed-receipt recheck is empty; a receipt committed before that recheck is returned as201. No repeated checkout, cart consumption, stock/voucher call or mutation occurs on replay; excluded stock/voucher implementations remain absent. Different keys still serialize cart consumption and cannot consume the same removed row twice. No automatic server retries or promised Retry-After interval.
+Receipt lifetime equals order lifetime; no age-based expiry, recycling or replay repricing. After cancellation the receipt still says PENDING while current detail says CANCELLED. New cart rows, address edits/deletion and catalog disappearance do not invalidate replay. Failed validation/rollback reserves no key; later valid attempts may reuse it with a changed command. Concurrent completed replays return201 without taking a mutation fence. Pending requests receive processing409 only when the busy-path committed-receipt recheck is empty; a receipt committed before that recheck is returned as201. No repeated checkout, cart consumption, stock/voucher call or mutation occurs on replay; the shared Inventory implementation is used only for initial execution and owned terminal actions; vouchers remain absent. Different keys still serialize cart consumption and cannot consume the same removed row twice. No automatic server retries or promised Retry-After interval.
 
 ## Errors
 
@@ -72,4 +76,9 @@ Existing more-specific dependency-unavailable statuses remain applicable where a
 
 ## Compatibility
 
-Current GET `/api/me/orders`, PENDING filtering/detail and cancellation unchanged. Created orders are immediately readable after commit subject to their own current grant checks. No confirm-receipt, preview, creation override, stock, voucher, payment or shipping route. Cancellation changes neither cart nor receipt and performs no refund/release.
+Current GET `/api/me/orders`, PENDING filtering/detail and cancellation routes unchanged (managed release is added by feature010). Created orders are immediately readable after commit subject to their own current grant checks. No confirm-receipt, preview, creation override, stock, voucher, payment or shipping route. Cancellation changes neither cart nor receipt and performs no refund. Feature010 releases exact managed ACTIVE allocations atomically with CANCELLED, decreasing reserved only; legacy and repeated cancellation perform no Inventory work. Initial checkout reserves included rows once and leaves physical stock unchanged. Failed checkout leaves no reservation; historical receipt version1/status201/Location/body remain immutable.
+
+
+## Voucher integration follow-up — feature011
+
+The earlier first-execution Voucher exclusion is superseded by feature011: captured Cart grant is independently validated after definition→usage→grant locks, then one authoritative event timestamps order, Inventory reservation, grant/redemption and receipt. Selected grant/quota/discount/order/Inventory/Cart/version2 receipt commit atomically. Receipt-first/fresh rechecks and address-only fingerprint remain; old version1 bodies are unchanged and every replay bypasses Voucher and Inventory mutations. Verified targeted deltas and the separately tracked unrestricted completion gate are recorded in [Voucher execution evidence](../../011-voucher-support/implementation-validation.md). Earlier completed tasks and their historical execution records are preserved; this follow-up adds no admin/code/public-discovery/cancellation-quota contract.

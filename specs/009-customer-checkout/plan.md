@@ -104,3 +104,8 @@ Required Bash setup could not run because bash is unavailable. Repository PowerS
 ## Accepted remediation verification
 
 C1: T016 moves the existing class rather than extending a new copy in the old package; preserve every existing assertion, test discovery and public PostgresTestSupport integration. I1: T027 uses receipt-first lookup and fresh SQL rechecks on acquired/busy fence paths; T042/T044/T045 prove all races in existing test classes. No new task IDs, duplicate classes, production changes or executed-test claim in this remediation step.
+
+
+## Voucher integration follow-up — feature011
+
+The earlier first-execution Voucher exclusion is superseded by feature011: captured Cart grant is independently validated after definition→usage→grant locks, then one authoritative event timestamps order, Inventory reservation, grant/redemption and receipt. Selected grant/quota/discount/order/Inventory/Cart/version2 receipt commit atomically. Receipt-first/fresh rechecks and address-only fingerprint remain; old version1 bodies are unchanged and every replay bypasses Voucher and Inventory mutations. Verified targeted deltas and the separately tracked unrestricted completion gate are recorded in [Voucher execution evidence](../011-voucher-support/implementation-validation.md). Earlier completed tasks and their historical execution records are preserved; this follow-up adds no admin/code/public-discovery/cancellation-quota contract.

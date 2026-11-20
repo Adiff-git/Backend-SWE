@@ -1,10 +1,12 @@
 # Feature Specification: Persistent Shopping Cart
 
+**Inventory follow-up (2026-11-20):** [Inventory Management](../010-inventory-management/spec.md) supersedes the earlier Inventory exclusions only for the implemented deltas below. See its [validation record](../010-inventory-management/implementation-validation.md). Existing routes, strict inputs, authorization, money and immutable historical receipts remain unchanged. Admin supply, public receipt confirmation, FAILED processing, payment and expiry producers remain deferred.
+
 Updated 2026-11-17 from the user's confirmed replacement brief. Current branch: draft/version-1. This document defines the current rules; earlier 1,000-unit and request-quantity variant switching policies no longer apply.
 
 ## Scope and ownership
 
-Authenticated, single-vendor cart management only: view, add, replace quantity, change variant, remove and individual/bulk selection. Inventory/stock checks/reservation, orders/checkout, payments/shipping, vouchers/discounts, shop grouping and guest carts/merging are excluded. No placeholder implementations for those domains are introduced.
+Authenticated, single-vendor cart management only: view, add, replace quantity, change variant, remove and individual/bulk selection. Cart now observes Inventory availability and validates full resulting quantities through feature010 without reserving or mutating stock. Order/Checkout workflows are owned by features008/009/010; payments/shipping, vouchers/discounts, shop grouping and guest carts/merging remain excluded. No placeholder implementations for those domains are introduced.
 
 At most one persistent cart per user and one item per variant. Owner comes only from authenticated identity; clients cannot supply owner overrides or authoritative prices/totals. Every item operation returns the same safe CART_ITEM_NOT_FOUND for foreign and unknown items. Create a cart only on a successful first add. Missing-cart GET and bulk selection return empty items and zero totals without insertion. Logout retains the cart; last removal retains an empty cart.
 
@@ -13,7 +15,7 @@ At most one persistent cart per user and one item per variant. Owner comes only 
 - Quantity is a strict integer from 1 to 999 inclusive. Missing/null, zero, negative, string, fractional, exponent and excessive quantities are rejected. Add increments an existing variant, checking the widened final sum before mutation. Existing 2 + add 3 becomes 5; 998 + add 2 fails unchanged. Quantity update replaces the value and preserves variant/selection.
 - Variant change accepts only productVariantId, with no quantity. The target must exist, be purchasable and belong to the source product. If absent from the cart, replace the source variant, reset quantity to exactly 1 and preserve source identity/selection/addedAt. If a distinct target row exists, delete only the source and leave every target field unchanged, including quantity, selection, snapshots and addedAt. Existing target takes precedence over reset-to-1. Submitting the current variant is a no-op and preserves quantity.
 - New rows start selected. Add/replacement/variant change preserve the applicable stored selection. Explicitly selecting unavailable rows is rejected, even if already selected. Deselect/removal remain allowed. Bulk true selects eligible rows only, preserving unavailable preferences; bulk false clears all.
-- Eligibility uses the current PUBLISHED product and valid nonnegative whole-VND selling price, without stock claims. Unavailable rows remain visible and are excluded from eligible selected totals. Hidden descriptions/images are withheld; use prior-public cart snapshots. GET never changes stored selections or snapshots.
+- Eligibility uses the current PUBLISHED product and valid nonnegative whole-VND selling price, then sufficient observed stock-reserved for the full row quantity. Availability is observational and never guarantees a later purchase. Unavailable rows remain visible and are excluded from eligible selected totals. Hidden descriptions/images are withheld; use prior-public cart snapshots. GET never changes stored selections or snapshots.
 - Current line subtotal = unit price times quantity. Selected subtotal sums selected purchasable rows. finalTotal equals selectedSubtotal, with no fees or discounts. Money is exact VND integer arithmetic and aggregate quantities use checked Long arithmetic. Adding an item never locks its future price.
 
 ## User stories and acceptance
@@ -37,7 +39,7 @@ Selected eligible rows 2x100 and 3x50 produce selectedItemCount=2, selectedTotal
 - FR-003: Add requires productVariantId and quantity; no trusted owner/price input.
 - FR-004: Quantity replacement and variant change are separate operations with the confirmed semantics above.
 - FR-005: Current catalog eligibility, retained unavailable rows and safe snapshot/image rendering.
-- FR-006: No inventory or other excluded domain capability.
+- FR-006: Reuse Catalog-to-Inventory availability reads under feature010. Cart never creates reservations or mutates either Inventory counter; other excluded capabilities remain absent.
 - FR-007: Request and final added quantities remain in 1..999 without capping or partial mutation.
 - FR-008: Stored selection is independent of eligibility and never silently changed by reads.
 - FR-009: Exact current VND totals, checked aggregate quantity and separate total/eligible selected row counts.
@@ -57,4 +59,9 @@ Existing catalog/user/auth/storage service boundaries; current PostgreSQL/Flyway
 
 ## Subsequent checkout integration
 
-The orders/checkout exclusion above bounds this cart-management increment. [Customer Checkout](../009-customer-checkout/spec.md) separately specifies atomic conversion of eligible selected rows into one order, preserving skipped/unselected rows and coordinating existing cart mutations. It introduces no stock, payment, voucher or shipping capability. Its remaining policies are pending clarification; this link does not implement checkout or change existing cart routes.
+The orders/checkout exclusion above bounds this cart-management increment. [Customer Checkout](../009-customer-checkout/spec.md) separately specifies atomic conversion of eligible selected rows into one order, preserving skipped/unselected rows and coordinating existing cart mutations. Checkout is implemented with receipt-first replay and, through feature010, atomic exact order/item reservation. It introduces no payment, voucher or shipping workflow and changes no Cart route.
+
+
+## Voucher integration follow-up — feature011
+
+The earlier Voucher exclusion is superseded by feature011: owned entitlement selection, exact order-level estimated discount and invalid-selection cleanup are implemented. Item unit/line prices and Inventory eligibility remain unchanged; finalTotal is selectedSubtotal minus voucherDiscount. Wallet browsing prepares current subtotal without images, insertion or cleanup. Verified targeted deltas and the separately tracked unrestricted completion gate are recorded in [Voucher execution evidence](../011-voucher-support/implementation-validation.md). Earlier completed tasks and their historical execution records are preserved; this follow-up adds no admin/code/public-discovery/cancellation-quota contract.
