@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.Value;
 
 @Value
+@lombok.experimental.NonFinal
 public class CheckoutOrderReceipt {
     Long id;
     String orderNumber;

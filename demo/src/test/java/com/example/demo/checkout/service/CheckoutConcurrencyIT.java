@@ -42,9 +42,11 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
     @Autowired CheckoutService service;
     @MockitoSpyBean CheckoutReceiptRepository receipts;
     @MockitoSpyBean com.example.demo.cart.service.CartCheckoutService cartBoundary;
+    @MockitoSpyBean com.example.demo.inventory.service.InventoryService inventoryBoundary;
     @Autowired com.example.demo.cart.service.CartService cartService;
     @MockitoSpyBean com.example.demo.catalog.service.CatalogCheckoutService catalogBoundary;
     @Autowired com.example.demo.user.service.AddressService addressService;
+    @Autowired com.example.demo.order.service.OrderService orderService;
     @Autowired javax.sql.DataSource dataSource;
     @Autowired com.example.demo.common.exception.ApiErrorFactory errors;
     Answer<?> delegate;
@@ -57,9 +59,11 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
         return service.checkout(fixture.owner(),key,new CheckoutRequest(fixture.address()));
     }
 
-    @Test void checkout_shouldReturnBothConcurrentCompletedReplaysWithoutAcquiringFence() throws Exception {
+    @ParameterizedTest @org.junit.jupiter.params.provider.ValueSource(booleans={false,true})
+    void checkout_shouldReturnBothConcurrentCompletedReplaysWithoutAcquiringFence(boolean voucher) throws Exception {
+        if(voucher) selectVoucher();
         CheckoutReceiptResponse original=checkout(KEY);
-        clearInvocations(receipts);
+        clearInvocations(receipts, inventoryBoundary);
         CyclicBarrier start=new CyclicBarrier(2);
         ExecutorService workers=Executors.newFixedThreadPool(2);
         try {
@@ -68,15 +72,34 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
             assertThat(first.get(WAIT_SECONDS,TimeUnit.SECONDS)).usingRecursiveComparison().isEqualTo(original);
             assertThat(second.get(WAIT_SECONDS,TimeUnit.SECONDS)).usingRecursiveComparison().isEqualTo(original);
             verify(receipts,never()).tryFence(anyLong());
+            org.mockito.Mockito.verifyNoInteractions(inventoryBoundary);
             assertOneCommittedOutcome();
         } finally { stop(workers); }
     }
 
+    @Autowired com.example.demo.cart.service.CartVoucherService cartVouchers;
+    private long selectVoucher() {
+        long grant=createVoucher();
+        cartVouchers.applyVoucher(fixture.owner(),grant);
+        return grant;
+    }
+    private long createVoucher() {
+        long grant=transactions.execute(tx -> {
+            long voucher=com.example.demo.fixture.voucher.VoucherFixtures.definition(jdbc,"RACE_"+System.nanoTime(),"FIXED_AMOUNT",java.math.BigDecimal.TEN,1L,1L);
+            long usage=com.example.demo.fixture.voucher.VoucherFixtures.usage(jdbc,voucher,fixture.owner());
+            return com.example.demo.fixture.voucher.VoucherFixtures.grant(jdbc,voucher,fixture.owner(),usage,Instant.now().minusSeconds(1));
+        });
+        return grant;
+    }
+    static java.util.stream.Stream<org.junit.jupiter.params.provider.Arguments> replayCases() {
+        return java.util.Arrays.stream(Race.values()).flatMap(race -> java.util.stream.Stream.of(false,true).map(voucher -> org.junit.jupiter.params.provider.Arguments.of(race,voucher)));
+    }
     enum Race { ACQUIRED_COMMIT, BUSY_COMMIT, GENUINELY_PROCESSING }
 
-    @ParameterizedTest @EnumSource(Race.class)
+    @ParameterizedTest @org.junit.jupiter.params.provider.MethodSource("replayCases")
     @SuppressWarnings("unchecked")
-    void checkout_shouldResolveFreshReceiptAtEachSynchronizedFenceBoundary(Race race) throws Exception {
+    void checkout_shouldResolveFreshReceiptAtEachSynchronizedFenceBoundary(Race race, boolean voucher) throws Exception {
+        if(voucher) selectVoucher();
         CountDownLatch inserted=new CountDownLatch(1);
         CountDownLatch releaseOriginal=new CountDownLatch(1);
         CountDownLatch retryBoundary=new CountDownLatch(1);
@@ -172,11 +195,22 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
     }
 
     private void assertOneCommittedOutcome() {
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_reservations", Long.class)).isEqualTo(1);
+        assertThat(jdbc.queryForObject("SELECT quantity FROM inventory_reservations", Integer.class)).isEqualTo(2);
+        assertThat(jdbc.queryForMap("SELECT stock,reserved FROM inventory_balances WHERE original_variant_id=?", fixture.variant()))
+                .containsEntry("stock", 1000L).containsEntry("reserved", 2L);
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM orders",Integer.class)).isEqualTo(1);
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM order_items",Integer.class)).isEqualTo(1);
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM checkout_receipts",Integer.class)).isEqualTo(1);
         assertThat(jdbc.queryForList("SELECT id FROM cart_items",Long.class)).containsExactly(fixture.unselected());
         assertThat(jdbc.queryForObject("SELECT quantity FROM cart_items WHERE id=?",Integer.class,fixture.unselected())).isEqualTo(2);
+        if(jdbc.queryForObject("SELECT COUNT(*) FROM vouchers",Long.class)>0) {
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM voucher_redemptions",Long.class)).isOne();
+            assertThat(jdbc.queryForObject("SELECT redeemed_count FROM vouchers",Long.class)).isOne();
+            assertThat(jdbc.queryForObject("SELECT redeemed_count FROM voucher_customer_usages",Long.class)).isOne();
+            assertThat(jdbc.queryForObject("SELECT state FROM voucher_entitlements",String.class)).isEqualTo("CONSUMED");
+            assertThat(jdbc.queryForObject("SELECT voucher_entitlement_id FROM carts WHERE id=?",Long.class,fixture.cart())).isNull();
+        }
     }
 
     private static void await(CountDownLatch latch) throws InterruptedException {
@@ -203,6 +237,8 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
                     entities.getReference(com.example.demo.catalog.entity.Product.class,fixture.product()),
                     java.util.Map.of("choice","target"),java.math.BigDecimal.valueOf(2000));
             entities.persist(variant);
+            entities.flush();
+            com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(entities, variant.getId(), 1000);
             return variant.getId();
         });
         java.util.Map<String,Object> unselectedBefore=jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?",fixture.unselected());
@@ -265,6 +301,7 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
                 assertThat(jdbc.queryForObject("SELECT id FROM cart_items WHERE product_variant_id=?",Long.class,fixture.variant())).isNotEqualTo(fixture.item());
             }
             if(noEligible && mutation!=CartMutation.REMOVE) assertThat(jdbc.queryForObject("SELECT selected FROM cart_items WHERE id=?",Boolean.class,fixture.item())).isFalse();
+            assertInventoryIntegrity();
         } finally { release.countDown(); stop(workers); }
     }
 
@@ -360,7 +397,11 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
                     : "products";
             awaitDatabaseLock(table);
             release.countDown();
-            changed.get(WAIT_SECONDS,TimeUnit.SECONDS);
+            boolean activeDeletion = !mutationFirst && java.util.Set.of(DomainMutation.PRODUCT_DELETE,DomainMutation.VARIANT_DELETE).contains(mutation);
+            if (activeDeletion) {
+                assertThatThrownBy(() -> changed.get(WAIT_SECONDS,TimeUnit.SECONDS)).satisfies(failure ->
+                        assertThat(errors.from(failure.getCause(), "/api/me/cart/checkout").getStatus()).isEqualTo(409));
+            } else changed.get(WAIT_SECONDS,TimeUnit.SECONDS);
             CheckoutReceiptResponse receipt=purchased.get(WAIT_SECONDS,TimeUnit.SECONDS);
             boolean unavailable=mutationFirst && java.util.Set.of(DomainMutation.ADDRESS_DELETE,DomainMutation.UNPUBLISH,
                     DomainMutation.PRODUCT_DELETE,DomainMutation.VARIANT_DELETE).contains(mutation);
@@ -375,16 +416,37 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
                 assertThat(receipt.getOrder().getItems().getFirst().getVariantSkuSnapshot()).isEqualTo(mutationFirst && mutation==DomainMutation.VARIANT_PRICE_OPTIONS ? "CHANGED-"+fixture.variant() : originalSku);
                 assertThat(receipt.getOrder().getPayableTotal().getAmount()).isEqualTo(java.math.BigInteger.valueOf(mutationFirst && mutation==DomainMutation.VARIANT_PRICE_OPTIONS ? 3500 : 2000));
                 assertThat(checkout(KEY)).usingRecursiveComparison().isEqualTo(receipt);
+                if (activeDeletion) {
+                    assertThat(jdbc.queryForObject("SELECT state FROM inventory_reservations WHERE order_id=?", String.class, receipt.getOrder().getId())).isEqualTo("ACTIVE");
+                    orderService.cancelOrder(fixture.owner(), receipt.getOrder().getId(), new com.example.demo.order.dto.request.CancelOrderRequest("Release before deletion"));
+                    transactions.executeWithoutResult(s -> mutateDomain(mutation));
+                    assertThat(checkout(KEY)).usingRecursiveComparison().isEqualTo(receipt);
+                }
                 if(mutation==DomainMutation.PRODUCT_DELETE) assertThat(jdbc.queryForObject("SELECT product_id FROM order_items",java.util.UUID.class)).isNull();
                 if(mutation==DomainMutation.PRODUCT_DELETE || mutation==DomainMutation.VARIANT_DELETE)
                     assertThat(jdbc.queryForObject("SELECT product_variant_id FROM order_items",java.util.UUID.class)).isNull();
             }
+            assertInventoryIntegrity();
         } finally { release.countDown();stop(workers); }
     }
 
     private CheckoutReceiptResponse checkoutOrUnavailable() {
         try { return checkout(KEY); }
         catch(NoEligibleCheckoutItemsException | com.example.demo.user.exception.ResourceNotFoundException expected) { return null; }
+    }
+
+    private void assertInventoryIntegrity() {
+        assertThat(jdbc.queryForObject("""
+                SELECT COUNT(*) FROM inventory_balances b WHERE stock<0 OR reserved<0 OR reserved>stock
+                OR reserved::NUMERIC<>COALESCE((SELECT SUM(r.quantity::NUMERIC) FROM inventory_reservations r
+                  WHERE r.inventory_balance_id=b.id AND r.state='ACTIVE'),0)
+                """, Long.class)).isZero();
+        assertThat(jdbc.queryForObject("""
+                SELECT COUNT(*) FROM order_items i JOIN orders o ON o.id=i.order_id
+                LEFT JOIN inventory_reservations r ON r.order_item_id=i.id WHERE o.inventory_managed
+                AND (r.id IS NULL OR r.order_id<>o.id OR r.quantity<>i.quantity OR r.state<>
+                  CASE o.status WHEN 'CANCELLED' THEN 'RELEASED' WHEN 'COMPLETED' THEN 'CONSUMED' ELSE 'ACTIVE' END)
+                """, Long.class)).isZero();
     }
 
     private void mutateDomain(DomainMutation mutation) {
@@ -520,5 +582,103 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
     private String sqlState(Throwable failure) {
         for(Throwable cause=failure;cause!=null;cause=cause.getCause()) if(cause instanceof java.sql.SQLException sql) return sql.getSQLState();
         return null;
+    }
+
+    static java.util.stream.Stream<org.junit.jupiter.params.provider.Arguments> voucherMutationCases() {
+        return java.util.stream.Stream.of(false,true).flatMap(remove -> java.util.stream.Stream.of(false,true).map(first -> org.junit.jupiter.params.provider.Arguments.of(remove,first)));
+    }
+    @ParameterizedTest @org.junit.jupiter.params.provider.MethodSource("voucherMutationCases")
+    void checkout_shouldSerializeVoucherReplacementAndRemoval(boolean remove,boolean mutationFirst) throws Exception {
+        long old=selectVoucher(); long replacement=createVoucher();
+        CountDownLatch held=new CountDownLatch(1),release=new CountDownLatch(1);
+        if(!mutationFirst) {
+            Answer<?> real=mockingDetails(cartBoundary).getMockCreationSettings().getDefaultAnswer();
+            doAnswer(call -> { Object value=real.answer(call); held.countDown(); await(release); return value; }).when(cartBoundary).getCheckoutCartSeed(anyLong());
+        }
+        try(var workers=Executors.newFixedThreadPool(2)) {
+            java.util.concurrent.Callable<Object> mutate=() -> {
+                try {
+                    if(remove) cartVouchers.removeVoucher(fixture.owner());
+                    else cartVouchers.applyVoucher(fixture.owner(),replacement);
+                    return Boolean.TRUE;
+                } catch(com.example.demo.common.exception.ApplicationException expected) { return expected; }
+            };
+            Future<Object> changed; Future<CheckoutReceiptResponse> purchase;
+            if(mutationFirst) {
+                changed=workers.submit(() -> transactions.execute(tx -> {
+                    try { Object outcome=mutate.call(); held.countDown(); await(release); return outcome; }
+                    catch(Exception error) { throw new IllegalStateException(error); }
+                }));
+                await(held); purchase=workers.submit(() -> checkout(KEY));
+            } else {
+                purchase=workers.submit(() -> checkout(KEY)); await(held); changed=workers.submit(mutate);
+            }
+            try { awaitDatabaseLock("carts"); } finally { release.countDown(); }
+            Object mutation=changed.get(WAIT_SECONDS,TimeUnit.SECONDS);
+            var receipt=(com.example.demo.checkout.dto.response.CheckoutOrderReceiptV2)purchase.get(WAIT_SECONDS,TimeUnit.SECONDS).getOrder();
+            if(mutationFirst && remove) assertThat(receipt.getVoucher()).isNull();
+            else assertThat(receipt.getVoucher().getWalletEntitlementId()).isEqualTo(mutationFirst ? replacement : old);
+            assertThat(mutation instanceof Boolean).isEqualTo(mutationFirst || remove);
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM voucher_redemptions",Long.class)).isEqualTo(mutationFirst && remove ? 0 : 1);
+            assertThat(jdbc.queryForObject("SELECT voucher_entitlement_id FROM carts WHERE id=?",Long.class,fixture.cart())).isNull();
+            assertInventoryIntegrity();
+        } finally { release.countDown(); }
+    }
+
+    @ParameterizedTest @org.junit.jupiter.params.provider.ValueSource(booleans={false,true})
+    void cleanup_shouldNotEraseAcceptedReplacementOrCheckout(boolean purchase) throws Exception {
+        selectVoucher(); long replacement=createVoucher();
+        jdbc.update("UPDATE vouchers SET enabled=FALSE WHERE id=(SELECT voucher_id FROM voucher_entitlements WHERE id=(SELECT voucher_entitlement_id FROM carts WHERE id=?))",fixture.cart());
+        CountDownLatch held=new CountDownLatch(1),release=new CountDownLatch(1);
+        try(var workers=Executors.newFixedThreadPool(2)) {
+            var cleanup=workers.submit(() -> transactions.execute(tx -> {
+                var response=cartService.getCart(fixture.owner());
+                held.countDown();
+                try {await(release);} catch(InterruptedException error) {Thread.currentThread().interrupt();throw new IllegalStateException(error);}
+                return response;
+            }));
+            await(held);
+            var following=workers.submit(() -> purchase ? checkout(KEY) : cartVouchers.applyVoucher(fixture.owner(),replacement));
+            try {awaitDatabaseLock("carts");} finally {release.countDown();}
+            assertThat(cleanup.get(WAIT_SECONDS,TimeUnit.SECONDS).getVoucherSelectionClearedReason()).isEqualTo("VOUCHER_DISABLED");
+            following.get(WAIT_SECONDS,TimeUnit.SECONDS);
+            assertThat(jdbc.queryForObject("SELECT voucher_entitlement_id FROM carts WHERE id=?",Long.class,fixture.cart())).isEqualTo(purchase ? null : replacement);
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM voucher_redemptions",Long.class)).isZero();
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM orders",Long.class)).isEqualTo(purchase ? 1 : 0);
+        } finally {release.countDown();}
+    }
+    @ParameterizedTest @org.junit.jupiter.params.provider.ValueSource(booleans={false,true})
+    void cleanup_shouldObserveCommittedReplacementOrRejectedCheckout(boolean purchase) throws Exception {
+        selectVoucher();long replacement=createVoucher();
+        jdbc.update("UPDATE vouchers SET enabled=FALSE WHERE id=(SELECT voucher_id FROM voucher_entitlements WHERE id=(SELECT voucher_entitlement_id FROM carts WHERE id=?))",fixture.cart());
+        CountDownLatch held=new CountDownLatch(1),release=new CountDownLatch(1);
+        if(purchase) {
+            Answer<?> real=mockingDetails(cartBoundary).getMockCreationSettings().getDefaultAnswer();
+            doAnswer(call -> {var value=real.answer(call);held.countDown();await(release);return value;}).when(cartBoundary).getCheckoutCartSeed(anyLong());
+        }
+        try(var workers=Executors.newFixedThreadPool(2)) {
+            Future<Object> first=workers.submit(() -> {
+                if(purchase) {
+                    try {return checkout(KEY);} catch(com.example.demo.voucher.exception.CheckoutVoucherNotApplicableException expected) {return expected;}
+                }
+                return transactions.execute(tx -> {
+                    var value=cartVouchers.applyVoucher(fixture.owner(),replacement);held.countDown();
+                    try {await(release);} catch(InterruptedException error) {Thread.currentThread().interrupt();throw new IllegalStateException(error);}
+                    return value;
+                });
+            });
+            await(held);var cleanup=workers.submit(() -> cartService.getCart(fixture.owner()));
+            try {awaitDatabaseLock("carts");} finally {release.countDown();}
+            var outcome=first.get(WAIT_SECONDS,TimeUnit.SECONDS);var response=cleanup.get(WAIT_SECONDS,TimeUnit.SECONDS);
+            if(purchase) {
+                assertThat(outcome).isInstanceOf(com.example.demo.voucher.exception.CheckoutVoucherNotApplicableException.class);
+                assertThat(response.getVoucherSelectionClearedReason()).isEqualTo("VOUCHER_DISABLED");
+            } else {
+                assertThat(response.getVoucher().getWalletEntitlementId()).isEqualTo(replacement);
+                assertThat(response.getVoucherSelectionClearedReason()).isNull();
+            }
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM orders",Long.class)).isZero();
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM voucher_redemptions",Long.class)).isZero();
+        } finally {release.countDown();}
     }
 }

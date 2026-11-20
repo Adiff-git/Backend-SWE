@@ -92,7 +92,9 @@ class CheckoutControllerIT extends CheckoutIntegrationSupport {
         mvc.perform(checkout("Api_reusable_key_1",fixture.address())).andExpect(status().isCreated());
     }
 
-    @Test void checkout_shouldRequireCurrentCheckoutGrantWithoutAdditionalDomainGrants() throws Exception {
+    @org.junit.jupiter.params.ParameterizedTest @org.junit.jupiter.params.provider.ValueSource(booleans={false,true})
+    void checkout_shouldRequireCurrentCheckoutGrantWithoutAdditionalDomainGrants(boolean withVoucher) throws Exception {
+        if(withVoucher) provisionSelectedVoucher();
         jdbc.update("DELETE FROM user_roles WHERE user_id=?",fixture.owner());
         mvc.perform(checkout("Api_grant_key_123",fixture.address())).andExpect(status().isForbidden());
         Long role = jdbc.queryForObject("INSERT INTO roles(name) VALUES (?) RETURNING id",Long.class,"CHECKOUT_ONLY_"+UUID.randomUUID());
@@ -101,6 +103,7 @@ class CheckoutControllerIT extends CheckoutIntegrationSupport {
         jdbc.update("INSERT INTO role_permissions(role_id,permission_id) SELECT ?,id FROM permissions WHERE name='MANAGE_CHECKOUT'",role);
         JsonNode body = json.readTree(mvc.perform(checkout("Api_grant_key_123",fixture.address()))
                 .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString());
+        assertThat(body.get("order").get("voucherDiscount").get("amount").intValue()).isEqualTo(withVoucher ? 10 : 0);
         mvc.perform(get("/api/me/orders/"+body.get("order").get("id").longValue()).header("Authorization",token))
                 .andExpect(status().isForbidden());
         jdbc.update("DELETE FROM role_permissions WHERE role_id=?",role);
@@ -147,5 +150,34 @@ class CheckoutControllerIT extends CheckoutIntegrationSupport {
         assertThat(replay).isEqualTo(original);
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM orders",Integer.class)).isEqualTo(1);
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM checkout_receipts",Integer.class)).isEqualTo(1);
+    }
+
+    @Test void checkout_shouldReturnVoucherReceiptAndPreserveReplayWithoutLiveEligibility() throws Exception {
+        long grant=transactions.execute(tx -> {
+            long definition=com.example.demo.fixture.voucher.VoucherFixtures.definition(jdbc,"API_"+System.nanoTime(),"FIXED_AMOUNT",java.math.BigDecimal.TEN,1L,1L);
+            long usage=com.example.demo.fixture.voucher.VoucherFixtures.usage(jdbc,definition,fixture.owner());
+            return com.example.demo.fixture.voucher.VoucherFixtures.grant(jdbc,definition,fixture.owner(),usage,java.time.Instant.now().minusSeconds(1));
+        });
+        mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put("/api/me/cart/voucher").header("Authorization",token).contentType("application/json").content("{\"walletEntitlementId\":"+grant+"}")).andExpect(status().isOk());
+        String original=mvc.perform(checkout("Api_voucher_key_123",fixture.address())).andExpect(status().isCreated()).andExpect(header().string("Cache-Control","private, no-store")).andReturn().getResponse().getContentAsString();
+        JsonNode receipt=json.readTree(original);
+        assertThat(receipt.get("order").get("voucherDiscount").get("amount").intValue()).isEqualTo(10);
+        assertThat(receipt.get("order").get("voucher").get("walletEntitlementId").longValue()).isEqualTo(grant);
+        var id=receipt.get("order").get("id").longValue();
+        var detail=json.readTree(mvc.perform(get("/api/me/orders/"+id).header("Authorization",token)).andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
+        assertThat(detail.get("voucher")).isEqualTo(receipt.get("order").get("voucher"));
+        assertThat(detail.get("voucherDiscount")).isEqualTo(receipt.get("order").get("voucherDiscount"));
+        jdbc.update("UPDATE vouchers SET enabled=FALSE");
+        assertThat(json.readTree(mvc.perform(checkout("Api_voucher_key_123",fixture.address())).andExpect(status().isCreated()).andReturn().getResponse().getContentAsString())).isEqualTo(receipt);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM orders",Long.class)).isOne();
+    }
+
+    private void provisionSelectedVoucher() {
+        transactions.executeWithoutResult(tx -> {
+            long definition=com.example.demo.fixture.voucher.VoucherFixtures.definition(jdbc,"PERMISSION","FIXED_AMOUNT",java.math.BigDecimal.TEN,null,null);
+            long usage=com.example.demo.fixture.voucher.VoucherFixtures.usage(jdbc,definition,fixture.owner());
+            long grant=com.example.demo.fixture.voucher.VoucherFixtures.grant(jdbc,definition,fixture.owner(),usage,java.time.Instant.now().minusSeconds(1));
+            jdbc.update("UPDATE carts SET voucher_entitlement_id=?,voucher_selection_revision=voucher_selection_revision+1 WHERE id=?",grant,fixture.cart());
+        });
     }
 }

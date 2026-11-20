@@ -48,10 +48,12 @@ public class CheckoutServiceImpl implements CheckoutService {
     private final CartCheckoutService carts;
     private final CatalogCheckoutService catalog;
     private final OrderCreationService orders;
+    private final com.example.demo.inventory.service.InventoryService inventory;
     private final CheckoutValidator validator;
     private final CheckoutCalculator calculator;
     private final CheckoutConverter converter;
     private final Clock clock;
+    private final com.example.demo.voucher.service.VoucherService vouchers;
     @Value("${checkout.lock-timeout-ms:5000}") private long lockTimeoutMs = 5000;
 
     @PostConstruct void validateConfiguration() {
@@ -59,7 +61,7 @@ public class CheckoutServiceImpl implements CheckoutService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public CheckoutReceiptResponse checkout(Long owner, String key, CheckoutRequest request) {
         validator.request(owner,key,request);
         CheckoutReceipt existing = lookup(owner,key);
@@ -82,19 +84,40 @@ public class CheckoutServiceImpl implements CheckoutService {
             if (reason == null) included.add(row);
             else skipped.add(new SkippedCheckoutItem(row.getId(),reason));
         }
+        Map<UUID, com.example.demo.inventory.dto.response.InventoryAvailability> availability = inventory.lockAvailability(
+                included.stream().map(CheckoutCartSeed.Row::getVariantId).toList());
+        java.util.Set<UUID> uniqueVariants = new java.util.HashSet<>();
+        java.util.Iterator<CheckoutCartSeed.Row> candidates = included.iterator();
+        while (candidates.hasNext()) {
+            CheckoutCartSeed.Row row = candidates.next();
+            if (!uniqueVariants.add(row.getVariantId())) throw new com.example.demo.inventory.exception.InventoryConflictException();
+            SkippedCheckoutItem.Reason reason = validator.stockReason(row, availability.get(row.getVariantId()));
+            if (reason != null) {
+                skipped.add(new SkippedCheckoutItem(row.getId(), reason));
+                candidates.remove();
+            }
+        }
         skipped.sort(Comparator.comparing(SkippedCheckoutItem::getCartItemId));
         if (included.isEmpty()) throw new NoEligibleCheckoutItemsException(skipped);
         CheckoutCalculation calculation = calculator.calculate(included,states);
-        Instant at = clock.instant().truncatedTo(ChronoUnit.MICROS);
+        com.example.demo.voucher.dto.response.CheckoutVoucherQuote voucher = seed.getSelectedEntitlementId()==null
+                ? new com.example.demo.voucher.dto.response.CheckoutVoucherQuote(owner,null,calculation.getTotal(),clock.instant().truncatedTo(ChronoUnit.MICROS),null)
+                : vouchers.lockCheckoutVoucher(owner,seed.getSelectedEntitlementId(),calculation.getTotal());
+        Instant at = voucher.getEvent();
         List<CreateOrderCommand.Item> items = calculation.getLines().stream().map(line -> new CreateOrderCommand.Item(
                 line.getRow().getId(),line.getState().getProductId(),line.getState().getVariantId(),line.getState().getProductName(),
                 line.getState().getSku(),line.getState().getOptions(),line.getRow().getQuantity(),line.getUnitPrice(),line.getLineTotal())).toList();
         CreatedOrderSeed created = orders.createOrder(new CreateOrderCommand(owner,at,address.getRecipientName(),
-                address.getRecipientPhone(),address.getDeliveryAddress(),items,calculation.getTotal()));
+                address.getRecipientPhone(),address.getDeliveryAddress(),items,calculation.getTotal(),voucher.getDiscount(),calculation.getTotal().subtract(voucher.getDiscount()),voucher.getSnapshot()));
+        inventory.reserveReservations(new com.example.demo.inventory.dto.request.ReservationCommand(created.getId(), at,
+                created.getItems().stream().map(item -> new com.example.demo.inventory.dto.request.ReservationLine(
+                        item.getId(), item.getSnapshot().getVariantId(), item.getSnapshot().getQuantity())).toList()));
+        if (voucher.getSnapshot()!=null) vouchers.redeemVoucher(voucher,created.getId());
         carts.consumeCheckoutItems(owner,seed,included);
+        if (voucher.getSnapshot()!=null) carts.clearCheckoutVoucher(owner,seed);
         CheckoutReceiptResponse response = converter.toReceipt(created,skipped);
         String body = converter.encode(response);
-        converter.decode(body); // Prove durable representation is decodable before committing any outcome.
+        converter.decode(body,2); // Prove durable representation is decodable before committing any outcome.
         receipts.insertSuccess(owner,key,request.getAddressId(),validator.fingerprint(request.getAddressId()),
                 created.getId(),"/api/me/orders/"+created.getId(),body,at);
         return response;
@@ -106,6 +129,6 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     private CheckoutReceiptResponse replay(CheckoutReceipt receipt, CheckoutRequest request) {
         validator.matching(receipt,request.getAddressId());
-        return converter.decode(receipt.getReceiptBody());
+        return converter.decode(receipt.getReceiptBody(),receipt.getReceiptVersion());
     }
 }

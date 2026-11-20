@@ -25,8 +25,19 @@ public final class CheckoutFixtures {
     }
 
     public static HistoricalOrder order(JdbcTemplate jdbc, Long owner) {
+        return order(jdbc, owner, true);
+    }
+
+    /** Explicit historical migration fixture before the inventory column exists. */
+    public static HistoricalOrder preInventoryOrder(JdbcTemplate jdbc, Long owner) {
+        return order(jdbc, owner, false);
+    }
+
+    private static HistoricalOrder order(JdbcTemplate jdbc, Long owner, boolean inventorySchema) {
         Long id = jdbc.queryForObject("SELECT nextval(pg_get_serial_sequence('orders','id'))", Long.class);
-        jdbc.update("INSERT INTO orders(id,customer_id,order_number,placed_at,status,recipient_name_snapshot,recipient_phone_snapshot,delivery_address_snapshot,merchandise_total,payable_total) VALUES (?, ?, ?, ?, 'PENDING','Recipient','0123456789','Address',100,100)",
+        String participationColumn = inventorySchema ? ",inventory_managed" : "";
+        String participationValue = inventorySchema ? ",false" : "";
+        jdbc.update("INSERT INTO orders(id,customer_id,order_number,placed_at,status,recipient_name_snapshot,recipient_phone_snapshot,delivery_address_snapshot,merchandise_total,payable_total" + participationColumn + ") VALUES (?, ?, ?, ?, 'PENDING','Recipient','0123456789','Address',100,100" + participationValue + ")",
                 id, owner, "TEST-" + id, java.sql.Timestamp.from(PLACED_AT));
         Long item = jdbc.queryForObject("INSERT INTO order_items(order_id,product_name_snapshot,variant_sku_snapshot,variant_options_snapshot,quantity,unit_price_snapshot,line_total) VALUES (?,'Product','SKU','{}',1,100,100) RETURNING id", Long.class, id);
         return new HistoricalOrder(id, item);
@@ -60,6 +71,8 @@ public final class CheckoutFixtures {
         CartItem item = cartItem(entities,cart,product,true);
         CartItem unselected = cartItem(entities,cart,other,false);
         entities.flush();
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(entities, product.variant().getId(), 1000);
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(entities, other.variant().getId(), 1000);
         return new Scenario(owner.getId(),foreign.getId(),address.getId(),cart.getId(),item.getId(),unselected.getId(),
                 product.product().getId(),product.variant().getId());
     }
@@ -81,7 +94,10 @@ public final class CheckoutFixtures {
             UUID product, UUID variant) { }
 
     public static CartItem additionalItem(EntityManager entities, Long cartId, boolean selected) {
-        return cartItem(entities,entities.getReference(Cart.class,cartId),
-                CatalogFixtures.persistProduct(entities,ProductStatus.PUBLISHED),selected);
+        CatalogFixtures.ProductFixture product = CatalogFixtures.persistProduct(entities,ProductStatus.PUBLISHED);
+        CartItem item = cartItem(entities,entities.getReference(Cart.class,cartId),product,selected);
+        entities.flush();
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(entities, product.variant().getId(), 1000);
+        return item;
     }
 }

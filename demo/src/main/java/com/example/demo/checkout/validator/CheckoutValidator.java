@@ -18,6 +18,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CheckoutValidator {
+    public SkippedCheckoutItem.Reason stockReason(CheckoutCartSeed.Row row,
+            com.example.demo.inventory.dto.response.InventoryAvailability availability) {
+        if (availability == null || "INVENTORY_UNAVAILABLE".equals(availability.getStatus())) return SkippedCheckoutItem.Reason.INVENTORY_UNAVAILABLE;
+        return availability.getAvailableQuantity() < row.getQuantity() ? SkippedCheckoutItem.Reason.INSUFFICIENT_STOCK : null;
+    }
     public void request(Long owner, String key, CheckoutRequest request) {
         if (owner == null || owner <= 0) throw new IdentityUnavailableException();
         if (key == null || !key.matches("[A-Za-z0-9_-]{16,128}") || request == null
@@ -27,7 +32,7 @@ public class CheckoutValidator {
     public void matching(CheckoutReceipt receipt, Long address) {
         if (!address.equals(receipt.getRequestAddressId()) || !fingerprint(address).equals(receipt.getRequestFingerprint()))
             throw new CheckoutKeyConflictException();
-        if (receipt.getReceiptVersion() != 1 || receipt.getResponseStatus() != 201) throw new IllegalStateException("Unsupported stored checkout receipt");
+        if ((receipt.getReceiptVersion() != 1 && receipt.getReceiptVersion() != 2) || receipt.getResponseStatus() != 201) throw new IllegalStateException("Unsupported stored checkout receipt");
     }
 
     public long fenceKey(Long owner, String key) { return ByteBuffer.wrap(digest("checkout:v1:"+owner+":"+key)).getLong(); }
