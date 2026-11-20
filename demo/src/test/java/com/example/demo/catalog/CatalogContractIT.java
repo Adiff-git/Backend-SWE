@@ -48,11 +48,11 @@ class CatalogContractIT {
 			"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
 	private static final Set<String> PAGE_FIELDS = Set.of("items", "page", "size", "totalItems", "totalPages");
 	private static final Set<String> SUMMARY_FIELDS = Set.of("id", "name", "category", "primaryImageUrl",
-            "displayPrice", "representativeVariantId");
+            "displayPrice", "representativeVariantId", "availability");
 	private static final Set<String> DETAIL_FIELDS = Set.of(
 			"id", "name", "category", "primaryImageUrl", "description", "brand", "variants", "images");
 	private static final Set<String> CATEGORY_FIELDS = Set.of("id", "name");
-	private static final Set<String> VARIANT_FIELDS = Set.of("id", "sku", "options", "sellingPrice", "technicalSpecifications");
+	private static final Set<String> VARIANT_FIELDS = Set.of("id", "sku", "options", "sellingPrice", "technicalSpecifications", "availability");
 	private static final Set<String> PRICE_FIELDS = Set.of("amount", "currency");
 	private static final Set<String> IMAGE_FIELDS = Set.of(
 			"id", "url", "altText", "width", "height", "displayOrder", "isPrimary");
@@ -97,6 +97,7 @@ class CatalogContractIT {
 		Set<String> returnedIds = new HashSet<>();
 		for (JsonNode item : response.get("items")) {
 			assertExactFields(item, SUMMARY_FIELDS);
+            assertThat(item.has("status")).isFalse();
 			assertCanonicalUuid(item.get("id"));
 			assertThat(item.get("name").asText()).isNotBlank();
 			assertCategory(item.get("category"));
@@ -162,6 +163,9 @@ class CatalogContractIT {
 		assertThat(response.get("variants").size()).isEqualTo(2);
 		for (JsonNode variant : response.get("variants")) {
 			assertExactFields(variant, VARIANT_FIELDS);
+            assertExactFields(variant.get("availability"), Set.of("availableQuantity", "status"));
+            assertThat(variant.get("availability").get("availableQuantity").longValue()).isZero();
+            assertThat(variant.get("availability").get("status").asText()).isEqualTo("OUT_OF_STOCK");
             assertThat(variant.get("technicalSpecifications").isObject()).isTrue();
             assertExactFields(variant.get("technicalSpecifications"), Set.of("schema_version", "values"));
             assertThat(variant.get("technicalSpecifications").get("schema_version").intValue()).isOne();
@@ -253,6 +257,7 @@ class CatalogContractIT {
         assertThat(response.get("totalItems").longValue()).isOne();
         JsonNode item = response.get("items").get(0);
         assertExactFields(item, SUMMARY_FIELDS);
+            assertThat(item.has("status")).isFalse();
         assertThat(item.get("id").asText()).isEqualTo(fixture.product().getId().toString());
         assertThat(item.get("displayPrice").isNull()).isTrue();
         assertThat(item.get("representativeVariantId").isNull()).isTrue();

@@ -45,6 +45,126 @@ class CartServiceIT {
     Long owner;
     UUID variant;
     UUID product;
+    @Autowired com.example.demo.checkout.service.CheckoutService checkout;
+    @org.springframework.test.context.bean.override.mockito.MockitoSpyBean
+    com.example.demo.catalog.service.CatalogCartReadService catalogBoundary;
+
+    @Test void stockChecks_shouldUseFullDemandAndKeepShortagePreferencesWithoutReserving() {
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 3);
+        long item = service.addItem(owner, addRequest(2)).getItemId();
+        var before = jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", item);
+        assertThatThrownBy(() -> service.addItem(owner, addRequest(2))).isInstanceOf(com.example.demo.cart.exception.CartStockConflictException.class);
+        assertThatThrownBy(() -> service.updateQuantity(owner, item, quantity(4))).isInstanceOf(com.example.demo.cart.exception.CartStockConflictException.class);
+        assertThat(jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", item)).isEqualTo(before);
+        service.updateQuantity(owner, item, quantity(3));
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 2);
+        var shortage = service.getCart(owner);
+        assertThat(shortage.getTotalItemCount()).isEqualTo(1);
+        assertThat(shortage.getSelectedItemCount()).isZero();
+        assertThat(shortage.getSelectedTotalQuantity()).isZero();
+        var row = shortage.getItems().getFirst();
+        assertThat(row.getQuantity()).isEqualTo(3);
+        assertThat(row.isSelected()).isTrue();
+        assertThat(row.isPurchasable()).isFalse();
+        assertThat(row.getAvailabilityReason()).isEqualTo("INSUFFICIENT_STOCK");
+        assertThat(row.getUnitPrice()).isNotNull();
+        assertThat(row.getSubtotal()).isNull();
+        assertThat(row.getAvailability().getAvailableQuantity()).isEqualTo(2);
+        assertThatThrownBy(() -> service.selectItem(owner, item, selection(true))).isInstanceOf(com.example.demo.cart.exception.CartStockConflictException.class);
+        assertThat(service.selectAll(owner, selection(true)).getItems().getFirst().isSelected()).isTrue();
+        assertThat(service.selectItem(owner, item, selection(false)).getItems().getFirst().isSelected()).isFalse();
+        service.removeItem(owner, item);
+        assertThat(jdbc.queryForMap("SELECT stock,reserved FROM inventory_balances WHERE original_variant_id=?", variant))
+                .containsEntry("stock", 2L).containsEntry("reserved", 0L);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_reservations", Long.class)).isZero();
+    }
+
+    @Test void variantStockChecks_shouldUseResetOneAndUnchangedExistingOrSameTargetQuantities() {
+        long source = service.addItem(owner, addRequest(5)).getItemId();
+        UUID target = sibling();
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, target, 1);
+        assertThat(service.changeVariant(owner, source, variant(target)).getItems().getFirst().getQuantity()).isEqualTo(1);
+        service.updateQuantity(owner, source, quantity(1));
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, target, 0);
+        var sameBefore = jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", source);
+        assertThatThrownBy(() -> service.changeVariant(owner, source, variant(target))).isInstanceOf(com.example.demo.cart.exception.CartStockConflictException.class);
+        assertThat(jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", source)).isEqualTo(sameBefore);
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, target, 3);
+        service.updateQuantity(owner, source, quantity(3));
+        service.selectItem(owner, source, selection(false));
+        long other = service.addItem(owner, addRequest(5)).getItemId();
+        var targetBefore = jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", source);
+        var sourceBefore = jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", other);
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, target, 2);
+        assertThatThrownBy(() -> service.changeVariant(owner, other, variant(target))).isInstanceOf(com.example.demo.cart.exception.CartStockConflictException.class);
+        assertThat(jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", source)).isEqualTo(targetBefore);
+        assertThat(jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", other)).isEqualTo(sourceBefore);
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, target, 3);
+        service.changeVariant(owner, other, variant(target));
+        assertThat(jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", source)).isEqualTo(targetBefore);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_reservations", Long.class)).isZero();
+    }
+
+    @Test void missingStock_shouldRejectNewCartAtomicallyAndNeverAutoProvision() {
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 0);
+        com.example.demo.fixture.inventory.InventoryFixtures.removeUnusedBalance(jdbc, variant);
+        assertThatThrownBy(() -> service.addItem(owner, addRequest(1))).isInstanceOf(com.example.demo.cart.exception.CartStockConflictException.class);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM carts", Long.class)).isZero();
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_balances WHERE original_variant_id=?", Long.class, variant)).isZero();
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_reservations", Long.class)).isZero();
+    }
+
+    @Test void missingStockOnAnExistingRow_shouldRemainVisibleAndAllowDeselectAndRemoval() {
+        long item = service.addItem(owner, addRequest(2)).getItemId();
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 0);
+        com.example.demo.fixture.inventory.InventoryFixtures.removeUnusedBalance(jdbc, variant);
+        var row = service.getCart(owner).getItems().getFirst();
+        assertThat(row.getQuantity()).isEqualTo(2);
+        assertThat(row.isSelected()).isTrue();
+        assertThat(row.getAvailabilityReason()).isEqualTo("INVENTORY_UNAVAILABLE");
+        assertThat(row.getAvailability().getAvailableQuantity()).isZero();
+        assertThat(row.getAvailability().getStatus()).isEqualTo("INVENTORY_UNAVAILABLE");
+        assertThat(row.getUnitPrice()).isNotNull();
+        assertThat(row.getSubtotal()).isNull();
+        assertThat(service.selectItem(owner, item, selection(false)).getItems().getFirst().isSelected()).isFalse();
+        service.removeItem(owner, item);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_balances WHERE original_variant_id=?", Long.class, variant)).isZero();
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_reservations", Long.class)).isZero();
+    }
+
+    @Test void finalStockObservation_shouldRollbackCartChangeAfterAnotherCustomersCommittedReservation() throws Exception {
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 3);
+        long item = service.addItem(owner, addRequest(1)).getItemId();
+        var before = jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", item);
+        var other = transactions.execute(s -> com.example.demo.fixture.checkout.CheckoutFixtures.scenario(entities));
+        jdbc.update("UPDATE cart_items SET product_id=?,product_variant_id=? WHERE id=?", product, variant, other.item());
+        CountDownLatch finalRead = new CountDownLatch(1);
+        CountDownLatch continueRead = new CountDownLatch(1);
+        org.mockito.Mockito.doAnswer(call -> {
+            if (Thread.currentThread().getName().equals("inventory-cart-mutation")) {
+                finalRead.countDown();
+                if (!continueRead.await(10, TimeUnit.SECONDS)) throw new IllegalStateException("Final cart observation timed out");
+            }
+            return call.callRealMethod();
+        }).when(catalogBoundary).getCartPresentation(org.mockito.ArgumentMatchers.anyCollection(), org.mockito.ArgumentMatchers.any());
+        try (var worker = Executors.newSingleThreadExecutor()) {
+            var changed = worker.submit(() -> {
+                Thread.currentThread().setName("inventory-cart-mutation");
+                return service.updateQuantity(owner, item, quantity(2));
+            });
+            try {
+                assertThat(finalRead.await(10, TimeUnit.SECONDS)).isTrue();
+                checkout.checkout(other.owner(), "Cart_recheck_key_123", new com.example.demo.checkout.dto.request.CheckoutRequest(other.address()));
+            } finally { continueRead.countDown(); }
+            assertThatThrownBy(() -> changed.get(15, TimeUnit.SECONDS)).hasCauseInstanceOf(com.example.demo.cart.exception.CartStockConflictException.class);
+        } finally { continueRead.countDown(); }
+        assertThat(jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", item)).isEqualTo(before);
+        assertThat(jdbc.queryForMap("SELECT stock,reserved FROM inventory_balances WHERE original_variant_id=?", variant))
+                .containsEntry("stock", 3L).containsEntry("reserved", 2L);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM orders WHERE customer_id=?", Long.class, owner)).isZero();
+        service.selectItem(owner, item, selection(false));
+        assertThat(jdbc.queryForObject("SELECT selected FROM cart_items WHERE id=?", Boolean.class, item)).isFalse();
+    }
 
     @BeforeEach void prepare() {
         cleanup();
@@ -54,8 +174,9 @@ class CartServiceIT {
             variant = fixture.variant().getId();
             product = fixture.product().getId();
         });
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 1000);
     }
-    @AfterEach void cleanup() { jdbc.execute("TRUNCATE TABLE users, categories CASCADE"); }
+    @AfterEach void cleanup() { com.example.demo.fixture.inventory.InventoryFixtures.cleanRetainedInventory(jdbc); }
 
     AddCartItemRequest addRequest(int quantity) {
         AddCartItemRequest request = new AddCartItemRequest();
@@ -108,6 +229,8 @@ class CartServiceIT {
             var parent = entities.find(com.example.demo.catalog.entity.Product.class, product);
             var target = CatalogFixtures.variant(parent, java.util.Map.of("color", UUID.randomUUID().toString()), java.math.BigDecimal.TEN);
             entities.persist(target);
+            entities.flush();
+            com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(entities, target.getId(), 1000);
             return target.getId();
         });
     }
@@ -170,6 +293,7 @@ class CartServiceIT {
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM carts", Long.class)).isZero();
         Long first = service.addItem(owner, addRequest(2)).getItemId();
         UUID other = transactions.execute(s -> CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED).variant().getId());
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, other, 1000);
         service.addItem(owner, addRequest(other, 3));
         jdbc.update("UPDATE product_variants SET selling_price=100 WHERE id=?", variant);
         jdbc.update("UPDATE product_variants SET selling_price=50 WHERE id=?", other);
@@ -286,6 +410,7 @@ class CartServiceIT {
             for (int index=0; index<104; index++) {
                 var fixture = CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED);
                 entities.flush();
+                com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(entities, fixture.variant().getId(), 1000);
                 jdbc.update("INSERT INTO cart_items(cart_id,product_id,product_variant_id,quantity,selected,added_at,public_product_name,public_sku,public_options) "
                         + "SELECT ?,product_id,id,1,TRUE,TIMESTAMPTZ '2026-01-01 00:00:00+00', 'Prior name',sku,option_combination FROM product_variants WHERE id=?",
                         cartId, fixture.variant().getId());

@@ -1,4 +1,6 @@
-package com.example.demo.catalog;
+package com.example.demo.catalog.controller;
+
+import com.example.demo.catalog.CatalogFixtures;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -44,7 +46,7 @@ import tools.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestPropertySource(properties = "spring.jpa.properties.hibernate.generate_statistics=true")
-@Import(ProductListingApiIT.FakeStorageConfiguration.class)
+@Import({ProductListingApiIT.FakeStorageConfiguration.class, com.example.demo.config.SqlCaptureConfiguration.class})
 class ProductListingApiIT {
 
 	@Autowired private MockMvc mvc;
@@ -84,11 +86,52 @@ class ProductListingApiIT {
 				.andReturn().getResponse().getContentAsString();
 		assertThat(body).contains(published.toString(), noImage.toString(), "category", "primaryImageUrl");
 		assertThat(body).doesNotContain(draft.toString(), archived.toString(), "objectKey", "stagingKey",
-				"preparerSubject", "sellingPrice", "status");
+				"preparerSubject", "sellingPrice");
+        for (var item : json.readTree(body).get("items")) {
+            assertThat(item.has("status")).isFalse();
+            assertThat(item.get("availability").get("status").asText()).isEqualTo("OUT_OF_STOCK");
+            assertThat(item.get("availability").get("availableQuantity").asLong()).isZero();
+        }
 		assertThat(body).contains("https://images.test/signed?X-Amz-Expires=300");
 		assertThat(body).contains("\"primaryImageUrl\":null");
 		assertThat(storage.signCalls.get()).isEqualTo(1);
 	}
+
+    @Test void representativeAvailability_shouldNotSubstituteAnInStockMoreExpensiveVariant() throws Exception {
+        UUID product = persistProduct(ProductStatus.PUBLISHED, false);
+        UUID original = jdbc.queryForObject("SELECT id FROM product_variants WHERE product_id=?", UUID.class, product);
+        UUID cheaper = transactions.execute(s -> {
+            var variant = CatalogFixtures.variant(entityManager.getReference(com.example.demo.catalog.entity.Product.class, product),
+                    java.util.Map.of("choice", "cheaper"), java.math.BigDecimal.TEN);
+            entityManager.persist(variant);
+            return variant.getId();
+        });
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, original, 5);
+        mvc.perform(get("/api/products")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalItems").value(1))
+                .andExpect(jsonPath("$.items[0].representativeVariantId").value(cheaper.toString()))
+                .andExpect(jsonPath("$.items[0].availability.status").value("OUT_OF_STOCK"));
+    }
+
+    @Test void noRepresentative_shouldReturnNullAvailabilityWithoutStockSql() throws Exception {
+        UUID product = persistProduct(ProductStatus.PUBLISHED, false);
+        com.example.demo.config.SqlCapture.begin();
+        java.util.List<String> sql;
+        try {
+            transactions.executeWithoutResult(transaction -> {
+                // Exercise the compatibility projection before deferred catalog validation, then restore by rollback.
+                jdbc.update("DELETE FROM product_variants WHERE product_id=?", product);
+                try {
+                    mvc.perform(get("/api/products")).andExpect(status().isOk())
+                            .andExpect(jsonPath("$.totalItems").value(1))
+                            .andExpect(jsonPath("$.items[0].availability").value(org.hamcrest.Matchers.nullValue()))
+                            .andExpect(jsonPath("$.items[0].representativeVariantId").value(org.hamcrest.Matchers.nullValue()));
+                } catch (Exception failure) { throw new IllegalStateException(failure); }
+                transaction.setRollbackOnly();
+            });
+        } finally { sql = com.example.demo.config.SqlCapture.end(); }
+        assertThat(sql).noneMatch(statement -> statement.contains("inventory_balances"));
+    }
 
 	@Test
 	void emptyOutOfRangeAndRepeatedPagesHaveAccurateStableMetadata() throws Exception {

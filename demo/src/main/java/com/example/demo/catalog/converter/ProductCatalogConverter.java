@@ -32,14 +32,15 @@ public class ProductCatalogConverter {
 
     /** All values have already been selected/loaded by the owning workflow; no variant selection here. */
     public ProductListingItem toListingItem(ProductSummary summary, BigInteger displayAmount,
-            UUID representativeVariantId) {
+            UUID representativeVariantId, com.example.demo.inventory.dto.response.InventoryAvailability availability) {
         SellingPrice price = displayAmount == null ? null : new SellingPrice(displayAmount, "VND");
         return new ProductListingItem(summary.getId(), summary.getName(), summary.getCategory(),
-                summary.getPrimaryImageUrl(), price, representativeVariantId);
+                summary.getPrimaryImageUrl(), price, representativeVariantId, availability);
     }
 
 	public ProductDetail toDetail(Product product, List<ProductVariant> variants,
-			List<ProductImage> images, Map<UUID, String> approvedImageUrls) {
+			List<ProductImage> images, Map<UUID, String> approvedImageUrls,
+            Map<UUID, com.example.demo.inventory.dto.response.InventoryAvailability> availability) {
 		String primaryImageUrl = null;
 		List<ProductImageSummary> imageSummaries = new ArrayList<>();
 		for (ProductImage image : images) {
@@ -55,7 +56,7 @@ public class ProductCatalogConverter {
 			variantSummaries.add(new VariantSummary(variant.getId(), variant.getSku(),
 					Map.copyOf(variant.getOptionCombination()),
 					new SellingPrice(variant.getSellingPrice().toBigIntegerExact(), "VND"),
-					Map.copyOf(variant.getTechnicalSpecifications())));
+					Map.copyOf(variant.getTechnicalSpecifications()), availability.get(variant.getId())));
 		}
 		ProductSummary summary = toSummary(product, primaryImageUrl);
 		Brand brand = product.getBrand();

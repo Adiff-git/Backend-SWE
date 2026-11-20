@@ -1,4 +1,6 @@
-package com.example.demo.catalog;
+package com.example.demo.catalog.controller;
+
+import com.example.demo.catalog.CatalogFixtures;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -51,6 +53,13 @@ import tools.jackson.databind.ObjectMapper;
 @TestPropertySource(properties = "spring.jpa.properties.hibernate.generate_statistics=true")
 @Import(ProductDetailApiIT.FakeStorageConfiguration.class)
 class ProductDetailApiIT {
+    @Test void availability_shouldSerializeLongMaxExactlyWithoutApplyingTheCartLineLimit() throws Exception {
+        DetailFixture fixture = persistDetailedProduct();
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, fixture.firstVariantId(), Long.MAX_VALUE);
+        String body = mvc.perform(get("/api/products/{id}", fixture.productId())).andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        assertThat(body).contains("\"availableQuantity\":9223372036854775807");
+    }
 
 	private static final BigDecimal LARGE_WHOLE_VND = new BigDecimal("123456789012345678901234567890");
 
@@ -107,11 +116,14 @@ class ProductDetailApiIT {
 		assertThat(detail.get("images").get(0).get("url").asText()).contains("X-Amz-Expires=300");
 		assertThat(body).contains(fixture.firstVariantId().toString(), fixture.secondVariantId().toString());
 		assertThat(body).doesNotContain(other.toString(), otherVariant.toString(), "objectKey", "stagingKey", "claimToken",
-				"contentType", "byteSize", "createdAt", "\"status\"", "weight");
+				"contentType", "byteSize", "createdAt", "weight");
+        assertThat(detail.has("status")).isFalse();
 		assertThat(detail.get("brand").get("id").asText()).isEqualTo(
 				jdbc.queryForObject("SELECT brand_id FROM products WHERE id = ?", UUID.class, fixture.productId()).toString());
 		JsonNode expensiveVariant = null;
 		for (JsonNode variant : detail.get("variants")) {
+            assertThat(variant.has("status")).isFalse();
+            assertThat(variant.get("availability").get("status").asText()).isEqualTo("OUT_OF_STOCK");
 			assertThat(variant.get("sellingPrice").get("currency").asText()).isEqualTo("VND");
 			assertThat(variant.get("options").isObject()).isTrue();
 			boolean second = fixture.secondVariantId().toString().equals(variant.get("id").asText());
@@ -131,6 +143,20 @@ class ProductDetailApiIT {
 		assertThat(storage.signCalls.get()).isEqualTo(2);
 		assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isLessThanOrEqualTo(5);
 	}
+
+    @Test void detailAvailability_shouldDistinguishMissingFromKnownZeroWithoutHidingVariants() throws Exception {
+        DetailFixture fixture = persistDetailedProduct();
+        com.example.demo.fixture.inventory.InventoryFixtures.removeUnusedBalance(jdbc, fixture.firstVariantId());
+        String body = mvc.perform(get("/api/products/{id}", fixture.productId())).andExpect(status().isOk())
+                .andExpect(jsonPath("$.variants.length()").value(2)).andReturn().getResponse().getContentAsString();
+        for (JsonNode variant : json.readTree(body).get("variants")) {
+            String expected = variant.get("id").asText().equals(fixture.firstVariantId().toString()) ? "INVENTORY_UNAVAILABLE" : "OUT_OF_STOCK";
+            assertThat(variant.get("availability").get("status").asText()).isEqualTo(expected);
+            assertThat(variant.get("availability").get("availableQuantity").asLong()).isZero();
+            assertThat(variant.get("availability").has("stock")).isFalse();
+            assertThat(variant.get("availability").has("reserved")).isFalse();
+        }
+    }
 
 	@Test
 	void productWithoutImagesHasNullPrimaryUrlAndEmptyGallery() throws Exception {

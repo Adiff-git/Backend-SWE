@@ -26,7 +26,7 @@ public class CartCheckoutServiceImpl implements CartCheckoutService {
         Cart cart = carts.findOwnedForUpdate(owner).orElse(null);
         if (cart == null) return new CheckoutCartSeed(owner,null,List.of());
         return new CheckoutCartSeed(owner,cart.getId(),items.findByCartIdAndSelectedTrueOrderByIdAsc(cart.getId()).stream()
-                .map(item -> new CheckoutCartSeed.Row(item.getId(),item.getProductId(),item.getProductVariantId(),item.getQuantity(),item.isSelected())).toList());
+                .map(item -> new CheckoutCartSeed.Row(item.getId(),item.getProductId(),item.getProductVariantId(),item.getQuantity(),item.isSelected())).toList(),cart.getVoucherEntitlementId(),cart.getVoucherSelectionRevision());
     }
 
     @Override
@@ -36,5 +36,10 @@ public class CartCheckoutServiceImpl implements CartCheckoutService {
             List<CheckoutCartSeed.Row> batch = included.subList(start,Math.min(start+BATCH_SIZE,included.size()));
             if (items.deleteCheckoutRows(owner,seed.getCartId(),batch) != batch.size()) throw new CartConflictException();
         }
+    }
+    @Override public void clearCheckoutVoucher(Long owner, CheckoutCartSeed seed) {
+        validator.owner(owner);
+        if (!owner.equals(seed.getOwnerId()) || seed.getSelectedEntitlementId()==null
+                || carts.clearCheckoutVoucher(owner,seed.getCartId(),seed.getSelectedEntitlementId(),seed.getSelectionRevision())!=1) throw new CartConflictException();
     }
 }
