@@ -77,6 +77,22 @@ class RecommendationIT {
   }
 
   @Test
+  void similarCardsUseCurrentRepresentativeVariantInventory() throws Exception {
+    UUID variant = store.catalog().stream()
+        .filter(row -> row.candidate().productId().equals(second)).findFirst().orElseThrow().variantId();
+    jdbc.update("UPDATE inventory_balances SET stock=7,reserved=2 WHERE product_variant_id=?", variant);
+    doReturn(List.of(second)).when(ai).rank(any());
+    mvc.perform(get("/api/products/" + first + "/similar"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.items[0].representativeVariantId").value(variant.toString()))
+        .andExpect(jsonPath("$.items[0].availability.availableQuantity").value(5));
+    jdbc.update("UPDATE inventory_balances SET stock=2 WHERE product_variant_id=?", variant);
+    mvc.perform(get("/api/products/" + first + "/similar"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.items[0].availability.availableQuantity").value(0));
+  }
+
+  @Test
   void accessLimitsAndNoTracking() throws Exception {
     mvc.perform(get("/api/recommendations"))
         .andExpect(status().isOk())

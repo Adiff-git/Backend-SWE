@@ -21,6 +21,7 @@ public class RecommendationHydrator {
   private final ProductImageStorage storage;
   private final ProductCatalogConverter converter;
   private final RecommendationStore store;
+  private final com.example.demo.inventory.service.InventoryService inventory;
 
   @Transactional
   public List<ProductListingItem> hydrate(List<UUID> ordered, int limit) {
@@ -50,6 +51,11 @@ public class RecommendationHydrator {
       currentProducts.forEach(product -> byId.put(product.getId(), product));
       Map<UUID, RecommendationStore.Row> fresh = new HashMap<>();
       store.refresh(ordered).forEach(row -> fresh.put(row.candidate().productId(), row));
+      var variantIds = fresh.values().stream().map(RecommendationStore.Row::variantId)
+          .filter(Objects::nonNull).distinct().sorted(Comparator.comparing(UUID::toString)).toList();
+      var availability = variantIds.isEmpty()
+          ? Map.<UUID, com.example.demo.inventory.dto.response.InventoryAvailability>of()
+          : inventory.getAvailability(variantIds);
       Map<UUID, String> urls = new HashMap<>();
       for (var image : primaryImages) {
         UUID id = image.getProduct().getId();
@@ -66,7 +72,8 @@ public class RecommendationHydrator {
                   row.candidate().price() == null
                       ? null
                       : row.candidate().price().toBigIntegerExact(),
-                  row.variantId()));
+                  row.variantId(),
+                  row.variantId() == null ? null : availability.get(row.variantId())));
           if (result.size() == limit) break;
         }
       }
