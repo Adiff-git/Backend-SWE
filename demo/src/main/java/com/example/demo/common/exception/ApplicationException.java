@@ -17,6 +17,9 @@ public abstract class ApplicationException extends RuntimeException {
 
 	public String getCode() { return null; }
 
+    /** Explicit safe domain extensions, empty unless the domain contract defines them. */
+    public java.util.Map<String,Object> getProperties() { return java.util.Map.of(); }
+
     public int getStatus() {
 		return status;
 	}

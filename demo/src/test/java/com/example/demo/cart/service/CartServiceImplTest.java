@@ -1,7 +1,7 @@
 package com.example.demo.cart.service;
 
 import com.example.demo.cart.dto.request.AddCartItemRequest;
-import com.example.demo.cart.dto.request.UpdateCartItemRequest;
+import com.example.demo.cart.dto.request.ChangeCartVariantRequest;
 import com.example.demo.cart.exception.CartItemNotFoundException;
 import com.example.demo.cart.repository.CartItemRepository;
 import com.example.demo.cart.service.impl.CartServiceImpl;
@@ -30,7 +30,7 @@ class CartServiceImplTest {
     @Test void addItem_shouldPrepareResourceFreeUrlsBeforeEnteringWriteTransaction() {
         UUID variant = UUID.randomUUID();
         AddCartItemRequest request = new AddCartItemRequest();
-        request.setVariantId(variant);
+        request.setProductVariantId(variant);
         request.setQuantity(2);
         PreparedImageUrls urls = key -> "url";
         when(items.findVariantIdsForOwner(1L)).thenReturn(List.of());
@@ -48,10 +48,10 @@ class CartServiceImplTest {
         verifyNoInteractions(catalog, resolver);
     }
 
-    @Test void updateItem_shouldRejectForeignSourceBeforeCatalogPreflight() {
-        UpdateCartItemRequest request = new UpdateCartItemRequest();
-        request.setQuantity(1); request.setVariantId(UUID.randomUUID());
-        assertThatThrownBy(() -> service.updateItem(1L, 9L, request)).isInstanceOf(CartItemNotFoundException.class);
+    @Test void changeVariant_shouldRejectForeignSourceBeforeCatalogPreflight() {
+        ChangeCartVariantRequest request = new ChangeCartVariantRequest();
+        request.setProductVariantId(UUID.randomUUID());
+        assertThatThrownBy(() -> service.changeVariant(1L, 9L, request)).isInstanceOf(CartItemNotFoundException.class);
         verifyNoInteractions(catalog, resolver, transactions);
     }
 }

@@ -13,4 +13,6 @@ public final class VariantSummary {
 	private final Map<String, String> options;
 	private final SellingPrice sellingPrice;
 	private final Map<String, Object> technicalSpecifications;
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)
+    private final com.example.demo.inventory.dto.response.InventoryAvailability availability;
 }

@@ -50,8 +50,15 @@ class ProductKeywordSearchServiceImplTest {
     private final ProductImageRepository images = mock(ProductImageRepository.class);
     private final ProductVariantRepository variants = mock(ProductVariantRepository.class);
     private final ProductImageStorage storage = mock(ProductImageStorage.class);
+    private final com.example.demo.inventory.service.InventoryService inventory = mock(com.example.demo.inventory.service.InventoryService.class);
     private final ProductCatalogServiceImpl service = new ProductCatalogServiceImpl(
-            products, images, variants, storage, new ProductCatalogConverter(), VALIDATION.getValidator());
+            products, images, variants, storage, new ProductCatalogConverter(), VALIDATION.getValidator(), inventory);
+
+    @org.junit.jupiter.api.BeforeEach void prepareZeroStockObservation() {
+        when(inventory.getAvailability(anyCollection())).thenAnswer(call -> call.<java.util.Collection<UUID>>getArgument(0)
+                .stream().collect(java.util.stream.Collectors.toMap(id -> id,
+                        id -> new com.example.demo.inventory.dto.response.InventoryAvailability(0, "OUT_OF_STOCK"))));
+    }
 
     @AfterAll
     static void closeValidation() { VALIDATION.close(); }

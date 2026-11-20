@@ -24,6 +24,17 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
 class ProductCatalogConverterTest {
+    @Test void listingAvailability_shouldMapThePreparedRepresentativeIncludingKnownZero() {
+        var converter = new ProductCatalogConverter();
+        java.util.UUID product = java.util.UUID.randomUUID(), variant = java.util.UUID.randomUUID();
+        var summary = new com.example.demo.catalog.dto.response.ProductSummary(product, "P",
+                new com.example.demo.catalog.dto.response.CategorySummary(java.util.UUID.randomUUID(), "C"), null);
+        var zero = new com.example.demo.inventory.dto.response.InventoryAvailability(0, "OUT_OF_STOCK");
+        var listing = converter.toListingItem(summary, java.math.BigInteger.TEN, variant, zero);
+        org.assertj.core.api.Assertions.assertThat(listing.getRepresentativeVariantId()).isEqualTo(variant);
+        org.assertj.core.api.Assertions.assertThat(listing.getAvailability()).isSameAs(zero);
+        org.assertj.core.api.Assertions.assertThat(converter.toListingItem(summary, null, null, null).getAvailability()).isNull();
+    }
 
 	private final ProductCatalogConverter converter = new ProductCatalogConverter();
 	private final JsonMapper json = JsonMapper.builder().build();
@@ -75,7 +86,7 @@ class ProductCatalogConverterTest {
 		String primaryUrl = "https://images.test/approved-primary";
 		String laterUrl = "https://images.test/approved-later";
 		ProductDetail detail = converter.toDetail(fixture.product(), List.of(first, second),
-				List.of(primary, later), Map.of(primary.getId(), primaryUrl, later.getId(), laterUrl));
+				List.of(primary, later), Map.of(primary.getId(), primaryUrl, later.getId(), laterUrl), java.util.Map.of());
 		assertThat(detail.getBrand().getId()).isEqualTo(brand.getId());
 		assertThat(detail.getBrand().getCode()).isEqualTo("test-brand");
 		assertThat(detail.getBrand().getName()).isEqualTo("Test Brand");
@@ -105,9 +116,10 @@ class ProductCatalogConverterTest {
 	@Test
 	void singleVariantEmptyOptionsAndNoImagesRemainRepresentable() {
 		ProductFixture fixture = CatalogFixtures.publishedProduct();
+		ReflectionTestUtils.setField(fixture.variant(), "id", UUID.randomUUID());
 		fixture.variant().setOptionCombination(Map.of());
 		ProductDetail detail = converter.toDetail(fixture.product(), List.of(fixture.variant()),
-				List.of(), Map.of());
+				List.of(), Map.of(), java.util.Map.of());
 		assertThat(detail.getVariants()).hasSize(1);
 		assertThat(detail.getVariants().get(0).getOptions()).isEmpty();
 		assertThat(detail.getImages()).isEmpty();
@@ -121,7 +133,7 @@ class ProductCatalogConverterTest {
         ProductSummary summary = converter.toSummary(CatalogFixtures.publishedProduct().product(), "signed-url");
         UUID selected = UUID.randomUUID();
         BigInteger amount = new BigInteger("1234567890123456789012345678901234567890");
-        ProductListingItem item = converter.toListingItem(summary, amount, selected);
+        ProductListingItem item = converter.toListingItem(summary, amount, selected, null);
         assertThat(item.getDisplayPrice().getAmount()).isEqualTo(amount);
         assertThat(item.getDisplayPrice().getCurrency()).isEqualTo("VND");
         assertThat(item.getRepresentativeVariantId()).isEqualTo(selected);
@@ -130,7 +142,7 @@ class ProductCatalogConverterTest {
         assertThat(item.getPrimaryImageUrl()).isEqualTo(summary.getPrimaryImageUrl());
         JsonNode body = json.valueToTree(item);
         assertThat(body.properties()).extracting(Map.Entry::getKey).containsExactlyInAnyOrder(
-                "id", "name", "category", "primaryImageUrl", "displayPrice", "representativeVariantId");
+                "id", "name", "category", "primaryImageUrl", "displayPrice", "representativeVariantId", "availability");
         assertThat(json.valueToTree(summary).has("displayPrice")).isFalse();
         ProductPage page = new ProductPage(
                 List.of(item), 2, 20, 41, 3);
@@ -144,14 +156,14 @@ class ProductCatalogConverterTest {
     @Test
     void orphanListingHasExplicitNullPairAndMixedPairsAreRejected() {
         ProductSummary summary = converter.toSummary(CatalogFixtures.publishedProduct().product(), null);
-        JsonNode item = json.valueToTree(converter.toListingItem(summary, null, null));
+        JsonNode item = json.valueToTree(converter.toListingItem(summary, null, null, null));
         assertThat(item.has("displayPrice")).isTrue();
         assertThat(item.get("displayPrice").isNull()).isTrue();
         assertThat(item.has("representativeVariantId")).isTrue();
         assertThat(item.get("representativeVariantId").isNull()).isTrue();
-        assertThatThrownBy(() -> converter.toListingItem(summary, BigInteger.ZERO, null))
+        assertThatThrownBy(() -> converter.toListingItem(summary, BigInteger.ZERO, null, null))
                 .isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> converter.toListingItem(summary, null, UUID.randomUUID()))
+        assertThatThrownBy(() -> converter.toListingItem(summary, null, UUID.randomUUID(), null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

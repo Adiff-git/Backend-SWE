@@ -20,5 +20,12 @@ public class Cart {
     @Column(name = "user_id", nullable = false, updatable = false)
     private Long userId;
 
+    @Column(name = "voucher_entitlement_id") private Long voucherEntitlementId;
+    @Column(name = "voucher_selection_revision", nullable = false) private long voucherSelectionRevision;
+    public void selectVoucher(Long grant) {
+        try { voucherSelectionRevision = Math.incrementExact(voucherSelectionRevision); }
+        catch (ArithmeticException overflow) { throw new com.example.demo.cart.exception.CartConflictException(); }
+        voucherEntitlementId = grant;
+    }
     public Cart(Long userId) { this.userId = userId; }
 }
