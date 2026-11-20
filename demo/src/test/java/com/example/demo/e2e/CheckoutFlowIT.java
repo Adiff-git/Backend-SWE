@@ -38,7 +38,7 @@ class CheckoutFlowIT {
     @Autowired JdbcTemplate jdbc;
     @Autowired JsonMapper json;
 
-    @AfterEach void cleanup() { jdbc.execute("TRUNCATE TABLE users,categories CASCADE"); }
+    @AfterEach void cleanup() { com.example.demo.fixture.inventory.InventoryFixtures.cleanRetainedInventory(jdbc); }
 
     @Test void checkout_shouldCompleteSingleVendorPurchaseAndRecoverOriginalOutcomeAcrossSession() throws Exception {
         cleanup();
@@ -46,6 +46,7 @@ class CheckoutFlowIT {
                 CatalogFixtures.persistProduct(entities,ProductStatus.PUBLISHED).variant().getId(),
                 CatalogFixtures.persistProduct(entities,ProductStatus.PUBLISHED).variant().getId(),
                 CatalogFixtures.persistProduct(entities,ProductStatus.PUBLISHED).variant().getId()});
+        for (UUID variant : variants) com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 1000);
         String email="checkout-flow-"+UUID.randomUUID()+"@example.com";
         users.createVerifiedAccount(email,passwords.encode("Password 123"),Instant.now());
         try(HttpClient client=HttpClient.newHttpClient()) {

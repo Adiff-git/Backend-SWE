@@ -41,7 +41,7 @@ class CartFlowIT {
     @Autowired JsonMapper json;
     @Autowired JdbcTemplate jdbc;
     @org.springframework.boot.test.web.server.LocalServerPort int port;
-    @AfterEach void cleanup() { jdbc.execute("TRUNCATE TABLE users, categories CASCADE"); }
+    @AfterEach void cleanup() { com.example.demo.fixture.inventory.InventoryFixtures.cleanRetainedInventory(jdbc); }
 
     @Test void cart_shouldSurviveLogoutAndLaterLoginThroughFullInternalFlow() throws Exception {
         cleanup();
@@ -51,6 +51,7 @@ class CartFlowIT {
             entities.persist(second);
             return new UUID[]{product.variant().getId(), second.getId()};
         });
+        for (UUID id : variants) com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, id, 1000);
         String username = "flow-" + UUID.randomUUID();
         users.createVerifiedAccount(username + "@example.com", passwords.encode("Password 123"), Instant.now());
         MvcResult login = login(username);
@@ -93,6 +94,7 @@ class CartFlowIT {
     @Test void networkWalkthrough_shouldExerciseRealHttpOnIsolatedRuntime() throws Exception {
         cleanup();
         UUID variant = transactions.execute(s -> CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED).variant().getId());
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 1000);
         String username = "http-" + UUID.randomUUID();
         users.createVerifiedAccount(username + "@example.com", passwords.encode("Password 123"), Instant.now());
         try (java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient()) {
