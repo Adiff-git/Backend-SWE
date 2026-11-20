@@ -1,4 +1,6 @@
 package com.example.demo.catalog;
+import com.example.demo.config.SqlCapture;
+import com.example.demo.catalog.service.CatalogQueryCountIT;
 
 import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,7 +61,7 @@ class ProductSourceWorkloadPerformanceIT {
             for(int i=0;i<20;i++)http(entry.getValue());
             long[] times=new long[100];int maxData=0,maxSet=0;
             for(int i=0;i<100;i++){
-                CatalogQueryCountIT.SqlCapture.begin();start=System.nanoTime();var result=http(entry.getValue());times[i]=System.nanoTime()-start;var sql=CatalogQueryCountIT.SqlCapture.end();
+                SqlCapture.begin();start=System.nanoTime();var result=http(entry.getValue());times[i]=System.nanoTime()-start;var sql=SqlCapture.end();
                 int set=(int)sql.stream().filter(x->x.contains("set_config")).count();maxSet=Math.max(set,maxSet);maxData=Math.max(maxData,sql.size()-set);
                 assertThat(result.get("totalItems").asLong()).isEqualTo(cold.get("totalItems").asLong());assertThat(result.get("items").size()).isLessThanOrEqualTo(20);
             }

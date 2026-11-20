@@ -10,6 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AddCartItemRequest {
-    @NotNull private UUID variantId;
-    @NotNull @Min(1) @Max(1000) private Integer quantity;
+    @NotNull private UUID productVariantId;
+    @NotNull @Min(1) @Max(999) private Integer quantity;
 }

@@ -12,16 +12,18 @@ public class PreparedCart {
     List<CartReadSeed> items;
     Map<UUID, CartVariantState> states;
     Map<Long, BigInteger> subtotals;
+    Map<Long, String> ineligibleReasons;
     long selectedItemCount;
     long selectedTotalQuantity;
     BigInteger selectedSubtotal;
 
     public PreparedCart(List<CartReadSeed> items, Map<UUID, CartVariantState> states,
-            Map<Long, BigInteger> subtotals, long selectedItemCount, long selectedTotalQuantity,
+            Map<Long, BigInteger> subtotals, Map<Long, String> ineligibleReasons, long selectedItemCount, long selectedTotalQuantity,
             BigInteger selectedSubtotal) {
         this.items = List.copyOf(items);
         this.states = Map.copyOf(states);
         this.subtotals = Map.copyOf(subtotals);
+        this.ineligibleReasons = Map.copyOf(ineligibleReasons);
         this.selectedItemCount = selectedItemCount;
         this.selectedTotalQuantity = selectedTotalQuantity;
         this.selectedSubtotal = selectedSubtotal;

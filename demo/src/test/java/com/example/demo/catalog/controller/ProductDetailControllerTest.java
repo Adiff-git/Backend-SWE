@@ -127,7 +127,7 @@ class ProductDetailControllerTest {
 			return new ProductDetail(id, "Product", new CategorySummary(UUID.randomUUID(), "Category"),
 					null, "Description", null, List.of(new VariantSummary(UUID.randomUUID(), "SKU-1",
 						Map.of(), new SellingPrice(BigInteger.valueOf(1000), "VND"),
-						Map.of("schema_version", 1, "values", Map.of()))), List.of());
+						Map.of("schema_version", 1, "values", Map.of()), null)), List.of());
 		}
 	}
 }

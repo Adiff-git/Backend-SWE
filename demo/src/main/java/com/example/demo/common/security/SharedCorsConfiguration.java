@@ -14,7 +14,7 @@ public class SharedCorsConfiguration {
         c.setAllowedOrigins(List.of("*"));
         c.setAllowedMethods(List.of("*"));
         c.setAllowedHeaders(List.of("*"));
-        c.setExposedHeaders(List.of("Authorization"));
+        c.setExposedHeaders(List.of("Authorization","Location"));
         c.setAllowCredentials(false);
         UrlBasedCorsConfigurationSource source=new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",c);

@@ -26,6 +26,7 @@ import com.example.demo.catalog.storage.ProductImageStorage.PreparedReadSigner;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Map;
 import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -35,9 +36,10 @@ class ProductCatalogServiceImplTest {
     private final ProductImageRepository images = mock(ProductImageRepository.class);
     private final ProductVariantRepository variants = mock(ProductVariantRepository.class);
     private final ProductImageStorage storage = mock(ProductImageStorage.class);
+    private final com.example.demo.inventory.service.InventoryService inventory = mock(com.example.demo.inventory.service.InventoryService.class);
     private final ProductCatalogServiceImpl service = new ProductCatalogServiceImpl(
             products, images, variants, storage, new ProductCatalogConverter(),
-            jakarta.validation.Validation.buildDefaultValidatorFactory().getValidator());
+            jakarta.validation.Validation.buildDefaultValidatorFactory().getValidator(), inventory);
 
     @Test
     void getPublishedProductEntity_shouldReturnReference_whenPublished() {
@@ -145,15 +147,19 @@ class ProductCatalogServiceImplTest {
                         new com.example.demo.catalog.search.ProductCandidatePage.Candidate(second.getId(), null, null)), 3));
         when(products.findAllByIdsAndStatusWithCategory(List.of(first.getId(), second.getId()), ProductStatus.PUBLISHED))
                 .thenReturn(List.of(second, first));
+        when(inventory.getAvailability(List.of(variant))).thenReturn(Map.of(variant,
+                new com.example.demo.inventory.dto.response.InventoryAvailability(0, "OUT_OF_STOCK")));
         var page = service.listProducts(0, 2);
         assertThat(page.getItems()).extracting(com.example.demo.catalog.dto.response.ProductSummary::getId)
                 .containsExactly(first.getId(), second.getId());
         var item = (com.example.demo.catalog.dto.response.ProductListingItem) page.getItems().getFirst();
         assertThat(item.getRepresentativeVariantId()).isEqualTo(variant);
+        assertThat(item.getAvailability().getStatus()).isEqualTo("OUT_OF_STOCK");
         assertThat(item.getDisplayPrice().getAmount()).isEqualTo(new java.math.BigInteger("123456789012345678901234567890"));
         var orphan = (com.example.demo.catalog.dto.response.ProductListingItem) page.getItems().get(1);
         assertThat(orphan.getRepresentativeVariantId()).isNull();
         assertThat(orphan.getDisplayPrice()).isNull();
+        assertThat(orphan.getAvailability()).isNull();
         assertThat(page.getTotalItems()).isEqualTo(3);
         assertThat(page.getTotalPages()).isEqualTo(2);
         verify(images).findPrimaryImagesForProducts(List.of(first.getId(), second.getId()));

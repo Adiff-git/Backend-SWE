@@ -16,7 +16,32 @@ import org.springframework.stereotype.Component;
 @Component
 public class CartValidator {
     public static final int MIN_QUANTITY = 1;
-    public static final int MAX_QUANTITY = 1000;
+    public static final int MAX_QUANTITY = 999;
+
+    public String ineligibleReason(CartVariantState state, int quantity) {
+        if (state == null || !state.isPublished()) return "PRODUCT_UNAVAILABLE";
+        if (state.getAmount() == null) return "PRICE_UNAVAILABLE";
+        if (state.getAvailability() == null || "INVENTORY_UNAVAILABLE".equals(state.getAvailability().getStatus())) return "INVENTORY_UNAVAILABLE";
+        if (state.getAvailability().getAvailableQuantity() < quantity) return "INSUFFICIENT_STOCK";
+        return null;
+    }
+
+    public void stockEligible(CartVariantState state, int quantity) {
+        if (state == null || state.getAvailability() == null
+                || "INVENTORY_UNAVAILABLE".equals(state.getAvailability().getStatus())
+                || state.getAvailability().getAvailableQuantity() < quantity) {
+            throw new com.example.demo.cart.exception.CartStockConflictException();
+        }
+    }
+
+    public void checkoutConsumption(Long owner, com.example.demo.cart.dto.response.CheckoutCartSeed seed,
+            List<com.example.demo.cart.dto.response.CheckoutCartSeed.Row> included) {
+        owner(owner);
+        if (seed == null || !java.util.Objects.equals(owner,seed.getOwnerId()) || seed.getCartId() == null
+                || included == null || included.stream().map(com.example.demo.cart.dto.response.CheckoutCartSeed.Row::getId).distinct().count() != included.size()
+                || !seed.getRows().containsAll(included) || included.stream().anyMatch(row -> !row.isSelected()))
+            throw new com.example.demo.cart.exception.CartConflictException();
+    }
 
     public void owner(Long owner) {
         if (owner == null || owner <= 0) throw new IdentityUnavailableException();

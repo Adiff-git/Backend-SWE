@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@org.springframework.context.annotation.Import(com.example.demo.config.SqlCaptureConfiguration.class)
 class CatalogCartReadServiceIT {
     @Autowired CatalogCartReadService service;
     @Autowired EntityManager entities;
@@ -28,22 +29,29 @@ class CatalogCartReadServiceIT {
 
     @AfterEach void cleanup() { jdbc.execute("TRUNCATE TABLE categories CASCADE"); }
 
-    @Test void getVariantStates_shouldReadCompleteBatchesAndRetainHiddenRows() {
+    @org.junit.jupiter.params.ParameterizedTest @org.junit.jupiter.params.provider.ValueSource(ints = {100,101,205})
+    void getVariantStates_shouldReadCompleteBatchesAndRetainHiddenRows(int publishedCount) {
         List<UUID> ids = transactions.execute(status -> {
             List<UUID> saved = new ArrayList<>();
-            for (int index = 0; index < 105; index++) {
+            for (int index = 0; index <= publishedCount; index++) {
                 CatalogFixtures.ProductFixture fixture = CatalogFixtures.persistProduct(entities,
-                        index == 104 ? ProductStatus.ARCHIVED : ProductStatus.PUBLISHED);
+                        index == publishedCount ? ProductStatus.ARCHIVED : ProductStatus.PUBLISHED);
                 saved.add(fixture.variant().getId());
             }
             return saved;
         });
-        Map<UUID, CartVariantState> states = service.getVariantStates(ids);
-        assertThat(states).hasSize(105);
-        assertThat(states.get(ids.get(104)).getProductName()).isNull();
+        com.example.demo.config.SqlCapture.begin();
+        Map<UUID, CartVariantState> states;
+        java.util.List<String> sql;
+        try { states = service.getVariantStates(ids); } finally { sql = com.example.demo.config.SqlCapture.end(); }
+        assertThat(sql.stream().filter(statement -> statement.toLowerCase(java.util.Locale.ROOT).contains("from inventory_balances"))).hasSize((publishedCount+99)/100);
+        assertThat(states).hasSize(publishedCount+1);
+        assertThat(states.get(ids.get(publishedCount)).getProductName()).isNull();
+        assertThat(states.get(ids.get(publishedCount)).getAvailability()).isNull();
+        assertThat(states.get(ids.get(0)).getAvailability().getStatus()).isEqualTo("OUT_OF_STOCK");
         assertThat(states.get(ids.get(0)).getOptions()).isNotEmpty();
         assertThat(service.hasImageCandidates(ids)).isFalse();
-        assertThat(service.getCartPresentation(ids, null)).hasSize(105);
+        assertThat(service.getCartPresentation(ids, null)).hasSize(publishedCount+1);
     }
 
     @Test void getVariantStates_shouldTreatNegativePriceAsUnavailableWithoutChangingCatalog() {

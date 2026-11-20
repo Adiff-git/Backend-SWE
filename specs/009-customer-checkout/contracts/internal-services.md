@@ -1,0 +1,94 @@
+# Checkout Internal Service Contract
+
+**Inventory follow-up (2026-11-20):** [Inventory Management](../../010-inventory-management/spec.md) supersedes the earlier Inventory exclusions only for the implemented deltas below. See its [validation record](../../010-inventory-management/implementation-validation.md). Existing routes, strict inputs, authorization, money and immutable historical receipts remain unchanged. Admin supply, public receipt confirmation, FAILED processing, payment and expiry producers remain deferred.
+
+Design boundaries for [API](api.md) and [data model](../data-model.md). Signatures are responsibilities to implement, not claims that methods exist.
+
+## Dependency graph
+
+CheckoutService -> CheckoutReceiptRepository (own domain), UserService/AddressService, CartCheckoutService, CatalogCheckoutService, OrderCreationService and InventoryService. Existing cart -> catalog/user and order -> catalog remain; Catalog/Order also use InventoryService. Inventory accesses only its own repositories and has no reverse domain dependency. User/catalog/cart/order must not depend on checkout or each other's repositories. Owning domains define internal input/output DTO classes; checkout maps prepared values into them. No shared cross-domain entity graph or catch-all DTO framework.
+
+| Component | Responsibility / return |
+| --- | --- |
+| CheckoutController | CurrentUserIdProvider, strict reader, proxied CheckoutService,201/Location; no repository/transaction orchestration |
+| CheckoutRequestReader | Reject query, parse one key and strict one-field JSON, activate Jakarta validation; no database work |
+| CheckoutService / Impl | Public checkout(owner,key,request) returns detached immutable receipt after proxied commit; one transaction and orchestration |
+| CheckoutReceiptRepository | Native try-advisory transaction lock, local timeout, exact scoped lookup, success insert; no unrelated tables queried |
+| CheckoutValidator | Key/command equality, deterministic ineligibility classification, no-eligible rejection, prepared data invariants |
+| CheckoutCalculator | Sole current checkout line/aggregate/payable calculation, BigInteger bounds checks; no database |
+| CheckoutConverter | Prepared order creation result + original skips -> immutable DTO; versioned receipt encode/decode only, no lazy fetch |
+| UserService.getUserEntityForUpdate(owner) | Existing user-row serialization; unavailable identity uses established identity failure |
+| AddressService.getCheckoutAddressSnapshot(owner,addressId) | Called after user serialization, reads owned address and returns complete immutable recipient/phone/address text; identical unknown/foreign404 |
+| CartCheckoutService.getCheckoutCartSeed(owner) | Lock existing cart, capture selected rows with IDs/variant/quantity; missing cart returns empty without insertion |
+| CartCheckoutService.consumeCheckoutItems(owner,seed,includedIds) | Validate exact row membership then conditional delete only included row states; affected-count mismatch409 |
+| CatalogCheckoutService.getCheckoutVariantStates(ids) | Product/variant lock protocol and authoritative publication/name/SKU/options/prices; no images/network; batch100 |
+| OrderCreationService.createOrder(command) | Order-owned validator/repositories create one complete PENDING historical aggregate, return generated IDs/immutable CreatedOrderSeed; no cart access |
+
+All service implementations have interfaces, constructor injection and explicit types/imports. Internal DTOs use immutable Lombok classes with defensive copies; requests use Jakarta Bean Validation. Native repository fragments may be introduced only where a real native insert/conditional delete cannot be expressed safely with existing facilities; preserve this responsibility split without mechanically generating unused classes.
+
+## Transaction sequence
+
+1. Existing security authenticates current account/session/authorities; MANAGE_CHECKOUT gates exact route. Strict input validates query, header and body before invoking checkout proxy.
+2. Enter public REQUIRED READ_COMMITTED transaction; ensure positive checkout lock timeout configuration at startup. Query exact committed successful receipt by customer, operation CHECKOUT and case-sensitive key BEFORE acquiring a fence. At every receipt hit compare original addressId and canonical fingerprint: match returns original201/Location/immutable receipt, mismatch409 CHECKOUT_KEY_CONFLICT; corrupt/unsupported stored version safe500, never new checkout. Current authorization/input validation always precedes this lookup.
+3. Only after an initial miss, try scoped advisory transaction fence. If acquired, issue a fresh SQL lookup for a committed receipt before entering checkout; resolve any hit as in step2. If busy, issue a fresh SQL lookup before a processing response; resolve any committed hit as in step2 and return CHECKOUT_IN_PROGRESS409 only if none is visible. READ_COMMITTED must give each recheck a new statement snapshot; do not reuse/cache the initial absence. A completed replay does not acquire a fence, query mutable domains or write anything. Only fence acquired plus no receipt continues to step4. Fence and successful receipt/order/cart commit stay in the same transaction; no process-memory-only lock.
+4. For new work lock user through existing service, which applies its existing user.lock-timeout-ms policy. Immediately reapply checkout.lock-timeout-ms (default5000, positive) transaction-locally after that call, before any cart/catalog blocking lock: the user method overwrites the local setting. Get owned address snapshot; unknown/foreign404. Existing address writers acquire the same user lock, ensuring coherent fields and ordering with update/delete.
+5. Lock existing cart via cart service, then fetch selected rows. Existing add, quantity, variant, removal and individual/bulk selection writers use this cart parent lock too. No cart creation, unselected-row update or full-cart clearing. No selected rows ->422.
+6. Catalog service discovers candidate variant/parent mapping, locks products FOR SHARE sorted by PostgreSQL UUID order, then variants FOR SHARE same order, chunks100. Reread full final scalar projections after all locks. If final variant maps to an unlocked parent, conflict409 without taking out-of-order locks. Missing final references classify business unavailable; unexpected SQL/dependency errors propagate. Do not use existing cart image-presentation or order image-signing services here.
+7. Validate catalog/quantity/price precedence, reject duplicate variant demand and lock live Inventory balances in globally sorted UUID batches100. Classify missing/insufficient stock last using full row quantity; no partial inclusion. Validator classifies selected rows using contracted precedence. Calculator calculates included rows' prices and totals once using exact amounts; check digit bounds. If none included,422 with safe skips, no success receipt. Price changes committed before protected final view apply; competing changes afterward wait until checkout completes. Row locks preserve included names/SKU/options/price/publication until commit. Unavailable-row discovery defines the chosen view without locking nonexistent rows or promising later arrivals.
+8. Sample injected Clock once and truncate to microseconds before using it for order/receipt/response (PostgreSQL timestamp precision). Build order-owned command of full snapshots/calculated amounts; order validator verifies command coherence, current creation status and stored arithmetic without duplicating authoritative pricing calculations. Order repository reserves next identity ID; insert order with ORD-id and supplied timestamp/PENDING/null terminal fields; insert included items in ascending source cart-row ID, returning actual IDs. Native inserts must use the same transaction/connection, never preset generated entity IDs through merge. Prepared output contains no lazy entity or image lookup.
+9. Mark new orders explicitly inventory_managed=true and reserve exact actual order/item/variant quantities via InventoryService using the same event and transaction, increasing reserved only. Then Cart service deletes included seed rows with owner/cart/ID/variant/quantity/selected predicates; all affected counts must match. Use batches without deleting skipped/unselected rows; mismatch409 rolls back the complete operation.
+10. Converter constructs complete immutable response with generated identities, original PENDING/history/totals and original sorted skips. Serialize/deserialize version1 successfully before commit using a receipt-scoped mapper supporting exact valid numeric length131072. No global request mapper relaxation. Insert successful receipt/status/Location in same transaction, exact unique scope/order constraints; do not store failed/processing outcomes.
+11. Flush necessary persistence; allow commit including V23 aggregate/receipt and V25 owned-allocation/counter constraints. Controller receives response only after proxy successfully commits. Commit/serialization/persistence failure produces safe error; no successful receipt/order/deletion/reservation/counter change survives. Lost HTTP delivery after commit is recovered by keyed replay.
+
+No external service/S3 call, independent transaction, unusual isolation or automatic retry. Rollback restores database changes but does not restore consumed sequence values; number gaps are expected. Any implementation-created native SQL uses bound parameters, trusted fixed templates and explicit columns.
+
+## Concurrency guarantees and conflict behavior
+
+| Concurrent work | Required result/proof |
+| --- | --- |
+| Same scoped key | Completed replays use receipt-first lookup and all return201 without a fence; initial miss rechecks after successful or failed fence attempt, returning201 for any matching committed receipt; busy recheck empty yields processing409, command mismatch409; max one execution/order |
+| Same text key/different customers | Independent receipts/orders, no cross-owner lookup; synthetic hash collision only transient conservative409 |
+| Different keys/same cart | User/cart coordination serializes consumption; no duplicate item consumption; later new rows may enter a distinct order |
+| Quantity/variant/selection/add/remove | Winner before checkout defines captured state; after checkout retains new state or safely rejects targeting consumed row; accepted edits never disappear unrepresented |
+| Address update/delete | Shared user serialization yields one full old/new snapshot or404 if already deleted, never mixed fields; replay ignores live address |
+| Product publication/delete | Product lock protects included PUBLISHED state; prior change causes skip; ACTIVE allocations prevent unsafe catalog deletion; after legitimate terminal release/consumption, deletion may null live refs without changing retained Inventory history or receipt |
+| Variant price/name/options/delete/reparent | Explicit variant locks protect final price/options; prior valid edit captured; parent discovery race409; later catalog changes never rewrite history |
+| Timeout/deadlock/conditional count failure | Full rollback, safe CHECKOUT_CONFLICT409, no successful key reservation or retry |
+| Unexpected dependency/integrity failure | Full rollback, safe established error; never business skip or blanket409 |
+
+Stable lock order is keyed fence -> user -> cart -> products UUID ascending -> variants UUID ascending -> live Inventory balances UUID ascending -> newly created aggregate/allocations/receipt. Parent locks do not implicitly protect child rows; cart/address safety relies on existing writer protocols, catalog child safety on explicit locks. Tests document actual supported competing writer paths. No lock escalation on all catalog reads.
+
+## Error routing and security compatibility
+
+Existing CartRequestBodyAdvice globally handles unsupported-media exceptions and already returns415 on checkout's cart prefix. Dedicated reader raises checkout custom400 for shape errors and an MVC unsupported-media error for415. Do not extend CartController body shape or repurpose InvalidCartRequestException. Extend ApiErrorFactory only for exact checkout path/recognized named constraints, before generic cart-prefix conflict mapping; preserve unrelated errors. Existing unknown/foreign address ResourceNotFoundException remains404. Identity-unavailable mapping must preserve401 rather than converting it to422.
+
+MANAGE_CHECKOUT added by new migration to USER, current security snapshot picks committed grants on next request. Explicit checkout-only custom role can check out/replay but cannot read order detail without MANAGE_ORDER: receipt contains all original purchase information and Location does not bypass that route's authorization. Existing current-state rules do not promise cancellation of requests already authenticated before a later revocation commits.
+
+## Query, resource and integrity limits
+
+No per-item entity fetch/converter query; selected cart projection once after cart lock, catalog candidate/product-lock/variant-lock/final projections in batches100. Order/item persistence, exact reservation UPDATE+INSERT and conditional cart consume use O(included rows) client statements, receipt O(all selected rows). Instrument tests on100/101/205 rows to prove batching and detached serialization, no lazy/image SQL; record actual query counts rather than inventing a fixed envelope for all drivers. Completed-receipt fast-path replay performs one exact receipt read, no fence/write/mutable-domain query, apart from authentication. Initial miss paths perform the try-fence and one fresh exact receipt recheck on acquired or busy branches; any hit returns stored outcome, busy miss returns processing409. Instrument each branch separately; do not retain the obsolete fence-first query expectation.
+
+PostgreSQL NUMERIC supports finite integral amounts up to131072 digits; maintain scoped receipt parser/serializer compatibility and test decoder at supported boundaries. Existing exact order integrity remains final protection. Never silently narrow ID, amount or counts. No implicit row/request-size cap added beyond established server configuration; large-cart resource limits are measured/reported, not assumed validated by tiny fixtures.
+
+## Required verification
+
+Implementation uses owning Spring Data repository fragments CartCheckoutRepository/Impl and OrderCreationRepository/Impl for bound native conditional deletion and generated-ID INSERT RETURNING. CheckoutCalculation supplies prepared immutable calculation lines; converters do not query. ApplicationException exposes an explicit safe properties map so the no-eligible ProblemDetail can include only approved skippedItems.
+
+Existing V3 deferred catalog integrity obtains a parent FOR NO KEY UPDATE lock at commit. Cooperative catalog writers acquire the parent before changing a child, preserving the checkout product-before-variant order. A variant-first writer can deadlock; the synchronized regression verifies recognized409, full rollback and explicit client retry. V3 is unchanged. Catalog deletion continues to respect restrictive cart references.
+
+Use unit boundaries for classifier/calculator/converter/replay orchestration; MVC shape/security/error mapping; PostgreSQL receipt uniqueness/constraints/rollback; service atomic commit and deferred failure injection; real bearer API ownership/current grants; complete cross-domain flow. CheckoutConcurrencyIT runs under normal Failsafe verify with class-local pool6, bounded latches/barriers, independent fixture/worker transactions and explicit commit. Observe advisory/row waits using pg_locks/pg_stat_activity or controlled real service boundary barriers; no sleeps as sole overlap evidence, no worker sharing one test transaction. Assert persisted order/item/receipt counts, exact surviving cart rows and snapshots after all workers finish. Include rollback-reuse, held-lock timeout and winner replay after lost delivery. No skipped required concurrency scenarios.
+
+## Remediation race proofs
+
+Extend existing CheckoutConcurrencyIT/CheckoutReceiptRepositoryIT/CheckoutServiceImplTest; no duplicate test class. Synchronize (a) two completed replays, both201 with no fence/mutation; (b) initial miss, original commit, fence acquisition then fresh201 hit; (c) failed fence attempt, original commit before busy-path recheck, then201; (d) failed fence attempt with no committed receipt, processing409 until eventual winner commit. Assert one durable original order/receipt, unchanged original skips/totals and no additional cart consumption or Inventory calls/mutations on replay, and no voucher work. Use real PostgreSQL transactions and test-owned barriers at existing boundaries, not new production callbacks or excluded-domain stubs. At every hit include mismatched address409 and current authorization as separate contract cases.
+
+## Inventory integrity and measured server work
+
+New execution reserves exact generated order items with reserved-only guarded updates and ACTIVE insertions in the same transaction as order/cart/receipt. Live-linked balances are required for initial reservation; terminal Order-owned resolution uses retained original UUID balances. Final V25 validation protects exact completeness/state/timestamps and NUMERIC SUM(ACTIVE)=reserved. Direct SQL stale allocation after live-link detachment fails at actual commit. No auto-repair, stock bootstrap, duplicate callback or producer is introduced.
+
+Client SQL and deferred server work are measured separately in the feature010 validation record: 100/101/205-row checkouts have320/330/649 JDBC statements, including200/202/410 stock mutations and2/4/6 stock locking reads; original non-Inventory ceiling remains enforced. Replay is one scoped receipt read and detached codec uses zero SQL. Deferred full-order validation runs repeatedly per affected row, so bounded client batching does not imply constant server cost or a throughput SLA.
+
+
+## Voucher integration follow-up — feature011
+
+The earlier first-execution Voucher exclusion is superseded by feature011: captured Cart grant is independently validated after definition→usage→grant locks, then one authoritative event timestamps order, Inventory reservation, grant/redemption and receipt. Selected grant/quota/discount/order/Inventory/Cart/version2 receipt commit atomically. Receipt-first/fresh rechecks and address-only fingerprint remain; old version1 bodies are unchanged and every replay bypasses Voucher and Inventory mutations. Verified targeted deltas and the separately tracked unrestricted completion gate are recorded in [Voucher execution evidence](../../011-voucher-support/implementation-validation.md). Earlier completed tasks and their historical execution records are preserved; this follow-up adds no admin/code/public-discovery/cancellation-quota contract.

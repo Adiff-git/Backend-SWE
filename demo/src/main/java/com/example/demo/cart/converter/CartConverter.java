@@ -22,15 +22,15 @@ public class CartConverter {
         List<CartItemResponse> items = cart.getItems().stream().map(seed -> {
             CartVariantState state = cart.getStates().get(seed.getVariantId());
             boolean published = state != null && state.isPublished();
-            boolean purchasable = state != null && state.isPurchasable();
+            boolean purchasable = !cart.getIneligibleReasons().containsKey(seed.getId());
             return new CartItemResponse(seed.getId(), seed.getProductId(), seed.getVariantId(),
                     published ? state.getProductName() : seed.getPublicProductName(),
                     published ? state.getSku() : seed.getPublicSku(),
                     published ? state.getOptions() : seed.getPublicOptions(),
                     published ? state.getPrimaryImageUrl() : null,
-                    state == null ? null : money(state.getAmount()), seed.getQuantity(), seed.isSelected(), purchasable,
-                    purchasable ? null : published ? "PRICE_UNAVAILABLE" : "PRODUCT_UNAVAILABLE",
-                    money(cart.getSubtotals().get(seed.getId())));
+                    published ? money(state.getAmount()) : null, seed.getQuantity(), seed.isSelected(), purchasable,
+                    cart.getIneligibleReasons().get(seed.getId()), money(cart.getSubtotals().get(seed.getId())),
+                    published ? state.getAvailability() : null);
         }).toList();
         SellingPrice total = money(cart.getSelectedSubtotal());
         return new CartResponse(items, cart.getSelectedItemCount(), cart.getSelectedTotalQuantity(), total, total);

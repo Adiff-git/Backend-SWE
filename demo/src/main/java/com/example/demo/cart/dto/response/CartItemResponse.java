@@ -20,4 +20,6 @@ public class CartItemResponse {
     boolean purchasable;
     String availabilityReason;
     SellingPrice subtotal;
+    @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.ALWAYS)
+    com.example.demo.inventory.dto.response.InventoryAvailability availability;
 }

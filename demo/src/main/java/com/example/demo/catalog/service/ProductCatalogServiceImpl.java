@@ -45,6 +45,7 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 	private final ProductImageStorage imageStorage;
 	private final ProductCatalogConverter converter;
 	private final Validator validator;
+    private final com.example.demo.inventory.service.InventoryService inventory;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -176,13 +177,18 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
             withoutImages.forEach(eligible::remove);eligible.putAll(revalidated);
         }
 
+        List<UUID> representativeIds = candidatePage.getItems().stream().filter(candidate -> eligible.containsKey(candidate.getProductId()))
+                .map(ProductCandidatePage.Candidate::getRepresentativeVariantId).filter(java.util.Objects::nonNull)
+                .distinct().sorted(java.util.Comparator.comparing(UUID::toString)).toList();
+        Map<UUID, com.example.demo.inventory.dto.response.InventoryAvailability> availability = representativeIds.isEmpty() ? Map.of() : inventory.getAvailability(representativeIds);
 		List<ProductListingItem> summaries = new ArrayList<>();
 		for (ProductCandidatePage.Candidate candidate : candidatePage.getItems()) {
 			UUID id = candidate.getProductId();
 			Product product = eligible.get(id);
 			if (product != null) {
 				summaries.add(converter.toListingItem(converter.toSummary(product, signedUrls.get(id)),
-						candidate.getDisplayAmount(), candidate.getRepresentativeVariantId()));
+						candidate.getDisplayAmount(), candidate.getRepresentativeVariantId(),
+                        candidate.getRepresentativeVariantId() == null ? null : availability.get(candidate.getRepresentativeVariantId())));
 			}
 		}
 		return new ProductPage(List.copyOf(summaries), request.getPage(), request.getSize(),
@@ -216,7 +222,8 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 				}
 			}
 		}
-		return converter.toDetail(product, ownedVariants, gallery, urls);
+		return converter.toDetail(product, ownedVariants, gallery, urls,
+                inventory.getAvailability(ownedVariants.stream().map(ProductVariant::getId).toList()));
 	}
 
 	private Map<UUID, Product> indexProducts(List<Product> fetched) {

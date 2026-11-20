@@ -1,7 +1,8 @@
 package com.example.demo.cart.service.impl;
 
 import com.example.demo.cart.dto.request.AddCartItemRequest;
-import com.example.demo.cart.dto.request.UpdateCartItemRequest;
+import com.example.demo.cart.dto.request.UpdateCartQuantityRequest;
+import com.example.demo.cart.dto.request.ChangeCartVariantRequest;
 import com.example.demo.cart.dto.request.CartSelectionRequest;
 import com.example.demo.cart.dto.response.AddCartResult;
 import com.example.demo.cart.dto.response.CartResponse;
@@ -35,10 +36,10 @@ public class CartServiceImpl implements CartService {
 
     @Override public AddCartResult addItem(Long owner, AddCartItemRequest request) {
         validator.owner(owner);
-        if (request == null || request.getVariantId() == null) throw new InvalidCartRequestException();
+        if (request == null || request.getProductVariantId() == null) throw new InvalidCartRequestException();
         validator.quantity(request.getQuantity());
         List<UUID> ids = new ArrayList<>(items.findVariantIdsForOwner(owner));
-        ids.add(request.getVariantId());
+        ids.add(request.getProductVariantId());
         return transactions.addItem(owner, request, prepare(ids));
     }
 
@@ -46,14 +47,21 @@ public class CartServiceImpl implements CartService {
         return ids.isEmpty() || !catalog.hasImageCandidates(ids) ? null : imageUrls.prepare();
     }
 
-    @Override public CartResponse updateItem(Long owner, Long itemId, UpdateCartItemRequest request) {
+    @Override public CartResponse updateQuantity(Long owner, Long itemId, UpdateCartQuantityRequest request) {
         validator.owner(owner);
-        if (request == null || request.isVariantIdPresent() && request.getVariantId() == null) throw new InvalidCartRequestException();
+        if (request == null) throw new InvalidCartRequestException();
         validator.quantity(request.getQuantity());
         requireOwned(owner, itemId);
+        return transactions.updateQuantity(owner, itemId, request, prepare(items.findVariantIdsForOwner(owner)));
+    }
+
+    @Override public CartResponse changeVariant(Long owner, Long itemId, ChangeCartVariantRequest request) {
+        validator.owner(owner);
+        if (request == null || request.getProductVariantId() == null) throw new InvalidCartRequestException();
+        requireOwned(owner, itemId);
         List<UUID> ids = new ArrayList<>(items.findVariantIdsForOwner(owner));
-        if (request.getVariantId() != null) ids.add(request.getVariantId());
-        return transactions.updateItem(owner, itemId, request, prepare(ids));
+        ids.add(request.getProductVariantId());
+        return transactions.changeVariant(owner, itemId, request, prepare(ids));
     }
 
     @Override public void removeItem(Long owner, Long itemId) {

@@ -104,8 +104,8 @@ class ProductListingControllerTest {
         var variantId = UUID.randomUUID();
         when(service.listProducts(any(ProductSearchRequest.class))).thenReturn(new ProductPage(List.of(
                 new ProductListingItem(UUID.randomUUID(), "Phone", category,
-                        null, new SellingPrice(BigInteger.TEN, "VND"), variantId),
-                new ProductListingItem(UUID.randomUUID(), "Legacy", category, null, null, null)), 0, 20, 2, 1));
+                        null, new SellingPrice(BigInteger.TEN, "VND"), variantId, null),
+                new ProductListingItem(UUID.randomUUID(), "Legacy", category, null, null, null, null)), 0, 20, 2, 1));
         mvc.perform(get("/api/products"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items[0].displayPrice.amount").value(10))
