@@ -22,17 +22,30 @@ class CheckoutServiceIT extends CheckoutIntegrationSupport {
         });
         transactions.executeWithoutResult(s -> {
             jdbc.execute("SET LOCAL track_functions='pl'");
+            String functionStatsSql = """
+                    SELECT funcname,calls,total_time,self_time FROM pg_stat_xact_user_functions
+                    WHERE schemaname='public' AND funcname IN
+                    ('check_inventory_balance_integrity','check_inventory_order_integrity','validate_inventory_order','validate_voucher_final','check_voucher_final')
+                    ORDER BY funcname
+                    """;
+            var before = jdbc.queryForList(functionStatsSql);
             service.checkout(fixture.owner(), "Trigger_cost_key_123", new CheckoutRequest(fixture.address()));
             entities.flush();
             long start = System.nanoTime();
             jdbc.execute("SET CONSTRAINTS ALL IMMEDIATE");
             long validationNanos = System.nanoTime()-start;
-            var functions = jdbc.queryForList("""
-                    SELECT funcname,calls,total_time,self_time FROM pg_stat_xact_user_functions
-                    WHERE schemaname='public' AND funcname IN
-                    ('check_inventory_balance_integrity','check_inventory_order_integrity','validate_inventory_order','validate_voucher_final','check_voucher_final')
-                    ORDER BY funcname
-                    """);
+            var functions = jdbc.queryForList(functionStatsSql);
+            // Isolate this checkout from pending function counters retained by a pooled backend.
+            for (var row : functions) {
+                var baseline = before.stream().filter(previous -> previous.get("funcname").equals(row.get("funcname")))
+                        .findFirst().orElse(java.util.Map.of());
+                row.put("calls", ((Number) row.get("calls")).longValue()
+                        - ((Number) baseline.getOrDefault("calls", 0L)).longValue());
+                for (String timing : java.util.List.of("total_time", "self_time")) {
+                    row.put(timing, ((Number) row.get(timing)).doubleValue()
+                            - ((Number) baseline.getOrDefault(timing, 0.0)).doubleValue());
+                }
+            }
             assertThat(functions).anySatisfy(row -> {
                 assertThat(row.get("funcname")).isEqualTo("check_inventory_balance_integrity");
                 assertThat(((Number) row.get("calls")).longValue()).isEqualTo(2L*selectedRows);
@@ -41,7 +54,7 @@ class CheckoutServiceIT extends CheckoutIntegrationSupport {
                 assertThat(row.get("funcname")).isEqualTo("check_inventory_order_integrity");
                 assertThat(((Number) row.get("calls")).longValue()).isEqualTo(2L*selectedRows+1);
             });
-            System.out.printf("INVENTORY_TRIGGER_COST rows=%d forcedValidationWallNanos=%d functions=%s%n", selectedRows, validationNanos, functions);
+            System.out.printf("INVENTORY_TRIGGER_COST rows=%d forcedValidationWallNanos=%d baseline=%s functions=%s%n", selectedRows, validationNanos, before, functions);
         }); // Actual commit still occurs; forcing deferred validation is measurement, not a flush-only commitment claim.
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_reservations", Long.class)).isEqualTo(selectedRows);
     }
