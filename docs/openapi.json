@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Backend-SWE API",
-    "version": "1.2.0",
-    "description": "Source-derived current Backend-SWE contract, reviewed2026-11-20 at feature/voucher commit f7d1f7e. Includes authentication/email/Google, profiles/addresses, search/filter/catalog/media/wishlist, behavior tracking, Inventory availability, Cart, atomic Checkout, Order history/cancellation and owned Voucher wallet. Inventory reservation/completion internals, admin granting/stock supply, payment, shipping-to-completed/received/failed and Voucher cancellation-quota policy do not expose new HTTP routes. Root bearer security is overridden for public operations. Authorities are current database grants, not OAuth scopes. Exact VND JSON integers may exceed JavaScript safe precision. Examples are synthetic. No runtime Swagger access or security policy is changed."
+    "version": "1.3.0",
+    "description": "Source-derived current Backend-SWE contract, reviewed 2026-11-21 at draft/version-1 commit 5585ddd. Includes authentication/email/Google, profiles/addresses, search/filter/catalog/media/wishlist, behavior tracking, Inventory availability, Cart, atomic Checkout, Order history/cancellation, owned Voucher wallet, verified product reviews/ratings with optional images, and product recommendations. Inventory reservation/completion internals, admin granting/stock supply, payment, shipping-to-completed/received/failed and Voucher cancellation-quota policy do not expose new HTTP routes. Root bearer security is overridden for public operations. Authorities are current database grants, not OAuth scopes. Exact VND JSON integers may exceed JavaScript safe precision. Examples are synthetic. No runtime Swagger access or security policy is changed."
   },
   "servers": [
     {
@@ -67,6 +67,14 @@
     {
       "name": "Behavior",
       "description": "Intentional Customer interactions and role-protected aggregate metrics."
+    },
+    {
+      "name": "Reviews",
+      "description": "Verified purchase reviews, optional ordered images and committed rating summaries."
+    },
+    {
+      "name": "Recommendations",
+      "description": "Published product recommendations and safe fallback ranking."
     }
   ],
   "security": [
@@ -6147,6 +6155,771 @@
           }
         }
       }
+    },
+    "/api/products/{productId}/reviews": {
+      "get": {
+        "operationId": "listProductReviews",
+        "summary": "List reviews of a published product",
+        "description": "Anonymous access for PUBLISHED products only. Reject unknown/repeated query parameters. Empty out-of-range pages are valid. Stable sort uses id DESC for ties. Inactive authors remain visible as Former customer with null avatar. Reviews are not limited by the page used for the rating summary.",
+        "tags": [
+          "Reviews"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "description": ""
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2147483647,
+              "default": 0
+            },
+            "description": "Canonical unsigned decimal, zero-based."
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "description": "Canonical unsigned decimal."
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "createdAt,asc",
+                "createdAt,desc",
+                "rating,asc",
+                "rating,desc"
+              ],
+              "default": "createdAt,desc"
+            },
+            "description": "Review ID descending breaks every tie."
+          }
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewPage"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "id": 701,
+                      "rating": 5,
+                      "comment": "Useful product",
+                      "images": [],
+                      "author": {
+                        "displayName": "Example customer",
+                        "profileImage": null
+                      },
+                      "createdAt": "2026-11-21T03:00:00.000000Z",
+                      "updatedAt": "2026-11-21T03:00:00.000000Z",
+                      "verifiedPurchase": true
+                    }
+                  ],
+                  "page": 0,
+                  "size": 20,
+                  "totalElements": 1,
+                  "totalPages": 1
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed identifier, unsupported/duplicate or invalid query input.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Supplied bearer credential is invalid.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product missing, removed or not PUBLISHED.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products/{productId}/rating-summary": {
+      "get": {
+        "operationId": "getProductRatingSummary",
+        "summary": "Read committed review count and average",
+        "description": "Anonymous for PUBLISHED products. No query parameters accepted. Includes all retained reviews, including inactive authors. No distribution or cached counter.",
+        "tags": [
+          "Reviews"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "description": ""
+          }
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductRatingSummary"
+                },
+                "example": {
+                  "reviewCount": 0,
+                  "averageRating": null
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed identifier, unsupported/duplicate or invalid query input.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Supplied bearer credential is invalid.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product missing, removed or not PUBLISHED.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me/orders/{orderId}/items/{orderItemId}/reviews": {
+      "post": {
+        "operationId": "createOrderItemReview",
+        "summary": "Review an owned completed order item",
+        "description": "Requires current ACTIVE identity with MANAGE_ORDER and purchase ownership. One review per order item, regardless of purchased quantity; repeated purchases may be reviewed separately. Only COMPLETED orders qualify. Product reference must be available at creation. Rating required; comment/images optional. Upload and complete images through the existing media API first. No review deletion endpoint.",
+        "tags": [
+          "Reviews"
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            },
+            "description": ""
+          },
+          {
+            "name": "orderItemId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            },
+            "description": ""
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "Location": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "/api/me/reviews/{reviewId}; identifier for PATCH, not a GET endpoint."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewResponse"
+                },
+                "example": {
+                  "id": 701,
+                  "rating": 5,
+                  "comment": "Useful product",
+                  "images": [],
+                  "author": {
+                    "displayName": "Example customer",
+                    "profileImage": null
+                  },
+                  "createdAt": "2026-11-21T03:00:00.000000Z",
+                  "updatedAt": "2026-11-21T03:00:00.000000Z",
+                  "verifiedPurchase": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid payload/identifier, unknown fields, empty PATCH, invalid rating/comment/images.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication/current ACTIVE identity unavailable.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "MANAGE_ORDER authority missing.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Missing or foreign purchase/review/image; ownership is not disclosed.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Duplicate review, non-COMPLETED purchase, unavailable purchase product reference, image not ready or concurrent/lock conflict.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported request content type.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Media storage temporarily unavailable while preparing image attachments.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReviewRequest"
+              },
+              "example": {
+                "rating": 5,
+                "comment": "Useful product"
+              }
+            }
+          }
+        },
+        "x-required-authorities": [
+          "MANAGE_ORDER"
+        ]
+      }
+    },
+    "/api/me/reviews/{reviewId}": {
+      "patch": {
+        "operationId": "updateOwnedReview",
+        "summary": "Edit an owned review",
+        "description": "Requires ACTIVE author with MANAGE_ORDER. No edit deadline. Omitted fields preserve values; comment null/blank clears; imageIds [] clears, explicit list replaces/reorders. Reject {} and null rating/imageIds. Changes are atomic. Effective edits advance updatedAt; normalized no-op keeps it unchanged. Purchase, author, product and createdAt remain immutable. Retained reviews can be edited after catalog removal.",
+        "tags": [
+          "Reviews"
+        ],
+        "parameters": [
+          {
+            "name": "reviewId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            },
+            "description": ""
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewResponse"
+                },
+                "example": {
+                  "id": 701,
+                  "rating": 5,
+                  "comment": "Useful product",
+                  "images": [],
+                  "author": {
+                    "displayName": "Example customer",
+                    "profileImage": null
+                  },
+                  "createdAt": "2026-11-21T03:00:00.000000Z",
+                  "updatedAt": "2026-11-21T03:00:00.000000Z",
+                  "verifiedPurchase": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid payload/identifier, unknown fields, empty PATCH, invalid rating/comment/images.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication/current ACTIVE identity unavailable.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "MANAGE_ORDER authority missing.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Missing or foreign purchase/review/image; ownership is not disclosed.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Duplicate review, non-COMPLETED purchase, unavailable purchase product reference, image not ready or concurrent/lock conflict.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Unsupported request content type.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Media storage temporarily unavailable while preparing image attachments.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchReviewRequest"
+              },
+              "example": {
+                "comment": null,
+                "imageIds": []
+              }
+            }
+          }
+        },
+        "x-required-authorities": [
+          "MANAGE_ORDER"
+        ]
+      }
+    },
+    "/api/recommendations": {
+      "get": {
+        "operationId": "getGeneralRecommendations",
+        "summary": "General product recommendations",
+        "description": "Aggregate popularity with category/brand diversity; no guest tracking or personalized history. Returns current published ProductListingItem objects. Optional AI ranking failure falls back to deterministic safe ranking; no AI scores/internal metadata are exposed. Cache-Control: no-store.",
+        "tags": [
+          "Recommendations"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20,
+              "default": 10
+            },
+            "description": "Unknown/repeated query keys rejected. At most this many products; fewer or empty results are valid."
+          }
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Recommendations"
+                },
+                "example": {
+                  "items": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid identifier, unknown/repeated query key or limit outside 1..20.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/missing bearer credential as applicable.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/me/recommendations": {
+      "get": {
+        "operationId": "getMyRecommendations",
+        "summary": "Current customer recommendations",
+        "description": "Customer JWT with ROLE_USER excluding ROLE_ADMIN. Owner comes from JWT; no customerId input. Uses current owner recent interests and wishlist; no history uses general ranking. Returns current published ProductListingItem objects. Optional AI ranking failure falls back to deterministic safe ranking; no AI scores/internal metadata are exposed. Cache-Control: no-store.",
+        "tags": [
+          "Recommendations"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20,
+              "default": 10
+            },
+            "description": "Unknown/repeated query keys rejected. At most this many products; fewer or empty results are valid."
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Recommendations"
+                },
+                "example": {
+                  "items": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid identifier, unknown/repeated query key or limit outside 1..20.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/missing bearer credential as applicable.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Customer role required; administrators are excluded.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products/{productId}/similar": {
+      "get": {
+        "operationId": "getSimilarProducts",
+        "summary": "Similar published products",
+        "description": "Source must be PUBLISHED, otherwise 404. Excludes source from results. Returns current published ProductListingItem objects. Optional AI ranking failure falls back to deterministic safe ranking; no AI scores/internal metadata are exposed. Cache-Control: no-store.",
+        "tags": [
+          "Recommendations"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "description": ""
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20,
+              "default": 10
+            },
+            "description": "Unknown/repeated query keys rejected. At most this many products; fewer or empty results are valid."
+          }
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "headers": {
+              "Cache-Control": {
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Recommendations"
+                },
+                "example": {
+                  "items": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid identifier, unknown/repeated query key or limit outside 1..20.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/missing bearer credential as applicable.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Source product missing or not published.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -7212,9 +7985,12 @@
             "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
           },
           "finalUrl": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "format": "uri",
-            "description": "Signed GET capability valid at most 300 seconds; may end sooner with signing credentials."
+            "description": "Signed GET capability valid at most 300 seconds; may end sooner with signing credentials. May be null in safe review-author enrichment when media is unavailable."
           }
         },
         "required": [
@@ -9648,6 +10424,314 @@
           "skippedItems"
         ],
         "additionalProperties": false
+      },
+      "ReviewContentRequest": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "JSON integer only; null, strings, booleans and fractional numbers rejected."
+          },
+          "comment": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 2000,
+            "pattern": "^[^\\u0000]*$",
+            "description": "Optional plain text. Java strip runs before validation; blank/null clears. At most 2000 Unicode code points after normalization. NUL rejected. Render as text, never HTML.",
+            "x-normalization": "strip-before-validation"
+          },
+          "imageIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "maxItems": 10,
+            "uniqueItems": true,
+            "description": "Ordered distinct owned COMPLETED uploads. Omitted preserves attachments on PATCH; [] clears; null invalid. Detaching retains uploaded objects."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "CreateReviewRequest": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "JSON integer only; null, strings, booleans and fractional numbers rejected."
+          },
+          "comment": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 2000,
+            "pattern": "^[^\\u0000]*$",
+            "description": "Optional plain text. Java strip runs before validation; blank/null clears. At most 2000 Unicode code points after normalization. NUL rejected. Render as text, never HTML.",
+            "x-normalization": "strip-before-validation"
+          },
+          "imageIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "maxItems": 10,
+            "uniqueItems": true,
+            "description": "Ordered distinct owned COMPLETED uploads. Omitted preserves attachments on PATCH; [] clears; null invalid. Detaching retains uploaded objects."
+          }
+        },
+        "required": [
+          "rating"
+        ],
+        "additionalProperties": false,
+        "examples": [
+          {
+            "rating": 5
+          },
+          {
+            "rating": 4,
+            "comment": "Useful product",
+            "imageIds": [
+              "33333333-3333-4333-8333-333333333333"
+            ]
+          }
+        ]
+      },
+      "PatchReviewRequest": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5,
+            "description": "JSON integer only; null, strings, booleans and fractional numbers rejected."
+          },
+          "comment": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 2000,
+            "pattern": "^[^\\u0000]*$",
+            "description": "Optional plain text. Java strip runs before validation; blank/null clears. At most 2000 Unicode code points after normalization. NUL rejected. Render as text, never HTML.",
+            "x-normalization": "strip-before-validation"
+          },
+          "imageIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "maxItems": 10,
+            "uniqueItems": true,
+            "description": "Ordered distinct owned COMPLETED uploads. Omitted preserves attachments on PATCH; [] clears; null invalid. Detaching retains uploaded objects."
+          }
+        },
+        "required": [],
+        "additionalProperties": false,
+        "minProperties": 1,
+        "examples": [
+          {
+            "rating": 3
+          },
+          {
+            "comment": null,
+            "imageIds": []
+          }
+        ]
+      },
+      "ReviewImageResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "finalUrl": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "uri",
+            "description": "Short-lived signed GET URL; null when metadata/signing is unavailable. Physical existence is not guaranteed by signing."
+          }
+        },
+        "required": [
+          "id",
+          "finalUrl"
+        ],
+        "additionalProperties": false
+      },
+      "ReviewAuthorSummary": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "Safe display name/username fallback; inactive authors are Former customer. No user ID, email, account state or other private fields."
+          },
+          "profileImage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ImageAccessResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "displayName",
+          "profileImage"
+        ],
+        "additionalProperties": false
+      },
+      "ReviewResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "comment": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 2000
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReviewImageResponse"
+            },
+            "maxItems": 10
+          },
+          "author": {
+            "$ref": "#/components/schemas/ReviewAuthorSummary"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "verifiedPurchase": {
+            "type": "boolean",
+            "const": true
+          }
+        },
+        "required": [
+          "id",
+          "rating",
+          "comment",
+          "images",
+          "author",
+          "createdAt",
+          "updatedAt",
+          "verifiedPurchase"
+        ],
+        "additionalProperties": false
+      },
+      "ReviewPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReviewResponse"
+            },
+            "maxItems": 100
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "size",
+          "totalElements",
+          "totalPages"
+        ],
+        "additionalProperties": false
+      },
+      "ProductRatingSummary": {
+        "type": "object",
+        "properties": {
+          "reviewCount": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 0
+          },
+          "averageRating": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 5,
+            "multipleOf": 0.01,
+            "description": "Committed reviews only. HALF_UP to two decimal places; null when reviewCount=0. JSON numeric formatting may omit trailing zeros."
+          }
+        },
+        "required": [
+          "reviewCount",
+          "averageRating"
+        ],
+        "additionalProperties": false
+      },
+      "Recommendations": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductListingItem"
+            },
+            "maxItems": 20
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "additionalProperties": false
       }
     },
     "responses": {
@@ -9843,21 +10927,31 @@
     }
   },
   "x-source-snapshot": {
-    "date": "2026-11-05",
-    "basis": "Current working-tree controllers, DTOs, validators, services and security chains; includes uncommitted source.",
+    "date": "2026-11-21",
+    "basis": "Current merged draft/version-1 source at 5585dddd12677a038de1e5645696cc51c6181e88",
     "controllers": [
       "AddressController",
       "AuthController",
+      "BehaviorController",
+      "CartController",
+      "CartVoucherController",
+      "CheckoutController",
       "EmailVerificationController",
       "GoogleConnectionController",
       "GoogleLoginController",
       "ImageUploadController",
       "InitialPasswordController",
+      "OrderController",
+      "OrderItemReviewController",
       "ProductCatalogController",
       "ProductImageController",
+      "ProductReviewController",
       "ReauthenticationController",
+      "RecommendationController",
       "RegistrationVerificationController",
+      "ReviewController",
       "UserController",
+      "VoucherController",
       "WishlistController"
     ],
     "frameworkRoutes": [
@@ -9908,10 +11002,11 @@
   },
   "x-request-limiting": "No request quotas, cooldowns, failed-proof lockouts, 429 or Retry-After behavior. Proof expiry, single use and supersession are independent of request frequency.",
   "x-source-review": {
-    "date": "2026-11-20",
-    "commit": "f7d1f7e6c9731ba2453bbea5791f764ac4b5a48a",
+    "date": "2026-11-21",
+    "commit": "5585dddd12677a038de1e5645696cc51c6181e88",
     "controllerSourceRoot": "demo/src/main/java/com/example/demo",
     "runtimeAccess": "Swagger UI and /v3/api-docs remain behind deny-all fallback; this is a standalone contract.",
-    "scope": "Source/contract/schema validation only; no application changes or application test run for this documentation update."
+    "scope": "Source/contract/schema validation only; no application changes or application test run for this documentation update.",
+    "branch": "draft/version-1"
   }
 }

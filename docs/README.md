@@ -1,6 +1,6 @@
 # API documentation
 
-[openapi.json](openapi.json) documents the current source at `feature/voucher` commit `f7d1f7e` as OpenAPI 3.1.0: **52 controller operations and 2 Google framework operations across 48 paths**, reviewed 2026-11-20. It includes auth/email/Google, profiles, addresses, catalog/search, product images, media, wishlist, behavior tracking, Inventory availability, Cart, Checkout, Order history/cancellation and owned Voucher wallet. Examples are synthetic.
+[openapi.json](openapi.json) documents the current source at `draft/version-1` commit `5585ddd` as OpenAPI 3.1.0: **59 controller operations and 2 Google framework operations across 55 paths**, reviewed 2026-11-21. It includes auth/email/Google, profiles, addresses, catalog/search, product images, media, wishlist, behavior tracking, Inventory availability, Cart, Checkout, Order history/cancellation owned Voucher wallet, verified reviews/ratings with optional images, and recommendations. Examples are synthetic.
 
 ## Use the contract
 
@@ -77,6 +77,13 @@ No endpoint request quotas, resend cooldowns or failed-proof lockouts apply. Aut
 | GET | `/api/me/orders/{orderId}` | Bearer + MANAGE_ORDER | 200 |
 | POST | `/api/me/orders/{orderId}/cancel` | Bearer + MANAGE_ORDER | 204 |
 | POST | `/api/me/cart/checkout` | Bearer + MANAGE_CHECKOUT | 201 |
+| GET | `/api/products/{productId}/reviews` | Public, PUBLISHED products | 200 |
+| GET | `/api/products/{productId}/rating-summary` | Public, PUBLISHED products | 200 |
+| POST | `/api/me/orders/{orderId}/items/{orderItemId}/reviews` | ACTIVE owner + MANAGE_ORDER | 201 |
+| PATCH | `/api/me/reviews/{reviewId}` | ACTIVE author + MANAGE_ORDER | 200 |
+| GET | `/api/recommendations` | Public | 200 |
+| GET | `/api/me/recommendations` | ROLE_USER excluding ROLE_ADMIN | 200 |
+| GET | `/api/products/{productId}/similar` | Public, PUBLISHED source | 200 |
 
 ## Boundaries and availability
 
@@ -98,8 +105,18 @@ Cart finalTotal is eligible selectedSubtotal minus voucherDiscount. Voucher mini
 
 Order history explains immutable original terms without fetching current Voucher definitions. Legacy orders expose 0/null added fields while retaining original amounts; old successful receipt bodies remain unchanged. Cancellation releases managed Inventory exactly once and does not rewrite the receipt. Voucher cancellation-quota restoration/reissue policy, admin granting/stock supply, payment and new shipping/completion/FAILED producers remain deferred.
 
+## Reviews and recommendations
+
+Create one review per owned COMPLETED order item, regardless of quantity. Repeated purchases can each be reviewed. Rating is a required JSON integer 1..5. Optional plain comments are stripped, blank/null becomes null, and normalized content allows at most 2000 Unicode code points. NUL and unknown fields are rejected. Up to 10 distinct canonical lowercase UUIDs attach owned COMPLETED media in the supplied order; use the existing upload/completion flow first.
+
+PATCH preserves omitted fields. A null/blank comment clears it; `imageIds: []` clears attachments; an explicit list replaces/reorders them. Null rating/imageIds and an empty object are invalid. Effective changes advance updatedAt; a normalized no-op retains it. There is no edit deadline or delete API. Detaching images retains storage objects.
+
+Review reads are anonymous for PUBLISHED products; missing, removed, DRAFT and ARCHIVED products return 404. Page defaults are 0/20, size 1..100, and sorting accepts createdAt or rating with asc/desc; ID descending breaks ties. Unknown/repeated query keys are rejected; the rating-summary endpoint accepts no query keys. Summaries include all committed reviews, with HALF_UP average to two decimals and null average for zero reviews. Retained inactive authors appear as “Former customer” with null avatar. Safe media URLs may be null; signed URLs do not prove physical object existence. Review mutation Location identifies the PATCH route, not a separate GET resource.
+
+All three recommendation routes accept only one optional `limit` (1..20, default 10) and return `{ "items": [...] }` using the current ProductListingItem shape. General recommendations use aggregate popularity/diversity; personalized recommendations derive the owner from a Customer JWT, and similar products exclude the published source. Unknown/repeated query keys are invalid. AI failures use safe deterministic fallback; fewer or empty results are valid. All review/recommendation success responses use `Cache-Control: no-store`.
+
 ## Verification
 
-Run `python docs/validate_openapi.py` from the repository root. [openapi-validation.json](openapi-validation.json) records the current source/structure check: **52 controller + 2 framework operations, 48 paths, 91 schemas, 480 resolved local references, 68 current Java DTO shapes and 83 checked examples**, with 0 errors. It also checks unique operation IDs, path parameters, security scheme references, required/property consistency and bodyless 204 responses. DTO comparison excludes deliberate unwritable profile presence flags and the always-rejected email setter.
+Run `python docs/validate_openapi.py` from the repository root. [openapi-validation.json](openapi-validation.json) records the current source/structure check: **59 controller + 2 framework operations, 55 paths, 100 schemas, 522 resolved local references, 77 current Java DTO shapes and 96 checked examples**, with 0 errors. It also checks unique operation IDs, path parameters, security scheme references, required/property consistency and bodyless 204 responses. DTO comparison excludes deliberate unwritable profile/review presence flags and the always-rejected profile email setter, and includes the nested Recommendations record.
 
-These are standard-library source/structural checks and a documented JSON Schema assertion subset, not external OpenAPI conformance validation. Existing SnakeYAML 2.6 from the Maven cache was used only to read the established search/behavior contracts; no dependency or tool was installed. No application source, runtime security, build configuration or application tests were changed/run for this documentation-only update. Historical feature contracts/evidence are preserved. Only these API documentation/validation files are allowlisted under the otherwise ignored docs directory. No commit or push is performed by this documentation update.
+These are standard-library source/structural checks and a documented JSON Schema assertion subset, not external OpenAPI conformance validation. Existing SnakeYAML 2.6 from the Maven cache was used only to read the established search/behavior contracts; no dependency or tool was installed. No application source, runtime security, build configuration or application tests were changed/run for this documentation-only update. Historical feature contracts/evidence are preserved. The standalone OpenAPI and README are tracked; the validation helper/report remain local under the existing ignore rules. No commit or push is performed by this documentation update.
