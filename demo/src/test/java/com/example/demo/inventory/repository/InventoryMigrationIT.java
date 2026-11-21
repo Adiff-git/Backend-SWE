@@ -54,7 +54,7 @@ class InventoryMigrationIT {
 
     private void migrateInventory() {
         Flyway.configure().dataSource(source).load().migrate();
-        assertThat(jdbc.queryForObject("SELECT MAX(version::INTEGER) FROM flyway_schema_history WHERE success", Integer.class)).isEqualTo(26);
+        assertThat(jdbc.queryForObject("SELECT MAX(version::INTEGER) FROM flyway_schema_history WHERE success", Integer.class)).isEqualTo(27);
     }
 
     private long balance() {

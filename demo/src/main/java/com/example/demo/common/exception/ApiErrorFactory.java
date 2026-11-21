@@ -48,6 +48,11 @@ public class ApiErrorFactory {
             return conflict(path);
         for(Throwable cause=failure;cause!=null;cause=cause.getCause()) {
             if (cause instanceof org.hibernate.exception.ConstraintViolationException constraint
+                    && "23505".equals(constraint.getSQLState())
+                    && "uk_product_reviews_order_item_id".equals(constraint.getConstraintName())) {
+                return create(409, "Review conflicts with the current state", path, Map.of());
+            }
+            if (cause instanceof org.hibernate.exception.ConstraintViolationException constraint
                     && constraint.getConstraintName() != null
                     && VOUCHER_CONSTRAINTS.contains(constraint.getConstraintName())
                     && isIntegrityState(constraint.getSQLState())) {

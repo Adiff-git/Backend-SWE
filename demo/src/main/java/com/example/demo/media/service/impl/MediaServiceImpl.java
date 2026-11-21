@@ -34,6 +34,47 @@ public class MediaServiceImpl implements MediaService {
     private final ImageUploadValidator validator;
     private final ImageUrlResolver imageUrls;
 
+    @Override @Transactional(readOnly = true)
+    public com.example.demo.media.dto.response.PreparedReviewImages prepareReviewImages(Long actor, java.util.List<UUID> ids) {
+        if (actor == null || actor <= 0) throw new IdentityUnavailableException();
+        java.util.Map<UUID, String> keys = new java.util.HashMap<>();
+        for (ImageUpload image : repository.findAllById(ids)) {
+            if (!actor.equals(image.getOwnerUserId())) throw new ImageUploadNotFoundException();
+            if (image.getStatus() != ImageUploadStatus.COMPLETED) throw new UploadStateConflictException();
+            keys.put(image.getId(), image.getFinalKey());
+        }
+        if (keys.size() != ids.size()) throw new ImageUploadNotFoundException();
+        for (String key : keys.values()) storage.verifyFinalExists(key);
+        return new com.example.demo.media.dto.response.PreparedReviewImages(keys);
+    }
+
+    @Override @Transactional
+    public void validatePreparedReviewImages(Long actor, com.example.demo.media.dto.response.PreparedReviewImages prepared) {
+        for (UUID id : prepared.getFinalKeys().keySet().stream().sorted().toList()) {
+            ImageUpload image = repository.findForReviewAttachment(id).orElseThrow(ImageUploadNotFoundException::new);
+            if (!actor.equals(image.getOwnerUserId())) throw new ImageUploadNotFoundException();
+            if (image.getStatus() != ImageUploadStatus.COMPLETED || !prepared.getFinalKeys().get(id).equals(image.getFinalKey()))
+                throw new UploadStateConflictException();
+        }
+    }
+
+    @Override @Transactional(readOnly = true)
+    public java.util.Map<UUID, ImageAccessResponse> getSafeAttachedImages(java.util.Collection<UUID> ids) {
+        java.util.Map<UUID, ImageAccessResponse> result = new java.util.HashMap<>();
+        if (ids.isEmpty()) return result;
+        ids.forEach(id -> result.put(id, new ImageAccessResponse(id, null)));
+        java.util.List<ImageUpload> images = repository.findAllById(ids);
+        try {
+            com.example.demo.storage.service.PreparedImageUrls signer = imageUrls.prepare();
+            for (ImageUpload image : images) {
+                if (image.getStatus() != ImageUploadStatus.COMPLETED) continue;
+                try { result.put(image.getId(), new ImageAccessResponse(image.getId(), signer.resolve(image.getFinalKey()))); }
+                catch (com.example.demo.storage.exception.StorageUnavailableException unavailable) { /* Keep safe null URL. */ }
+            }
+        } catch (com.example.demo.storage.exception.StorageUnavailableException unavailable) { /* Keep safe null URLs. */ }
+        return result;
+    }
+
     @Override public ImageUploadResponse createImageUpload(Long actorId, CreateImageUploadRequest request) {
         requireEntryBoundary();
         return commands.create(actorId, request);
