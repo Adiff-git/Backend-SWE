@@ -14,7 +14,11 @@ Thumbs.db
 .idea/
 .vscode/
 # Local documentation and database design artifacts.
-/docs/
+/docs/*
+!/docs/README.md
+!/docs/openapi.json
+!/docs/validate_openapi.py
+# Generated OpenAPI validation report (kept local).
 /Database-Design/
 
 # Keep Docker runtime scripts: compose.dev.yaml mounts them into LocalStack.
@@ -37,3 +41,13 @@ venv/
 coverage/
 .coverage
 htmlcov/
+
+# Local test caches, editor backups, and operating-system files
+.testcontainers.properties
+*.bak
+*.orig
+*~
+Desktop.ini
+
+# Generated API validation output
+/docs/openapi-validation.json
