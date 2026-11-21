@@ -13,14 +13,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CartCalculator {
-    public PreparedCart calculate(List<CartReadSeed> rows, Map<UUID, CartVariantState> states) {
+    public PreparedCart calculate(List<CartReadSeed> rows, Map<UUID, CartVariantState> states, Map<Long, String> ineligibleReasons) {
         Map<Long, BigInteger> subtotals = new HashMap<>();
         BigInteger total = BigInteger.ZERO;
         long selectedRows = 0;
         long selectedQuantity = 0;
         for (CartReadSeed row : rows) {
             CartVariantState state = states.get(row.getVariantId());
-            if (state == null || !state.isPurchasable()) continue;
+            if (ineligibleReasons.containsKey(row.getId())) continue;
             BigInteger subtotal = state.getAmount().multiply(BigInteger.valueOf(row.getQuantity()));
             subtotals.put(row.getId(), subtotal);
             if (row.isSelected()) {
@@ -31,6 +31,6 @@ public class CartCalculator {
                 } catch (ArithmeticException overflow) { throw new CartQuantityLimitException(); }
             }
         }
-        return new PreparedCart(rows, states, subtotals, selectedRows, selectedQuantity, total);
+        return new PreparedCart(rows, states, subtotals, ineligibleReasons, selectedRows, selectedQuantity, total);
     }
 }

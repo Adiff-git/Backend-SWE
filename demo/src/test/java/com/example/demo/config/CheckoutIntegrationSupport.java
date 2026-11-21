@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import com.example.demo.fixture.checkout.CheckoutFixtures;
+import com.example.demo.fixture.inventory.InventoryFixtures;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,5 +25,8 @@ public abstract class CheckoutIntegrationSupport {
         fixture = transactions.execute(s -> CheckoutFixtures.scenario(entities));
     }
 
-    @AfterEach void cleanCheckoutFixture() { jdbc.execute("TRUNCATE TABLE users,categories CASCADE"); }
+    @AfterEach void cleanCheckoutFixture() {
+        jdbc.execute("TRUNCATE vouchers CASCADE");
+        InventoryFixtures.cleanRetainedInventory(jdbc);
+    }
 }

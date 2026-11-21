@@ -25,3 +25,8 @@ Prepare resource-free image URL capabilities outside authoritative cart transact
 ## Validation
 
 Update boundary/controller/service/real database/flow tests for new semantics rather than retaining old expectations. Verify 999/1000, 998+2 rejection, explicit variant-only requests, same-variant no-op, absent target reset, existing target entire-row preservation, counts, rollback, ownership and synchronized operations. Migration tests must prove legacy 1000 is not capped and retry after a reviewed 999 value preserves data. Run full Maven verify and record actual discovery/results in quickstart.md. No commits or deployment are part of this revision request.
+
+
+## Voucher integration follow-up — feature011
+
+The earlier Voucher exclusion is superseded by feature011: owned entitlement selection, exact order-level estimated discount and invalid-selection cleanup are implemented. Item unit/line prices and Inventory eligibility remain unchanged; finalTotal is selectedSubtotal minus voucherDiscount. Wallet browsing prepares current subtotal without images, insertion or cleanup. Verified targeted deltas and the separately tracked unrestricted completion gate are recorded in [Voucher execution evidence](../011-voucher-support/implementation-validation.md). Earlier completed tasks and their historical execution records are preserved; this follow-up adds no admin/code/public-discovery/cancellation-quota contract.

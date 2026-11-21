@@ -9,8 +9,15 @@ public class CheckoutCartSeed {
     Long ownerId;
     Long cartId;
     List<Row> rows;
+    Long selectedEntitlementId;
+    long selectionRevision;
 
     public CheckoutCartSeed(Long ownerId, Long cartId, List<Row> rows) {
+        this(ownerId, cartId, rows, null, 0);
+    }
+    public CheckoutCartSeed(Long ownerId, Long cartId, List<Row> rows, Long selectedEntitlementId, long selectionRevision) {
+        this.selectedEntitlementId=selectedEntitlementId;
+        this.selectionRevision=selectionRevision;
         this.ownerId = ownerId;
         this.cartId = cartId;
         this.rows = List.copyOf(rows);

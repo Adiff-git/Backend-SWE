@@ -28,9 +28,14 @@ public class CatalogCartReadServiceImpl implements CatalogCartReadService {
     private final ProductVariantRepository variants;
     private final ProductRepository products;
     private final ProductImageRepository images;
+    private final com.example.demo.inventory.service.InventoryService inventory;
 
     @Override @Transactional(readOnly = true)
     public Map<UUID, CartVariantState> getVariantStates(Collection<UUID> requested) {
+        return withAvailability(catalogStates(requested));
+    }
+
+    private Map<UUID, CartVariantState> catalogStates(Collection<UUID> requested) {
         Map<UUID, CartVariantState> result = new HashMap<>();
         List<UUID> ids = requested.stream().distinct().sorted().toList();
         for (List<UUID> chunk : chunks(ids)) {
@@ -38,7 +43,7 @@ public class CatalogCartReadServiceImpl implements CatalogCartReadService {
                 boolean published = row.getStatus() == ProductStatus.PUBLISHED;
                 result.put(row.getVariantId(), new CartVariantState(row.getVariantId(), row.getProductId(),
                         published, validAmount(row.getPrice()), row.getProductName(), row.getSku(),
-                        published ? row.getOptions() : Map.of(), null));
+                        published ? row.getOptions() : Map.of(), null, null));
             }
         }
         return Map.copyOf(result);
@@ -46,14 +51,14 @@ public class CatalogCartReadServiceImpl implements CatalogCartReadService {
 
     @Override @Transactional(readOnly = true)
     public boolean hasImageCandidates(Collection<UUID> variantIds) {
-        List<UUID> ids = getVariantStates(variantIds).values().stream().filter(CartVariantState::isPublished)
+        List<UUID> ids = catalogStates(variantIds).values().stream().filter(CartVariantState::isPublished)
                 .map(CartVariantState::getProductId).distinct().sorted().toList();
         return !imageKeys(ids).isEmpty();
     }
 
     @Override @Transactional
     public Map<UUID, CartVariantState> getCartPresentation(Collection<UUID> variantIds, PreparedImageUrls urls) {
-        Map<UUID, CartVariantState> states = new HashMap<>(getVariantStates(variantIds));
+        Map<UUID, CartVariantState> states = new HashMap<>(catalogStates(variantIds));
         List<UUID> ids = states.values().stream().filter(CartVariantState::isPublished)
                 .map(CartVariantState::getProductId).distinct().sorted().toList();
         Map<UUID, String> keys = imageKeys(ids);
@@ -76,8 +81,19 @@ public class CatalogCartReadServiceImpl implements CatalogCartReadService {
         }
         states.replaceAll((id, state) -> new CartVariantState(id, state.getProductId(),
                 state.isPublished() && publication.getOrDefault(state.getProductId(), !keys.containsKey(state.getProductId())),
-                state.getAmount(), state.getProductName(), state.getSku(), state.getOptions(), signed.get(state.getProductId())));
-        return Map.copyOf(states);
+                state.getAmount(), state.getProductName(), state.getSku(), state.getOptions(), signed.get(state.getProductId()), null));
+        return withAvailability(states);
+    }
+
+    private Map<UUID, CartVariantState> withAvailability(Map<UUID, CartVariantState> states) {
+        List<UUID> ids = states.values().stream().filter(CartVariantState::isPublished).map(CartVariantState::getVariantId)
+                .distinct().sorted(Comparator.comparing(UUID::toString)).toList();
+        Map<UUID, com.example.demo.inventory.dto.response.InventoryAvailability> availability = ids.isEmpty() ? Map.of() : inventory.getAvailability(ids);
+        Map<UUID, CartVariantState> prepared = new HashMap<>();
+        states.forEach((id, state) -> prepared.put(id, new CartVariantState(id, state.getProductId(), state.isPublished(),
+                state.getAmount(), state.getProductName(), state.getSku(), state.getOptions(), state.getPrimaryImageUrl(),
+                state.isPublished() ? availability.get(id) : null)));
+        return Map.copyOf(prepared);
     }
 
     private Map<UUID, String> imageKeys(List<UUID> productIds) {

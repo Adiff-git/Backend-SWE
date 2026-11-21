@@ -77,4 +77,16 @@ class OrderReadServiceImplTest {
                 .isInstanceOf(com.example.demo.order.exception.OrderNotFoundException.class);
         verifyNoInteractions(items);
     }
+    @Test void getOrderSeed_shouldPrepareLargeSnapshotWithoutHibernateMapperOrLiveVoucherReads() {
+        var amount=java.math.BigInteger.TEN.pow(1200);
+        var snapshot=new com.example.demo.voucher.dto.response.VoucherSnapshot(1L,2L,"LARGE","Original","FIXED_AMOUNT",new BigDecimal(amount),
+            new com.example.demo.catalog.dto.response.SellingPrice(java.math.BigInteger.ZERO,"VND"),null,
+            new com.example.demo.catalog.dto.response.SellingPrice(amount,"VND"),new com.example.demo.catalog.dto.response.SellingPrice(amount,"VND"),Instant.EPOCH);
+        String body=tools.jackson.databind.json.JsonMapper.builder().build().writeValueAsString(snapshot);
+        var raw=new OrderReadSeed.Header(7L,"ORDER7",Instant.EPOCH,OrderStatus.PENDING,BigDecimal.ZERO,new BigDecimal(amount),"Name","Phone","Address",null,null,null,new BigDecimal(amount),body);
+        when(orders.findOwnedHeader(1L,7L)).thenReturn(java.util.Optional.of(raw));when(items.findDetails(7L)).thenReturn(List.of());
+        var result=reads.getOrderSeed(1L,7L).getHeader();
+        assertThat(result.getVoucherSnapshot().getAppliedDiscount().getAmount()).isEqualTo(amount);
+        assertThat(result.getVoucherSnapshotJson()).isNull();
+    }
 }

@@ -1,3 +1,35 @@
+<!--
+Sync Impact Report (temporary review material; remove before committing)
+Version: 1.1.0 -> 1.2.0 (MINOR: materially expanded verification guidance).
+Modified principles:
+- XIII. Meaningful Testing (title unchanged): integrated risk-based execution policy.
+- Technology and Repository Baseline: clarified risk-triggered concurrency verification
+  versus requiring concurrency infrastructure for every feature.
+- Development Workflow and Quality Gates: linked feature plans/tasks to Principle XIII.
+Added subsection: Risk-Based Verification and Regression Testing Policy (within XIII).
+Removed sections: none. Existing test categories, organization and integrity rules retained.
+Conflicts resolved:
+- A full gate is not required after every isolated fix; reruns depend on regression risk.
+- Documentation-only governance work retains its existing no-application-test exemption.
+- Environmental inability is recorded as blocked/unverified, never a passing full gate.
+Read-only feature review / follow-up (no feature files changed):
+- specs/011-voucher-support/plan.md and tasks.md: add explicit risk/scope mapping,
+  checkpoint selection, isolated-fix rerun criteria and environmental reporting;
+  retain T058's unrestricted full gate and all affected security/concurrency checks.
+- specs/010-inventory-management/plan.md and tasks.md: on future active revision,
+  reference XIII; T069 already limits broad reruns to justified changes/uncertainty.
+- specs/008-customer-order-management/tasks.md T047 and
+  specs/009-customer-checkout/tasks.md T058 already distinguish focused reruns;
+  no retrospective rewriting of completed evidence is required.
+- specs/005-catalog-data-enhancement/tasks.md T009/T016: if reused, qualify repeated
+  complete Maven/Python runs by regression risk; preserve historical execution records.
+- specs/007-shopping-cart/plan.md: on future active revision, add targeted/checkpoint
+  scope and conditional rerun rules to its full-verify instruction.
+Templates/commands: read Constitution at runtime; no source changes in this amendment.
+Deferred metadata: original ratification remains unverified; preserved date is not
+proof of adoption. No new unresolved policy placeholders.
+-->
+
 # Backend-SWE Java Backend Constitution
 
 ## Core Principles
@@ -225,6 +257,64 @@ feature requires every category. Tests MUST be deterministic and independent.
   controller, service, and database layers. E2E/flow integration tests MUST use
   `@SpringBootTest` and appropriate infrastructure for complete user-facing workflows.
 
+#### Risk-Based Verification and Regression Testing Policy
+
+Verification MUST be selected from the affected code, observable behavior, dependencies
+and regression risk. This policy governs execution scope and frequency; it MUST NOT
+weaken the applicable test categories, integrity protections or evidence requirements
+elsewhere in this Constitution.
+
+- After each implementation change, targeted verification MUST be the default. Select
+  compilation and applicable unit, MVC, repository, service, API, flow or other checks
+  that exercise the changed behavior and affected dependency paths. Record the scope
+  and risk rationale; passing a narrow test does not establish unaffected behavior.
+- At integration checkpoints, relevant cross-domain regression tests MUST run for the
+  contracts, persistence and workflows connected by the change. Checkpoints and their
+  actual test scope MUST be specified in the feature plan and tasks.
+- Near completion of a feature involving application implementation, at least one
+  unrestricted full `mvn verify` MUST run from `demo/`, using the repository wrapper
+  where available. This run MUST include normal configured test discovery and packaging,
+  without selective test exclusions or skip flags. It does not replace risk-specific
+  tests absent from normal discovery. Documentation-only work retains the existing
+  document-consistency-check exemption; it does not require application tests.
+- After an isolated fix, affected tests MUST be rerun first. The entire suite MUST NOT
+  be rerun automatically merely because a fix occurred. Full verification MUST be repeated
+  when the fix has broad impact, changes shared infrastructure, or leaves unresolved
+  regression uncertainty. Record the trigger and rationale for a repeated full run,
+  or why affected-test evidence is sufficient after a localized fix. Earlier full-run
+  results MUST remain attributed to the revision tested; they MUST NOT be relabeled
+  as a passing full run of later changes.
+- Required security, transaction, concurrency, rollback, idempotency and performance
+  tests MUST be preserved and executed whenever their associated risks are affected.
+  Risk-based selection MUST NOT justify omitting a required scenario, weakening its
+  assertions, disabling security/integrity, or substituting a mock for a required real
+  transaction/concurrency boundary. This does not require every category for every fix.
+- Unrelated expensive tests MUST NOT be repeatedly executed without a justified
+  regression risk. Their presence in a required unrestricted full run is not a reason
+  to repeat them at every targeted or integration checkpoint. Existing performance
+  budgets and query/integrity assertions remain in force when applicable.
+- Environmental limitations MUST be documented with the blocked commands/checks,
+  concrete cause, affected verification scope and remaining uncertainty. Attempt the
+  required full run when the environment permits; do not replace an unavailable full
+  run with selective checks and label it unrestricted. Continue feasible independent
+  verification, record the full gate as blocked or unverified when it cannot finish,
+  and disclose that limitation before claiming feature completion. An application
+  assertion failure is not an environmental waiver; diagnose and verify its fix under
+  the same risk-based rerun rules.
+- Verification records MUST contain exact commands and selectors, tested revision or
+  identifiable working-state scope, relevant environment, results and discovered test
+  counts, failures and fixes, skipped or unexecuted checks and environmental limitations.
+  Inspect current-run reports rather than aggregating stale reports from earlier runs.
+  Distinguish targeted success, integration-checkpoint success and full-suite success.
+  Unexecuted, skipped, interrupted or failed tests MUST NOT be reported as passed;
+  unresolved failures and incomplete gates MUST remain explicit.
+- Feature-level `plan.md` and `tasks.md` MUST inherit this policy and specify affected
+  risks and dependencies, targeted verification scope, cross-domain checkpoints,
+  required full verification and conditional rerun criteria. They MUST retain the
+  feature's mandatory risk-specific tests and evidence obligations. Where an older
+  instruction requires unconditional repeated broad runs, align it with this policy
+  before reuse; preserve historical execution evidence rather than rewriting it.
+
 #### Test File and Package Organization
 
 Tests MUST use Package by Feature/Domain and Test Class by Responsibility. All Java
@@ -371,16 +461,19 @@ over conflicting global-layer package proposals.
 
 Global primary-key types, exact roles and permissions, token invalidation and refresh-token
 strategy, endpoint update/error contracts, and storage lifecycle details remain open until
-approved requirements resolve them. No mandatory concurrency-test policy or project-wide
-idempotency requirement is established. Developers MUST NOT invent defaults for these
-decisions. Missing approved capabilities require separately authorized implementation work.
+approved requirements resolve them. Principle XIII requires concurrency and idempotency
+verification when their associated risks are affected; it does not require concurrency
+infrastructure for every feature or establish a project-wide idempotency-key contract.
+Developers MUST NOT invent defaults for these decisions. Missing approved capabilities
+require separately authorized implementation work.
 
 ## Development Workflow and Quality Gates
 
 Feature specifications MUST define applicable HTTP, update, authorization, persistence,
 concurrency, and storage behavior. Plans and tasks MUST use actual repository paths and
-select meaningful tests appropriate to changed behavior. Illustrative template content
-MUST NOT override this constitution or imply implemented capabilities.
+select meaningful tests appropriate to changed behavior and inherit the risk-based
+verification scope, checkpoints and rerun criteria in Principle XIII. Illustrative template
+content MUST NOT override this constitution or imply implemented capabilities.
 
 The installed Spec Kit planning workflow supplies constitution checks before research and
 after design. These checks do not require additional developer approval at each stage.
@@ -407,7 +500,8 @@ MUST reflect the latest amendment. Corrections to an unratified initial draft do
 a new ratification or amendment event. Compliance MUST be assessed through the normal
 Spec Kit planning and review workflow.
 
-Ratification status remains unverified. The testing-organization amendment below was requested
-by the developer; retaining the original ratification date does not verify initial adoption.
+Ratification status remains unverified. The testing-organization and risk-based verification
+amendments were requested by the developer; retaining the original ratification date does
+not verify initial adoption.
 
-**Version**: 1.1.0 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-10-30
+**Version**: 1.2.0 | **Ratified**: 2026-10-23 | **Last Amended**: 2026-11-20

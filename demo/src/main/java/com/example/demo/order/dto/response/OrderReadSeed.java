@@ -12,7 +12,7 @@ import lombok.Value;
 public final class OrderReadSeed {
     private OrderReadSeed() { }
 
-    @Value
+    @Value @lombok.AllArgsConstructor
     public static class Header {
         Long id;
         String orderNumber;
@@ -26,6 +26,22 @@ public final class OrderReadSeed {
         Instant cancelledAt;
         Instant completedAt;
         String cancellationReason;
+        BigDecimal voucherDiscount;
+        com.example.demo.voucher.dto.response.VoucherSnapshot voucherSnapshot;
+        String voucherSnapshotJson;
+        public Header(Long id,String number,Instant placed,OrderStatus status,BigDecimal payable,BigDecimal merchandise,
+                String name,String phone,String address,Instant cancelled,Instant completed,String reason,BigDecimal discount,
+                com.example.demo.voucher.dto.response.VoucherSnapshot snapshot) {
+            this(id,number,placed,status,payable,merchandise,name,phone,address,cancelled,completed,reason,discount,snapshot,null);
+        }
+        public Header(Long id,String number,Instant placed,OrderStatus status,BigDecimal payable,BigDecimal merchandise,
+                String name,String phone,String address,Instant cancelled,Instant completed,String reason,BigDecimal discount,String json) {
+            this(id,number,placed,status,payable,merchandise,name,phone,address,cancelled,completed,reason,discount,null,json);
+        }
+        public Header(Long id,String number,Instant placed,OrderStatus status,BigDecimal payable,BigDecimal merchandise,
+                String name,String phone,String address,Instant cancelled,Instant completed,String reason) {
+            this(id,number,placed,status,payable,merchandise,name,phone,address,cancelled,completed,reason,BigDecimal.ZERO,(com.example.demo.voucher.dto.response.VoucherSnapshot)null);
+        }
     }
 
     @Value

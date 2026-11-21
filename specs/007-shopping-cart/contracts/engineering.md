@@ -1,8 +1,10 @@
 # Cart engineering contract
 
+**Inventory follow-up (2026-11-20):** [Inventory Management](../../010-inventory-management/spec.md) supersedes the earlier Inventory exclusions only for the implemented deltas below. See its [validation record](../../010-inventory-management/implementation-validation.md). Existing routes, strict inputs, authorization, money and immutable historical receipts remain unchanged. Admin supply, public receipt confirmation, FAILED processing, payment and expiry producers remain deferred.
+
 Current confirmed requirements are in ../spec.md (2026-11-17). The previous 1,000-unit and target-plus-request switch semantics have been replaced, not retained as alternative rules.
 
-Preserve single-vendor scope, UUID catalog IDs, Long owner/cart/item IDs, PUBLISHED/current valid-price eligibility, lazy persistent cart creation, safe ownership, snapshots, complete ordered responses, exact VND calculations and transaction guarantees. No inventory, orders, checkout, voucher or guest implementation is added.
+Preserve single-vendor scope, UUID catalog IDs, Long owner/cart/item IDs, PUBLISHED/current valid-price eligibility, lazy persistent cart creation, safe ownership, snapshots, complete ordered responses, exact VND calculations and transaction guarantees. Cart uses the Catalog service, which reads the shared Inventory service; no cross-domain repository access, Cart reservation/counter mutation or duplicate order/checkout workflow. Vouchers and guests remain excluded. CartValidator prepares row-specific stock reasons, CartCalculator consumes those prepared reasons and CartConverter maps prepared values without queries. The four individual stock-enforcing mutations validate full resulting quantity initially and at final presentation; bulk/deselect/remove/read retain the approved nonblocking semantics.
 
 The seven-route contract uses productVariantId on add/variant requests, separate quantity/variant PUTs, strict token shapes, 200 add and totalItemCount in the complete response. Variant-only requests never carry quantity. New target quantity is 1; existing target remains entirely unchanged; current variant is no-op. All requested and final added quantities remain 1..999.
 

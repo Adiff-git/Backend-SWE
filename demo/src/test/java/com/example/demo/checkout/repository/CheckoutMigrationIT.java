@@ -26,12 +26,13 @@ class CheckoutMigrationIT {
             Long foreign = CheckoutFixtures.customer(jdbc);
             jdbc.update("INSERT INTO user_roles(user_id,role_id) SELECT ?,id FROM roles WHERE name='USER'", owner);
             jdbc.update("INSERT INTO carts(user_id) VALUES (?)", owner);
-            CheckoutFixtures.HistoricalOrder historical = tx.execute(s -> CheckoutFixtures.order(jdbc, owner));
-            List<?> originalCart = jdbc.queryForList("SELECT * FROM carts");
-            List<?> originalOrder = jdbc.queryForList("SELECT * FROM orders");
+            CheckoutFixtures.HistoricalOrder historical = tx.execute(s -> CheckoutFixtures.preInventoryOrder(jdbc, owner));
+            List<?> originalCart = jdbc.queryForList("SELECT id,user_id FROM carts");
+            List<?> originalOrder = jdbc.queryForList("SELECT to_jsonb(o)-ARRAY['inventory_managed','voucher_discount','voucher_snapshot'] AS historical FROM orders o");
             Flyway.configure().dataSource(source).load().migrate();
-            assertThat(jdbc.queryForList("SELECT * FROM carts")).isEqualTo(originalCart);
-            assertThat(jdbc.queryForList("SELECT * FROM orders")).isEqualTo(originalOrder);
+            assertThat(jdbc.queryForList("SELECT id,user_id FROM carts")).isEqualTo(originalCart);
+            assertThat(jdbc.queryForList("SELECT to_jsonb(o)-ARRAY['inventory_managed','voucher_discount','voucher_snapshot'] AS historical FROM orders o")).isEqualTo(originalOrder);
+            assertThat(jdbc.queryForObject("SELECT inventory_managed FROM orders WHERE id=?", Boolean.class, historical.id())).isFalse();
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM permissions WHERE name='MANAGE_CHECKOUT'", Integer.class)).isEqualTo(1);
             assertThat(jdbc.queryForList("SELECT r.name FROM roles r JOIN role_permissions rp ON r.id=rp.role_id JOIN permissions p ON p.id=rp.permission_id WHERE p.name='MANAGE_CHECKOUT'", String.class)).containsExactly("USER");
             assertThatThrownBy(() -> tx.executeWithoutResult(s -> CheckoutFixtures.receipt(jdbc, foreign, historical, "Foreign_key_12345")))

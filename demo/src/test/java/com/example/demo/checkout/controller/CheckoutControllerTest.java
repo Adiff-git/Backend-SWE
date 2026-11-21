@@ -46,6 +46,26 @@ class CheckoutControllerTest {
 
     @BeforeEach void prepare() { when(identity.getCurrentUserId()).thenReturn(1L); }
 
+    @ParameterizedTest @ValueSource(strings = {"INVENTORY_UNAVAILABLE", "INSUFFICIENT_STOCK"})
+    void checkout_shouldExposeSafeStockSkipsForPartialAndAllUnavailableOutcomes(String code) throws Exception {
+        successfulReceipt();
+        var original = service.checkout(1L, "Fixture_key_12345", new com.example.demo.checkout.dto.request.CheckoutRequest(1L));
+        var skipped = java.util.List.of(new com.example.demo.checkout.dto.response.SkippedCheckoutItem(9L,
+                com.example.demo.checkout.dto.response.SkippedCheckoutItem.Reason.valueOf(code)));
+        when(service.checkout(eq(1L), any(), any())).thenReturn(new com.example.demo.checkout.dto.response.CheckoutReceiptResponse(original.getOrder(), skipped));
+        mvc.perform(request().content("{\"addressId\":1}")).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.skippedItems[0].reason").value(code))
+                .andExpect(jsonPath("$.skippedItems[0].productName").doesNotExist())
+                .andExpect(jsonPath("$.order.availability").doesNotExist());
+        when(service.checkout(eq(1L), any(), any())).thenThrow(new com.example.demo.checkout.exception.NoEligibleCheckoutItemsException(skipped));
+        mvc.perform(request().content("{\"addressId\":1}")).andExpect(status().is(422))
+                .andExpect(jsonPath("$.skippedItems[0].reason").value(code));
+        org.mockito.Mockito.doThrow(new com.example.demo.inventory.exception.InventoryConflictException()).when(service).checkout(eq(1L), any(), any());
+        mvc.perform(request().content("{\"addressId\":1}")).andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("CHECKOUT_CONFLICT"))
+                .andExpect(jsonPath("$.skippedItems").doesNotExist());
+    }
+
     private MockHttpServletRequestBuilder request() {
         return post("/api/me/cart/checkout").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_CHECKOUT")))
                 .header("Idempotency-Key", "Checkout_key_1234").contentType("application/json");

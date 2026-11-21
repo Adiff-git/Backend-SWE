@@ -39,6 +39,30 @@ class OrderControllerIT {
     @Autowired JdbcTemplate jdbc;
     Long owner;
     String token;
+    @Autowired com.example.demo.inventory.service.InventoryService inventory;
+
+    @Test void cancelOrder_shouldReleaseManagedStockOnceThroughTheOwnedPrivateApi() throws Exception {
+        Long order = transactions.execute(s -> {
+            var product = com.example.demo.catalog.CatalogFixtures.persistProduct(entities, com.example.demo.catalog.entity.ProductStatus.DRAFT);
+            entities.flush();
+            com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, product.variant().getId(), 10);
+            long id = com.example.demo.fixture.inventory.InventoryFixtures.order(jdbc, owner, true, product.variant().getId(), 3);
+            long item = jdbc.queryForObject("SELECT id FROM order_items WHERE order_id=?", Long.class, id);
+            inventory.reserveReservations(new com.example.demo.inventory.dto.request.ReservationCommand(id,
+                    java.time.Instant.parse("2026-01-01T00:00:00Z"), java.util.List.of(new com.example.demo.inventory.dto.request.ReservationLine(item, product.variant().getId(), 3))));
+            return id;
+        });
+        mvc.perform(post("/api/me/orders/"+order+"/cancel").header("Authorization", token).contentType("application/json").content("{\"reason\":\"first\"}"))
+                .andExpect(status().isNoContent()).andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.header().string("Cache-Control", "private, no-store"));
+        var terminal = jdbc.queryForMap("SELECT * FROM inventory_reservations WHERE order_id=?", order);
+        mvc.perform(post("/api/me/orders/"+order+"/cancel").header("Authorization", token).contentType("application/json").content("{\"reason\":\"second\"}"))
+                .andExpect(status().isNoContent());
+        assertThat(jdbc.queryForMap("SELECT * FROM inventory_reservations WHERE order_id=?", order)).isEqualTo(terminal);
+        assertThat(terminal).containsEntry("state", "RELEASED");
+        assertThat(jdbc.queryForObject("SELECT SUM(reserved) FROM inventory_balances", Long.class)).isZero();
+        assertThat(jdbc.queryForObject("SELECT SUM(stock) FROM inventory_balances", Long.class)).isEqualTo(10);
+        assertThat(jdbc.queryForObject("SELECT cancellation_reason FROM orders WHERE id=?", String.class, order)).isEqualTo("first");
+    }
 
     @BeforeEach void prepare() throws Exception {
         cleanup();
@@ -48,7 +72,7 @@ class OrderControllerIT {
                 .content(json.writeValueAsString(Map.of("identifier",email,"password","Password 123"))))
                 .andExpect(status().isOk()).andReturn().getResponse().getHeader("Authorization");
     }
-    @AfterEach void cleanup() { jdbc.execute("TRUNCATE TABLE users,categories CASCADE"); }
+    @AfterEach void cleanup() { com.example.demo.fixture.inventory.InventoryFixtures.cleanRetainedInventory(jdbc); }
 
     @Test void listOrders_shouldTraverseEveryOwnedFilterAndSortWithExactMetadata() throws Exception {
         transactions.executeWithoutResult(s -> {
@@ -56,7 +80,7 @@ class OrderControllerIT {
             OrderFixtures.corpus(entities,OrderFixtures.customer(entities).getId(),25);
         });
         jdbc.update("UPDATE orders SET payable_total=id%7,placed_at=placed_at-(id%3)*INTERVAL '1 second'");
-        for (String filter : List.of("", "PENDING","CONFIRMED","SHIPPING","COMPLETED","CANCELLED")) {
+        for (String filter : List.of("", "PENDING","CONFIRMED","SHIPPING","COMPLETED","CANCELLED","FAILED")) {
             for (String sort : List.of("placedAt,asc","placedAt,desc","payableTotal,asc","payableTotal,desc")) {
                 String column = sort.startsWith("placedAt") ? "placed_at" : "payable_total";
                 String direction = sort.endsWith("asc") ? "ASC" : "DESC";
@@ -83,6 +107,16 @@ class OrderControllerIT {
                 }
             }
         }
+    }
+
+    @Test void getOrder_shouldExposeOwnedLegacyFailedWithoutAddingRefusalProcessingFields() throws Exception {
+        long id = transactions.execute(s -> OrderFixtures.persist(entities, owner, OrderStatus.FAILED, 1).getId());
+        mvc.perform(get("/api/me/orders/"+id).header("Authorization", token)).andExpect(status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath("$.status").value("FAILED"))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath("$.failedAt").doesNotExist())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath("$.failureReason").doesNotExist());
+        assertThat(jdbc.queryForObject("SELECT inventory_managed FROM orders WHERE id=?", Boolean.class, id)).isFalse();
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_reservations WHERE order_id=?", Long.class, id)).isZero();
     }
 
     @Test void listOrders_shouldUseCurrentPermissionsAndKeepMaximumPageContract() throws Exception {
@@ -116,7 +150,7 @@ class OrderControllerIT {
         for (OrderStatus state : OrderStatus.values()) {
             Long id = transactions.execute(s -> OrderFixtures.persist(entities,owner,state,2).getId());
             Map<String,Object> before = jdbc.queryForMap("SELECT * FROM orders WHERE id=?",id);
-            int expected = state == OrderStatus.SHIPPING || state == OrderStatus.COMPLETED ? 409 : 204;
+            int expected = state == OrderStatus.SHIPPING || state == OrderStatus.COMPLETED || state == OrderStatus.FAILED ? 409 : 204;
             mvc.perform(post("/api/me/orders/"+id+"/cancel").header("Authorization",token).contentType("application/json")
                     .content("{\"reason\":\" first \"}")).andExpect(status().is(expected));
             Map<String,Object> after = jdbc.queryForMap("SELECT * FROM orders WHERE id=?",id);

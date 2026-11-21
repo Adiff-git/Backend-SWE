@@ -33,6 +33,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class CartControllerIT {
+    @Test void stockAwareHttp_shouldRejectFullDemandAndKeepRemovalAndBulkSelectionUsable() throws Exception {
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 3);
+        Credentials user = register();
+        long item = body(add(user.access(), 2, 200)).get("items").get(0).get("id").asLong();
+        var before = jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", item);
+        assertThat(body(add(user.access(), 2, 409)).get("code").asString()).isEqualTo("CART_STOCK_CONFLICT");
+        assertThat(jdbc.queryForMap("SELECT * FROM cart_items WHERE id=?", item)).isEqualTo(before);
+        mvc.perform(put("/api/me/cart/items/"+item+"/quantity").header("Authorization", user.access())
+                .contentType("application/json").content("{\"quantity\":4}")).andExpect(status().isConflict());
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 1);
+        JsonNode cart = body(mvc.perform(get("/api/me/cart").header("Authorization", user.access())).andExpect(status().isOk()).andReturn());
+        assertThat(cart.get("items").get(0).get("quantity").asInt()).isEqualTo(2);
+        assertThat(cart.get("items").get(0).get("availabilityReason").asString()).isEqualTo("INSUFFICIENT_STOCK");
+        assertThat(cart.get("items").get(0).get("subtotal").isNull()).isTrue();
+        assertThat(cart.get("selectedItemCount").asLong()).isZero();
+        mvc.perform(put("/api/me/cart/items/"+item+"/selection").header("Authorization", user.access())
+                .contentType("application/json").content("{\"selected\":true}")).andExpect(status().isConflict());
+        mvc.perform(put("/api/me/cart/selection").header("Authorization", user.access())
+                .contentType("application/json").content("{\"selected\":true}")).andExpect(status().isOk());
+        mvc.perform(put("/api/me/cart/items/"+item+"/selection").header("Authorization", user.access())
+                .contentType("application/json").content("{\"selected\":false}")).andExpect(status().isOk());
+        mvc.perform(delete("/api/me/cart/items/"+item).header("Authorization", user.access())).andExpect(status().isNoContent());
+        assertThat(jdbc.queryForObject("SELECT reserved FROM inventory_balances WHERE original_variant_id=?", Long.class, variant)).isZero();
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_reservations", Long.class)).isZero();
+    }
     @Autowired MockMvc mvc;
     @Autowired UserService users;
     @Autowired PasswordEncoder passwords;
@@ -47,8 +72,9 @@ class CartControllerIT {
     @BeforeEach void prepare() {
         cleanup();
         variant = transactions.execute(s -> CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED).variant().getId());
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 1000);
     }
-    @AfterEach void cleanup() { jdbc.execute("TRUNCATE TABLE users, categories CASCADE"); }
+    @AfterEach void cleanup() { com.example.demo.fixture.inventory.InventoryFixtures.cleanRetainedInventory(jdbc); }
 
     @Test void addAndRead_shouldUseRealSessionAndCurrentPrices() throws Exception {
         Credentials user = register();
@@ -75,6 +101,8 @@ class CartControllerIT {
             var parent = entities.find(com.example.demo.catalog.entity.ProductVariant.class, variant).getProduct();
             var target = CatalogFixtures.variant(parent, Map.of("color", "sibling"), java.math.BigDecimal.TEN);
             entities.persist(target);
+            entities.flush();
+            com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(entities, target.getId(), 1000);
             return target.getId();
         });
         String route = "/api/me/cart/items/" + source + "/variant";

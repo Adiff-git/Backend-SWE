@@ -33,7 +33,7 @@ public class CartRequestBodyAdvice extends RequestBodyAdviceAdapter {
 
     @Override public boolean supports(MethodParameter parameter, Type type,
             Class<? extends HttpMessageConverter<?>> converter) {
-        return parameter.getContainingClass() == CartController.class;
+        return parameter.getContainingClass() == CartController.class || parameter.getContainingClass() == CartVoucherController.class;
     }
 
     @Override public HttpInputMessage beforeBodyRead(HttpInputMessage input, MethodParameter parameter, Type type,

@@ -45,6 +45,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         ApiAuthenticationEntryPoint.class, ApiAccessDeniedHandler.class, ApiErrorFactory.class, CartRequestReader.class})
 @TestPropertySource(properties = {"security.jwt.secret=controlled-test-key-with-at-least-32-bytes", "security.jwt.issuer=urn:test"})
 class CartControllerTest {
+    @Test void stockConflict_shouldReturnSafePrivate409WithoutCounterOrAllocationDetails() throws Exception {
+        when(cart.addItem(eq(1L), any())).thenThrow(new com.example.demo.cart.exception.CartStockConflictException());
+        mvc.perform(post("/api/me/cart/items").with(jwt().authorities(new SimpleGrantedAuthority("MANAGE_CART")))
+                .contentType("application/json").content(valid))
+                .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("CART_STOCK_CONFLICT"))
+                .andExpect(header().string("Cache-Control", "private, no-store"))
+                .andExpect(jsonPath("$.reserved").doesNotExist()).andExpect(jsonPath("$.orderId").doesNotExist());
+    }
     @Autowired MockMvc mvc;
     @MockitoBean CartService cart;
     @MockitoBean UserService users;

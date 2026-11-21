@@ -14,6 +14,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CheckoutValidatorTest {
     private final CheckoutValidator validator = new CheckoutValidator();
 
+    @Test void stockReason_shouldRequireFullQuantityAndDistinguishMissingWithoutCapping() {
+        CheckoutCartSeed.Row row = new CheckoutCartSeed.Row(1L, UUID.randomUUID(), UUID.randomUUID(), 3, true);
+        assertThat(validator.stockReason(row, new com.example.demo.inventory.dto.response.InventoryAvailability(3, "IN_STOCK"))).isNull();
+        assertThat(validator.stockReason(row, new com.example.demo.inventory.dto.response.InventoryAvailability(2, "IN_STOCK")))
+                .isEqualTo(SkippedCheckoutItem.Reason.INSUFFICIENT_STOCK);
+        assertThat(validator.stockReason(row, new com.example.demo.inventory.dto.response.InventoryAvailability(0, "OUT_OF_STOCK")))
+                .isEqualTo(SkippedCheckoutItem.Reason.INSUFFICIENT_STOCK);
+        assertThat(validator.stockReason(row, new com.example.demo.inventory.dto.response.InventoryAvailability(0, "INVENTORY_UNAVAILABLE")))
+                .isEqualTo(SkippedCheckoutItem.Reason.INVENTORY_UNAVAILABLE);
+    }
+
     @Test void fingerprint_shouldRepresentCanonicalClientCommandOnly() {
         assertThat(validator.fingerprint(1L)).isEqualTo(com.example.demo.testdata.checkout.CheckoutTestData.ADDRESS_ONE_FINGERPRINT);
         assertThat(validator.fenceKey(1L,"Case_sensitive_123")).isNotEqualTo(validator.fenceKey(1L,"case_sensitive_123"));

@@ -13,7 +13,7 @@ public final class OrderTestData {
     private OrderTestData() { }
 
     public static Order.OrderBuilder order(Long owner, OrderStatus status) {
-        return Order.builder().customerId(owner).orderNumber("ORDER-" + UUID.randomUUID()).placedAt(PLACED)
+        return Order.builder().inventoryManaged(false).customerId(owner).orderNumber("ORDER-" + UUID.randomUUID()).placedAt(PLACED)
                 .status(status).recipientNameSnapshot("Historical recipient").recipientPhoneSnapshot("0123456789")
                 .deliveryAddressSnapshot("Historical address").merchandiseTotal(BigDecimal.valueOf(100))
                 .payableTotal(BigDecimal.valueOf(90))

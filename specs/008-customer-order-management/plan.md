@@ -114,3 +114,8 @@ Implementation integration note: the existing global cart advice intercepts unsu
 ## Complexity Tracking
 
 No constitution violations require exemption. Two order service interfaces are justified by a real transaction boundary: seed reads finish before publication-safe optional image preparation. Deferred constraint triggers protect cross-row historical validity that CHECK constraints cannot enforce; no general workflow/creation abstraction is introduced.
+
+
+## Voucher integration follow-up — feature011
+
+The earlier Voucher exclusion is superseded by feature011: summary/detail add stored original voucherDiscount and nullable immutable snapshots; payable sorting and historical items remain unchanged. Legacy zero/null history retains original payable amounts. Cancellation/completion contain no Voucher policy calls or status-driven quota reconciliation. Verified targeted deltas and the separately tracked unrestricted completion gate are recorded in [Voucher execution evidence](../011-voucher-support/implementation-validation.md). Earlier completed tasks and their historical execution records are preserved; this follow-up adds no admin/code/public-discovery/cancellation-quota contract.

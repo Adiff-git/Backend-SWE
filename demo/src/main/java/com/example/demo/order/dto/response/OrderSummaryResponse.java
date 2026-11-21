@@ -16,4 +16,6 @@ public class OrderSummaryResponse {
     long itemCount;
     List<OrderItemPreview> itemPreview;
     long remainingItemCount;
+    SellingPrice voucherDiscount;
+    OrderVoucherReference voucher;
 }

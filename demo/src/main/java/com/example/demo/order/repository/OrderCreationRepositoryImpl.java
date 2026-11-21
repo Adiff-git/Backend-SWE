@@ -16,11 +16,13 @@ public class OrderCreationRepositoryImpl implements OrderCreationRepository {
     }
 
     @Override public void insertPendingOrder(Long id, String number, CreateOrderCommand command) {
-        entities.createNativeQuery("INSERT INTO orders(id,customer_id,order_number,placed_at,status,recipient_name_snapshot,recipient_phone_snapshot,delivery_address_snapshot,merchandise_total,payable_total) VALUES (:id,:owner,:number,:at,'PENDING',:name,:phone,:address,:total,:total)")
+        entities.createNativeQuery("INSERT INTO orders(id,customer_id,order_number,placed_at,status,recipient_name_snapshot,recipient_phone_snapshot,delivery_address_snapshot,merchandise_total,payable_total,inventory_managed,voucher_discount,voucher_snapshot) VALUES (:id,:owner,:number,:at,'PENDING',:name,:phone,:address,:total,:payable,true,:discount,CAST(:voucher AS JSONB))")
                 .setParameter("id",id).setParameter("owner",command.getCustomerId()).setParameter("number",number)
                 .setParameter("at",command.getPlacedAt()).setParameter("name",command.getRecipientName())
                 .setParameter("phone",command.getRecipientPhone()).setParameter("address",command.getDeliveryAddress())
-                .setParameter("total",new BigDecimal(command.getTotal())).executeUpdate();
+                .setParameter("total",new BigDecimal(command.getMerchandiseTotal()))
+                .setParameter("payable",new BigDecimal(command.getPayableTotal())).setParameter("discount",new BigDecimal(command.getVoucherDiscount()))
+                .setParameter("voucher",command.getVoucherSnapshot()==null ? null : json.writeValueAsString(command.getVoucherSnapshot())).executeUpdate();
     }
 
     @Override public Long insertHistoricalItem(Long order, CreateOrderCommand.Item item) {

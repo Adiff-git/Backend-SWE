@@ -99,7 +99,7 @@ class CatalogRelationshipApiIT {
 		String firstBody = first.toString();
 		assertThat(firstBody).doesNotContain(fixtures.secondVariantId().toString(),
 				fixtures.secondCategoryId().toString(), "objectKey", "stagingKey", "claimToken",
-				"contentType", "byteSize", "preparerSubject", "\"status\"");
+				"contentType", "byteSize", "preparerSubject", "\"status\":\"PUBLISHED\"", "\"status\":\"DRAFT\"", "\"status\":\"ARCHIVED\"");
 		assertThat(second.toString()).doesNotContain(fixtures.firstImageId().toString());
 	}
 

@@ -25,10 +25,10 @@ class OrderRepositoryIT {
     @Test void findOwnedHeaders_shouldFilterBeforePagingAndKeepStableOrder() {
         Long owner = OrderFixtures.customer(entities).getId();
         Long foreign = OrderFixtures.customer(entities).getId();
-        OrderFixtures.corpus(entities,owner,15);
-        OrderFixtures.corpus(entities,foreign,5);
+        OrderFixtures.corpus(entities,owner,18);
+        OrderFixtures.corpus(entities,foreign,6);
         entities.flush(); entities.clear();
-        assertThat(orders.countOwnedOrders(owner,null)).isEqualTo(15);
+        assertThat(orders.countOwnedOrders(owner,null)).isEqualTo(18);
         for (OrderStatus status : OrderStatus.values()) {
             assertThat(orders.countOwnedOrders(owner,status)).isEqualTo(3);
             assertThat(orders.findOwnedHeaders(owner,status,PageRequest.of(1,2,Sort.by("id")))).hasSize(1);
@@ -47,6 +47,8 @@ class OrderRepositoryIT {
         Long foreign = OrderFixtures.customer(entities).getId();
         Long id = OrderFixtures.persist(entities,owner,OrderStatus.COMPLETED,5).getId();
         assertThat(orders.findOwnedHeader(owner,id)).isPresent();
+        assertThat(orders.findOwnedHeader(owner,id).orElseThrow().getVoucherDiscount()).isZero();
+        assertThat(orders.findOwnedHeader(owner,id).orElseThrow().getVoucherSnapshot()).isNull();
         assertThat(orders.findOwnedHeader(foreign,id)).isEmpty();
         assertThat(orders.findOwnedHeader(owner,Long.MAX_VALUE)).isEmpty();
     }

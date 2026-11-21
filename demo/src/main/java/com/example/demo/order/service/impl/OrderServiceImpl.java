@@ -32,6 +32,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orders;
     private final OrderValidator validator;
     private final Clock clock;
+    private final com.example.demo.order.repository.OrderItemRepository items;
+    private final com.example.demo.inventory.service.InventoryService inventory;
     @Value("${order.lock-timeout-ms:5000}")
     private long lockTimeoutMs = 5000;
 
@@ -49,14 +51,19 @@ public class OrderServiceImpl implements OrderService {
         return converter.toDetail(seed,imageUrls(seed.getItems()));
     }
 
-    @Override @Transactional
+    @Override @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public void cancelOrder(Long owner, Long id, CancelOrderRequest request) {
         validator.validateRequest(owner,id,request);
         orders.setLockTimeout(lockTimeoutMs + "ms");
         Order order = orders.findOwnedForUpdate(owner,id).orElse(null);
         if (!validator.canCancel(order,owner)) return;
-        Instant at = clock.instant();
+        Instant at = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
         validator.validateTime(order,at);
+        if (order.isInventoryManaged()) {
+            com.example.demo.order.dto.response.OrderInventorySeed seed = converter.toInventorySeed(order, items.findDetails(order.getId()));
+            inventory.releaseReservations(new com.example.demo.inventory.dto.request.ResolutionCommand(order.getId(), at,
+                    seed.getItems().stream().map(item -> new com.example.demo.inventory.dto.request.ReservationLine(item.getId(), item.getVariantId(), item.getQuantity())).toList()));
+        }
         order.cancel(at,request.getReason());
     }
 

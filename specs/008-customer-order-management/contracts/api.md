@@ -1,5 +1,7 @@
 # HTTP Contract: Customer Order Management
 
+**Inventory follow-up (2026-11-20):** [Inventory Management](../../010-inventory-management/spec.md) supersedes the earlier Inventory exclusions only for the implemented deltas below. See its [validation record](../../010-inventory-management/implementation-validation.md). Existing routes, strict inputs, authorization, money and immutable historical receipts remain unchanged. Admin supply, public receipt confirmation, FAILED processing, payment and expiry producers remain deferred.
+
 All routes require current-state bearer authentication and MANAGE_ORDER. Identity comes from CurrentUserIdProvider; no owner query/body input is accepted. Responses are private with Cache-Control: no-store. JSON success DTOs are direct; no generic envelope. No admin, creation, receipt-confirmation or arbitrary-status route exists.
 
 ## GET /api/me/orders
@@ -10,7 +12,7 @@ No body. Only the following query parameters, each at most once:
 | --- | --- | --- |
 | page | 0 | Canonical nonnegative decimal int, <=2147483647 |
 | size | 20 | Canonical decimal int, 1..100 |
-| status | All statuses | PENDING, CONFIRMED, SHIPPING, COMPLETED, CANCELLED, exact case |
+| status | All statuses | PENDING, CONFIRMED, SHIPPING, COMPLETED, CANCELLED, FAILED, exact case |
 | sort | placedAt,desc | placedAt,asc / placedAt,desc / payableTotal,asc / payableTotal,desc |
 
 Append id ascending as unique tie-breaker. Filter by authenticated owner and optional status before sorting/counting/paging. Reject blanks, duplicate parameters even with equal values, null-like text, unknown parameters, malformed numbers, parameter range overflow and unsupported sorting with 400. Page/size grammar is 0 or a nonzero digit followed by digits, subject to range; no signs/whitespace/leading zeroes. Count the owned/status-filtered set first as totalElements (public totalItems), then compute offset=(long)page*size, widening before multiplication. If offset >= totalElements, return 200 with items=[] and accurate requested page/size, totalItems and totalPages without executing paginated content or preview queries. A large accepted page value is not invalid merely because its offset exceeds Integer.MAX_VALUE.
@@ -72,7 +74,7 @@ Canonical positive base-10 Long ID (1..9223372036854775807), no signs/leading ze
 | id | Positive integer order ID |
 | orderNumber | Immutable unique string |
 | placedAt | UTC absolute timestamp |
-| status | One of the five statuses |
+| status | One of the six statuses |
 | recipientNameSnapshot, recipientPhoneSnapshot, deliveryAddressSnapshot | Required historical strings |
 | merchandiseTotal, payableTotal | Stored money objects, amount exact whole VND integer, currency VND |
 | cancelledAt, completedAt | Timestamp or explicit null according to lifecycle |
@@ -83,7 +85,7 @@ Complete item fields: id; productId/productVariantId (UUID strings or null); pro
 
 ## POST /api/me/orders/{orderId}/cancel
 
-Same identifier grammar, no query. Success returns 204 and zero response body. Cancellation is valid from PENDING and CONFIRMED, recording CANCELLED/cancelledAt/optional reason atomically. If the Clock sample precedes placedAt on an otherwise eligible first cancellation, return 409 ORDER_CONFLICT with every field unchanged. Already-CANCELLED is classified before the clock check and returns 204 without sampling the current clock or changing anything, even if a different valid reason was submitted. SHIPPING/COMPLETED return 409. Access and shape validation apply on repeats.
+Same identifier grammar, no query. Success returns 204 and zero response body. Cancellation is valid from PENDING and CONFIRMED, recording CANCELLED/cancelledAt/optional reason atomically. If the Clock sample precedes placedAt on an otherwise eligible first cancellation, return 409 ORDER_CONFLICT with every field unchanged. Already-CANCELLED is classified before the clock check and returns 204 without sampling the current clock or changing anything, even if a different valid reason was submitted. SHIPPING/COMPLETED/FAILED return 409. Access and shape validation apply on repeats.
 
 | Body/field | Meaning/result |
 | --- | --- |
@@ -117,3 +119,10 @@ Accept application/json and compatible application/*+json for nonempty bodies; e
 Authentication/permission checks precede controller/business access. After access checks, validate shape/identifier before owned lookup; unknown/foreign requests with valid shape always match. A malformed repeat is 400/415, not unconditional success. Errors follow existing ApiError ProblemDetail fields type/title/status/detail/instance and timestamp/message/path/fieldErrors extensions; do not introduce a mandatory code on pre-existing security/infrastructure responses. Where current global handling would incorrectly turn 415 into 500, add only the applicable safe MVC exception mapping rather than replacing the error contract. No error returns another owner's fields, SQL details or tokens.
 
 Receipt-confirmation URLs remain unsupported by route/security configuration; do not add a special placeholder endpoint or promise a new status for unsupported URLs. Regression tests verify no transition/data changes occur. Normal offset pages may shift under concurrent changes; unchanged-data stability is the guarantee. Signed image access remains subject to existing expiry, with no immediate revocation promise.
+
+Inventory-managed first cancellation releases its exact ACTIVE allocations atomically with CANCELLED/cancelledAt, decreasing reserved only. Explicit legacy and valid repeated CANCELLED204 skip Inventory; repeats preserve the first timestamp/reason before Clock sampling. SHIPPING, COMPLETED and FAILED reject cancellation409. Recognized Inventory integrity conflicts return safe409 INVENTORY_CONFLICT; current ownership/security and private,no-store apply to successes and errors. Allocations/counters/managed flags are never public input or Order response fields. No public completion/refusal endpoint is added.
+
+
+## Voucher integration follow-up — feature011
+
+The earlier Voucher exclusion is superseded by feature011: summary/detail add stored original voucherDiscount and nullable immutable snapshots; payable sorting and historical items remain unchanged. Legacy zero/null history retains original payable amounts. Cancellation/completion contain no Voucher policy calls or status-driven quota reconciliation. Verified targeted deltas and the separately tracked unrestricted completion gate are recorded in [Voucher execution evidence](../../011-voucher-support/implementation-validation.md). Earlier completed tasks and their historical execution records are preserved; this follow-up adds no admin/code/public-discovery/cancellation-quota contract.

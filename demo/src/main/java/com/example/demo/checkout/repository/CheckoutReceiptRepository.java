@@ -19,7 +19,7 @@ public interface CheckoutReceiptRepository extends Repository<CheckoutReceipt, L
     String setLockTimeout(@Param("timeout") String timeout);
 
     @Modifying
-    @Query(value = "INSERT INTO checkout_receipts(customer_id,operation,idempotency_key,request_address_id,request_fingerprint,order_id,receipt_version,response_status,location,receipt_body,created_at) VALUES (:owner,'CHECKOUT',:key,:address,:fingerprint,:order,1,201,:location,CAST(:body AS JSONB),:at)", nativeQuery = true)
+    @Query(value = "INSERT INTO checkout_receipts(customer_id,operation,idempotency_key,request_address_id,request_fingerprint,order_id,receipt_version,response_status,location,receipt_body,created_at) VALUES (:owner,'CHECKOUT',:key,:address,:fingerprint,:order,2,201,:location,CAST(:body AS JSONB),:at)", nativeQuery = true)
     void insertSuccess(@Param("owner") Long owner, @Param("key") String key, @Param("address") Long address,
             @Param("fingerprint") String fingerprint, @Param("order") Long order, @Param("location") String location,
             @Param("body") String body, @Param("at") Instant at);

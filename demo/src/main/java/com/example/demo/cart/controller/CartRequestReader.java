@@ -25,6 +25,7 @@ public class CartRequestReader {
         else if (type == UpdateCartQuantityRequest.class) required = Set.of("quantity");
         else if (type == ChangeCartVariantRequest.class) required = Set.of("productVariantId");
         else if (type == CartSelectionRequest.class) required = Set.of("selected");
+        else if (type == com.example.demo.cart.dto.request.ApplyCartVoucherRequest.class) required = Set.of("walletEntitlementId");
         else throw new InvalidCartRequestException();
         try (JsonParser parser = json.createParser(body)) {
             if (parser.nextToken() != JsonToken.START_OBJECT) throw new InvalidCartRequestException();
@@ -40,6 +41,8 @@ public class CartRequestReader {
                     if (value != JsonToken.VALUE_NUMBER_INT || !parser.getText().matches("[0-9]+")) throw new InvalidCartRequestException();
                     int quantity = Integer.parseInt(parser.getText());
                     if (quantity < 1 || quantity > 999) throw new InvalidCartRequestException();
+                } else if ("walletEntitlementId".equals(field)) {
+                    if (value != JsonToken.VALUE_NUMBER_INT || !parser.getText().matches("[1-9][0-9]*") || Long.parseLong(parser.getText())<=0) throw new InvalidCartRequestException();
                 } else if ("productVariantId".equals(field)) {
                     if (value != JsonToken.VALUE_STRING || !parser.getString().matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))
                         throw new InvalidCartRequestException();
