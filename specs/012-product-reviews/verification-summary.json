@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-21",
+  "unrestricted": {
+    "command": "./mvnw.cmd verify",
+    "unitTests": 690,
+    "integrationTests": 699,
+    "failures": 10,
+    "errors": 0,
+    "skipped": 0,
+    "result": "Failed on migration-test compatibility assumptions; preserved as the result of that source snapshot",
+    "jarPackaged": true
+  },
+  "affectedReruns": [
+    {
+      "errors": 0,
+      "scope": "CatalogMigrationsIT selected method and CatalogSearchMigrationIT recovery method",
+      "failures": 0,
+      "tests": 2
+    },
+    {
+      "errors": 0,
+      "scope": "InventoryMigrationIT and VoucherMigrationIT",
+      "failures": 0,
+      "tests": 17
+    }
+  ],
+  "remainingKnownFailures": 0,
+  "productionChangedAfterUnrestricted": false,
+  "postUnrestrictedSourceChanges": [
+    "demo\\src\\test\\java\\com\\example\\demo\\catalog\\CatalogMigrationsIT.java",
+    "demo\\src\\test\\java\\com\\example\\demo\\catalog\\repository\\CatalogSearchMigrationIT.java",
+    "demo\\src\\test\\java\\com\\example\\demo\\inventory\\repository\\InventoryMigrationIT.java",
+    "demo\\src\\test\\java\\com\\example\\demo\\voucher\\repository\\VoucherMigrationIT.java"
+  ],
+  "finalSourceFingerprint": "24fc50eb3729c17e332a531380b728b30a8c5df0e70e92b290133da540c614cd",
+  "fullRunRepeated": false,
+  "rerunRationale": "Only four test compatibility files changed after the unrestricted run; targeted real-PostgreSQL reruns cover every reported failure. No production/schema change or unresolved regression uncertainty justifies repeating unrelated benchmarks."
+}
