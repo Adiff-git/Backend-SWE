@@ -1,0 +1,94 @@
+openapi: 3.1.0
+info:
+  title: Recommendation MVP public APIs
+  version: '1.0'
+  description: Backend owns authentication, publication, pricing and public hydration. Internal inference contract is canonical in AI-SWE/src/ai_service/recommendation/inference.py.
+paths:
+  /api/recommendations:
+    get:
+      summary: General recommendations without guest tracking
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          $ref: '#/components/responses/Recommendations'
+        '400':
+          description: Invalid, unknown or duplicate parameters; ProblemDetail
+        '503':
+          description: Published catalog exceeds explicitly supported capacity of 3000
+  /api/me/recommendations:
+    get:
+      summary: Current authenticated Customer recommendations
+      description: Only Customer identity from JWT; ADMIN denied; customerId is rejected.
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          $ref: '#/components/responses/Recommendations'
+        '400':
+          description: Invalid, unknown or duplicate parameters; ProblemDetail
+        '401':
+          description: Customer authentication required
+        '403':
+          description: Customer role required; ADMIN denied
+        '503':
+          description: Published catalog capacity exceeded
+  /api/products/{productId}/similar:
+    get:
+      summary: Similar alternatives to a published source product
+      security: []
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          $ref: '#/components/responses/Recommendations'
+        '400':
+          description: Invalid UUID, limit or parameters; ProblemDetail
+        '404':
+          description: Source missing or not published
+        '503':
+          description: Published catalog capacity exceeded
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 20
+        default: 10
+  responses:
+    Recommendations:
+      description: Trusted catalog cards in ranking order; no scores or reasons. Empty list when no eligible products.
+      headers:
+        Cache-Control:
+          schema:
+            type: string
+            const: no-store
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [items]
+            properties:
+              items:
+                type: array
+                maxItems: 20
+                items:
+                  $ref: ../specs/007-product-search-filter/contracts/openapi.yaml#/components/schemas/ProductListingItem

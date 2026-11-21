@@ -6,8 +6,8 @@ on:
             - '**'
     pull_request:
         branches:
-            main
-            draft/version-1
+            - main
+            - draft/version-1
 
 permissions:
     contents: read
@@ -17,8 +17,18 @@ jobs:
         name: Run tests
         runs-on: ubuntu-latest
         steps:
-          - name: Checkout source code
+          - name: Checkout Backend-SWE
             uses: actions/checkout@v7
+            with:
+                path: Backend-SWE
+
+          - name: Checkout AI-SWE
+            uses: actions/checkout@v7
+            with:
+                repository: Adiff-git/AI-SWE
+                ref: ee49f95e29511debb8dc8c302cb6f6d808bc7175
+                path: AI-SWE
+                persist-credentials: false
 
           - name: Set up JDK 25
             uses: actions/setup-java@v6
@@ -26,6 +36,24 @@ jobs:
                 distribution: temurin
                 java-version: 25
 
+          - name: Set up Python 3.12
+            uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+            with:
+                python-version: '3.12'
+
+          - name: Set up uv
+            uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9 # v7
+            with:
+                version: '0.12.21'
+                enable-cache: false
+
+          - name: Install AI dependencies
+            working-directory: AI-SWE
+            run: |
+                python --version
+                uv --version
+                uv sync --locked
+
           - name: Run tests
-            working-directory: demo
+            working-directory: Backend-SWE/demo
             run: mvn -B -ntp clean verify
