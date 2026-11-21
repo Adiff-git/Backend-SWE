@@ -15,9 +15,7 @@ Thumbs.db
 .vscode/
 # Local documentation and database design artifacts.
 /docs/*
-!/docs/README.md
 !/docs/openapi.json
-!/docs/validate_openapi.py
 # Generated OpenAPI validation report (kept local).
 /Database-Design/
 
@@ -48,6 +46,3 @@ htmlcov/
 *.orig
 *~
 Desktop.ini
-
-# Generated API validation output
-/docs/openapi-validation.json
