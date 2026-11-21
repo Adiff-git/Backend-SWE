@@ -22,17 +22,26 @@ class CheckoutServiceIT extends CheckoutIntegrationSupport {
         });
         transactions.executeWithoutResult(s -> {
             jdbc.execute("SET LOCAL track_functions='pl'");
+            // PostgreSQL can retain unflushed function counters on a reused backend.
+            // Measure this checkout relative to its baseline on the same transaction/connection.
+            var baseline = deferredFunctionStatistics();
             service.checkout(fixture.owner(), "Trigger_cost_key_123", new CheckoutRequest(fixture.address()));
             entities.flush();
             long start = System.nanoTime();
             jdbc.execute("SET CONSTRAINTS ALL IMMEDIATE");
             long validationNanos = System.nanoTime()-start;
-            var functions = jdbc.queryForList("""
-                    SELECT funcname,calls,total_time,self_time FROM pg_stat_xact_user_functions
-                    WHERE schemaname='public' AND funcname IN
-                    ('check_inventory_balance_integrity','check_inventory_order_integrity','validate_inventory_order','validate_voucher_final','check_voucher_final')
-                    ORDER BY funcname
-                    """);
+            var functions = deferredFunctionStatistics();
+            functions.forEach(row -> {
+                var previous = baseline.stream()
+                        .filter(value -> value.get("funcname").equals(row.get("funcname")))
+                        .findFirst();
+                for (String metric : java.util.List.of("calls", "total_time", "self_time")) {
+                    Number before = previous.map(value -> (Number) value.get(metric)).orElse(0L);
+                    Number after = (Number) row.get(metric);
+                    if (metric.equals("calls")) row.put(metric, after.longValue() - before.longValue());
+                    else row.put(metric, after.doubleValue() - before.doubleValue());
+                }
+            });
             assertThat(functions).anySatisfy(row -> {
                 assertThat(row.get("funcname")).isEqualTo("check_inventory_balance_integrity");
                 assertThat(((Number) row.get("calls")).longValue()).isEqualTo(2L*selectedRows);
@@ -44,6 +53,14 @@ class CheckoutServiceIT extends CheckoutIntegrationSupport {
             System.out.printf("INVENTORY_TRIGGER_COST rows=%d forcedValidationWallNanos=%d functions=%s%n", selectedRows, validationNanos, functions);
         }); // Actual commit still occurs; forcing deferred validation is measurement, not a flush-only commitment claim.
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_reservations", Long.class)).isEqualTo(selectedRows);
+    }
+    private java.util.List<java.util.Map<String, Object>> deferredFunctionStatistics() {
+        return jdbc.queryForList("""
+                SELECT funcname,calls,total_time,self_time FROM pg_stat_xact_user_functions
+                WHERE schemaname='public' AND funcname IN
+                ('check_inventory_balance_integrity','check_inventory_order_integrity','validate_inventory_order','validate_voucher_final','check_voucher_final')
+                ORDER BY funcname
+                """);
     }
     @Test void checkout_shouldRetainStockShortageRowWhileReservingOnlyTheOtherFullRow() {
         jdbc.update("UPDATE cart_items SET selected=true WHERE id=?", fixture.unselected());
