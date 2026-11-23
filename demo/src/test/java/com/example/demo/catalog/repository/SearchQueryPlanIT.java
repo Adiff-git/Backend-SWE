@@ -37,6 +37,7 @@ class SearchQueryPlanIT {
         tx.executeWithoutResult(status->{
             jdbc.update("INSERT INTO products(id,category_id,name,description,status) SELECT md5('plan-product-'||i)::uuid,?,'Sony Alpha Camera '||i,repeat('Electronics portable photography ',3),'PUBLISHED' FROM generate_series(1,1500)i",category);
             jdbc.execute("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price,technical_specifications) SELECT md5('plan-variant-'||i)::uuid,md5('plan-product-'||i)::uuid,'PLAN-'||i,'{}'::jsonb,i*1000,'{\"schema_version\":1,\"values\":{\"physical_ram\":{\"value\":16,\"unit\":\"GB\"}}}'::jsonb FROM generate_series(1,1500)i");
+            jdbc.execute("INSERT INTO product_images(id,product_id,object_key,alt_text,content_type,byte_size,width,height,display_order,is_primary,created_at) SELECT md5('plan-ready-'||id::text)::uuid,id,'final/plan-ready/'||id::text,'Ready image','image/png',100,10,10,0,true,now() FROM products");
         });jdbc.execute("ANALYZE products");jdbc.execute("ANALYZE product_variants");
         var output=Path.of("target","search-plans");Files.createDirectories(output);
         var normalizer=new ProductSearchNormalizer();
@@ -75,6 +76,7 @@ class SearchQueryPlanIT {
         tx.executeWithoutResult(st->{
             jdbc.update("INSERT INTO products(id,category_id,name,status) SELECT md5('scale-p-'||i)::uuid,?,'Scale Laptop '||i,'PUBLISHED' FROM generate_series(1,10000)i",category);
             jdbc.execute("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) SELECT md5('scale-v-'||i||'-0')::uuid,md5('scale-p-'||i)::uuid,'SCALE-'||i,jsonb_build_object('option','0'),i*1000 FROM generate_series(1,10000)i");
+            jdbc.execute("INSERT INTO product_images(id,product_id,object_key,alt_text,content_type,byte_size,width,height,display_order,is_primary,created_at) SELECT md5('scale-ready-'||id::text)::uuid,id,'final/scale-ready/'||id::text,'Ready image','image/png',100,10,10,0,true,now() FROM products");
         });
         var output=Path.of("target","search-plans");Files.createDirectories(output);
         for(int fanout:List.of(1,5,20)){

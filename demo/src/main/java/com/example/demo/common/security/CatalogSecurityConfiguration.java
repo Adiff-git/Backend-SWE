@@ -17,20 +17,18 @@ public class CatalogSecurityConfiguration {
 			CatalogSecurityProblemHandler problemHandler,
             com.example.demo.auth.security.CurrentStateJwtConverter converter) throws Exception {
 		http
-			.securityMatcher("/api/products", "/api/products/**")
+			.securityMatcher("/api/products", "/api/products/**", "/api/admin/catalog", "/api/admin/catalog/**")
 			.cors(org.springframework.security.config.Customizer.withDefaults())
 			// The planned catalog API uses Bearer credentials, not cookie authentication.
-			.csrf(csrf -> csrf.ignoringRequestMatchers("/api/products/**"))
+			.csrf(csrf -> csrf.ignoringRequestMatchers("/api/products/**", "/api/admin/catalog", "/api/admin/catalog/**"))
 			.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers("/api/admin/catalog", "/api/admin/catalog/**")
+                    .access((authentication, context) -> administrator(authentication.get()))
 				.requestMatchers(HttpMethod.GET, "/api/products", "/api/products/{id}").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/products/{id}/reviews", "/api/products/{id}/rating-summary").permitAll()
 				.requestMatchers(HttpMethod.GET, "/api/products/{id}/similar").permitAll()
-				.requestMatchers(HttpMethod.POST, "/api/products/{id}/images").access((authentication, context) -> {
-                            var actor = authentication.get();
-                            return new org.springframework.security.authorization.AuthorizationDecision(
-                                actor instanceof org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
-                                && actor.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")));
-                        })
+				.requestMatchers(HttpMethod.POST, "/api/products/{id}/images")
+                    .access((authentication, context) -> administrator(authentication.get()))
 				.anyRequest().denyAll())
 			.sessionManagement(s -> s.sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
             .oauth2ResourceServer(o -> o.authenticationEntryPoint(problemHandler).accessDeniedHandler(problemHandler)
@@ -40,4 +38,11 @@ public class CatalogSecurityConfiguration {
 				.accessDeniedHandler(problemHandler));
 		return http.build();
 	}
+
+    private static org.springframework.security.authorization.AuthorizationDecision administrator(
+            org.springframework.security.core.Authentication actor) {
+        return new org.springframework.security.authorization.AuthorizationDecision(
+                actor instanceof org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
+                && actor.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN")));
+    }
 }

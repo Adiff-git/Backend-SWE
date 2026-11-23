@@ -38,7 +38,7 @@ class CatalogCartReadServiceImplTest {
         UUID id = UUID.randomUUID();
         CartVariantView row = mock(CartVariantView.class);
         when(row.getVariantId()).thenReturn(id); when(row.getProductId()).thenReturn(id);
-        when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getPrice()).thenReturn(BigDecimal.TEN);
+        when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getEnabled()).thenReturn(true); when(row.getPrice()).thenReturn(BigDecimal.TEN);
         when(row.getProductName()).thenReturn("P"); when(row.getSku()).thenReturn("S"); when(row.getOptions()).thenReturn(Map.of());
         when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
         when(inventory.getAvailability(List.of(id))).thenReturn(Map.of(id, new com.example.demo.inventory.dto.response.InventoryAvailability(0, "OUT_OF_STOCK")));
@@ -71,8 +71,8 @@ class CatalogCartReadServiceImplTest {
         CartVariantView row = mock(CartVariantView.class);
         when(row.getVariantId()).thenReturn(variant);
         when(row.getProductId()).thenReturn(product);
-        when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED);
-        when(row.getPrice()).thenReturn(BigDecimal.ZERO);
+        when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getEnabled()).thenReturn(true);
+        when(row.getPrice()).thenReturn(BigDecimal.ONE);
         when(row.getOptions()).thenReturn(Map.of());
         when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
         when(images.findCartPrimaryImages(anyCollection())).thenReturn(List.<Object[]>of(new Object[]{product,"images/key"}));
@@ -91,7 +91,7 @@ class CatalogCartReadServiceImplTest {
             UUID id = UUID.randomUUID();
             CartVariantView row = mock(CartVariantView.class);
             when(row.getVariantId()).thenReturn(id); when(row.getProductId()).thenReturn(id);
-            when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getPrice()).thenReturn(BigDecimal.TEN);
+            when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getEnabled()).thenReturn(true); when(row.getPrice()).thenReturn(BigDecimal.TEN);
             when(row.getOptions()).thenReturn(Map.of()); rows.put(id, row);
         }
         when(variants.findCartStates(anyCollection())).thenAnswer(call -> ((Collection<UUID>)call.getArgument(0)).stream().map(rows::get).toList());
@@ -107,17 +107,46 @@ class CatalogCartReadServiceImplTest {
         List<String> ordered = locks.getAllValues().stream().flatMap(Collection::stream).map(UUID::toString).toList();
         assertThat(ordered).isSorted();
         assertThat(locks.getAllValues().getFirst()).hasSize(100);
-        verify(variants, times(2)).findCartStates(anyCollection());
-        verify(images, times(4)).findCartPrimaryImages(anyCollection());
-        assertThat(new CatalogCartReadServiceImpl(variants, products, images, inventory).getCartPresentation(rows.keySet(), null).values())
-                .allMatch(row -> row.getPrimaryImageUrl() == null);
+        verify(variants, times(4)).findCartStates(anyCollection());
+        verify(images, times(2)).findCartPrimaryImages(anyCollection());
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> new CatalogCartReadServiceImpl(variants, products, images, inventory)
+                .getCartPresentation(rows.keySet(), null)).isInstanceOf(com.example.demo.catalog.exception.CatalogStorageUnavailableException.class);
     }
 
-    @Test void getVariantStates_shouldDefensivelyRejectFractionalOrNegativePricesAndAcceptZero() {
+    @Test void getCartPresentation_shouldRefreshImagelessEligibilityPriceAndInventoryAfterParentLock() {
+        UUID id=UUID.randomUUID();
+        CartVariantView before=mock(CartVariantView.class), after=mock(CartVariantView.class);
+        for (CartVariantView row : List.of(before,after)) {
+            when(row.getVariantId()).thenReturn(id); when(row.getProductId()).thenReturn(id);
+            when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getEnabled()).thenReturn(true);
+            when(row.getOptions()).thenReturn(Map.of());
+        }
+        when(before.getPrice()).thenReturn(BigDecimal.TEN); when(after.getPrice()).thenReturn(BigDecimal.valueOf(25));
+        when(variants.findCartStates(anyCollection())).thenReturn(List.of(before),List.of(after));
+        when(products.lockStatusesForShare(List.of(id))).thenReturn(List.<Object[]>of(new Object[]{id,"PUBLISHED"}));
+        var state=new CatalogCartReadServiceImpl(variants,products,images,inventory).getCartPresentation(List.of(id),null).get(id);
+        assertThat(state.getAmount()).isEqualTo(java.math.BigInteger.valueOf(25));
+        var order=org.mockito.Mockito.inOrder(variants,products,inventory);
+        order.verify(variants).findCartStates(anyCollection()); order.verify(products).lockStatusesForShare(List.of(id));
+        order.verify(variants).findCartStates(anyCollection()); order.verify(inventory).getAvailability(List.of(id));
+    }
+
+    @Test void getVariantStates_shouldMaskDisabledVariantAndExcludeInventory() {
+        UUID id=UUID.randomUUID(); CartVariantView row=mock(CartVariantView.class);
+        when(row.getVariantId()).thenReturn(id); when(row.getProductId()).thenReturn(id);
+        when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getEnabled()).thenReturn(false);
+        when(row.getPrice()).thenReturn(BigDecimal.TEN); when(row.getProductName()).thenReturn("private");
+        when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
+        var state=new CatalogCartReadServiceImpl(variants,products,images,inventory).getVariantStates(List.of(id)).get(id);
+        assertThat(state.isPurchasable()).isFalse(); assertThat(state.getProductName()).isNull();
+        assertThat(state.getAvailability()).isNull(); verifyNoInteractions(inventory);
+    }
+
+    @Test void getVariantStates_shouldRejectFractionalNegativeAndZeroPrices() {
         UUID id = UUID.randomUUID();
         CartVariantView row = mock(CartVariantView.class);
         when(row.getVariantId()).thenReturn(id); when(row.getProductId()).thenReturn(id);
-        when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getOptions()).thenReturn(Map.of());
+        when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getEnabled()).thenReturn(true); when(row.getOptions()).thenReturn(Map.of());
         when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
         var service = new CatalogCartReadServiceImpl(variants, products, images, inventory);
         for (BigDecimal price : List.of(new BigDecimal("0.5"), BigDecimal.valueOf(-1))) {
@@ -125,6 +154,6 @@ class CatalogCartReadServiceImplTest {
             assertThat(service.getVariantStates(List.of(id)).get(id).isPurchasable()).isFalse();
         }
         when(row.getPrice()).thenReturn(BigDecimal.ZERO);
-        assertThat(service.getVariantStates(List.of(id)).get(id).isPurchasable()).isTrue();
+        assertThat(service.getVariantStates(List.of(id)).get(id).isPurchasable()).isFalse();
     }
 }

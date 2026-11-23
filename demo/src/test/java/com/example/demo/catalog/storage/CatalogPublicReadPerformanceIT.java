@@ -140,9 +140,10 @@ class CatalogPublicReadPerformanceIT {
 						"{\"color\":\"" + (variant == 0 ? "red" : "blue") + "\"}",
 						BigDecimal.valueOf(100_000L + variant)});
 			}
-			if (index < PUBLISHED_COUNT && index % 4 == 0) {
-				imageBearing.add(productId);
-				int imageCount = index == 0 ? 10 : 2;
+			if (index < PUBLISHED_COUNT) {
+                // Every positive Published aggregate is ready; retain original heavy-gallery detail sample set.
+                if(index % 4 == 0) imageBearing.add(productId);
+                int imageCount = index % 4 == 0 ? (index == 0 ? 10 : 2) : 1;
 				for (int order = 0; order < imageCount; order++) {
 					images.add(new Object[] {UUID.randomUUID(), productId,
 							"final/performance/" + productId + "/" + order,

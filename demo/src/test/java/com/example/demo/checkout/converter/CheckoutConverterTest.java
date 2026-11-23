@@ -30,6 +30,14 @@ class CheckoutConverterTest {
                 .isEqualTo(JsonMapper.builder().build().readTree(body));
     }
 
+    @Test void decode_shouldPreserveHistoricalZeroPriceWithoutApplyingCurrentSaleEligibility(){
+        String body=JsonMapper.builder().build().writeValueAsString(CheckoutTestData.receipt(5L,7L,CheckoutFixtures.PLACED_AT,0));
+        var converter=new CheckoutConverter();var historical=converter.decode(body);
+        assertThat(historical.getOrder().getPayableTotal().getAmount()).isZero();
+        assertThat(historical.getOrder().getItems().getFirst().getUnitPriceSnapshot().getAmount()).isZero();
+        assertThat(converter.decode(converter.encode(historical))).usingRecursiveComparison().isEqualTo(historical);
+    }
+
     @Test void decode_shouldPreserveWideNumbersWithinReceiptOnlyParser() {
         String amount = "1"+"0".repeat(131071);
         String body = JsonMapper.builder().build().writeValueAsString(CheckoutTestData.receipt(5L,7L,CheckoutFixtures.PLACED_AT))

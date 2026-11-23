@@ -27,7 +27,7 @@ class CatalogEnhancementMappingsIT {
 
     @Test
     void repositories_shouldRoundTripBrandSpecificationAndReceiptWithoutChangingOptions() {
-        CatalogFixtures.ProductFixture fixture = CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED);
+        CatalogFixtures.ProductFixture fixture = CatalogFixtures.persistReadyProduct(entities);
         Brand brand = brands.save(new Brand("mapping-brand", "Mapping Brand"));
         fixture.product().setBrand(brand);
         Map<String, String> originalOptions = fixture.variant().getOptionCombination();

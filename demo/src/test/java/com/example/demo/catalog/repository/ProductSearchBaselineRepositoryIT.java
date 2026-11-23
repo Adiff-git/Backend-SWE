@@ -110,7 +110,7 @@ class ProductSearchBaselineRepositoryIT {
     void selectsCheapestVariantWithUuidTieAndPreservesExactAmount() {
         List<UUID> cheapestIds = new ArrayList<>();
         ProductFixture fixture = transactions.execute(status -> {
-            ProductFixture product = CatalogFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+            ProductFixture product = CatalogFixtures.persistReadyProduct(entityManager);
             product.variant().setOptionCombination(Map.of("choice", "expensive"));
             product.variant().setSellingPrice(new BigDecimal("9999999999999999999999999999999999999999"));
             ProductVariant one = CatalogFixtures.variant(product.product(), Map.of("choice", "one"), new BigDecimal("123456789012345678901234567890"));
@@ -152,11 +152,9 @@ class ProductSearchBaselineRepositoryIT {
         entityManager.persist(fixture.product());
         entityManager.flush();
         ProductCandidatePage result = page(0, 20);
-        assertThat(result.getTotalElements()).isOne();
-        assertThat(result.getItems()).hasSize(1);
-        assertThat(result.getItems().getFirst().getProductId()).isEqualTo(fixture.product().getId());
-        assertThat(result.getItems().getFirst().getRepresentativeVariantId()).isNull();
-        assertThat(result.getItems().getFirst().getDisplayAmount()).isNull();
+        assertThat(result.getTotalElements()).isZero();
+        assertThat(result.getItems()).isEmpty();
+        assertThat(jdbc.queryForObject("SELECT status FROM products WHERE id=?",String.class,fixture.product().getId())).isEqualTo("PUBLISHED");
         assertThat(jdbc.queryForObject("SELECT tgenabled::text FROM pg_trigger WHERE tgname='ct_products_variant_integrity'", String.class)).isEqualTo("O");
         // The deliberately exceptional fixture is rolled back,not committed and no trigger is disabled.
     }
@@ -184,7 +182,7 @@ class ProductSearchBaselineRepositoryIT {
     void representativeMetadataDoesNotMultiplyWithVariantsOrImages() {
         transactions.executeWithoutResult(status -> {
             ProductFixture fixture = CatalogFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
-            fixture.variant().setSellingPrice(BigDecimal.ZERO);
+            fixture.variant().setSellingPrice(BigDecimal.ONE);
             entityManager.persist(CatalogFixtures.image(fixture.product(), 0, true));
             entityManager.persist(CatalogFixtures.image(fixture.product(), 1, false));
             entityManager.flush();
@@ -193,12 +191,12 @@ class ProductSearchBaselineRepositoryIT {
         assertThat(result.getItems()).hasSize(1);
         assertThat(result.getTotalElements()).isOne();
         assertThat(result.getItems().getFirst().getRepresentativeVariantId()).isNotNull();
-        assertThat(result.getItems().getFirst().getDisplayAmount()).isEqualTo(BigInteger.ZERO);
+        assertThat(result.getItems().getFirst().getDisplayAmount()).isEqualTo(BigInteger.ONE);
     }
 
     private UUID persist(ProductStatus status) {
         return transactions.execute(transaction -> {
-            ProductFixture fixture = CatalogFixtures.persistProduct(entityManager, status);
+            ProductFixture fixture = status==ProductStatus.PUBLISHED ? CatalogFixtures.persistReadyProduct(entityManager) : CatalogFixtures.persistProduct(entityManager,status);
             entityManager.flush();
             return fixture.product().getId();
         });

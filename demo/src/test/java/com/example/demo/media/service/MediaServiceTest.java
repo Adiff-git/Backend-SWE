@@ -70,4 +70,26 @@ class MediaServiceTest {
         image.complete("images/final");
         return image;
     }
+    @Test void productPreparation_shouldRejectForeignPendingAndExpiredUploads_withoutStorageAccess() {
+        java.util.UUID id=java.util.UUID.randomUUID();
+        org.mockito.Mockito.when(repository.findByIdAndOwnerUserId(id,1L)).thenReturn(java.util.Optional.empty());
+        assertThatThrownBy(()->service.prepareProductImage(1L,id)).isInstanceOf(com.example.demo.media.exception.ImageUploadNotFoundException.class);
+        var pending=com.example.demo.media.entity.ImageUpload.pending(1L,"staging","image/png",java.time.Instant.now(),java.time.Instant.now().plusSeconds(900));
+        org.mockito.Mockito.when(repository.findByIdAndOwnerUserId(id,1L)).thenReturn(java.util.Optional.of(pending));
+        assertThatThrownBy(()->service.prepareProductImage(1L,id)).isInstanceOf(com.example.demo.media.exception.UploadStateConflictException.class);
+        pending.expire();assertThatThrownBy(()->service.prepareProductImage(1L,id)).isInstanceOf(com.example.demo.media.exception.UploadStateConflictException.class);
+        org.mockito.Mockito.verifyNoInteractions(storage);
+    }
+    @Test void productRevalidation_shouldCheckOwnerVersionKeyAndCompletedState_withoutNetwork() {
+        java.util.UUID id=java.util.UUID.randomUUID();var image=completedImage();
+        org.springframework.test.util.ReflectionTestUtils.setField(image,"id",id);org.springframework.test.util.ReflectionTestUtils.setField(image,"version",2L);
+        org.mockito.Mockito.when(repository.findByIdAndOwnerUserId(id,1L)).thenReturn(java.util.Optional.of(image));
+        org.mockito.Mockito.when(repository.lockProductAttachmentSnapshot(id)).thenReturn(java.util.Collections.singletonList(new Object[]{id,1L,2L,"images/final","image/png","COMPLETED"}));
+        var proof=service.prepareProductImage(1L,id);service.validatePreparedProductImage(1L,proof);
+        // A fresh scalar row differs while the preparation entity remains cached at version2.
+        org.mockito.Mockito.when(repository.lockProductAttachmentSnapshot(id)).thenReturn(java.util.Collections.singletonList(new Object[]{id,1L,3L,"images/final","image/png","COMPLETED"}));
+        assertThatThrownBy(()->service.validatePreparedProductImage(1L,proof)).isInstanceOf(com.example.demo.media.exception.UploadStateConflictException.class);
+        org.mockito.Mockito.verifyNoInteractions(storage);
+    }
+
 }

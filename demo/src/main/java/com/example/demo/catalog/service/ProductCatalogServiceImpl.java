@@ -65,48 +65,22 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 		if (ids.isEmpty()) {
 			return Map.of();
 		}
-		List<ProductImage> primaryImages = images.findPrimaryImagesForProducts(ids);
-		Map<UUID, Product> eligible = indexProducts(
-				products.findAllByIdsAndStatusWithCategory(ids, ProductStatus.PUBLISHED));
-		Map<UUID, ProductImage> primaryByProduct = new HashMap<>();
-		for (ProductImage image : primaryImages) {
-			UUID id = image.getProduct().getId();
-			if (eligible.containsKey(id)) {
-				primaryByProduct.put(id, image);
-			}
-		}
-		Map<UUID, String> urls = new HashMap<>();
-		if (!primaryByProduct.isEmpty()) {
-			try (PreparedReadSigner signer = imageStorage.prepareReadSigner()) {
-				Set<UUID> published = lockPublishedImageProducts(primaryByProduct.keySet());
-				for (UUID id : primaryByProduct.keySet()) {
-					if (published.contains(id)) {
-						urls.put(id, signer.signReadUrl(primaryByProduct.get(id).getObjectKey()));
-					} else {
-						eligible.remove(id);
-					}
-				}
-			}
-		}
-		// Products without image locks still need a final publication revalidation.
-		List<UUID> withoutImages = ids.stream()
-				.filter(id -> !primaryByProduct.containsKey(id)).toList();
-		if (!withoutImages.isEmpty()) {
-			Map<UUID, Product> revalidated = indexProducts(
-					products.findAllByIdsAndStatusWithCategory(withoutImages, ProductStatus.PUBLISHED));
-			for (UUID id : withoutImages) {
-				eligible.remove(id);
-			}
-			eligible.putAll(revalidated);
-		}
-		Map<UUID, ProductSummary> summaries = new HashMap<>();
-		for (UUID id : ids) {
-			Product product = eligible.get(id);
-			if (product != null) {
-				summaries.put(id, converter.toSummary(product, urls.get(id)));
-			}
-		}
+        boolean pictured=!images.findCartPrimaryImages(ids).isEmpty();
+        try(PreparedReadSigner signer=pictured?imageStorage.prepareReadSigner():null){
+            Set<UUID> published=lockPublishedImageProducts(ids);
+            List<UUID> currentIds=ids.stream().filter(published::contains).toList();
+            if(currentIds.isEmpty())return Map.of();
+            var eligible=products.findPublicSummaries(currentIds).stream().collect(java.util.stream.Collectors.toMap(
+                    com.example.demo.catalog.repository.CatalogPublicViews.Product::getId,java.util.function.Function.identity()));
+            Map<UUID,String> urls=new HashMap<>();
+            for(Object[] row:images.findCartPrimaryImages(currentIds)){
+                if(signer==null)throw new com.example.demo.catalog.exception.CatalogStorageUnavailableException();
+                urls.put((UUID)row[0],signer.signReadUrl((String)row[1]));
+            }
+            Map<UUID,ProductSummary> summaries=new HashMap<>();
+            for(UUID id:ids){var product=eligible.get(id);if(product!=null)summaries.put(id,converter.toSummary(product,urls.get(id)));}
 		return Map.copyOf(summaries);
+        }
 	}
 
 	@Override
@@ -142,97 +116,59 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 			return new ProductPage(List.of(), request.getPage(), request.getSize(), candidatePage.getTotalElements(), totalPages);
 		}
 
-		// Batch image metadata first, then recheck publication immediately before projection.
-		List<ProductImage> primaryImages = images.findPrimaryImagesForProducts(ids);
-		Map<UUID, Product> eligible = indexProducts(
-				products.findAllByIdsAndStatusWithCategory(ids, ProductStatus.PUBLISHED));
-		Map<UUID, ProductImage> primaryByProduct = new HashMap<>();
-		for (ProductImage image : primaryImages) {
-			UUID productId = image.getProduct().getId();
-			if (eligible.containsKey(productId)) {
-				primaryByProduct.put(productId, image);
-			}
-		}
-
-		Map<UUID, String> signedUrls = new HashMap<>();
-		if (!primaryByProduct.isEmpty()) {
-			// Credential resolution happens before taking locks. Signing itself is local.
-			try (PreparedReadSigner signer = imageStorage.prepareReadSigner()) {
-				Set<UUID> lockedPublished = lockPublishedImageProducts(primaryByProduct.keySet());
-				for (UUID id : ids) {
-					if (lockedPublished.contains(id)) {
-						signedUrls.put(id, signer.signReadUrl(primaryByProduct.get(id).getObjectKey()));
-					} else if (primaryByProduct.containsKey(id)) {
-						eligible.remove(id);
-					}
-				}
-			}
-		}
-
-        // Signer credential resolution may block;revalidate imageless rows after it as one batch.
-        // Pictured rows are protected by the ordered publication locks above.
-        List<UUID> withoutImages=ids.stream().filter(id->!primaryByProduct.containsKey(id)).toList();
-        if(!withoutImages.isEmpty()){
-            Map<UUID,Product> revalidated=indexProducts(products.findAllByIdsAndStatusWithCategory(withoutImages,ProductStatus.PUBLISHED));
-            withoutImages.forEach(eligible::remove);eligible.putAll(revalidated);
+        // Only a scalar peek precedes credential preparation; no pre-lock entity/gallery is projected.
+        boolean pictured=!images.findCartPrimaryImages(ids).isEmpty();
+        try(PreparedReadSigner signer=pictured?imageStorage.prepareReadSigner():null){
+            Set<UUID> published=lockPublishedImageProducts(ids);
+            List<ProductCandidatePage.Candidate> selected=candidatePage.getItems().stream()
+                    .filter(c -> published.contains(c.getProductId())).toList();
+            var current=selected.isEmpty()?List.<com.example.demo.catalog.repository.ProductSearchRepository.CurrentCandidate>of()
+                    :products.recheckPublishedCandidates(criteria,selected);
+            var byId=current.stream().collect(java.util.stream.Collectors.toMap(
+                    com.example.demo.catalog.repository.ProductSearchRepository.CurrentCandidate::productId,java.util.function.Function.identity()));
+            List<UUID> representativeIds=current.stream().map(com.example.demo.catalog.repository.ProductSearchRepository.CurrentCandidate::variantId)
+                    .distinct().sorted(java.util.Comparator.comparing(UUID::toString)).toList();
+            var availability=representativeIds.isEmpty()?Map.<UUID,com.example.demo.inventory.dto.response.InventoryAvailability>of():inventory.getAvailability(representativeIds);
+            List<ProductListingItem> summaries=new ArrayList<>();
+            for(var candidate:candidatePage.getItems()){
+                var row=byId.get(candidate.getProductId());
+                // Never substitute a different representative or refill a page after revalidation.
+                if(row==null || !row.variantId().equals(candidate.getRepresentativeVariantId()))continue;
+                String url=null;
+                if(row.imageKey()!=null){
+                    if(signer==null)throw new com.example.demo.catalog.exception.CatalogStorageUnavailableException();
+                    url=signer.signReadUrl(row.imageKey());
+                }
+                var summary=new ProductSummary(row.productId(),row.name(),new com.example.demo.catalog.dto.response.CategorySummary(row.categoryId(),row.categoryName()),url);
+                summaries.add(converter.toListingItem(summary,row.amount(),row.variantId(),availability.get(row.variantId())));
+            }
+            return new ProductPage(List.copyOf(summaries),request.getPage(),request.getSize(),candidatePage.getTotalElements(),totalPages);
         }
-
-        List<UUID> representativeIds = candidatePage.getItems().stream().filter(candidate -> eligible.containsKey(candidate.getProductId()))
-                .map(ProductCandidatePage.Candidate::getRepresentativeVariantId).filter(java.util.Objects::nonNull)
-                .distinct().sorted(java.util.Comparator.comparing(UUID::toString)).toList();
-        Map<UUID, com.example.demo.inventory.dto.response.InventoryAvailability> availability = representativeIds.isEmpty() ? Map.of() : inventory.getAvailability(representativeIds);
-		List<ProductListingItem> summaries = new ArrayList<>();
-		for (ProductCandidatePage.Candidate candidate : candidatePage.getItems()) {
-			UUID id = candidate.getProductId();
-			Product product = eligible.get(id);
-			if (product != null) {
-				summaries.add(converter.toListingItem(converter.toSummary(product, signedUrls.get(id)),
-						candidate.getDisplayAmount(), candidate.getRepresentativeVariantId(),
-                        candidate.getRepresentativeVariantId() == null ? null : availability.get(candidate.getRepresentativeVariantId())));
-			}
-		}
-		return new ProductPage(List.copyOf(summaries), request.getPage(), request.getSize(),
-				candidatePage.getTotalElements(), totalPages);
 	}
 
 	@Override
 	@Transactional // A gallery read may need FOR SHARE before local URL signing.
 	public ProductDetail getProduct(UUID id) {
-		Product product = products.findByIdAndStatusWithCategory(id, ProductStatus.PUBLISHED)
-				.orElseThrow(ProductNotFoundException::new);
-		List<ProductVariant> ownedVariants = variants.findByProduct_IdOrderByIdAsc(id);
-		if (ownedVariants.isEmpty()) {
-			throw new CatalogConflictException();
-		}
-		List<ProductImage> gallery = images.findByProduct_IdOrderByDisplayOrderAsc(id);
-		Map<UUID, String> urls = new HashMap<>();
-		if (gallery.isEmpty()) {
-			// Recheck after the relationship reads, immediately before DTO projection.
-			product = products.findByIdAndStatusWithCategory(id, ProductStatus.PUBLISHED)
-					.orElseThrow(ProductNotFoundException::new);
-		} else {
-			// Resolve credentials before locking; signing performs no S3 network operation.
-			try (PreparedReadSigner signer = imageStorage.prepareReadSigner()) {
-				String status = products.lockStatusForShare(id).orElseThrow(ProductNotFoundException::new);
-				if (!ProductStatus.PUBLISHED.name().equals(status)) {
-					throw new ProductNotFoundException();
-				}
-				for (ProductImage image : gallery) {
-					urls.put(image.getId(), signer.signReadUrl(image.getObjectKey()));
-				}
-			}
-		}
-		return converter.toDetail(product, ownedVariants, gallery, urls,
-                inventory.getAvailability(ownedVariants.stream().map(ProductVariant::getId).toList()));
-	}
+        boolean pictured=!images.findCartPrimaryImages(List.of(id)).isEmpty();
+        try(PreparedReadSigner signer=pictured?imageStorage.prepareReadSigner():null){
+            var product=products.findPublishedForShare(id).orElseThrow(ProductNotFoundException::new);
+            var enabled=variants.findPublicVariants(id).stream().filter(com.example.demo.catalog.repository.CatalogPublicViews.Variant::getEnabled).toList();
+            if(enabled.isEmpty() || enabled.stream().anyMatch(v -> !positiveWhole(v.getPrice())))throw new CatalogConflictException();
+            var gallery=images.findPublicGallery(id);
+            if(gallery.isEmpty() || gallery.size()>10 || gallery.stream().filter(com.example.demo.catalog.repository.CatalogPublicViews.Image::getPrimaryImage).count()!=1)throw new CatalogConflictException();
+            Map<UUID,String> urls=new HashMap<>();
+            for(var image:gallery){
+                if(signer==null)throw new com.example.demo.catalog.exception.CatalogStorageUnavailableException();
+                urls.put(image.getId(),signer.signReadUrl(image.getObjectKey()));
+            }
+            return converter.toPublicDetail(product,enabled,gallery,urls,inventory.getAvailability(enabled.stream().map(com.example.demo.catalog.repository.CatalogPublicViews.Variant::getId).toList()));
+        }
+    }
 
-	private Map<UUID, Product> indexProducts(List<Product> fetched) {
-		Map<UUID, Product> byId = new HashMap<>();
-		for (Product product : fetched) {
-			byId.put(product.getId(), product);
-		}
-		return byId;
-	}
+    private boolean positiveWhole(java.math.BigDecimal price){
+        if(price==null || price.signum()<=0)return false;
+        try{price.toBigIntegerExact();return true;}catch(ArithmeticException invalid){return false;}
+    }
 
 	private Set<UUID> lockPublishedImageProducts(Collection<UUID> imageProductIds) {
 		Set<UUID> published = new HashSet<>();

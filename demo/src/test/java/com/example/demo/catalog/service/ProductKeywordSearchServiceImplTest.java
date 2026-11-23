@@ -129,10 +129,8 @@ class ProductKeywordSearchServiceImplTest {
         assertThat(item(page, 0).getRepresentativeVariantId()).isEqualTo(secondVariant);
         assertThat(item(page, 1).getRepresentativeVariantId()).isEqualTo(firstVariant);
         assertThat(item(page, 0).getDisplayPrice().getAmount()).isEqualTo(BigInteger.TEN);
-        verify(images).findPrimaryImagesForProducts(List.of(second.product().getId(), first.product().getId()));
-        // Initial batch plus mandatory final imageless publication recheck;both stay batched.
-        verify(products, org.mockito.Mockito.times(2)).findAllByIdsAndStatusWithCategory(
-                List.of(second.product().getId(), first.product().getId()), ProductStatus.PUBLISHED);
+        verify(images).findCartPrimaryImages(List.of(second.product().getId(), first.product().getId()));
+        verify(products).recheckPublishedCandidates(any(),any());
     }
 
     @Test
@@ -160,16 +158,14 @@ class ProductKeywordSearchServiceImplTest {
     }
 
     @Test
-    void listProducts_shouldKeepPairedNullMetadata_whenRepositoryReturnsSharedOnlyOrphan() {
+    void listProducts_shouldSuppressOrphanWithoutRefilling_whenNoEligibleVariantRemains() {
         var fixture = fixture("Máy tính");
         // This in-memory Product has no persisted relationships;eligibility is the repository's responsibility.
         selected(List.of(new Candidate(fixture.product().getId(), null, null)), List.of(fixture.product()));
 
         ProductPage page = service.listProducts(request("máy tính"));
 
-        assertThat(item(page, 0).getId()).isEqualTo(fixture.product().getId());
-        assertThat(item(page, 0).getRepresentativeVariantId()).isNull();
-        assertThat(item(page, 0).getDisplayPrice()).isNull();
+        assertThat(page.getItems()).isEmpty();
         assertThat(page.getTotalItems()).isOne();
         verifyNoInteractions(storage);
     }
@@ -184,7 +180,7 @@ class ProductKeywordSearchServiceImplTest {
         selected(List.of(new Candidate(visible.product().getId(), selectedVariant, BigInteger.TEN),
                 new Candidate(hidden.product().getId(), UUID.randomUUID(), BigInteger.ONE)),
                 List.of(hidden.product(), visible.product()));
-        when(images.findPrimaryImagesForProducts(anyCollection())).thenReturn(List.of(hiddenImage, visibleImage));
+        stubImages(List.of(hiddenImage,visibleImage));
         when(products.lockStatusesForShare(anyCollection())).thenReturn(List.of(
                 new Object[]{visible.product().getId(), "PUBLISHED"}, new Object[]{hidden.product().getId(), "ARCHIVED"}));
         PreparedReadSigner signer = mock(PreparedReadSigner.class);
@@ -210,8 +206,7 @@ class ProductKeywordSearchServiceImplTest {
     void listProducts_shouldAvoidLocksAndRetry_whenSignerPreparationFails() {
         var fixture = fixture("Phone");
         selected(List.of(new Candidate(fixture.product().getId(), UUID.randomUUID(), BigInteger.TEN)), List.of(fixture.product()));
-        when(images.findPrimaryImagesForProducts(anyCollection()))
-                .thenReturn(List.of(CatalogFixtures.image(fixture.product(), 0, true)));
+        stubImages(List.of(CatalogFixtures.image(fixture.product(),0,true)));
         when(storage.prepareReadSigner()).thenThrow(new CatalogStorageUnavailableException());
 
         assertThatThrownBy(() -> service.listProducts(request("phone"))).isInstanceOf(CatalogStorageUnavailableException.class);
@@ -226,7 +221,7 @@ class ProductKeywordSearchServiceImplTest {
         var fixture = fixture("Phone");
         ProductImage image = CatalogFixtures.image(fixture.product(), 0, true);
         selected(List.of(new Candidate(fixture.product().getId(), UUID.randomUUID(), BigInteger.TEN)), List.of(fixture.product()));
-        when(images.findPrimaryImagesForProducts(anyCollection())).thenReturn(List.of(image));
+        stubImages(List.of(image));
         when(products.lockStatusesForShare(anyCollection())).thenReturn(
                 List.<Object[]>of(new Object[]{fixture.product().getId(), "PUBLISHED"}));
         PreparedReadSigner signer = mock(PreparedReadSigner.class);
@@ -238,6 +233,34 @@ class ProductKeywordSearchServiceImplTest {
         verify(signer).close();
         verify(signer).signReadUrl(image.getObjectKey());
         verify(storage).prepareReadSigner();
+    }
+
+    @Test void listProducts_shouldNotRefillOrSubstitute_whenOriginalRepresentativeStopsMatching(){
+        var fixture=fixture("Phone");UUID original=UUID.randomUUID();
+        selected(List.of(new Candidate(fixture.product().getId(),original,BigInteger.TEN)),List.of(fixture.product()));
+        when(products.recheckPublishedCandidates(any(),any())).thenReturn(List.of(
+                new com.example.demo.catalog.repository.ProductSearchRepository.CurrentCandidate(fixture.product().getId(),UUID.randomUUID(),BigInteger.ONE,
+                        "Phone",fixture.category().getId(),fixture.category().getName(),null)));
+        var page=service.listProducts(request("phone"));
+        assertThat(page.getItems()).isEmpty();assertThat(page.getTotalItems()).isOne();
+        verify(products,org.mockito.Mockito.times(1)).findPublishedCandidates(any());
+    }
+
+    @Test void listProducts_shouldUseCurrentPriceAndCurrentPrimaryAfterCredentialResolution(){
+        var fixture=fixture("Phone");UUID variant=UUID.randomUUID();
+        selected(List.of(new Candidate(fixture.product().getId(),variant,BigInteger.TEN)),List.of(fixture.product()));
+        stubImages(List.of(CatalogFixtures.image(fixture.product(),0,true)));
+        var signer=mock(PreparedReadSigner.class);when(storage.prepareReadSigner()).thenReturn(signer);
+        when(signer.signReadUrl("current-key")).thenReturn("signed-current");
+        when(products.recheckPublishedCandidates(any(),any())).thenReturn(List.of(
+                new com.example.demo.catalog.repository.ProductSearchRepository.CurrentCandidate(fixture.product().getId(),variant,BigInteger.valueOf(99),
+                        "Current name",fixture.category().getId(),fixture.category().getName(),"current-key")));
+        var item=item(service.listProducts(request("phone")),0);
+        assertThat(item.getName()).isEqualTo("Current name");assertThat(item.getDisplayPrice().getAmount()).isEqualTo(99);
+        assertThat(item.getPrimaryImageUrl()).isEqualTo("signed-current");
+        var order=inOrder(storage,products,signer);order.verify(storage).prepareReadSigner();
+        order.verify(products).lockStatusesForShare(anyCollection());order.verify(products).recheckPublishedCandidates(any(),any());
+        order.verify(signer).signReadUrl("current-key");
     }
 
     private CatalogFixtures.ProductFixture fixture(String name) {
@@ -256,7 +279,20 @@ class ProductKeywordSearchServiceImplTest {
 
     private void selected(List<Candidate> candidates, List<Product> batchRows) {
         when(products.findPublishedCandidates(any())).thenReturn(new ProductCandidatePage(candidates, candidates.size()));
-        when(products.findAllByIdsAndStatusWithCategory(anyCollection(), eq(ProductStatus.PUBLISHED))).thenReturn(batchRows);
+        when(products.lockStatusesForShare(anyCollection())).thenReturn(batchRows.stream().map(p -> new Object[]{p.getId(),"PUBLISHED"}).toList());
+        when(products.recheckPublishedCandidates(any(),any())).thenAnswer(call -> {
+            List<Candidate> selected=call.getArgument(1);
+            if(selected==null)return List.of();
+            return selected.stream().filter(c -> c.getRepresentativeVariantId()!=null).flatMap(c -> batchRows.stream().filter(p -> p.getId().equals(c.getProductId())).map(p ->
+                    new com.example.demo.catalog.repository.ProductSearchRepository.CurrentCandidate(p.getId(),c.getRepresentativeVariantId(),c.getDisplayAmount(),
+                            p.getName(),p.getCategory().getId(),p.getCategory().getName(),currentKeys.get(p.getId())))).toList();
+        });
+    }
+
+    private final Map<UUID,String> currentKeys=new java.util.HashMap<>();
+    private void stubImages(List<ProductImage> rows){
+        rows.forEach(i -> currentKeys.put(i.getProduct().getId(),i.getObjectKey()));
+        when(images.findCartPrimaryImages(anyCollection())).thenReturn(rows.stream().map(i -> new Object[]{i.getProduct().getId(),i.getObjectKey()}).toList());
     }
 
     private ProductSearchCriteria criteria() {

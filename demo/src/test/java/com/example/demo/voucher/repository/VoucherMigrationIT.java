@@ -41,7 +41,7 @@ class VoucherMigrationIT {
         });
         String originalReceipt = jdbc.queryForObject("SELECT receipt_body::TEXT FROM checkout_receipts WHERE order_id=?", String.class, historical.id());
         Flyway.configure().dataSource(source).load().migrate();
-        assertThat(jdbc.queryForObject("SELECT MAX(version::INTEGER) FROM flyway_schema_history WHERE success", Integer.class)).isEqualTo(27);
+        assertThat(jdbc.queryForObject("SELECT MAX(version::INTEGER) FROM flyway_schema_history WHERE success", Integer.class)).isEqualTo(28);
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM users WHERE id=?", Integer.class, owner)).isOne();
         assertThat(jdbc.queryForObject("SELECT voucher_entitlement_id FROM carts WHERE id=?", Long.class, cart)).isNull();
         assertThat(jdbc.queryForObject("SELECT voucher_discount FROM orders WHERE id=?", BigDecimal.class, historical.id())).isZero();

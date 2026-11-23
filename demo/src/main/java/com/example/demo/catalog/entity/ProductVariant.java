@@ -27,6 +27,9 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductVariant {
 
+	@Column(name = "enabled", nullable = false)
+	private boolean enabled = true;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Setter(AccessLevel.NONE)

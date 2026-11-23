@@ -11,6 +11,7 @@ public class CheckoutVariantState {
     UUID variantId;
     UUID productId;
     ProductStatus status;
+    boolean enabled;
     BigDecimal price;
     String productName;
     String sku;
@@ -18,6 +19,12 @@ public class CheckoutVariantState {
 
     public CheckoutVariantState(UUID variantId, UUID productId, ProductStatus status, BigDecimal price,
             String productName, String sku, Map<String, String> options) {
+        this(variantId, productId, status, true, price, productName, sku, options);
+    }
+
+    public CheckoutVariantState(UUID variantId, UUID productId, ProductStatus status, boolean enabled, BigDecimal price,
+            String productName, String sku, Map<String, String> options) {
+        this.enabled = enabled;
         this.variantId = variantId;
         this.productId = productId;
         this.status = status;

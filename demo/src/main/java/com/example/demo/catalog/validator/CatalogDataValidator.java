@@ -26,7 +26,7 @@ public class CatalogDataValidator {
 		if (product.getStatus() == null) {
 			throw new IllegalArgumentException("Product requires an explicit status");
 		}
-		if (variants == null || variants.isEmpty()) {
+		if (variants == null || variants.isEmpty() && product.getStatus() == com.example.demo.catalog.entity.ProductStatus.PUBLISHED) {
 			throw new IllegalArgumentException("Product requires at least one variant");
 		}
 

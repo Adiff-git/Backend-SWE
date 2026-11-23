@@ -23,6 +23,10 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 
+	@Setter(AccessLevel.NONE)
+	@Column(name = "version", nullable = false, insertable = false, updatable = false)
+	private long version;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Setter(AccessLevel.NONE)

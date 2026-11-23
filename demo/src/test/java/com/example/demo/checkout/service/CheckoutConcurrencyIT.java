@@ -36,6 +36,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest(properties={"spring.datasource.hikari.maximum-pool-size=6", "checkout.lock-timeout-ms=1000", "user.lock-timeout-ms=3000"})
+@org.springframework.context.annotation.Import(com.example.demo.catalog.service.AdminCatalogIntegrationSupport.LocalSigning.class)
 class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
     private static final String KEY="Synchronized_key_123";
     private static final int WAIT_SECONDS=20;
@@ -349,6 +350,79 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
         throw new IllegalStateException("No real competing lock wait observed for "+table);
     }
 
+    @Autowired com.example.demo.catalog.service.AdminProductService adminProducts;
+    @Autowired com.example.demo.catalog.service.AdminVariantService adminVariants;
+    @Autowired com.example.demo.catalog.service.AdminGalleryService adminGallery;
+    @Autowired com.example.demo.catalog.service.AdminCategoryService adminCategories;
+    @Autowired com.example.demo.order.service.OrderCompletionService completion;
+    @MockitoSpyBean com.example.demo.catalog.repository.CatalogMutationRepository adminClaims;
+    enum AdminEdit { UNPUBLISH, ARCHIVE, DISABLE, PRICE }
+    static java.util.stream.Stream<org.junit.jupiter.params.provider.Arguments> adminCheckoutCases(){return java.util.Arrays.stream(AdminEdit.values()).flatMap(edit->java.util.stream.Stream.of(org.junit.jupiter.params.provider.Arguments.of(edit,false),org.junit.jupiter.params.provider.Arguments.of(edit,true)));}
+    @ParameterizedTest @org.junit.jupiter.params.provider.MethodSource("adminCheckoutCases")
+    void checkoutShouldSerializeActualAdministrativeCommands(AdminEdit edit,boolean adminFirst) throws Exception {
+        if(edit==AdminEdit.DISABLE){var p=adminProducts.get(fixture.product());adminVariants.create(fixture.product(),new com.example.demo.catalog.dto.request.AdminVariantRequests.Create(Long.parseLong(p.getVersion()),Long.parseLong(p.getTaxonomyVersion()),"ENABLED-SIBLING-"+fixture.product(),java.math.BigDecimal.TEN,java.util.Map.of("choice","other"),java.util.Map.of("schema_version",1,"values",java.util.Map.of()),true));}
+        var before=adminProducts.get(fixture.product());long version=Long.parseLong(before.getVersion()),taxonomy=Long.parseLong(before.getTaxonomyVersion());
+        CountDownLatch held=new CountDownLatch(1),release=new CountDownLatch(1);
+        if(adminFirst){
+            doAnswer(call->{call.callRealMethod();held.countDown();await(release);return null;}).when(adminClaims).claim(org.mockito.ArgumentMatchers.eq(com.example.demo.catalog.repository.CatalogMutationRepository.Resource.PRODUCT),org.mockito.ArgumentMatchers.eq(fixture.product()),anyLong());
+        }else{
+            doAnswer(call->{Object result=call.callRealMethod();held.countDown();await(release);return result;}).when(catalogBoundary).getCheckoutVariantStates(any());
+        }
+        java.util.concurrent.Callable<Object> editCommand=()->{
+            switch(edit){
+                case UNPUBLISH,ARCHIVE->adminProducts.transition(fixture.product(),version,taxonomy,edit==AdminEdit.UNPUBLISH?com.example.demo.catalog.dto.request.AdminProductRequests.Action.UNPUBLISH:com.example.demo.catalog.dto.request.AdminProductRequests.Action.ARCHIVE);
+                case DISABLE->adminVariants.setEnabled(fixture.product(),fixture.variant(),version,taxonomy,false);
+                case PRICE->adminVariants.update(fixture.product(),fixture.variant(),new com.example.demo.catalog.dto.request.AdminVariantRequests.Patch(version,taxonomy,com.example.demo.catalog.dto.request.CatalogField.absent(),com.example.demo.catalog.dto.request.CatalogField.supplied(java.math.BigDecimal.valueOf(1750)),com.example.demo.catalog.dto.request.CatalogField.absent(),com.example.demo.catalog.dto.request.CatalogField.absent()));
+            }return true;
+        };
+        ExecutorService workers=Executors.newFixedThreadPool(2);
+        try{
+            Future<?> edited;Future<CheckoutReceiptResponse> purchased;
+            if(adminFirst){edited=workers.submit(editCommand);await(held);purchased=workers.submit(this::checkoutOrUnavailable);}
+            else{purchased=workers.submit(this::checkoutOrUnavailable);await(held);edited=workers.submit(editCommand);}
+            try{awaitDatabaseLock("products");}finally{release.countDown();}
+            edited.get(WAIT_SECONDS,TimeUnit.SECONDS);var receipt=purchased.get(WAIT_SECONDS,TimeUnit.SECONDS);
+            boolean unavailable=adminFirst && edit!=AdminEdit.PRICE;
+            assertThat(receipt==null).isEqualTo(unavailable);
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM orders",Integer.class)).isEqualTo(unavailable?0:1);
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_reservations",Integer.class)).isEqualTo(unavailable?0:1);
+            assertThat(Long.parseLong(adminProducts.get(fixture.product()).getVersion())).isEqualTo(version+1);
+            if(receipt!=null){assertThat(receipt.getOrder().getPayableTotal().getAmount()).isEqualTo(java.math.BigInteger.valueOf(adminFirst?3500:2000));assertThat(checkout(KEY)).usingRecursiveComparison().isEqualTo(receipt);}
+            else assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM cart_items WHERE id=?",Integer.class,fixture.item())).isOne();
+            assertInventoryIntegrity();
+        }finally{release.countDown();stop(workers);org.mockito.Mockito.reset(adminClaims);}
+    }
+    static java.util.stream.Stream<org.junit.jupiter.params.provider.Arguments> historicalAdminCases(){return java.util.stream.Stream.of("SPECIFICATION","CATEGORY","GALLERY").flatMap(edit->java.util.stream.Stream.of(org.junit.jupiter.params.provider.Arguments.of(edit,false),org.junit.jupiter.params.provider.Arguments.of(edit,true)));}
+    @ParameterizedTest @org.junit.jupiter.params.provider.MethodSource("historicalAdminCases")
+    void heldAdministrativeEditMustNotCorruptOwnedCancellationOrCompletion(String edit,boolean complete) throws Exception {
+        var receipt=checkout(KEY);long order=receipt.getOrder().getId();
+        var snapshot=jdbc.queryForList("SELECT * FROM order_items WHERE order_id=?",order);var receiptBefore=jdbc.queryForMap("SELECT * FROM checkout_receipts WHERE order_id=?",order);
+        if(complete)jdbc.update("UPDATE orders SET status='SHIPPING' WHERE id=?",order);
+        if(edit.equals("GALLERY"))jdbc.update("INSERT INTO product_images(id,product_id,object_key,alt_text,content_type,byte_size,width,height,display_order,is_primary,created_at) SELECT ?,product_id,object_key||'-second',alt_text,content_type,byte_size,width,height,1,false,CURRENT_TIMESTAMP FROM product_images WHERE product_id=? AND active AND is_primary",java.util.UUID.randomUUID(),fixture.product());
+        var p=adminProducts.get(fixture.product());long v=Long.parseLong(p.getVersion()),t=Long.parseLong(p.getTaxonomyVersion());
+        var categoryId=p.getCategory().getId();CountDownLatch held=new CountDownLatch(1),release=new CountDownLatch(1);
+        if(edit.equals("CATEGORY"))doAnswer(call->{Object result=call.callRealMethod();held.countDown();await(release);return result;}).when(adminClaims).lockTaxonomy(true);
+        else doAnswer(call->{call.callRealMethod();held.countDown();await(release);return null;}).when(adminClaims).claim(org.mockito.ArgumentMatchers.eq(com.example.demo.catalog.repository.CatalogMutationRepository.Resource.PRODUCT),org.mockito.ArgumentMatchers.eq(fixture.product()),anyLong());
+        ExecutorService workers=Executors.newFixedThreadPool(2);
+        try{
+            var edited=workers.submit(()->{
+                if(edit.equals("CATEGORY"))adminCategories.update(categoryId,new com.example.demo.catalog.dto.request.AdminTaxonomyRequests.CategoryPatch(Long.parseLong(p.getCategory().getVersion()),t,com.example.demo.catalog.dto.request.CatalogField.supplied("Renamed historical category"),com.example.demo.catalog.dto.request.CatalogField.absent()));
+                else if(edit.equals("GALLERY"))adminGallery.reorder(fixture.product(),v,t,java.util.List.of(p.getImages().getLast().getId(),p.getImages().getFirst().getId()));
+                else adminVariants.replaceSpecifications(fixture.product(),fixture.variant(),new com.example.demo.catalog.dto.request.AdminVariantRequests.Patch(v,t,com.example.demo.catalog.dto.request.CatalogField.absent(),com.example.demo.catalog.dto.request.CatalogField.absent(),com.example.demo.catalog.dto.request.CatalogField.absent(),com.example.demo.catalog.dto.request.CatalogField.supplied(java.util.Map.of("schema_version",1,"values",java.util.Map.of("physical_ram",java.util.Map.of("value",8,"unit","GB"))))));
+                return true;
+            });
+            await(held);
+            var resolved=workers.submit(()->{if(complete)completion.completeOrder(fixture.owner(),order);else orderService.cancelOrder(fixture.owner(),order,new com.example.demo.order.dto.request.CancelOrderRequest("Concurrent owned cancellation"));return true;});
+            try{assertThat(resolved.get(WAIT_SECONDS,TimeUnit.SECONDS)).isTrue();}finally{release.countDown();}
+            assertThat(edited.get(WAIT_SECONDS,TimeUnit.SECONDS)).isTrue();
+            assertThat(jdbc.queryForList("SELECT * FROM order_items WHERE order_id=?",order)).isEqualTo(snapshot);
+            assertThat(jdbc.queryForMap("SELECT * FROM checkout_receipts WHERE order_id=?",order)).isEqualTo(receiptBefore);
+            assertThat(jdbc.queryForObject("SELECT state FROM inventory_reservations WHERE order_id=?",String.class,order)).isEqualTo(complete?"CONSUMED":"RELEASED");
+            assertThat(jdbc.queryForObject("SELECT reserved FROM inventory_balances WHERE original_variant_id=?",Long.class,fixture.variant())).isZero();
+            assertThat(checkout(KEY)).usingRecursiveComparison().isEqualTo(receipt);
+            assertInventoryIntegrity();
+        }finally{release.countDown();stop(workers);org.mockito.Mockito.reset(adminClaims);}
+    }
     enum DomainMutation { ADDRESS_UPDATE, ADDRESS_DELETE, UNPUBLISH, PRODUCT_NAME, VARIANT_PRICE_OPTIONS, PRODUCT_DELETE, VARIANT_DELETE }
 
     static java.util.stream.Stream<org.junit.jupiter.params.provider.Arguments> domainCases() {
@@ -469,6 +543,8 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
                 jdbc.queryForObject("SELECT id FROM carts WHERE id=? FOR UPDATE",Long.class,fixture.cart());
                 jdbc.update("DELETE FROM cart_items WHERE product_variant_id=?",fixture.variant());
                 if(mutation==DomainMutation.PRODUCT_DELETE) {
+                    // Historical physical-delete drill only; ready fixtures now retain gallery metadata.
+                    jdbc.update("DELETE FROM product_images WHERE product_id=?",fixture.product());
                     jdbc.update("DELETE FROM product_variants WHERE product_id=?",fixture.product());
                     jdbc.update("DELETE FROM products WHERE id=?",fixture.product());
                 } else jdbc.update("DELETE FROM product_variants WHERE id=?",fixture.variant());

@@ -44,11 +44,11 @@ public class CheckoutValidator {
     }
 
     public SkippedCheckoutItem.Reason reason(CheckoutCartSeed.Row row, CheckoutVariantState state) {
-        if (state == null) return SkippedCheckoutItem.Reason.VARIANT_UNAVAILABLE;
+        if (state == null || !state.isEnabled()) return SkippedCheckoutItem.Reason.VARIANT_UNAVAILABLE;
         if (state.getProductId() == null || state.getStatus() == null) return SkippedCheckoutItem.Reason.PRODUCT_UNAVAILABLE;
         if (state.getStatus() != ProductStatus.PUBLISHED) return SkippedCheckoutItem.Reason.PRODUCT_NOT_FOR_SALE;
         if (row.getQuantity() < 1 || row.getQuantity() > 999) return SkippedCheckoutItem.Reason.INVALID_QUANTITY;
-        if (state.getPrice() == null || state.getPrice().signum() < 0) return SkippedCheckoutItem.Reason.INVALID_PRICE;
+        if (state.getPrice() == null || state.getPrice().signum() <= 0) return SkippedCheckoutItem.Reason.INVALID_PRICE;
         try { state.getPrice().toBigIntegerExact(); }
         catch (ArithmeticException invalid) { return SkippedCheckoutItem.Reason.INVALID_PRICE; }
         return null;

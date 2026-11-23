@@ -64,7 +64,7 @@ class ProductSearchRepositoryIT {
     @AfterEach void cleanup(){jdbc.execute("TRUNCATE product_image_uploads,product_images,catalog_source_links,wishlist_items,product_variants,products,brands,categories CASCADE");}
     record Owned(UUID product,UUID variant){}
     Owned seed(String name,String brand,String sku,int price,int ram,UUID cat){
-        return tx.execute(s->{var f=CatalogFixtures.persistProduct(em,ProductStatus.PUBLISHED);f.product().setName(name);
+        return tx.execute(s->{var f=CatalogFixtures.persistReadyProduct(em);f.product().setName(name);
             f.product().setCategory(em.find(Category.class,cat));f.variant().setSku(sku);f.variant().setSellingPrice(BigDecimal.valueOf(price));
             f.variant().setTechnicalSpecifications(Map.of("schema_version",1,"values",Map.of("physical_ram",Map.of("value",ram,"unit","GB"),"display_diagonal",Map.of("value",15.6,"unit","inch"),"display_resolution","1920x1080")));
             if(brand!=null){var b=new Brand(brand.toLowerCase()+"-"+UUID.randomUUID(),brand);em.persist(b);f.product().setBrand(b);}
@@ -148,11 +148,12 @@ class ProductSearchRepositoryIT {
     }
     @Test void specifications_shouldGuardMalformedValuesAndKnownQualityContradictions(){
         var a=seed("Laptop 64GB Storage",null,"a",10,8,laptop);
-        tx.executeWithoutResult(status->em.find(ProductVariant.class,a.variant()).setTechnicalSpecifications(Map.of("schema_version",1,"values",Map.of("installed_storage_gb",Map.of("value",65,"unit","GB"),"physical_ram","16","display_resolution","1600x600","cpu_model","secret-exynos"))));
+        withLegacyFacts(a.variant(),Map.of("schema_version",1,"values",Map.of("installed_storage_gb",Map.of("value",65,"unit","GB"),"physical_ram","16","display_resolution","1600x600","cpu_model","secret-exynos")),() -> {
         assertThat(search(Map.of("q",List.of("65 gb"))).getTotalElements()).isZero();
         assertThat(search(Map.of("q",List.of("secret-exynos"))).getTotalElements()).isZero();
         String filters="[{\"key\":\"physical_ram\",\"alternatives\":[{\"op\":\"eq\",\"value\":16,\"unit\":\"GB\"}]}]";
         assertThat(search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(filters))).getTotalElements()).isZero();
+        });
         tx.executeWithoutResult(status->{em.find(Product.class,a.product()).setName("Laptop 16:10");em.find(ProductVariant.class,a.variant()).setTechnicalSpecifications(Map.of("schema_version",1,"values",Map.of("display_resolution","1600x600","display_diagonal",Map.of("value",6088,"unit","inch"))));});
         assertThat(search(Map.of("q",List.of("1600x600"))).getTotalElements()).isZero();
         assertThat(search(Map.of("q",List.of("6088 inch"))).getTotalElements()).isZero();
@@ -182,7 +183,7 @@ class ProductSearchRepositoryIT {
     }
     @Test void ambiguousTaxonomy_shouldDisableOnlyThatBinding_notPlainSearch(){
         seed("Laptop Device",null,"a",10,16,laptop);
-        tx.executeWithoutResult(status->{var cat=CatalogFixtures.category();cat.setName("Laptop");em.persist(cat);});
+        tx.executeWithoutResult(status->{var cat=CatalogFixtures.category(em.find(Category.class,tablet));cat.setName("Laptop");em.persist(cat);});
         assertThat(search(Map.of("q",List.of("device"))).getTotalElements()).isOne();
         String json="[{\"key\":\"physical_ram\",\"alternatives\":[{\"op\":\"eq\",\"value\":16,\"unit\":\"GB\"}]}]";
         assertThatThrownBy(()->search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(json)))).isInstanceOf(InvalidCatalogRequestException.class);
@@ -212,8 +213,16 @@ class ProductSearchRepositoryIT {
     }
     @Test void categoryCycles_shouldTerminateAndDedupeProducts(){
         var p=seed("Laptop Device",null,"one",10,8,child);
-        jdbc.update("UPDATE categories SET parent_category_id=? WHERE id=?",child,laptop);
-        assertThat(ids(search(Map.of("categoryId",List.of(laptop.toString()))))).containsExactly(p.product());
+        // Persisted cycles are now rejected; retain the historical read-defense oracle separately.
+        assertThatThrownBy(()->jdbc.update("UPDATE categories SET parent_category_id=? WHERE id=?",child,laptop))
+                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+        tx.executeWithoutResult(state->{
+            em.createNativeQuery("CREATE TEMP VIEW categories AS SELECT id,name,version,CASE WHEN id='"+laptop
+                    +"'::uuid THEN '"+child+"'::uuid ELSE parent_category_id END AS parent_category_id FROM public.categories").executeUpdate();
+            try{assertThat(ids(search(Map.of("categoryId",List.of(laptop.toString()))))).containsExactly(p.product());}
+            finally{em.createNativeQuery("DROP VIEW pg_temp.categories").executeUpdate();}
+        });
+        assertThat(jdbc.queryForObject("SELECT parent_category_id FROM categories WHERE id=?",UUID.class,laptop)).isNull();
     }
 
     @Test void fuzzy_shouldRejectMultiEditNaturalNameCollisions_butKeepApprovedTypos(){
@@ -243,11 +252,12 @@ class ProductSearchRepositoryIT {
     @Test void zeroMissingAndBooleanFacts_shouldRemainDistinct_withoutImplicitCoercion(){
         var zero=seed("Zero Device",null,"zero",10,0,laptop);
         var malformed=seed("Wrong Device",null,"wrong",20,8,laptop);
-        tx.executeWithoutResult(st->em.find(ProductVariant.class,malformed.variant()).setTechnicalSpecifications(Map.of("schema_version",1,"values",Map.of("physical_ram",false))));
+        withLegacyFacts(malformed.variant(),Map.of("schema_version",1,"values",Map.of("physical_ram",false)),() -> {
         String filter="[{\"key\":\"physical_ram\",\"alternatives\":[{\"op\":\"eq\",\"value\":0,\"unit\":\"GB\"}]}]";
         assertThat(ids(search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(filter))))).containsExactly(zero.product());
         assertThat(ids(search(Map.of("q",List.of("0 GB"))))).containsExactly(zero.product());
         assertThat(search(Map.of("q",List.of("false"))).getTotalElements()).isZero();
+        });
     }
     @Test void invalidLegacyDocuments_shouldNotCastFail_withoutWeakeningPersistedConstraints(){
         seed("Data Device",null,"safe",10,16,laptop);
@@ -256,7 +266,7 @@ class ProductSearchRepositoryIT {
             tx.executeWithoutResult(st->{
                 // Connection-local read view supplies legacy shapes;public rows/constraints are untouched.
                 // Documents above are fixed test literals,never request-derived SQL.
-                em.createNativeQuery("CREATE TEMP VIEW product_variants AS SELECT id,product_id,sku,selling_price,'"+document+"'::jsonb AS technical_specifications FROM public.product_variants").executeUpdate();
+                em.createNativeQuery("CREATE TEMP VIEW product_variants AS SELECT id,product_id,sku,enabled,selling_price,'"+document+"'::jsonb AS technical_specifications FROM public.product_variants").executeUpdate();
                 try{
                     assertThat(search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(filter))).getTotalElements()).isZero();
                     assertThat(search(Map.of("q",List.of("16 GB"))).getTotalElements()).isZero();
@@ -265,6 +275,16 @@ class ProductSearchRepositoryIT {
         }
         assertThat(search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(filter))).getTotalElements()).isOne();
     }
+    private void withLegacyFacts(UUID variant,Map<String,Object> facts,Runnable assertions){
+        String document=tools.jackson.databind.json.JsonMapper.builder().build().writeValueAsString(facts).replace("'","''");
+        tx.executeWithoutResult(state -> {
+            // Connection-local historical read snapshot, not an accepted Admin mutation or persisted repair.
+            em.createNativeQuery("CREATE TEMP VIEW product_variants AS SELECT id,product_id,sku,enabled,selling_price,CASE WHEN id='"
+                    +variant+"'::uuid THEN '"+document+"'::jsonb ELSE technical_specifications END AS technical_specifications FROM public.product_variants").executeUpdate();
+            try{assertions.run();}finally{em.createNativeQuery("DROP VIEW pg_temp.product_variants").executeUpdate();}
+        });
+    }
+
     @Test void registryInheritance_shouldStopAtAnotherApprovedFamilyRoot(){
         seed("Tablet Device",null,"tablet-owned",10,16,tablet);
         jdbc.update("UPDATE categories SET parent_category_id=? WHERE id=?",laptop,tablet);

@@ -22,9 +22,8 @@ public final class ProductImageContentValidator {
 
 	public ValidatedImage validate(byte[] bytes, String claimedContentType, long claimedByteSize,
 			String altText) {
-		if (bytes == null || bytes.length == 0 || bytes.length > MAX_BYTES
-				|| claimedByteSize != bytes.length || altText == null || altText.isBlank()
-				|| !isAllowedType(claimedContentType)) {
+		validateMetadata(claimedContentType, claimedByteSize, altText);
+		if (bytes == null || claimedByteSize != bytes.length) {
 			throw new InvalidProductImageException();
 		}
 		try (MemoryCacheImageInputStream input = new MemoryCacheImageInputStream(
@@ -57,6 +56,13 @@ public final class ProductImageContentValidator {
 			throw new InvalidProductImageException();
 		}
 	}
+
+    /** Metadata-only integrity, shared with publication readiness; no object read/decoding. */
+    public void validateMetadata(String contentType, long byteSize, String altText) {
+        if (byteSize < 1 || byteSize > MAX_BYTES || altText == null || altText.isBlank() || !isAllowedType(contentType)) {
+            throw new InvalidProductImageException();
+        }
+    }
 
 	private boolean isAllowedType(String type) {
 		return "image/jpeg".equals(type) || "image/png".equals(type) || "image/webp".equals(type);

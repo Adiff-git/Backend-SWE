@@ -55,8 +55,8 @@ public class RecommendationStore {
             SELECT p.id,left(p.name,512) name,left(c.name,256) category,left(b.name,256) brand,
               left(p.description,2000) description,v.id variant_id,v.selling_price
             FROM products p JOIN categories c ON c.id=p.category_id LEFT JOIN brands b ON b.id=p.brand_id
-            LEFT JOIN LATERAL (SELECT id,selling_price FROM product_variants WHERE product_id=p.id
-              AND selling_price>=0 AND selling_price::text NOT IN ('NaN','Infinity','-Infinity')
+            JOIN LATERAL (SELECT id,selling_price FROM product_variants WHERE product_id=p.id
+              AND enabled=true AND selling_price>0 AND selling_price::text NOT IN ('NaN','Infinity','-Infinity')
               ORDER BY selling_price,id LIMIT 1) v ON true
             WHERE p.status='PUBLISHED'
             """

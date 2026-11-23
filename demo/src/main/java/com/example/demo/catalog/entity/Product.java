@@ -25,6 +25,13 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
+	@Setter(AccessLevel.NONE)
+	@Column(name = "version", nullable = false, insertable = false, updatable = false)
+	private long version;
+
+	@Column(name = "last_restored_at", columnDefinition = "timestamptz")
+	private java.time.Instant lastRestoredAt;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Setter(AccessLevel.NONE)

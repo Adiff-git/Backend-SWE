@@ -196,6 +196,8 @@ class CheckoutServiceIT extends CheckoutIntegrationSupport {
         })).isInstanceOf(RuntimeException.class);
         orderReads.cancelOrder(fixture.owner(),id,new com.example.demo.order.dto.request.CancelOrderRequest("Release before deletion"));
         transactions.executeWithoutResult(s -> {
+            // Historical physical-delete compatibility drill only; Admin has no delete operation.
+            jdbc.update("DELETE FROM product_images WHERE product_id=?",fixture.product());
             jdbc.update("DELETE FROM product_variants WHERE id=?",fixture.variant());
             jdbc.update("DELETE FROM products WHERE id=?",fixture.product());
         });
@@ -235,12 +237,31 @@ class CheckoutServiceIT extends CheckoutIntegrationSupport {
 
     @org.junit.jupiter.params.ParameterizedTest
     @org.junit.jupiter.params.provider.ValueSource(ints={1,999})
-    void checkout_shouldPreserveQuantityBoundariesAtCurrentZeroPrice(int quantity) {
+    void checkout_shouldPreserveQuantityBoundariesAtCurrentPositivePrice(int quantity) {
         jdbc.update("UPDATE cart_items SET quantity=? WHERE id=?",quantity,fixture.item());
-        jdbc.update("UPDATE product_variants SET selling_price=0 WHERE id=?",fixture.variant());
+        jdbc.update("UPDATE product_variants SET selling_price=7 WHERE id=?",fixture.variant());
         CheckoutReceiptResponse receipt=service.checkout(fixture.owner(),"Quantity_boundary_123",new CheckoutRequest(fixture.address()));
         assertThat(receipt.getOrder().getItems().getFirst().getQuantity()).isEqualTo(quantity);
-        assertThat(receipt.getOrder().getPayableTotal().getAmount()).isZero();
+        assertThat(receipt.getOrder().getPayableTotal().getAmount()).isEqualTo(BigInteger.valueOf(7L*quantity));
+    }
+
+    @Test void checkout_shouldReplayAllowedHistoricalZeroReceiptBeforeCurrentEligibilityWithoutNewAllocations(){
+        var historical=transactions.execute(tx -> com.example.demo.fixture.checkout.CheckoutFixtures.historicalZeroOrder(jdbc,fixture.owner()));
+        String body=tools.jackson.databind.json.JsonMapper.builder().build().writeValueAsString(
+                com.example.demo.testdata.checkout.CheckoutTestData.receipt(historical.id(),historical.itemId(),com.example.demo.fixture.checkout.CheckoutFixtures.PLACED_AT,0));
+        var validator=new com.example.demo.checkout.validator.CheckoutValidator();
+        jdbc.update("INSERT INTO checkout_receipts(customer_id,operation,idempotency_key,request_address_id,request_fingerprint,order_id,receipt_version,response_status,location,receipt_body,created_at) VALUES (?,'CHECKOUT',?,?,?,?,1,201,?,CAST(? AS JSONB),?)",
+                fixture.owner(),"Historical_zero_key_123",fixture.address(),validator.fingerprint(fixture.address()),historical.id(),
+                "/api/me/orders/"+historical.id(),body,java.sql.Timestamp.from(com.example.demo.fixture.checkout.CheckoutFixtures.PLACED_AT));
+        var cartBefore=jdbc.queryForList("SELECT * FROM cart_items ORDER BY id");
+        jdbc.update("UPDATE products SET status='ARCHIVED' WHERE id=?",fixture.product());
+        var replay=service.checkout(fixture.owner(),"Historical_zero_key_123",new CheckoutRequest(fixture.address()));
+        assertThat(replay.getOrder().getPayableTotal().getAmount()).isZero();
+        assertThat(replay.getOrder().getItems().getFirst().getQuantity()).isEqualTo(1);
+        assertThat(jdbc.queryForObject("SELECT unit_price_snapshot FROM order_items WHERE id=?",BigInteger.class,historical.itemId())).isZero();
+        assertThat(jdbc.queryForList("SELECT * FROM cart_items ORDER BY id")).isEqualTo(cartBefore);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM inventory_reservations",Long.class)).isZero();
+        assertThat(jdbc.queryForObject("SELECT receipt_body::text FROM checkout_receipts WHERE order_id=?",String.class,historical.id())).isNotBlank();
     }
 
     @Test void checkout_shouldRejectMissingOrEmptyCartWithoutCreatingOneOrReceipt() {

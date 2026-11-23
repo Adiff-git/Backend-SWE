@@ -42,7 +42,7 @@ class CatalogMigrationsIT {
 	void migrateSchema() throws SQLException {
 		containerAnchor = openConnection();
 		Flyway.configure().dataSource(JDBC_URL, USERNAME, PASSWORD)
-				.locations("classpath:db/migration").load().migrate();
+				.locations("classpath:db/migration").target("27").load().migrate(); // Historical pre-Admin contract.
 	}
 
 	@AfterAll

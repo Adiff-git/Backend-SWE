@@ -159,17 +159,21 @@ class ProductDetailApiIT {
     }
 
 	@Test
-	void productWithoutImagesHasNullPrimaryUrlAndEmptyGallery() throws Exception {
+	void publicationRequiresImagesButOptionalBrandAndEmptyFactsRemainValid() throws Exception {
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> transactions.executeWithoutResult(tx -> {
+            // Intentionally invalid Published fixture; constraints remain enabled through real commit.
+            CatalogFixtures.persistProduct(entityManager,ProductStatus.PUBLISHED);
+        })).isInstanceOf(RuntimeException.class).hasStackTraceContaining("Invalid catalog gallery");
 		UUID id = persistProduct(ProductStatus.PUBLISHED);
 		mvc.perform(get("/api/products/{id}", id))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.primaryImageUrl").value(org.hamcrest.Matchers.nullValue()))
-				.andExpect(jsonPath("$.images").isEmpty())
+				.andExpect(jsonPath("$.primaryImageUrl").isNotEmpty())
+				.andExpect(jsonPath("$.images.length()").value(1))
 				.andExpect(jsonPath("$.brand").value(org.hamcrest.Matchers.nullValue()))
 				.andExpect(jsonPath("$.variants[0].technicalSpecifications.schema_version").value(1))
 				.andExpect(jsonPath("$.variants[0].technicalSpecifications.values").isEmpty())
 				.andExpect(jsonPath("$.variants.length()").value(1));
-		assertThat(storage.signCalls.get()).isZero();
+		assertThat(storage.signCalls.get()).isEqualTo(1);
 	}
 
 	@Test
@@ -210,7 +214,8 @@ class ProductDetailApiIT {
 
 	private UUID persistProduct(ProductStatus status) {
 		return transactions.execute(transaction -> {
-			ProductFixture fixture = CatalogFixtures.persistProduct(entityManager, status);
+			ProductFixture fixture = status==ProductStatus.PUBLISHED ? CatalogFixtures.persistReadyProduct(entityManager)
+                    : CatalogFixtures.persistProduct(entityManager,status);
 			entityManager.flush();
 			return fixture.product().getId();
 		});

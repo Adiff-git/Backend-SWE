@@ -47,8 +47,7 @@ class WishlistControllerIT {
     @BeforeEach
     void prepare() {
         cleanup();
-        productId = transactions.execute(status -> WishlistFixtures.persistProduct(
-                entityManager, ProductStatus.PUBLISHED).getId());
+        productId = transactions.execute(status -> WishlistFixtures.persistReadyProduct(entityManager).getId());
     }
 
     @AfterEach
@@ -238,8 +237,8 @@ class WishlistControllerIT {
         Long otherOwner = userId(other);
         transactions.executeWithoutResult(status -> {
             for (int index = 0; index < 150; index++) {
-                UUID id = WishlistFixtures.persistProduct(entityManager,
-                        index % 5 == 0 ? ProductStatus.DRAFT : ProductStatus.PUBLISHED).getId();
+                UUID id = (index % 5 == 0 ? WishlistFixtures.persistProduct(entityManager,ProductStatus.DRAFT)
+                        : WishlistFixtures.persistReadyProduct(entityManager)).getId();
                 entityManager.flush();
                 jdbc.update("INSERT INTO wishlist_items(user_id, product_id, added_at) VALUES (?, ?, ?)",
                         owner, id, java.sql.Timestamp.from(java.time.Instant.parse("2026-10-31T03:00:00Z")
@@ -263,7 +262,7 @@ class WishlistControllerIT {
                 assertThat(response.get("items").size()).isEqualTo(Math.min(size, 120 - page * size));
                 for (JsonNode item : response.get("items")) {
                     actual.add(item.get("product").get("id").asString());
-                    assertThat(item.get("product").get("primaryImageUrl").isNull()).isTrue();
+                    assertThat(item.get("product").get("primaryImageUrl").isTextual()).isTrue();
                     assertThat(item.propertyNames()).containsExactlyInAnyOrder("addedAt", "product");
                     assertThat(item.get("product").propertyNames())
                             .containsExactlyInAnyOrder("id", "name", "category", "primaryImageUrl");

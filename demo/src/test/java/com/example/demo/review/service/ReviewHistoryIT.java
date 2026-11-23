@@ -18,6 +18,7 @@ class ReviewHistoryIT extends ReviewIntegrationSupport {
         JsonMapper json = JsonMapper.builder().build();
         ReviewResponse created = reviews.create(purchase.owner(), purchase.order(), purchase.item(), json.readValue("{\"rating\":1}", CreateReviewRequest.class));
         transactions.executeWithoutResult(s -> {
+            jdbc.update("DELETE FROM product_images WHERE product_id=?", purchase.product()); // Own metadata fixture only; no storage deletion.
             jdbc.update("DELETE FROM product_variants WHERE product_id=?", purchase.product());
             jdbc.update("DELETE FROM products WHERE id=?", purchase.product());
         });

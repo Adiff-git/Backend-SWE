@@ -154,11 +154,13 @@ class OrderServiceIT {
             Order order = OrderTestData.order(owner,OrderStatus.COMPLETED).merchandiseTotal(java.math.BigDecimal.valueOf(10500)).build();
             entities.persist(order);
             for (int i=0;i<105;i++) {
-                CatalogFixtures.ProductFixture product = CatalogFixtures.persistProduct(entities,ProductStatus.PUBLISHED);
+                CatalogFixtures.ProductFixture product = CatalogFixtures.persistReadyProduct(entities);
                 OrderFixtures.referencedItem(entities,order,product.product().getId(),product.variant().getId());
             }
             return order.getId();
         });
+        // Ready current references; historical details still tolerate unavailable optional images.
+        org.mockito.Mockito.when(storage.prepareReadSigner()).thenThrow(new CatalogStorageUnavailableException());
         assertThat(service.getOrder(owner,id).getItems()).hasSize(105)
                 .allSatisfy(item -> assertThat(item.getPrimaryImageUrl()).isNull());
     }

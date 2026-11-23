@@ -26,6 +26,27 @@ public class ProductSearchRepositoryImpl implements ProductSearchRepository {
     }
     @Override
     @Transactional(readOnly=true)
+    public java.util.List<CurrentCandidate> recheckPublishedCandidates(ProductSearchCriteria criteria,
+            java.util.List<ProductCandidatePage.Candidate> candidates){
+        var eligible=candidates.stream().filter(c -> c.getRepresentativeVariantId()!=null).toList();
+        if(eligible.isEmpty())return java.util.List.of();
+        var statement=new CatalogSearchSql(registry).recheck(criteria,threshold,fuzzyEnabled,
+                eligible.stream().map(ProductCandidatePage.Candidate::getProductId).distinct().toList(),
+                eligible.stream().map(ProductCandidatePage.Candidate::getRepresentativeVariantId).distinct().toList());
+        var query=entityManager.createNativeQuery(statement.sql());statement.parameters().forEach(query::setParameter);
+        var expected=eligible.stream().collect(java.util.stream.Collectors.toMap(ProductCandidatePage.Candidate::getProductId,
+                ProductCandidatePage.Candidate::getRepresentativeVariantId));
+        var result=new ArrayList<CurrentCandidate>();
+        for(Object value:query.getResultList()){
+            Object[] row=(Object[])value;
+            if(java.util.Objects.equals(expected.get(row[0]),row[1]))result.add(new CurrentCandidate(
+                    (java.util.UUID)row[0],(java.util.UUID)row[1],((BigDecimal)row[2]).toBigIntegerExact(),
+                    (String)row[3],(java.util.UUID)row[4],(String)row[5],(String)row[6]));
+        }
+        return java.util.List.copyOf(result);
+    }
+    @Override
+    @Transactional(readOnly=true)
     public ProductCandidatePage findPublishedCandidates(ProductSearchCriteria criteria){
         if(criteria==null || criteria.getPage()<0 || criteria.getSize()<1 || criteria.getSize()>100
                 || criteria.getBrandIds()!=null && criteria.getBrandIds().isEmpty()){

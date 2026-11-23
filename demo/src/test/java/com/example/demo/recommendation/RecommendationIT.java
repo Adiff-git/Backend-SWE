@@ -45,10 +45,13 @@ class RecommendationIT {
     cleanup();
     first =
         tx.execute(
-            s -> CatalogFixtures.persistProduct(em, ProductStatus.PUBLISHED).product().getId());
+            s -> CatalogFixtures.persistReadyProduct(em).product().getId());
     second =
         tx.execute(
-            s -> CatalogFixtures.persistProduct(em, ProductStatus.PUBLISHED).product().getId());
+            s -> CatalogFixtures.persistReadyProduct(em).product().getId());
+    var readySigner=mock(com.example.demo.catalog.storage.ProductImageStorage.PreparedReadSigner.class);
+    when(readySigner.signReadUrl(org.mockito.ArgumentMatchers.anyString())).thenReturn("https://images.test/recommendation");
+    when(storage.prepareReadSigner()).thenReturn(readySigner);
     draft =
         tx.execute(s -> CatalogFixtures.persistProduct(em, ProductStatus.DRAFT).product().getId());
   }
@@ -227,15 +230,10 @@ class RecommendationIT {
     mvc.perform(get("/api/recommendations").param("limit", "1"))
         .andExpect(jsonPath("$.items[0].id").value(first.toString()))
         .andExpect(jsonPath("$.items[0].representativeVariantId").value(variant.toString()));
-    jdbc.update("UPDATE product_variants SET selling_price=-1 WHERE product_id=?", second);
-    assertThat(
-            store.catalog().stream()
-                .filter(r -> r.candidate().productId().equals(second))
-                .findFirst()
-                .orElseThrow()
-                .candidate()
-                .price())
-        .isNull();
+    assertThatThrownBy(() -> jdbc.update("UPDATE product_variants SET selling_price=-1 WHERE product_id=?",second))
+        .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    assertThat(store.catalog().stream().filter(r -> r.candidate().productId().equals(second)).findFirst().orElseThrow().candidate().price())
+        .isEqualByComparingTo("1000");
   }
 
   @Test
@@ -286,14 +284,7 @@ class RecommendationIT {
 
   @Test
   void imageUsesTrustedSigningAndSourceUnpublicationIsRechecked() throws Exception {
-    String key =
-        tx.execute(
-            transaction -> {
-              var product = em.find(com.example.demo.catalog.entity.Product.class, second);
-              var image = CatalogFixtures.image(product, 0, true);
-              em.persist(image);
-              return image.getObjectKey();
-            });
+    String key=jdbc.queryForObject("SELECT object_key FROM product_images WHERE product_id=? AND active AND is_primary",String.class,second);
     var signer =
         mock(com.example.demo.catalog.storage.ProductImageStorage.PreparedReadSigner.class);
     when(storage.prepareReadSigner()).thenReturn(signer);
@@ -356,10 +347,29 @@ class RecommendationIT {
                   + " SELECT"
                   + " md5('capacity-v-'||i)::uuid,md5('capacity-'||i)::uuid,'capacity-'||i,'{}',1"
                   + " FROM generate_series(1,3001) i");
+          jdbc.execute("INSERT INTO product_images(id,product_id,object_key,alt_text,content_type,byte_size,width,height,display_order,is_primary,created_at) "
+              + "SELECT md5('capacity-image-'||i)::uuid,md5('capacity-'||i)::uuid,'final/capacity/'||i,'Capacity image','image/png',100,10,10,0,true,now() FROM generate_series(1,3001) i");
         });
     mvc.perform(get("/api/recommendations"))
         .andExpect(status().isServiceUnavailable())
         .andExpect(jsonPath("$.detail").value("Recommendation catalog capacity exceeded"));
+  }
+
+  @Autowired com.example.demo.catalog.service.AdminProductService admin;
+
+  @Test void candidateRefresh_shouldFollowActualAdminWithdrawalRestoreAndRepublish(){
+    var current=admin.get(second);
+    admin.transition(second,Long.parseLong(current.getVersion()),Long.parseLong(current.getTaxonomyVersion()),
+        com.example.demo.catalog.dto.request.AdminProductRequests.Action.ARCHIVE);
+    assertThat(store.refresh(List.of(second))).isEmpty();
+    current=admin.get(second);
+    admin.transition(second,Long.parseLong(current.getVersion()),Long.parseLong(current.getTaxonomyVersion()),
+        com.example.demo.catalog.dto.request.AdminProductRequests.Action.RESTORE);
+    assertThat(store.refresh(List.of(second))).isEmpty();
+    current=admin.get(second);
+    admin.transition(second,Long.parseLong(current.getVersion()),Long.parseLong(current.getTaxonomyVersion()),
+        com.example.demo.catalog.dto.request.AdminProductRequests.Action.PUBLISH);
+    assertThat(store.refresh(List.of(second))).singleElement().satisfies(row -> assertThat(row.candidate().productId()).isEqualTo(second));
   }
 
   @Test

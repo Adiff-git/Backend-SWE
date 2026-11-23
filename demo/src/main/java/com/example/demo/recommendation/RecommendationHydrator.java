@@ -30,12 +30,9 @@ public class RecommendationHydrator {
 
   @Transactional
   public List<ProductListingItem> hydrate(List<UUID> ordered, int limit, UUID source) {
-    var primaryImages =
-        ordered.isEmpty()
-            ? List.<com.example.demo.catalog.entity.ProductImage>of()
-            : images.findPrimaryImagesForProducts(ordered);
-    // Follow catalog policy: credential resolution must precede publication locks.
-    try (var signer = primaryImages.isEmpty() ? null : storage.prepareReadSigner()) {
+    boolean pictured=!ordered.isEmpty() && !images.findCartPrimaryImages(ordered).isEmpty();
+    // Only a scalar peek precedes credential resolution. Current membership is reloaded under locks.
+    try (var signer = pictured ? storage.prepareReadSigner() : null) {
       var locks = new ArrayList<>(ordered);
       if (source != null) locks.add(source);
       if (locks.isEmpty()) return List.of();
@@ -46,8 +43,8 @@ public class RecommendationHydrator {
       if (source != null && !published.contains(source)) throw new ProductNotFoundException();
       if (ordered.isEmpty()) return List.of();
       var currentProducts =
-          products.findAllByIdsAndStatusWithCategory(ordered, ProductStatus.PUBLISHED);
-      Map<UUID, com.example.demo.catalog.entity.Product> byId = new HashMap<>();
+          products.findPublicSummaries(ordered);
+      Map<UUID, com.example.demo.catalog.repository.CatalogPublicViews.Product> byId = new HashMap<>();
       currentProducts.forEach(product -> byId.put(product.getId(), product));
       Map<UUID, RecommendationStore.Row> fresh = new HashMap<>();
       store.refresh(ordered).forEach(row -> fresh.put(row.candidate().productId(), row));
@@ -57,15 +54,19 @@ public class RecommendationHydrator {
           ? Map.<UUID, com.example.demo.inventory.dto.response.InventoryAvailability>of()
           : inventory.getAvailability(variantIds);
       Map<UUID, String> urls = new HashMap<>();
-      for (var image : primaryImages) {
-        UUID id = image.getProduct().getId();
-        if (published.contains(id)) urls.put(id, signer.signReadUrl(image.getObjectKey()));
+      for (Object[] image : images.findCartPrimaryImages(ordered)) {
+        UUID id=(UUID)image[0];
+        if (published.contains(id) && fresh.containsKey(id)) {
+          if(signer==null)throw new com.example.demo.catalog.exception.CatalogStorageUnavailableException();
+          urls.put(id,signer.signReadUrl((String)image[1]));
+        }
       }
       List<ProductListingItem> result = new ArrayList<>();
       for (UUID id : ordered) {
         var product = byId.get(id);
         var row = fresh.get(id);
-        if (published.contains(id) && product != null && row != null) {
+        if (published.contains(id) && product != null && row != null && row.variantId()!=null
+                && row.candidate().price()!=null && row.candidate().price().signum()>0) {
           result.add(
               converter.toListingItem(
                   converter.toSummary(product, urls.get(id)),

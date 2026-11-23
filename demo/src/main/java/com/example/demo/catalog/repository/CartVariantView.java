@@ -10,6 +10,7 @@ public interface CartVariantView {
     UUID getVariantId();
     UUID getProductId();
     ProductStatus getStatus();
+    Boolean getEnabled();
     BigDecimal getPrice();
     String getProductName();
     String getSku();

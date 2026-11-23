@@ -10,7 +10,11 @@ public final class CheckoutTestData {
     private CheckoutTestData() { }
 
     public static Map<String, Object> receipt(Long orderId, Long itemId, Instant placedAt) {
-        Map<String, Object> money = Map.of("amount", 100, "currency", "VND");
+        return receipt(orderId,itemId,placedAt,100);
+    }
+
+    public static Map<String,Object> receipt(Long orderId,Long itemId,Instant placedAt,int historicalAmount){
+        Map<String, Object> money = Map.of("amount", historicalAmount, "currency", "VND");
         Map<String, Object> item = Map.of("id", itemId, "productNameSnapshot", "Product",
                 "variantSkuSnapshot", "SKU", "variantOptionsSnapshot", Map.of(), "quantity", 1,
                 "unitPriceSnapshot", money, "lineTotal", money);

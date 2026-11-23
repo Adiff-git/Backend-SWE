@@ -170,6 +170,9 @@ class RecommendationHttpIT {
                   + " SELECT"
                   + " md5('rec-variant-'||i)::uuid,md5('rec-product-'||i)::uuid,'REC-'||i,'{}',5000000+i*10000"
                   + " FROM generate_series(1,1500) i");
+          // Ready Published metadata; retains all1500 candidates and genuine Backend-to-AI HTTP.
+          jdbc.execute("INSERT INTO product_images(id,product_id,object_key,alt_text,content_type,byte_size,width,height,display_order,is_primary,created_at) "
+              + "SELECT md5('rec-image-'||i)::uuid,md5('rec-product-'||i)::uuid,'final/rec/'||i,'Recommendation image','image/png',100,10,10,0,true,now() FROM generate_series(1,1500) i");
         });
     UUID source =
         jdbc.queryForObject("SELECT id FROM products WHERE name='Gaming RTX Laptop 3'", UUID.class);

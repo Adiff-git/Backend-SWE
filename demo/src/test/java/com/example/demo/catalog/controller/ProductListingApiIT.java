@@ -74,9 +74,9 @@ class ProductListingApiIT {
 	}
 
 	@Test
-	void anonymousListingShowsOnlyPublishedSummariesWithSignedOrNullPrimaryUrl() throws Exception {
+	void anonymousListingShowsOnlyReadyPublishedSummariesWithSignedPrimaryUrls() throws Exception {
 		UUID published = persistProduct(ProductStatus.PUBLISHED, true);
-		UUID noImage = persistProduct(ProductStatus.PUBLISHED, false);
+		UUID secondPublished = persistProduct(ProductStatus.PUBLISHED, true);
 		UUID draft = persistProduct(ProductStatus.DRAFT, true);
 		UUID archived = persistProduct(ProductStatus.ARCHIVED, false);
 		String body = mvc.perform(get("/api/products"))
@@ -84,7 +84,7 @@ class ProductListingApiIT {
 				.andExpect(jsonPath("$.totalItems").value(2))
 				.andExpect(jsonPath("$.items.length()").value(2))
 				.andReturn().getResponse().getContentAsString();
-		assertThat(body).contains(published.toString(), noImage.toString(), "category", "primaryImageUrl");
+		assertThat(body).contains(published.toString(), secondPublished.toString(), "category", "primaryImageUrl");
 		assertThat(body).doesNotContain(draft.toString(), archived.toString(), "objectKey", "stagingKey",
 				"preparerSubject", "sellingPrice");
         for (var item : json.readTree(body).get("items")) {
@@ -93,12 +93,12 @@ class ProductListingApiIT {
             assertThat(item.get("availability").get("availableQuantity").asLong()).isZero();
         }
 		assertThat(body).contains("https://images.test/signed?X-Amz-Expires=300");
-		assertThat(body).contains("\"primaryImageUrl\":null");
-		assertThat(storage.signCalls.get()).isEqualTo(1);
+		assertThat(body).doesNotContain("\"primaryImageUrl\":null");
+		assertThat(storage.signCalls.get()).isEqualTo(2);
 	}
 
     @Test void representativeAvailability_shouldNotSubstituteAnInStockMoreExpensiveVariant() throws Exception {
-        UUID product = persistProduct(ProductStatus.PUBLISHED, false);
+        UUID product = persistProduct(ProductStatus.PUBLISHED, true);
         UUID original = jdbc.queryForObject("SELECT id FROM product_variants WHERE product_id=?", UUID.class, product);
         UUID cheaper = transactions.execute(s -> {
             var variant = CatalogFixtures.variant(entityManager.getReference(com.example.demo.catalog.entity.Product.class, product),
@@ -113,8 +113,8 @@ class ProductListingApiIT {
                 .andExpect(jsonPath("$.items[0].availability.status").value("OUT_OF_STOCK"));
     }
 
-    @Test void noRepresentative_shouldReturnNullAvailabilityWithoutStockSql() throws Exception {
-        UUID product = persistProduct(ProductStatus.PUBLISHED, false);
+    @Test void noRepresentative_shouldBeExcludedWithoutInventorySql() throws Exception {
+        UUID product = persistProduct(ProductStatus.PUBLISHED, true);
         com.example.demo.config.SqlCapture.begin();
         java.util.List<String> sql;
         try {
@@ -123,9 +123,8 @@ class ProductListingApiIT {
                 jdbc.update("DELETE FROM product_variants WHERE product_id=?", product);
                 try {
                     mvc.perform(get("/api/products")).andExpect(status().isOk())
-                            .andExpect(jsonPath("$.totalItems").value(1))
-                            .andExpect(jsonPath("$.items[0].availability").value(org.hamcrest.Matchers.nullValue()))
-                            .andExpect(jsonPath("$.items[0].representativeVariantId").value(org.hamcrest.Matchers.nullValue()));
+                            .andExpect(jsonPath("$.totalItems").value(0))
+                            .andExpect(jsonPath("$.items").isEmpty());
                 } catch (Exception failure) { throw new IllegalStateException(failure); }
                 transaction.setRollbackOnly();
             });
@@ -141,9 +140,9 @@ class ProductListingApiIT {
 				.andExpect(jsonPath("$.items").isEmpty())
 				.andExpect(jsonPath("$.totalItems").value(0))
 				.andExpect(jsonPath("$.totalPages").value(0));
-		persistProduct(ProductStatus.PUBLISHED, false);
-		persistProduct(ProductStatus.PUBLISHED, false);
-		persistProduct(ProductStatus.PUBLISHED, false);
+		persistProduct(ProductStatus.PUBLISHED, true);
+		persistProduct(ProductStatus.PUBLISHED, true);
+		persistProduct(ProductStatus.PUBLISHED, true);
 		String first = mvc.perform(get("/api/products?page=0&size=2"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.totalItems").value(3))
@@ -162,7 +161,7 @@ class ProductListingApiIT {
 	void unchangedMixedCatalogHasStableOrderedIdsAndCountsAcrossEveryPage() throws Exception {
 		List<UUID> expectedPublishedIds = new ArrayList<>();
 		for (int index = 0; index < 23; index++) {
-			expectedPublishedIds.add(persistProduct(ProductStatus.PUBLISHED, false));
+			expectedPublishedIds.add(persistProduct(ProductStatus.PUBLISHED, true));
 		}
 		UUID draft = persistProduct(ProductStatus.DRAFT, false);
 		UUID archived = persistProduct(ProductStatus.ARCHIVED, false);
@@ -228,14 +227,14 @@ class ProductListingApiIT {
 	}
 
     @Test
-    void mixedPage_shouldRecheckImagelessProductAfterSignerPreparation()throws Exception{
+    void mixedPage_shouldRecheckEveryProductAfterSignerPreparation()throws Exception{
         UUID pictured=persistProduct(ProductStatus.PUBLISHED,true);
-        UUID imageless=persistProduct(ProductStatus.PUBLISHED,false);
+        UUID withdrawn=persistProduct(ProductStatus.PUBLISHED,true);
         var entered=new CountDownLatch(1);var proceed=new CountDownLatch(1);storage.pauseBeforeLock(entered,proceed);
         try(var executor=Executors.newSingleThreadExecutor()){
             var response=executor.submit(()->mvc.perform(get("/api/products?q=Product&minPrice=0")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
-            assertThat(entered.await(10,TimeUnit.SECONDS)).isTrue();jdbc.update("UPDATE products SET status='ARCHIVED' WHERE id=?",imageless);proceed.countDown();
-            String body=response.get(10,TimeUnit.SECONDS);assertThat(body).contains(pictured.toString()).doesNotContain(imageless.toString());
+            assertThat(entered.await(10,TimeUnit.SECONDS)).isTrue();jdbc.update("UPDATE products SET status='ARCHIVED' WHERE id=?",withdrawn);proceed.countDown();
+            String body=response.get(10,TimeUnit.SECONDS);assertThat(body).contains(pictured.toString()).doesNotContain(withdrawn.toString());
             assertThat(storage.signCalls.get()).isOne();
         }finally{proceed.countDown();}
     }

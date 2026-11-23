@@ -41,7 +41,7 @@ class WishlistRepositoryIT {
     @Test
     void insertIfAbsent_shouldKeepTransactionUsableAndOriginalTime_whenDuplicate() {
         User user = WishlistFixtures.persistUser(entityManager);
-        Product product = WishlistFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+        Product product = WishlistFixtures.persistReadyProduct(entityManager);
         entityManager.flush();
         Instant original = Instant.parse("2026-10-31T00:00:00Z");
         assertThat(repository.insertIfAbsent(user.getId(), product.getId(), original)).isEqualTo(1);
@@ -53,7 +53,7 @@ class WishlistRepositoryIT {
     @Test
     void mapping_shouldPreserveReferencesAndTimestamp_whenPersisted() {
         User user = WishlistFixtures.persistUser(entityManager);
-        Product product = WishlistFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+        Product product = WishlistFixtures.persistReadyProduct(entityManager);
         Instant savedAt = Instant.parse("2026-10-31T01:02:03.123456Z");
         WishlistItem item = BeanUtils.instantiateClass(WishlistItem.class);
         ReflectionTestUtils.setField(item, "user", user);
@@ -76,7 +76,7 @@ class WishlistRepositoryIT {
     @Test
     void schema_shouldRejectDuplicatePair_whenInsertedTwice() {
         User user = WishlistFixtures.persistUser(entityManager);
-        Product product = WishlistFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+        Product product = WishlistFixtures.persistReadyProduct(entityManager);
         entityManager.flush();
         insert(user.getId(), product.getId());
         assertThatThrownBy(() -> insert(user.getId(), product.getId()))
@@ -93,7 +93,7 @@ class WishlistRepositoryIT {
 
     @Test
     void schema_shouldRejectMissingUser_whenForeignKeyIsInvalid() {
-        Product product = WishlistFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+        Product product = WishlistFixtures.persistReadyProduct(entityManager);
         entityManager.flush();
         assertThatThrownBy(() -> insert(Long.MIN_VALUE, product.getId()))
                 .hasMessageContaining("fk_wishlist_items_user_id");
@@ -102,7 +102,7 @@ class WishlistRepositoryIT {
     @Test
     void schema_shouldRejectNullTimestamp_whenMembershipIsInserted() {
         User user = WishlistFixtures.persistUser(entityManager);
-        Product product = WishlistFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+        Product product = WishlistFixtures.persistReadyProduct(entityManager);
         entityManager.flush();
         assertThatThrownBy(() -> jdbc.update(
                 "INSERT INTO wishlist_items(user_id, product_id, added_at) VALUES (?, ?, NULL)",
@@ -112,7 +112,7 @@ class WishlistRepositoryIT {
     @Test
     void cleanup_shouldDeleteOnlyDependents_whenUserIsPhysicallyDeleted() {
         User user = WishlistFixtures.persistUser(entityManager);
-        Product product = WishlistFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+        Product product = WishlistFixtures.persistReadyProduct(entityManager);
         entityManager.flush();
         insert(user.getId(), product.getId());
         jdbc.update("DELETE FROM users WHERE id = ?", user.getId());
@@ -125,9 +125,11 @@ class WishlistRepositoryIT {
     @Test
     void cleanup_shouldDeleteOnlyDependents_whenProductIsPhysicallyDeleted() {
         User user = WishlistFixtures.persistUser(entityManager);
-        Product product = WishlistFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+        Product product = WishlistFixtures.persistReadyProduct(entityManager);
         entityManager.flush();
         insert(user.getId(), product.getId());
+        // Historical nullable-reference/delete fixture; no Admin deletion endpoint is introduced.
+        jdbc.update("DELETE FROM product_images WHERE product_id = ?", product.getId());
         jdbc.update("DELETE FROM product_variants WHERE product_id = ?", product.getId());
         jdbc.update("DELETE FROM products WHERE id = ?", product.getId());
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM wishlist_items WHERE product_id = ?",
@@ -196,10 +198,10 @@ class WishlistRepositoryIT {
     void findVisibleMemberships_shouldFilterBeforePagingAndCount_whenStatusesAndOwnersAreMixed() {
         User owner = WishlistFixtures.persistUser(entityManager);
         User other = WishlistFixtures.persistUser(entityManager);
-        Product visibleA = WishlistFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
-        Product visibleB = WishlistFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+        Product visibleA = WishlistFixtures.persistReadyProduct(entityManager);
+        Product visibleB = WishlistFixtures.persistReadyProduct(entityManager);
         Product hidden = WishlistFixtures.persistProduct(entityManager, ProductStatus.ARCHIVED);
-        Product foreign = WishlistFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+        Product foreign = WishlistFixtures.persistReadyProduct(entityManager);
         entityManager.flush();
         Instant tie = Instant.parse("2026-10-31T00:00:00Z");
         repository.insertIfAbsent(owner.getId(), visibleA.getId(), tie);

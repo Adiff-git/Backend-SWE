@@ -79,7 +79,7 @@ class CatalogContractIT {
 	@Test
 	void listProducts_shouldMatchOpenApiContract_forAnonymousPublishedPage() throws Exception {
 		ContractFixture publishedWithImage = persistDetailedProduct(ProductStatus.PUBLISHED, true);
-		UUID publishedWithoutImage = persistBasicProduct(ProductStatus.PUBLISHED);
+		UUID secondPublished = persistBasicProduct(ProductStatus.PUBLISHED);
 		UUID draft = persistBasicProduct(ProductStatus.DRAFT);
 		UUID archived = persistBasicProduct(ProductStatus.ARCHIVED);
 
@@ -114,13 +114,13 @@ class CatalogContractIT {
 			returnedIds.add(item.get("id").asText());
 		}
 		assertThat(returnedIds).containsExactlyInAnyOrder(
-				publishedWithImage.productId().toString(), publishedWithoutImage.toString());
+				publishedWithImage.productId().toString(), secondPublished.toString());
 		assertThat(returnedIds).doesNotContain(draft.toString(), archived.toString());
 
 		JsonNode withImage = findById(response.get("items"), publishedWithImage.productId());
 		assertSignedUrl(withImage.get("primaryImageUrl"));
-		JsonNode withoutImage = findById(response.get("items"), publishedWithoutImage);
-		assertThat(withoutImage.get("primaryImageUrl").isNull()).isTrue();
+		JsonNode secondImage = findById(response.get("items"), secondPublished);
+        assertSignedUrl(secondImage.get("primaryImageUrl"));
 	}
 
 	@Test
@@ -202,7 +202,7 @@ class CatalogContractIT {
 	}
 
 	@Test
-	void getProduct_shouldReturnNullAndEmptyOptionalRepresentations_withoutImages() throws Exception {
+	void getProduct_shouldKeepOptionalFieldsNullAndFactsEmpty_withReadyGallery() throws Exception {
 		UUID productId = persistBasicProduct(ProductStatus.PUBLISHED);
 
 		JsonNode response = performJson("/api/products/" + productId, 200, MediaType.APPLICATION_JSON);
@@ -210,9 +210,9 @@ class CatalogContractIT {
 		assertExactFields(response, DETAIL_FIELDS);
 		assertThat(response.get("description").isNull()).isTrue();
         assertThat(response.get("brand").isNull()).isTrue();
-		assertThat(response.get("primaryImageUrl").isNull()).isTrue();
+		assertSignedUrl(response.get("primaryImageUrl"));
 		assertThat(response.get("images").isArray()).isTrue();
-		assertThat(response.get("images").isEmpty()).isTrue();
+		assertThat(response.get("images").size()).isEqualTo(1);
 		assertThat(response.get("variants").size()).isEqualTo(1);
 	}
 
@@ -247,40 +247,25 @@ class CatalogContractIT {
 
     @Test
     @org.springframework.transaction.annotation.Transactional
-    void listProducts_shouldPreservePairedNullOrphan_whenDeferredFixtureRollsBack() throws Exception {
-        // Exceptional historical/corrupt state only:do not disable triggers or commit an orphan.
-        ProductFixture fixture = CatalogFixtures.publishedProduct();
-        entityManager.persist(fixture.category());
-        entityManager.persist(fixture.product());
-        entityManager.flush();
-        JsonNode response = performJson("/api/products", 200, MediaType.APPLICATION_JSON);
-        assertThat(response.get("totalItems").longValue()).isOne();
-        JsonNode item = response.get("items").get(0);
-        assertExactFields(item, SUMMARY_FIELDS);
-            assertThat(item.has("status")).isFalse();
-        assertThat(item.get("id").asText()).isEqualTo(fixture.product().getId().toString());
-        assertThat(item.get("displayPrice").isNull()).isTrue();
-        assertThat(item.get("representativeVariantId").isNull()).isTrue();
+    void listProducts_shouldExcludeOrphanWithoutWeakeningDeferredIntegrity() throws Exception {
+        // Exceptional historical read snapshot; triggers stay enabled and this transaction rolls back.
+        ProductFixture fixture=CatalogFixtures.publishedProduct();
+        entityManager.persist(fixture.category());entityManager.persist(fixture.product());entityManager.flush();
+        var response=performJson("/api/products",200,MediaType.APPLICATION_JSON);
+        assertThat(response.get("totalItems").longValue()).isZero();assertThat(response.get("items").isEmpty()).isTrue();
         fixture.product().setName("Orphan shared keyword");entityManager.flush();
-        for(String suffix:List.of("?q=orphan","?q=orphan&sort=price-asc","?q=orphan&sort=price-desc")){
+        for(String suffix:List.of("?q=orphan","?q=orphan&sort=price-asc","?q=orphan&sort=price-desc","?q=orphan&minPrice=0")){
             var orphan=performJson("/api/products"+suffix,200,MediaType.APPLICATION_JSON);
-            assertThat(orphan.get("totalItems").longValue()).isOne();
-            assertThat(orphan.get("items").get(0).get("displayPrice").isNull()).isTrue();
-            assertThat(orphan.get("items").get(0).get("representativeVariantId").isNull()).isTrue();
+            assertThat(orphan.get("totalItems").longValue()).isZero();assertThat(orphan.get("items").isEmpty()).isTrue();
         }
-        assertThat(performJson("/api/products?q=orphan&minPrice=0",200,MediaType.APPLICATION_JSON).get("totalItems").longValue()).isZero();
-        var real=CatalogFixtures.persistProduct(entityManager,ProductStatus.PUBLISHED);real.product().setName("Orphan shared keyword with variant");entityManager.flush();
+        var real=CatalogFixtures.persistReadyProduct(entityManager);real.product().setName("Orphan shared keyword with variant");entityManager.flush();
         for(String sort:List.of("price-asc","price-desc")){
             var ordered=performJson("/api/products?q=orphan&sort="+sort,200,MediaType.APPLICATION_JSON);
-            assertThat(ordered.get("totalItems").longValue()).isEqualTo(2);
+            assertThat(ordered.get("totalItems").longValue()).isOne();assertThat(ordered.get("items").size()).isEqualTo(1);
             assertThat(ordered.get("items").get(0).get("id").asText()).isEqualTo(real.product().getId().toString());
-            assertThat(ordered.get("items").get(1).get("id").asText()).isEqualTo(fixture.product().getId().toString());
-            assertThat(ordered.get("items").get(1).get("displayPrice").isNull()).isTrue();
         }
-        assertProblem(performJson("/api/products/" + fixture.product().getId(), 409,
-                MediaType.APPLICATION_PROBLEM_JSON), 409);
-        assertThat(jdbc.queryForObject("SELECT tgenabled::text FROM pg_trigger WHERE tgname='ct_products_variant_integrity'", String.class))
-                .isEqualTo("O");
+        assertProblem(performJson("/api/products/"+fixture.product().getId(),409,MediaType.APPLICATION_PROBLEM_JSON),409);
+        assertThat(jdbc.queryForObject("SELECT tgenabled::text FROM pg_trigger WHERE tgname='ct_products_variant_integrity'",String.class)).isEqualTo("O");
     }
 
 	private JsonNode performJson(String path, int expectedStatus, MediaType mediaType) throws Exception {
@@ -348,7 +333,8 @@ class CatalogContractIT {
 
 	private UUID persistBasicProduct(ProductStatus status) {
 		return transactions.execute(transaction -> {
-			ProductFixture fixture = CatalogFixtures.persistProduct(entityManager, status);
+			ProductFixture fixture = status==ProductStatus.PUBLISHED ? CatalogFixtures.persistReadyProduct(entityManager)
+                    : CatalogFixtures.persistProduct(entityManager,status);
 			entityManager.flush();
 			return fixture.product().getId();
 		});

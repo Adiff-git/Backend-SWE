@@ -88,6 +88,22 @@ class CatalogSecurityBaselineTest {
 				.andExpect(jsonPath("$.status").value(409));
 	}
 
+    @Test void adminPrefixRequiresJwtAdministrator_evenBeforeControllersExist() throws Exception {
+        String path = "/api/admin/catalog/products";
+        mvc.perform(get(path)).andExpect(status().isUnauthorized());
+        mvc.perform(get(path).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
+                .jwt().authorities(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_CUSTOMER"))))
+                .andExpect(status().isForbidden());
+        mvc.perform(get(path).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
+                .user("admin").roles("ADMIN"))).andExpect(status().isForbidden());
+        // No route exists: reaching MVC resource resolution proves filter admission only.
+        // Existing global advice maps unknown resources to 500; that unrelated behavior is not changed here.
+        mvc.perform(get(path).with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
+                .jwt().authorities(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_ADMIN"))))
+                .andExpect(result -> org.assertj.core.api.Assertions.assertThat(result.getResolvedException())
+                        .isInstanceOf(org.springframework.web.servlet.resource.NoResourceFoundException.class));
+    }
+
 	private void assertUploadDeniedForAnonymous(String path) throws Exception {
 		mvc.perform(post(path))
 				.andExpect(status().isUnauthorized())

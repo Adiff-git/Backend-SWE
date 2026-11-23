@@ -104,7 +104,7 @@ public class ApiErrorFactory {
     }
 
     /** The existing PostgreSQL driver is runtime-scoped; read its public structured fields without a new compile dependency. */
-    private String postgresConstraint(SQLException sql) {
+    String postgresConstraint(SQLException sql) {
         if (!"org.postgresql.util.PSQLException".equals(sql.getClass().getName())) return null;
         try {
             Object serverError = sql.getClass().getMethod("getServerErrorMessage").invoke(sql);

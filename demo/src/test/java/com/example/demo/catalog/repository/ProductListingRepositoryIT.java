@@ -77,7 +77,8 @@ class ProductListingRepositoryIT {
 
 	private UUID persist(ProductStatus status) {
 		return transactions.execute(transaction -> {
-			ProductFixture fixture = CatalogFixtures.persistProduct(entityManager, status);
+			ProductFixture fixture = status==ProductStatus.PUBLISHED ? CatalogFixtures.persistReadyProduct(entityManager)
+                    : CatalogFixtures.persistProduct(entityManager,status);
 			entityManager.flush();
 			return fixture.product().getId();
 		});

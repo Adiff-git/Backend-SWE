@@ -24,6 +24,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductCatalogConverter {
 
+    public ProductSummary toSummary(com.example.demo.catalog.repository.CatalogPublicViews.Product product,String url){
+        return new ProductSummary(product.getId(),product.getName(),new CategorySummary(product.getCategoryId(),product.getCategoryName()),url);
+    }
+
+    public ProductDetail toPublicDetail(com.example.demo.catalog.repository.CatalogPublicViews.Product product,
+            List<com.example.demo.catalog.repository.CatalogPublicViews.Variant> variants,
+            List<com.example.demo.catalog.repository.CatalogPublicViews.Image> images,Map<UUID,String> urls,
+            Map<UUID,com.example.demo.inventory.dto.response.InventoryAvailability> availability){
+        var gallery=images.stream().map(i -> new ProductImageSummary(i.getId(),urls.get(i.getId()),i.getAltText(),
+                i.getWidth(),i.getHeight(),i.getDisplayOrder(),i.getPrimaryImage())).toList();
+        var choices=variants.stream().map(v -> new VariantSummary(v.getId(),v.getSku(),Map.copyOf(v.getOptions()),
+                new SellingPrice(v.getPrice().toBigIntegerExact(),"VND"),Map.copyOf(v.getSpecifications()),availability.get(v.getId()))).toList();
+        String primary=images.stream().filter(com.example.demo.catalog.repository.CatalogPublicViews.Image::getPrimaryImage)
+                .map(i -> urls.get(i.getId())).findFirst().orElse(null);
+        var summary=toSummary(product,primary);
+        BrandSummary brand=product.getBrandId()==null?null:new BrandSummary(product.getBrandId(),product.getBrandCode(),product.getBrandName());
+        return new ProductDetail(summary.getId(),summary.getName(),summary.getCategory(),primary,product.getDescription(),brand,choices,gallery);
+    }
+
 	public ProductSummary toSummary(Product product, String primaryImageUrl) {
 		Category category = product.getCategory();
 		return new ProductSummary(product.getId(), product.getName(),

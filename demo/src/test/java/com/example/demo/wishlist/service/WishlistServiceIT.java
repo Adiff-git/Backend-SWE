@@ -54,11 +54,15 @@ class WishlistServiceIT {
     @BeforeEach
     void prepare() {
         cleanup();
+        when(storage.prepareReadSigner()).thenAnswer(invocation -> new ProductImageStorage.PreparedReadSigner() {
+            public String signReadUrl(String key){return "https://images.test/wishlist";}
+            public void close(){ }
+        });
         when(clock.instant()).thenReturn(now);
         when(clock.getZone()).thenReturn(ZoneOffset.UTC);
         transactions.executeWithoutResult(status -> {
             owner = WishlistFixtures.persistUser(entityManager).getId();
-            productId = WishlistFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED).getId();
+            productId = WishlistFixtures.persistReadyProduct(entityManager).getId();
         });
     }
 
@@ -80,7 +84,7 @@ class WishlistServiceIT {
 
     @Test
     void addProduct_shouldRollbackNewMembership_whenSigningFails() {
-        addImage();
+        requireReadyImage();
         when(storage.prepareReadSigner()).thenThrow(new CatalogStorageUnavailableException());
         assertThatThrownBy(() -> service.addProduct(owner, productId))
                 .isInstanceOf(CatalogStorageUnavailableException.class);
@@ -99,7 +103,7 @@ class WishlistServiceIT {
 
     @Test
     void addProduct_shouldRollbackAndHideMetadata_whenFinalPublicationCheckFails() {
-        addImage();
+        requireReadyImage();
         when(storage.prepareReadSigner()).thenAnswer(invocation -> {
             // Controlled external-boundary callback changes eligibility before the final catalog check.
             jdbc.update("UPDATE products SET status = 'ARCHIVED' WHERE id = ?", productId);
@@ -121,6 +125,7 @@ class WishlistServiceIT {
     void addProduct_shouldTranslateRealForeignKeyFailureAfterRollback_whenParentDisappears() {
         // A disposable-database trigger creates the precise between-check-and-insert failure.
         jdbc.execute("CREATE FUNCTION wishlist_test_remove_parent() RETURNS TRIGGER AS $$ BEGIN "
+                + "DELETE FROM product_images WHERE product_id = NEW.product_id; "
                 + "DELETE FROM product_variants WHERE product_id = NEW.product_id; "
                 + "DELETE FROM products WHERE id = NEW.product_id; RETURN NEW; END; $$ LANGUAGE plpgsql");
         jdbc.execute("CREATE TRIGGER wishlist_test_remove_parent BEFORE INSERT ON wishlist_items "
@@ -199,11 +204,8 @@ class WishlistServiceIT {
         }
     }
 
-    private void addImage() {
-        transactions.executeWithoutResult(status -> {
-            Product product = entityManager.find(Product.class, productId);
-            entityManager.persist(CatalogFixtures.image(product, 0, true));
-        });
+    private void requireReadyImage() {
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM product_images WHERE product_id=? AND active AND is_primary",Long.class,productId)).isOne();
     }
 
     private long count() {
@@ -223,13 +225,13 @@ class WishlistServiceIT {
         WishlistPage restored = service.listWishlist(owner, 0, 20);
         assertThat(restored.getItems()).hasSize(1);
         assertThat(restored.getItems().getFirst().getAddedAt()).isEqualTo(addedAt);
-        assertThat(restored.getItems().getFirst().getProduct().getPrimaryImageUrl()).isNull();
+        assertThat(restored.getItems().getFirst().getProduct().getPrimaryImageUrl()).isEqualTo("https://images.test/wishlist");
     }
 
     @Test
     void listWishlist_shouldReturnConflictWithoutPartialPage_whenSelectedProductBecomesHidden() {
         service.addProduct(owner, productId);
-        addImage();
+        requireReadyImage();
         when(storage.prepareReadSigner()).thenAnswer(invocation -> {
             jdbc.update("UPDATE products SET status = 'DRAFT' WHERE id = ?", productId);
             return new ProductImageStorage.PreparedReadSigner() {

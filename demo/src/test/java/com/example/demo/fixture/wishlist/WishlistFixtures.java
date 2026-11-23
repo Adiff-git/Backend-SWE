@@ -24,6 +24,11 @@ public final class WishlistFixtures {
         return user;
     }
 
+    /** Explicit ready positive; generic persistProduct remains gallery-neutral for gallery-owning tests. */
+    public static Product persistReadyProduct(EntityManager entityManager) {
+        return CatalogFixtures.persistReadyProduct(entityManager).product();
+    }
+
     public static Product persistProduct(EntityManager entityManager, ProductStatus status) {
         return CatalogFixtures.persistProduct(entityManager, status).product();
     }

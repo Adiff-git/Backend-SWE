@@ -19,8 +19,8 @@ public class CartValidator {
     public static final int MAX_QUANTITY = 999;
 
     public String ineligibleReason(CartVariantState state, int quantity) {
-        if (state == null || !state.isPublished()) return "PRODUCT_UNAVAILABLE";
-        if (state.getAmount() == null) return "PRICE_UNAVAILABLE";
+        if (state == null || !state.isPublished() || !state.isEnabled()) return "PRODUCT_UNAVAILABLE";
+        if (state.getAmount() == null || state.getAmount().signum() <= 0) return "PRICE_UNAVAILABLE";
         if (state.getAvailability() == null || "INVENTORY_UNAVAILABLE".equals(state.getAvailability().getStatus())) return "INVENTORY_UNAVAILABLE";
         if (state.getAvailability().getAvailableQuantity() < quantity) return "INSUFFICIENT_STOCK";
         return null;

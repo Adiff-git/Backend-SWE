@@ -17,7 +17,7 @@ public final class ReviewFixtures {
     public static Purchase purchase(EntityManager entities, OrderStatus status) {
         User owner = OrderFixtures.customer(entities);
         User foreign = OrderFixtures.customer(entities);
-        CatalogFixtures.ProductFixture product = CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED);
+        CatalogFixtures.ProductFixture product = CatalogFixtures.persistReadyProduct(entities);
         Order order = com.example.demo.testdata.order.OrderTestData.order(owner.getId(), status).build();
         entities.persist(order);
         OrderItem item = OrderFixtures.referencedItem(entities, order, product.product().getId(), product.variant().getId());

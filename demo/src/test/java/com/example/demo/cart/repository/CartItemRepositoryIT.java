@@ -34,7 +34,7 @@ class CartItemRepositoryIT {
 
     @BeforeEach void prepare() {
         Long user = WishlistFixtures.persistUser(entities).getId();
-        CatalogFixtures.ProductFixture fixture = CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED);
+        CatalogFixtures.ProductFixture fixture = CatalogFixtures.persistReadyProduct(entities);
         entities.flush();
         product = fixture.product().getId();
         variant = fixture.variant().getId();
@@ -77,7 +77,7 @@ class CartItemRepositoryIT {
 
     @Test void reads_shouldScopeOwnerAndOrderTimestampTiesByItemId() {
         insert(1);
-        var second = CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED);
+        var second = CatalogFixtures.persistReadyProduct(entities);
         entities.flush();
         jdbc.update("INSERT INTO cart_items(cart_id,product_id,product_variant_id,quantity,selected,added_at,public_product_name,public_sku,public_options) "
                 + "SELECT cart_id,?,?,2,TRUE,added_at,public_product_name,public_sku,public_options FROM cart_items WHERE cart_id=?",

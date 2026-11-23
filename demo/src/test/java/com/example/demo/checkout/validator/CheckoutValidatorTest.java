@@ -31,12 +31,19 @@ class CheckoutValidatorTest {
         assertThat(validator.fenceKey(1L,"Case_sensitive_123")).isNotEqualTo(validator.fenceKey(2L,"Case_sensitive_123"));
     }
 
-    @Test void reason_shouldAcceptZeroPriceAndQuantityBoundaries() {
+    @Test void reason_shouldAcceptPositivePriceAndQuantityBoundaries() {
         UUID product = UUID.randomUUID();
         UUID variant = UUID.randomUUID();
-        CheckoutVariantState state = new CheckoutVariantState(variant,product,ProductStatus.PUBLISHED,BigDecimal.ZERO,"Product","SKU",Map.of());
+        CheckoutVariantState state = new CheckoutVariantState(variant,product,ProductStatus.PUBLISHED,BigDecimal.ONE,"Product","SKU",Map.of());
         assertThat(validator.reason(new CheckoutCartSeed.Row(1L,product,variant,1,true),state)).isNull();
         assertThat(validator.reason(new CheckoutCartSeed.Row(2L,product,variant,999,true),state)).isNull();
+    }
+
+    @Test void reason_shouldRejectDisabledVariantBeforePriceAndQuantity() {
+        UUID product=UUID.randomUUID(), variant=UUID.randomUUID();
+        var state=new CheckoutVariantState(variant,product,ProductStatus.PUBLISHED,false,BigDecimal.TEN,"P","S",Map.of());
+        assertThat(validator.reason(new CheckoutCartSeed.Row(1L,product,variant,1,true),state))
+                .isEqualTo(SkippedCheckoutItem.Reason.VARIANT_UNAVAILABLE);
     }
 
     @Test void reason_shouldPreferMissingVariantBeforeInvalidQuantity() {
@@ -55,7 +62,7 @@ class CheckoutValidatorTest {
         assertThat(validator.reason(invalidQuantity,new CheckoutVariantState(variant,product,ProductStatus.PUBLISHED,null,"Product","SKU",Map.of())))
                 .isEqualTo(SkippedCheckoutItem.Reason.INVALID_QUANTITY);
         CheckoutCartSeed.Row valid=new CheckoutCartSeed.Row(1L,product,variant,1,true);
-        for (BigDecimal price : java.util.Arrays.asList(null,BigDecimal.valueOf(-1),BigDecimal.valueOf(0.5))) {
+        for (BigDecimal price : java.util.Arrays.asList(null,BigDecimal.ZERO,BigDecimal.valueOf(-1),BigDecimal.valueOf(0.5))) {
             assertThat(validator.reason(valid,new CheckoutVariantState(variant,product,ProductStatus.PUBLISHED,price,"Product","SKU",Map.of())))
                     .isEqualTo(SkippedCheckoutItem.Reason.INVALID_PRICE);
         }

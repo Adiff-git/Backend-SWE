@@ -63,6 +63,13 @@ public final class CatalogFixtures {
 		return fixture;
 	}
 
+    /** Explicit publication-ready metadata; does not upload a storage object. */
+    public static ProductFixture persistReadyProduct(EntityManager entityManager) {
+        ProductFixture fixture = persistProduct(entityManager, ProductStatus.PUBLISHED);
+        entityManager.persist(image(fixture.product(), 0, true));
+        return fixture;
+    }
+
 	public static ProductVariant variant(Product product, Map<String, String> options, BigDecimal price) {
 		ProductVariant variant = BeanUtils.instantiateClass(ProductVariant.class);
 		variant.setProduct(product);

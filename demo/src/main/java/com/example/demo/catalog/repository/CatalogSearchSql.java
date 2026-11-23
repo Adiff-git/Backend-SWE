@@ -22,8 +22,15 @@ final class CatalogSearchSql {
     private final SpecificationFilterRegistry registry;
     CatalogSearchSql(SpecificationFilterRegistry registry){this.registry=registry;}
     Statement compile(ProductSearchCriteria c,double threshold,boolean fuzzy){
+        return compile(c,threshold,fuzzy,null,null);
+    }
+    Statement recheck(ProductSearchCriteria c,double threshold,boolean fuzzy,List<java.util.UUID> productIds,List<java.util.UUID> variantIds){
+        return compile(c,threshold,fuzzy,productIds,variantIds);
+    }
+    private Statement compile(ProductSearchCriteria c,double threshold,boolean fuzzy,List<java.util.UUID> productIds,List<java.util.UUID> variantIds){
         Map<String,Object> params=new LinkedHashMap<>();
         List<String> where=new ArrayList<>(List.of("p.status='PUBLISHED'"));
+        if(productIds!=null){where.add("p.id IN(:recheckProducts)");params.put("recheckProducts",productIds);}
         String categoryRoot=c.getCategoryId()==null?"SELECT id FROM categories":"SELECT id FROM categories WHERE id=:category";
         if(c.getCategoryId()!=null){params.put("category",c.getCategoryId());where.add("p.category_id IN(SELECT id FROM category_scope)");}
         if(c.getBrandIds()!=null){params.put("brands",c.getBrandIds());where.add("p.brand_id IN(:brands)");}
@@ -31,16 +38,8 @@ final class CatalogSearchSql {
             WITH RECURSIVE category_scope(id) AS (
             """);
         sql.append(categoryRoot).append(" UNION SELECT c.id FROM categories c JOIN category_scope s ON c.parent_category_id=s.id),");
-        sql.append("""
-            registry_roots AS (
-                SELECT catalog_search_safe_normalize_v2(name) AS family,min(id::text)::uuid AS id FROM categories
-                WHERE catalog_search_safe_normalize_v2(name) IN ('laptop','tablet')
-                GROUP BY catalog_search_safe_normalize_v2(name) HAVING count(*)=1
-            ), registry_categories(family,id) AS (
-                SELECT family,id FROM registry_roots UNION
-                SELECT r.family,c.id FROM registry_categories r JOIN categories c ON c.parent_category_id=r.id
-                WHERE catalog_search_safe_normalize_v2(c.name)=r.family OR catalog_search_safe_normalize_v2(c.name) NOT IN ('laptop','tablet','smartphone','computer accessories','headphone & earbuds','charger & power bank','speaker','phone accessories','smartwatch')
-            ), selected_products AS MATERIALIZED (
+        sql.append(CatalogApplicabilitySql.registryCtes()).append("""
+            , selected_products AS MATERIALIZED (
                 SELECT p.id,p.category_id,p.name,catalog_search_safe_normalize_v2(p.name) AS normalized_name,
                     catalog_search_safe_normalize_v2(coalesce(b.name,'')) AS brand_name,
                     catalog_search_safe_normalize_v2(coalesce(b.code,'')) AS brand_code,p.description,p.catalog_description_tokens_v1
@@ -66,7 +65,8 @@ final class CatalogSearchSql {
         }
         sql.append(", safe_facts AS MATERIALIZED (").append(String.join(" UNION ALL ",factViews)).append(")");
         boolean keyword=c.getKeyword()!=null&&!c.getKeyword().getTokens().isEmpty();
-        List<String> variantConditions=new ArrayList<>();
+        List<String> variantConditions=new ArrayList<>(List.of("v.enabled=true","v.selling_price>0","v.selling_price::text NOT IN ('NaN','Infinity','-Infinity')"));
+        if(variantIds!=null){variantConditions.add("v.id IN(:recheckVariants)");params.put("recheckVariants",variantIds);}
         if(c.getMinPrice()!=null){variantConditions.add("v.selling_price>=:minPrice");params.put("minPrice",c.getMinPrice());}
         if(c.getMaxPrice()!=null){variantConditions.add("v.selling_price<=:maxPrice");params.put("maxPrice",c.getMaxPrice());}
         List<String> support=new ArrayList<>();
@@ -96,7 +96,7 @@ final class CatalogSearchSql {
                     +fuzzyCandidate+"))");
         }
         String unsupported=support.isEmpty()?"false":"EXISTS(SELECT 1 FROM categories WHERE id=:category) AND NOT EXISTS(SELECT 1 FROM category_scope cs WHERE "+String.join(" AND ",support)+")";
-        sql.append(", validation AS(SELECT ").append(unsupported).append(" AS unsupported),eligible_base AS MATERIALIZED(SELECT p.id AS product_id,v.id AS variant_id,v.selling_price AS display_amount,p.normalized_name FROM selected_products p LEFT JOIN product_variants v ON v.product_id=p.id");
+        sql.append(", validation AS(SELECT ").append(unsupported).append(" AS unsupported),eligible_base AS MATERIALIZED(SELECT p.id AS product_id,v.id AS variant_id,v.selling_price AS display_amount,p.normalized_name FROM selected_products p JOIN product_variants v ON v.product_id=p.id");
         if(!variantConditions.isEmpty()){sql.append(" WHERE ").append(String.join(" AND ",variantConditions));}sql.append(")");
         if(keyword){
             params.put("phrase",c.getKeyword().getOriginalNormalized());params.put("phraseLength",c.getKeyword().getSequence().size());if(fuzzy){params.put("threshold",threshold);}
@@ -158,6 +158,16 @@ final class CatalogSearchSql {
                 )
                 """);
         }else{sql.append(", ranked_variants AS(SELECT e.*,0 AS tier,0 AS class_sum,0 AS source_sum,0 AS similarity_sum FROM eligible_base e)");}
+        if(productIds!=null){
+            sql.append("""
+                SELECT r.product_id,r.variant_id,r.display_amount,p.name,p.category_id,c.name,i.object_key
+                FROM ranked_variants r JOIN selected_products p ON p.id=r.product_id
+                JOIN categories c ON c.id=p.category_id
+                LEFT JOIN product_images i ON i.product_id=p.id AND i.active=true AND i.is_primary=true
+                WHERE NOT (SELECT unsupported FROM validation)
+                """);
+            return new Statement(fuzzy ? sql.toString() : sql.toString().replace("CASE WHEN w.fuzzy THEN round(similarity(q.token,w.token)::numeric,6) ELSE 0 END", "0::numeric"),params);
+        }
         sql.append("""
             ,representatives AS(SELECT DISTINCT ON(product_id) product_id,variant_id,display_amount FROM ranked_variants ORDER BY product_id,display_amount ASC NULLS LAST,variant_id ASC NULLS LAST),
             best_ranks AS(SELECT DISTINCT ON(product_id) product_id,tier,class_sum,source_sum,similarity_sum FROM ranked_variants ORDER BY product_id,tier DESC,class_sum DESC,source_sum DESC,similarity_sum DESC),

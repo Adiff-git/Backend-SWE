@@ -168,9 +168,11 @@ class CartServiceIT {
 
     @BeforeEach void prepare() {
         cleanup();
+        org.mockito.Mockito.doReturn((com.example.demo.storage.service.PreparedImageUrls) key -> "https://images.test/cart")
+                .when(imageUrls).prepare();
         transactions.executeWithoutResult(status -> {
             owner = WishlistFixtures.persistUser(entities).getId();
-            CatalogFixtures.ProductFixture fixture = CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED);
+            CatalogFixtures.ProductFixture fixture = CatalogFixtures.persistReadyProduct(entities);
             variant = fixture.variant().getId();
             product = fixture.product().getId();
         });
@@ -277,7 +279,7 @@ class CartServiceIT {
 
     @Test void update_shouldCheckOwnershipBeforeTargetAndRejectCrossProductWithoutChangingRows() {
         Long source = service.addItem(owner, addRequest(8)).getItemId();
-        UUID foreignProductVariant = transactions.execute(s -> CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED).variant().getId());
+        UUID foreignProductVariant = transactions.execute(s -> CatalogFixtures.persistReadyProduct(entities).variant().getId());
         assertThatThrownBy(() -> service.changeVariant(owner, source, variant(foreignProductVariant))).isInstanceOf(CartVariantSwitchException.class);
         Long other = transactions.execute(s -> WishlistFixtures.persistUser(entities).getId());
         assertThatThrownBy(() -> service.changeVariant(other, source, variant(UUID.randomUUID()))).isInstanceOf(CartItemNotFoundException.class);
@@ -292,7 +294,7 @@ class CartServiceIT {
         service.selectAll(owner, selection(true));
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM carts", Long.class)).isZero();
         Long first = service.addItem(owner, addRequest(2)).getItemId();
-        UUID other = transactions.execute(s -> CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED).variant().getId());
+        UUID other = transactions.execute(s -> CatalogFixtures.persistReadyProduct(entities).variant().getId());
         com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, other, 1000);
         service.addItem(owner, addRequest(other, 3));
         jdbc.update("UPDATE product_variants SET selling_price=100 WHERE id=?", variant);
@@ -314,8 +316,7 @@ class CartServiceIT {
     }
 
     @Test void responseFailure_shouldRollBackFirstCreationAndMergeAfterWrites() {
-        transactions.executeWithoutResult(s -> entities.persist(CatalogFixtures.image(
-                entities.find(com.example.demo.catalog.entity.Product.class, product), 0, true)));
+        // The shared positive fixture already owns one valid primary.
         org.mockito.Mockito.doAnswer(call -> {
             assertThat(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive()).isFalse();
             return (com.example.demo.storage.service.PreparedImageUrls) key -> {
@@ -408,7 +409,7 @@ class CartServiceIT {
         Long cartId = jdbc.queryForObject("SELECT id FROM carts WHERE user_id=?", Long.class, owner);
         transactions.executeWithoutResult(s -> {
             for (int index=0; index<104; index++) {
-                var fixture = CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED);
+                var fixture = CatalogFixtures.persistReadyProduct(entities);
                 entities.flush();
                 com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(entities, fixture.variant().getId(), 1000);
                 jdbc.update("INSERT INTO cart_items(cart_id,product_id,product_variant_id,quantity,selected,added_at,public_product_name,public_sku,public_options) "
@@ -449,7 +450,10 @@ class CartServiceIT {
     @Test void update_shouldRecoverUnavailableSourceThroughEligibleSiblingAndRejectRetainedInvalidPrice() {
         Long source = service.addItem(owner, addRequest(2)).getItemId();
         UUID target = sibling();
-        jdbc.update("UPDATE product_variants SET selling_price=-1 WHERE id=?", variant);
+        assertThatThrownBy(()->jdbc.update("UPDATE product_variants SET selling_price=-1 WHERE id=?",variant))
+                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+        // Disabled preparation may retain a basic-valid negative price; Enabled sibling stays sellable.
+        jdbc.update("UPDATE product_variants SET enabled=FALSE,selling_price=-1 WHERE id=?",variant);
         assertThatThrownBy(() -> service.updateQuantity(owner, source, quantity(3))).isInstanceOf(CartItemUnavailableException.class);
         var response = service.changeVariant(owner, source, variant(target));
         assertThat(response.getItems().getFirst().getId()).isEqualTo(source);

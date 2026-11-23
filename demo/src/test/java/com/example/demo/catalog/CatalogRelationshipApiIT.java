@@ -68,7 +68,7 @@ class CatalogRelationshipApiIT {
 		assertThat(firstSummary.get("category").properties()).extracting(Map.Entry::getKey)
 				.containsExactlyInAnyOrder("id", "name");
 		assertThat(firstSummary.get("primaryImageUrl").asText()).contains("X-Amz-Expires=300");
-		assertThat(secondSummary.get("primaryImageUrl").isNull()).isTrue();
+		assertThat(secondSummary.get("primaryImageUrl").asText()).startsWith("https://");
 
 		JsonNode first = json.readTree(mvc.perform(get("/api/products/{id}", fixtures.firstProductId()))
 				.andExpect(status().isOk()).andReturn().getResponse().getContentAsString());
@@ -94,8 +94,9 @@ class CatalogRelationshipApiIT {
 		assertThat(firstSummary.get("primaryImageUrl").asText())
 				.isEqualTo(first.get("primaryImageUrl").asText())
 				.isEqualTo(first.get("images").get(0).get("url").asText());
-		assertThat(second.get("images").isEmpty()).isTrue();
-		assertThat(second.get("primaryImageUrl").isNull()).isTrue();
+		assertThat(second.get("images").size()).isEqualTo(1);
+        assertThat(second.get("images").get(0).get("url").asText()).isEqualTo(secondSummary.get("primaryImageUrl").asText());
+		assertThat(second.get("primaryImageUrl").asText()).startsWith("https://");
 		String firstBody = first.toString();
 		assertThat(firstBody).doesNotContain(fixtures.secondVariantId().toString(),
 				fixtures.secondCategoryId().toString(), "objectKey", "stagingKey", "claimToken",
@@ -138,7 +139,7 @@ class CatalogRelationshipApiIT {
 			ProductImage primary = CatalogFixtures.image(first.product(), 2, true);
 			entityManager.persist(later);
 			entityManager.persist(primary);
-			ProductFixture second = CatalogFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+			ProductFixture second = CatalogFixtures.persistReadyProduct(entityManager);
 			second.variant().setOptionCombination(Map.of());
 			entityManager.flush();
 			return new RelatedProducts(first.product().getId(), second.product().getId(),

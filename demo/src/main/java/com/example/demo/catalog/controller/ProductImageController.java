@@ -1,15 +1,19 @@
 package com.example.demo.catalog.controller;
 
-import com.example.demo.catalog.exception.InvalidCatalogRequestException;
+import com.example.demo.catalog.dto.request.AdminCatalogRequestReader;
+import com.example.demo.catalog.dto.request.AdminGalleryRequests;
+import com.example.demo.catalog.dto.response.AdminCatalogResponses.LegacyAttachment;
 import com.example.demo.catalog.service.ProductImageService;
 import com.example.demo.common.identity.CurrentUserIdProvider;
-import java.util.Map;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Set;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,25 +21,14 @@ import org.springframework.web.bind.annotation.*;
 public class ProductImageController {
     private final ProductImageService service;
     private final CurrentUserIdProvider identity;
-
-    private UUID identifier(String value) {
-        if (value == null || !value.matches("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))
-            throw new InvalidCatalogRequestException("Invalid identifier");
-        return UUID.fromString(value);
-    }
-
-    @PostMapping
-    public ResponseEntity<ProductImageService.Attached> attach(@PathVariable String id,
-            @RequestBody Map<String, Object> body) {
-        if (!Set.of("imageId", "altText", "isPrimary", "displayOrder").containsAll(body.keySet())
-                || !(body.get("imageId") instanceof String imageId)
-                || !(body.get("altText") instanceof String altText) || altText.isBlank()
-                || body.containsKey("isPrimary") && !(body.get("isPrimary") instanceof Boolean)
-                || body.containsKey("displayOrder") && !(body.get("displayOrder") instanceof Integer))
-            throw new InvalidCatalogRequestException("Invalid image attachment");
-        var outcome = service.attach(identifier(id), identifier(imageId), identity.getCurrentUserId(),
-                altText, (Boolean) body.get("isPrimary"), (Integer) body.get("displayOrder"));
-        return ResponseEntity.status(outcome.replay() ? 200 : 201).cacheControl(CacheControl.noStore())
-                .body(outcome.image());
+    private final AdminGalleryRequests requests;
+    private final AdminCatalogRequestReader reader;
+    @PostMapping public ResponseEntity<LegacyAttachment> attach(@org.springframework.web.bind.annotation.PathVariable String id,@RequestBody(required=false) byte[] body,HttpServletRequest request){
+        reader.requireJson(request.getContentType());reader.query(request.getParameterMap(),Set.of(),Set.of());var input=requests.attachment(body);
+        var result=service.attach(reader.identifier(id),input.getImageId(),identity.getCurrentUserId(),input.getAltText(),input.getPrimary(),input.getDisplayOrder(),input.getExpectedVersion(),input.getExpectedTaxonomyVersion());
+        var image=result.image();
+        ResponseEntity.BodyBuilder response=ResponseEntity.status(result.replay()?200:201).cacheControl(CacheControl.noStore());
+        if(!result.replay())response.location(java.net.URI.create("/api/admin/catalog/products/"+id+"/images"));
+        return response.body(new LegacyAttachment(image.imageId(),image.productId(),image.altText(),image.width(),image.height(),image.displayOrder(),image.isPrimary(),result.productVersion(),result.taxonomyVersion(),result.replay()));
     }
 }

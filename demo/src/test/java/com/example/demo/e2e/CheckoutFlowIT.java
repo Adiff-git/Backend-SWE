@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /** Real local HTTP account/address/cart/checkout/history/cancellation/session workflow. */
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@org.springframework.context.annotation.Import(com.example.demo.catalog.service.AdminCatalogIntegrationSupport.LocalSigning.class)
 class CheckoutFlowIT {
     @LocalServerPort int port;
     @Autowired UserService users;
@@ -43,9 +44,9 @@ class CheckoutFlowIT {
     @Test void checkout_shouldCompleteSingleVendorPurchaseAndRecoverOriginalOutcomeAcrossSession() throws Exception {
         cleanup();
         UUID[] variants=transactions.execute(s -> new UUID[]{
-                CatalogFixtures.persistProduct(entities,ProductStatus.PUBLISHED).variant().getId(),
-                CatalogFixtures.persistProduct(entities,ProductStatus.PUBLISHED).variant().getId(),
-                CatalogFixtures.persistProduct(entities,ProductStatus.PUBLISHED).variant().getId()});
+                CatalogFixtures.persistReadyProduct(entities).variant().getId(),
+                CatalogFixtures.persistReadyProduct(entities).variant().getId(),
+                CatalogFixtures.persistReadyProduct(entities).variant().getId()});
         for (UUID variant : variants) com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 1000);
         String email="checkout-flow-"+UUID.randomUUID()+"@example.com";
         users.createVerifiedAccount(email,passwords.encode("Password 123"),Instant.now());

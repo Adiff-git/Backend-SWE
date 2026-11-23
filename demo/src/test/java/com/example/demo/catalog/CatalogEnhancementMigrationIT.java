@@ -26,6 +26,10 @@ class CatalogEnhancementMigrationIT {
                 sql.execute("INSERT INTO products(id,category_id,name,status) VALUES ('" + product + "','" + category + "','Legacy','PUBLISHED')");
                 sql.execute("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) VALUES ('" + variant + "','" + product + "','legacy-sku','{}',1234)");
             }
+            try (Statement sql = anchor.createStatement()) {
+                sql.execute("INSERT INTO product_images(id,product_id,object_key,alt_text,content_type,byte_size,width,height,display_order,is_primary,created_at) VALUES ('"
+                        + UUID.randomUUID() + "','" + product + "','legacy/" + product + "','Ready','image/png',100,10,10,0,TRUE,CURRENT_TIMESTAMP)");
+            }
             anchor.commit();
             anchor.setAutoCommit(true);
             Flyway.configure().dataSource(url, "test", "test").load().migrate();
@@ -58,6 +62,45 @@ class CatalogEnhancementMigrationIT {
             assertSqlRejected(anchor, "DELETE FROM brands WHERE id='" + brand + "'", "23503");
         }
     }
+    @Test
+    void incompatibleImagelessUpgradePreservesV27RowsAndHistory() throws Exception {
+        String url = "jdbc:tc:postgresql:17-alpine:///catalog_admin_incompatible_upgrade_test";
+        try (Connection anchor = DriverManager.getConnection(url, "test", "test")) {
+            Flyway.configure().dataSource(url, "test", "test").target("27").load().migrate();
+            UUID category = UUID.randomUUID(), product = UUID.randomUUID(), variant = UUID.randomUUID();
+            anchor.setAutoCommit(false);
+            try (Statement sql = anchor.createStatement()) {
+                sql.execute("INSERT INTO categories(id,name) VALUES ('" + category + "','Legacy')");
+                sql.execute("INSERT INTO products(id,category_id,name,status) VALUES ('" + product + "','" + category + "','Legacy','PUBLISHED')");
+                sql.execute("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) VALUES ('" + variant + "','" + product + "','legacy-imageless','{}',1234)");
+            }
+            anchor.commit();
+            anchor.setAutoCommit(true);
+            assertThatThrownBy(() -> Flyway.configure().dataSource(url, "test", "test").load().migrate())
+                    .hasStackTraceContaining("Invalid catalog gallery");
+            try (Statement sql = anchor.createStatement(); var rows = sql.executeQuery(
+                    "SELECT p.id,p.status,v.id,v.sku,v.selling_price FROM products p JOIN product_variants v ON v.product_id=p.id")) {
+                assertThat(rows.next()).isTrue();
+                assertThat(rows.getObject(1)).isEqualTo(product);
+                assertThat(rows.getString(2)).isEqualTo("PUBLISHED");
+                assertThat(rows.getObject(3)).isEqualTo(variant);
+                assertThat(rows.getString(4)).isEqualTo("legacy-imageless");
+                assertThat(rows.getBigDecimal(5)).isEqualByComparingTo("1234");
+                assertThat(rows.next()).isFalse();
+            }
+            try (Statement sql = anchor.createStatement(); var rows = sql.executeQuery(
+                    "SELECT MAX(version::integer) FROM flyway_schema_history WHERE success")) {
+                assertThat(rows.next()).isTrue();
+                assertThat(rows.getInt(1)).isEqualTo(27);
+            }
+            try (Statement sql = anchor.createStatement(); var rows = sql.executeQuery(
+                    "SELECT COUNT(*) FROM information_schema.columns WHERE table_schema='public' AND table_name='products' AND column_name='version'")) {
+                assertThat(rows.next()).isTrue();
+                assertThat(rows.getInt(1)).isZero();
+            }
+        }
+    }
+
     private void assertSqlRejected(Connection connection, String sql, String state) {
         assertThatThrownBy(() -> {
             try (Statement statement = connection.createStatement()) { statement.execute(sql); }

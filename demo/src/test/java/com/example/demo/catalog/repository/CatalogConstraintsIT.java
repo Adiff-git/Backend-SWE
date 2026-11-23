@@ -80,12 +80,13 @@ class CatalogConstraintsIT {
 
 	@Test
 	void repositories_shouldFindOwnedAndBatchedCatalogRows() {
-		UUID firstId = persistProduct(ProductStatus.PUBLISHED);
+		UUID firstId = persistProduct(ProductStatus.DRAFT);
 		UUID secondId = persistProduct(ProductStatus.DRAFT);
 		UUID firstImageId = transactions.execute(status -> {
 			Product first = products.findById(firstId).orElseThrow();
 			ProductImage image = CatalogFixtures.image(first, 0, true);
 			entityManager.persist(image);
+            first.setStatus(ProductStatus.PUBLISHED);
 			entityManager.flush();
 			return image.getId();
 		});
@@ -155,6 +156,7 @@ class CatalogConstraintsIT {
 			ProductFixture fixture = CatalogFixtures.publishedProduct();
 			entityManager.persist(fixture.category());
 			entityManager.persist(fixture.product());
+            entityManager.persist(CatalogFixtures.image(fixture.product(), 0, true));
 		}), "23514", "ct_products_variant_integrity");
 		UUID productId = persistProduct(ProductStatus.PUBLISHED);
 		assertConstraint(() -> transactions.executeWithoutResult(status -> {
@@ -166,11 +168,12 @@ class CatalogConstraintsIT {
 
 	@Test
 	void database_shouldEnforceImageGallery() {
-		UUID productId = persistProduct(ProductStatus.PUBLISHED);
+		UUID productId = persistProduct(ProductStatus.DRAFT);
 		UUID firstImageId = transactions.execute(status -> {
 			Product product = products.findById(productId).orElseThrow();
 			ProductImage image = CatalogFixtures.image(product, 0, true);
 			entityManager.persist(image);
+            product.setStatus(ProductStatus.PUBLISHED);
 			entityManager.flush();
 			return image.getId();
 		});
@@ -227,9 +230,10 @@ class CatalogConstraintsIT {
 
 	@Test
 	void concurrentGalleryInserts_shouldRejectOnlyExpectedIntegrityConflict() throws Exception {
-		UUID productId = persistProduct(ProductStatus.PUBLISHED);
+		UUID productId = persistProduct(ProductStatus.DRAFT);
 		transactions.executeWithoutResult(status -> {
 			Product product = products.findById(productId).orElseThrow();
+			product.setStatus(ProductStatus.PUBLISHED);
 			for (int order = 0; order < 9; order++) {
 				entityManager.persist(CatalogFixtures.image(product, order, order == 0));
 			}
@@ -281,7 +285,8 @@ class CatalogConstraintsIT {
 
 	private UUID persistProduct(ProductStatus status) {
 		return transactions.execute(transaction -> {
-			ProductFixture fixture = CatalogFixtures.persistProduct(entityManager, status);
+			ProductFixture fixture = status == ProductStatus.PUBLISHED
+                    ? CatalogFixtures.persistReadyProduct(entityManager) : CatalogFixtures.persistProduct(entityManager, status);
 			entityManager.flush();
 			return fixture.product().getId();
 		});

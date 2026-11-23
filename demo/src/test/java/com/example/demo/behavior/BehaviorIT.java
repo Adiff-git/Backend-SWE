@@ -27,6 +27,7 @@ import tools.jackson.databind.json.JsonMapper;
 @SpringBootTest(properties="spring.datasource.hikari.maximum-pool-size=4")
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@org.springframework.context.annotation.Import(com.example.demo.catalog.service.AdminCatalogIntegrationSupport.LocalSigning.class)
 class BehaviorIT {
     @Autowired MockMvc mvc;
     @Autowired JdbcTemplate jdbc;
@@ -48,7 +49,7 @@ class BehaviorIT {
         now = Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
         when(clock.instant()).thenReturn(now);
         when(clock.getZone()).thenReturn(ZoneOffset.UTC);
-        product = tx.execute(s -> WishlistFixtures.persistProduct(em, ProductStatus.PUBLISHED).getId());
+        product = tx.execute(s -> WishlistFixtures.persistReadyProduct(em).getId());
         customer = actor();
     }
     @AfterEach void cleanup() { jdbc.execute("TRUNCATE users,categories CASCADE"); }
@@ -261,6 +262,7 @@ class BehaviorIT {
         assertThat(submit(customer,event("PRODUCT_VIEW"))).isEqualTo(201);
         assertThat(submit(customer,event("SEARCH"))).isEqualTo(201);
         tx.executeWithoutResult(s -> {
+            jdbc.update("DELETE FROM product_images WHERE product_id=?",product); // Own synthetic gallery metadata; historical/event oracle unchanged.
             jdbc.update("DELETE FROM product_variants WHERE product_id=?",product);
             jdbc.update("DELETE FROM products WHERE id=?",product);
         });

@@ -21,7 +21,7 @@ public class CartConverter {
     public CartResponse toResponse(PreparedCart cart) {
         List<CartItemResponse> items = cart.getItems().stream().map(seed -> {
             CartVariantState state = cart.getStates().get(seed.getVariantId());
-            boolean published = state != null && state.isPublished();
+            boolean published = state != null && state.isPublished() && state.isEnabled();
             boolean purchasable = !cart.getIneligibleReasons().containsKey(seed.getId());
             return new CartItemResponse(seed.getId(), seed.getProductId(), seed.getVariantId(),
                     published ? state.getProductName() : seed.getPublicProductName(),

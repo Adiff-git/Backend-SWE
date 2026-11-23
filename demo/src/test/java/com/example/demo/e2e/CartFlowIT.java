@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@org.springframework.context.annotation.Import(com.example.demo.catalog.service.AdminCatalogIntegrationSupport.LocalSigning.class)
 class CartFlowIT {
     @Autowired MockMvc mvc;
     @Autowired EntityManager entities;
@@ -46,7 +47,7 @@ class CartFlowIT {
     @Test void cart_shouldSurviveLogoutAndLaterLoginThroughFullInternalFlow() throws Exception {
         cleanup();
         UUID[] variants = transactions.execute(s -> {
-            var product = CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED);
+            var product = CatalogFixtures.persistReadyProduct(entities);
             var second = CatalogFixtures.variant(product.product(), Map.of("color", "blue"), BigDecimal.valueOf(50));
             entities.persist(second);
             return new UUID[]{product.variant().getId(), second.getId()};
@@ -93,7 +94,7 @@ class CartFlowIT {
 
     @Test void networkWalkthrough_shouldExerciseRealHttpOnIsolatedRuntime() throws Exception {
         cleanup();
-        UUID variant = transactions.execute(s -> CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED).variant().getId());
+        UUID variant = transactions.execute(s -> CatalogFixtures.persistReadyProduct(entities).variant().getId());
         com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 1000);
         String username = "http-" + UUID.randomUUID();
         users.createVerifiedAccount(username + "@example.com", passwords.encode("Password 123"), Instant.now());

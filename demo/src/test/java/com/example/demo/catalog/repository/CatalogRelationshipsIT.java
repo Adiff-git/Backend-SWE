@@ -90,6 +90,16 @@ class CatalogRelationshipsIT {
 				insertVariant(UUID.randomUUID(), "{}", "SKU-" + UUID.randomUUID())));
 	}
 
+    @Test
+    void variantlessDraftCommitsWithoutInventingChildren() {
+        UUID category = insertCategory();
+        UUID product = UUID.randomUUID();
+        transactions.executeWithoutResult(status -> jdbc.update(
+                "INSERT INTO products(id,category_id,name,status) VALUES (?,?,'Draft','DRAFT')", product, category));
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM product_variants WHERE product_id=?", Long.class, product)).isZero();
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM product_images WHERE product_id=?", Long.class, product)).isZero();
+    }
+
 	private UUID insertCategory() {
 		UUID id = UUID.randomUUID();
 		jdbc.update("INSERT INTO categories (id, name) VALUES (?, ?)", id, "Category " + id);
@@ -99,6 +109,9 @@ class CatalogRelationshipsIT {
 	private void insertProduct(UUID id, UUID categoryId) {
 		jdbc.update("INSERT INTO products (id, category_id, name, status) VALUES (?, ?, ?, 'PUBLISHED')",
 				id, categoryId, "Product " + id);
+        jdbc.update("INSERT INTO product_images(id,product_id,object_key,alt_text,content_type,byte_size,width,height,display_order,is_primary,created_at) "
+                + "VALUES (?,?,?,'Ready','image/png',100,10,10,0,TRUE,CURRENT_TIMESTAMP)",
+                UUID.randomUUID(), id, "relationships/" + id);
 	}
 
 	private void insertVariant(UUID productId, String options, String sku) {

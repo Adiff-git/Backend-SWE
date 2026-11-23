@@ -33,13 +33,21 @@ public final class CheckoutFixtures {
         return order(jdbc, owner, false);
     }
 
+    public static HistoricalOrder historicalZeroOrder(JdbcTemplate jdbc,Long owner){
+        return order(jdbc,owner,true,0);
+    }
+
     private static HistoricalOrder order(JdbcTemplate jdbc, Long owner, boolean inventorySchema) {
+        return order(jdbc,owner,inventorySchema,100);
+    }
+
+    private static HistoricalOrder order(JdbcTemplate jdbc, Long owner, boolean inventorySchema,int historicalAmount) {
         Long id = jdbc.queryForObject("SELECT nextval(pg_get_serial_sequence('orders','id'))", Long.class);
         String participationColumn = inventorySchema ? ",inventory_managed" : "";
         String participationValue = inventorySchema ? ",false" : "";
-        jdbc.update("INSERT INTO orders(id,customer_id,order_number,placed_at,status,recipient_name_snapshot,recipient_phone_snapshot,delivery_address_snapshot,merchandise_total,payable_total" + participationColumn + ") VALUES (?, ?, ?, ?, 'PENDING','Recipient','0123456789','Address',100,100" + participationValue + ")",
-                id, owner, "TEST-" + id, java.sql.Timestamp.from(PLACED_AT));
-        Long item = jdbc.queryForObject("INSERT INTO order_items(order_id,product_name_snapshot,variant_sku_snapshot,variant_options_snapshot,quantity,unit_price_snapshot,line_total) VALUES (?,'Product','SKU','{}',1,100,100) RETURNING id", Long.class, id);
+        jdbc.update("INSERT INTO orders(id,customer_id,order_number,placed_at,status,recipient_name_snapshot,recipient_phone_snapshot,delivery_address_snapshot,merchandise_total,payable_total" + participationColumn + ") VALUES (?, ?, ?, ?, 'PENDING','Recipient','0123456789','Address',?,?" + participationValue + ")",
+                id, owner, "TEST-" + id, java.sql.Timestamp.from(PLACED_AT),historicalAmount,historicalAmount);
+        Long item = jdbc.queryForObject("INSERT INTO order_items(order_id,product_name_snapshot,variant_sku_snapshot,variant_options_snapshot,quantity,unit_price_snapshot,line_total) VALUES (?,'Product','SKU','{}',1,?,?) RETURNING id", Long.class, id,historicalAmount,historicalAmount);
         return new HistoricalOrder(id, item);
     }
 
@@ -64,8 +72,8 @@ public final class CheckoutFixtures {
         address.setAddressText("Address");
         address.setIsDefault(true);
         entities.persist(address);
-        CatalogFixtures.ProductFixture product = CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED);
-        CatalogFixtures.ProductFixture other = CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED);
+        CatalogFixtures.ProductFixture product = CatalogFixtures.persistReadyProduct(entities);
+        CatalogFixtures.ProductFixture other = CatalogFixtures.persistReadyProduct(entities);
         Cart cart = new Cart(owner.getId());
         entities.persist(cart);
         CartItem item = cartItem(entities,cart,product,true);
@@ -94,7 +102,7 @@ public final class CheckoutFixtures {
             UUID product, UUID variant) { }
 
     public static CartItem additionalItem(EntityManager entities, Long cartId, boolean selected) {
-        CatalogFixtures.ProductFixture product = CatalogFixtures.persistProduct(entities,ProductStatus.PUBLISHED);
+        CatalogFixtures.ProductFixture product = CatalogFixtures.persistReadyProduct(entities);
         CartItem item = cartItem(entities,entities.getReference(Cart.class,cartId),product,selected);
         entities.flush();
         com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(entities, product.variant().getId(), 1000);

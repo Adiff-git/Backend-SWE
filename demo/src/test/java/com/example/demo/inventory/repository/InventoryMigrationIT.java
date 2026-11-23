@@ -53,7 +53,8 @@ class InventoryMigrationIT {
     }
 
     private void migrateInventory() {
-        Flyway.configure().dataSource(source).load().migrate();
+        // Preserve this historical V25–V27 upgrade contract; T013/T014 cover V28.
+        Flyway.configure().dataSource(source).target("27").load().migrate();
         assertThat(jdbc.queryForObject("SELECT MAX(version::INTEGER) FROM flyway_schema_history WHERE success", Integer.class)).isEqualTo(27);
     }
 

@@ -8,6 +8,16 @@ import org.springframework.stereotype.Component;
 /** Validates typed document shape. Registry applicability is checked by the normalizer. */
 @Component
 public class TechnicalSpecificationValidator {
+    /** Same pure persisted validator as the V27 auditor, with caller-resolved proposed/current context. */
+    public void validatePersisted(Map<String, Object> document, Set<String> applicableFamilies) {
+        new PersistedSpecificationValidator(this, RegistryHolder.REGISTRY).validate(document, applicableFamilies);
+    }
+
+    private static final class RegistryHolder {
+        private static final com.example.demo.catalog.search.SpecificationFilterRegistry REGISTRY =
+                new com.example.demo.catalog.search.SpecificationFilterRegistry();
+    }
+
     public void validate(Map<String, Object> document) {
         if (document == null || !document.keySet().equals(Set.of("schema_version", "values"))
                 || !(document.get("schema_version") instanceof Number version)

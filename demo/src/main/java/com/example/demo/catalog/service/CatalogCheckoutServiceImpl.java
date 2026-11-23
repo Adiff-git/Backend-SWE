@@ -40,7 +40,7 @@ public class CatalogCheckoutServiceImpl implements CatalogCheckoutService {
         for (List<UUID> batch : batches(candidates)) {
             for (CartVariantView row : variants.findCheckoutStates(batch)) {
                 if (!parentSet.contains(row.getProductId())) throw new CatalogConflictException();
-                result.put(row.getVariantId(),new CheckoutVariantState(row.getVariantId(),row.getProductId(),row.getStatus(),
+                result.put(row.getVariantId(),new CheckoutVariantState(row.getVariantId(),row.getProductId(),row.getStatus(),Boolean.TRUE.equals(row.getEnabled()),
                         row.getPrice(),row.getProductName(),row.getSku(),row.getOptions()));
             }
         }

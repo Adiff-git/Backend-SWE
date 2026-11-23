@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ProductImageController.class)
 @Import({CatalogSecurityConfiguration.class, CatalogSecurityProblemHandler.class,
+        com.example.demo.catalog.dto.request.AdminCatalogRequestReader.class, com.example.demo.catalog.dto.request.AdminGalleryRequests.class,
         com.example.demo.common.exception.ApiExceptionHandler.class, com.example.demo.common.exception.ApiErrorFactory.class})
 class ProductImageControllerTest {
     @Autowired MockMvc mvc;
@@ -30,12 +31,12 @@ class ProductImageControllerTest {
     private final UUID product = UUID.randomUUID();
     private final UUID source = UUID.randomUUID();
     private String path() { return "/api/products/" + product + "/images"; }
-    private String body() { return "{\"imageId\":\"" + source + "\",\"altText\":\"Front\"}"; }
+    private String body() { return "{\"expectedVersion\":\"0\",\"expectedTaxonomyVersion\":\"0\",\"imageId\":\"" + source + "\",\"altText\":\"Front\"}"; }
 
     @Test void adminCanAttachAndReplayUsingServerIdentity() throws Exception {
         when(identity.getCurrentUserId()).thenReturn(8L);
         var attached = new ProductImageService.Attached(UUID.randomUUID(), product, "Front", 2, 2, 0, true);
-        when(service.attach(product, source, 8L, "Front", null, null))
+        when(service.attach(product, source, 8L, "Front", null, null, 0L, 0L))
                 .thenReturn(new ProductImageService.Outcome(attached, false), new ProductImageService.Outcome(attached, true));
         mvc.perform(post(path()).with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN")))
                 .contentType("application/json").content(body()))
@@ -62,10 +63,32 @@ class ProductImageControllerTest {
         verifyNoInteractions(service);
     }
 
+    @Test void scopedAdvicePreservesSafeConflictExtensionsAndNoStore() throws Exception {
+        when(identity.getCurrentUserId()).thenReturn(8L);
+        when(service.attach(product, source, 8L, "Front", null, null, 0L, 0L)).thenThrow(
+                new com.example.demo.catalog.exception.AdminCatalogException(409, "CATALOG_STALE_VERSION",
+                        "Reload the product", java.util.Map.of("expectedVersion", "0", "currentVersion", "1")));
+        mvc.perform(post(path()).with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN")))
+                .contentType("application/json").content(body()))
+                .andExpect(status().isConflict()).andExpect(content().contentTypeCompatibleWith("application/problem+json"))
+                .andExpect(jsonPath("$.code").value("CATALOG_STALE_VERSION"))
+                .andExpect(jsonPath("$.currentVersion").value("1"))
+                .andExpect(header().string("Cache-Control", "no-store"));
+    }
+
     @Test void oldUploadEndpointsAreDeniedEvenForAdmin() throws Exception {
         for (String suffix : new String[]{"/uploads", "/uploads/" + source + "/complete"})
             mvc.perform(post(path() + suffix).with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN")))
                     .contentType("application/json").content("{}")).andExpect(status().isForbidden());
         verifyNoInteractions(service);
     }
+    @Test void missingRevisionsRejectOtherwiseValidAttachment_beforeReplay() throws Exception {
+        mvc.perform(post(path()).with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))).contentType("text/plain").content("{}"))
+                .andExpect(status().isUnsupportedMediaType());
+        mvc.perform(post(path()).with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN")))
+                .contentType("application/json").content("{\"imageId\":\""+source+"\",\"altText\":\"Front\"}"))
+                .andExpect(status().isBadRequest());
+        verifyNoInteractions(service);
+    }
+
 }

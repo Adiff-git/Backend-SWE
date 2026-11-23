@@ -18,6 +18,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Brand {
+    @Setter(AccessLevel.NONE)
+    @Column(name = "version", nullable = false, insertable = false, updatable = false)
+    private long version;
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     @Setter(AccessLevel.NONE)
     private UUID id;

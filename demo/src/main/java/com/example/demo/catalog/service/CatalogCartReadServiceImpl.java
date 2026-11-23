@@ -42,7 +42,7 @@ public class CatalogCartReadServiceImpl implements CatalogCartReadService {
             for (CartVariantView row : variants.findCartStates(chunk)) {
                 boolean published = row.getStatus() == ProductStatus.PUBLISHED;
                 result.put(row.getVariantId(), new CartVariantState(row.getVariantId(), row.getProductId(),
-                        published, validAmount(row.getPrice()), row.getProductName(), row.getSku(),
+                        published, Boolean.TRUE.equals(row.getEnabled()), validAmount(row.getPrice()), row.getProductName(), row.getSku(),
                         published ? row.getOptions() : Map.of(), null, null));
             }
         }
@@ -51,48 +51,59 @@ public class CatalogCartReadServiceImpl implements CatalogCartReadService {
 
     @Override @Transactional(readOnly = true)
     public boolean hasImageCandidates(Collection<UUID> variantIds) {
-        List<UUID> ids = catalogStates(variantIds).values().stream().filter(CartVariantState::isPublished)
-                .map(CartVariantState::getProductId).distinct().sorted().toList();
-        return !imageKeys(ids).isEmpty();
+        // Signer preparation needs only existence, not two complete catalog/image projections.
+        // Current state is still reloaded under ordered Product locks before presentation.
+        List<UUID> ids = variantIds.stream().distinct().sorted(Comparator.comparing(UUID::toString)).toList();
+        for (List<UUID> chunk : chunks(ids)) {
+            if (images.hasCartImageCandidates(chunk)) return true;
+        }
+        return false;
     }
 
     @Override @Transactional
     public Map<UUID, CartVariantState> getCartPresentation(Collection<UUID> variantIds, PreparedImageUrls urls) {
-        Map<UUID, CartVariantState> states = new HashMap<>(catalogStates(variantIds));
-        List<UUID> ids = states.values().stream().filter(CartVariantState::isPublished)
-                .map(CartVariantState::getProductId).distinct().sorted().toList();
-        Map<UUID, String> keys = imageKeys(ids);
+        // Parent discovery is scalar. Lock every parent, including imageless/unavailable rows,
+        // then reload current variant eligibility and prices after potentially slow signer preparation.
+        Map<UUID, CartVariantState> discovered = catalogStates(variantIds);
+        List<UUID> parents = discovered.values().stream().map(CartVariantState::getProductId)
+                .distinct().sorted(Comparator.comparing(UUID::toString)).toList();
         Map<UUID, Boolean> publication = new HashMap<>();
-        // PostgreSQL UUID order is unsigned byte order, unlike UUID.compareTo's signed longs.
-        for (List<UUID> chunk : chunks(keys.keySet().stream().sorted(Comparator.comparing(UUID::toString)).toList())) {
+        for (List<UUID> chunk : chunks(parents)) {
             for (Object[] row : products.lockStatusesForShare(chunk)) {
                 publication.put((UUID) row[0], "PUBLISHED".equals(row[1]));
             }
         }
-        // Re-read gallery after publication locks; never sign stale hidden gallery data.
-        Map<UUID, String> currentKeys = imageKeys(publication.entrySet().stream()
-                .filter(Map.Entry::getValue).map(Map.Entry::getKey).sorted().toList());
-        Map<UUID, String> signed = new HashMap<>();
-        if (urls != null) {
-            for (Map.Entry<UUID, String> key : currentKeys.entrySet()) {
-                try { signed.put(key.getKey(), urls.resolve(key.getValue())); }
-                catch (RuntimeException failure) { throw new CatalogStorageUnavailableException(); }
+        Map<UUID, CartVariantState> states = new HashMap<>(catalogStates(variantIds));
+        states.replaceAll((id, state) -> {
+            CartVariantState before = discovered.get(id);
+            if (before == null || !before.getProductId().equals(state.getProductId())) {
+                throw new com.example.demo.catalog.exception.CatalogConflictException();
             }
+            return new CartVariantState(id, state.getProductId(),
+                    state.isPublished() && publication.getOrDefault(state.getProductId(), false), state.isEnabled(),
+                    state.getAmount(), state.getProductName(), state.getSku(), state.getOptions(), null, null);
+        });
+        List<UUID> ids = states.values().stream().filter(CartVariantState::isPurchasable)
+                .map(CartVariantState::getProductId).distinct().sorted(Comparator.comparing(UUID::toString)).toList();
+        Map<UUID, String> signed = new HashMap<>();
+        for (Map.Entry<UUID, String> key : imageKeys(ids).entrySet()) {
+            if (urls == null) throw new CatalogStorageUnavailableException();
+            try { signed.put(key.getKey(), urls.resolve(key.getValue())); }
+            catch (RuntimeException failure) { throw new CatalogStorageUnavailableException(); }
         }
-        states.replaceAll((id, state) -> new CartVariantState(id, state.getProductId(),
-                state.isPublished() && publication.getOrDefault(state.getProductId(), !keys.containsKey(state.getProductId())),
+        states.replaceAll((id, state) -> new CartVariantState(id, state.getProductId(), state.isPublished(), state.isEnabled(),
                 state.getAmount(), state.getProductName(), state.getSku(), state.getOptions(), signed.get(state.getProductId()), null));
         return withAvailability(states);
     }
 
     private Map<UUID, CartVariantState> withAvailability(Map<UUID, CartVariantState> states) {
-        List<UUID> ids = states.values().stream().filter(CartVariantState::isPublished).map(CartVariantState::getVariantId)
+        List<UUID> ids = states.values().stream().filter(CartVariantState::isPurchasable).map(CartVariantState::getVariantId)
                 .distinct().sorted(Comparator.comparing(UUID::toString)).toList();
         Map<UUID, com.example.demo.inventory.dto.response.InventoryAvailability> availability = ids.isEmpty() ? Map.of() : inventory.getAvailability(ids);
         Map<UUID, CartVariantState> prepared = new HashMap<>();
-        states.forEach((id, state) -> prepared.put(id, new CartVariantState(id, state.getProductId(), state.isPublished(),
+        states.forEach((id, state) -> prepared.put(id, new CartVariantState(id, state.getProductId(), state.isPublished(), state.isEnabled(),
                 state.getAmount(), state.getProductName(), state.getSku(), state.getOptions(), state.getPrimaryImageUrl(),
-                state.isPublished() ? availability.get(id) : null)));
+                state.isPurchasable() ? availability.get(id) : null)));
         return Map.copyOf(prepared);
     }
 
@@ -113,7 +124,7 @@ public class CatalogCartReadServiceImpl implements CatalogCartReadService {
     }
 
     private BigInteger validAmount(BigDecimal price) {
-        if (price == null || price.signum() < 0) return null;
+        if (price == null || price.signum() <= 0) return null;
         try { return price.toBigIntegerExact(); }
         catch (ArithmeticException invalidPrice) { return null; }
     }

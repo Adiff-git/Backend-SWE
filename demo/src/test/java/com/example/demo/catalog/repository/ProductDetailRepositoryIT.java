@@ -67,7 +67,7 @@ class ProductDetailRepositoryIT {
 	@Test
 	void detailLookupFetchesBrandAndPreservesProductWithoutBrand() {
 		UUID branded = transactions.execute(transaction -> {
-			ProductFixture fixture = CatalogFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
+			ProductFixture fixture = CatalogFixtures.persistReadyProduct(entityManager);
 			Brand brand = new Brand("repository-brand", "Repository Brand");
 			entityManager.persist(brand);
 			fixture.product().setBrand(brand);
@@ -94,7 +94,8 @@ class ProductDetailRepositoryIT {
 
 	private UUID persistSimple(ProductStatus status) {
 		return transactions.execute(transaction -> {
-			ProductFixture fixture = CatalogFixtures.persistProduct(entityManager, status);
+			ProductFixture fixture = status==ProductStatus.PUBLISHED ? CatalogFixtures.persistReadyProduct(entityManager)
+                    : CatalogFixtures.persistProduct(entityManager,status);
 			entityManager.flush();
 			return fixture.product().getId();
 		});

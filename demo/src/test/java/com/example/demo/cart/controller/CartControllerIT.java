@@ -71,7 +71,8 @@ class CartControllerIT {
 
     @BeforeEach void prepare() {
         cleanup();
-        variant = transactions.execute(s -> CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED).variant().getId());
+        org.mockito.Mockito.when(imageUrls.prepare()).thenReturn(key -> "https://images.test/cart");
+        variant = transactions.execute(s -> CatalogFixtures.persistReadyProduct(entities).variant().getId());
         com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 1000);
     }
     @AfterEach void cleanup() { com.example.demo.fixture.inventory.InventoryFixtures.cleanRetainedInventory(jdbc); }
@@ -181,8 +182,7 @@ class CartControllerIT {
 
     @Test void signingFailure_shouldReturn503AndLeaveNoCreatedCart() throws Exception {
         Credentials user = register();
-        transactions.executeWithoutResult(s -> entities.persist(CatalogFixtures.image(
-                entities.find(com.example.demo.catalog.entity.ProductVariant.class, variant).getProduct(), 0, true)));
+        // Existing positive fixture supplies the primary; exercise signing failure, not a duplicate gallery.
         org.mockito.Mockito.when(imageUrls.prepare()).thenReturn(key -> { throw new IllegalStateException("Controlled failure"); });
         add(user.access(), 2, 503);
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM carts", Long.class)).isZero();

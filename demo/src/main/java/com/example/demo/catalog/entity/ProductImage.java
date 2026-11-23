@@ -24,6 +24,12 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductImage {
 
+	@Column(name = "active", nullable = false)
+	private boolean active = true;
+
+	@Column(name = "source_image_id")
+	private UUID sourceImageId;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Setter(AccessLevel.NONE)

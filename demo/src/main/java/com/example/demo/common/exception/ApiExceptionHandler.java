@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-@RestControllerAdvice(basePackages = "com.example.demo.catalog")
+@RestControllerAdvice(assignableTypes = com.example.demo.catalog.controller.ProductCatalogController.class)
 @org.springframework.core.annotation.Order(org.springframework.core.Ordered.HIGHEST_PRECEDENCE)
 public class ApiExceptionHandler {
 	private static final URI ABOUT_BLANK = URI.create("about:blank");

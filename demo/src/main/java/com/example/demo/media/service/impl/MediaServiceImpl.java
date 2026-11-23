@@ -35,6 +35,27 @@ public class MediaServiceImpl implements MediaService {
     private final ImageUrlResolver imageUrls;
 
     @Override @Transactional(readOnly = true)
+    public com.example.demo.media.dto.response.PreparedProductImage prepareProductImage(Long actor, UUID id) {
+        if (actor == null || actor <= 0) throw new IdentityUnavailableException();
+        ImageUpload image = repository.findByIdAndOwnerUserId(id, actor).orElseThrow(ImageUploadNotFoundException::new);
+        if (image.getStatus() != ImageUploadStatus.COMPLETED) throw new UploadStateConflictException();
+        return new com.example.demo.media.dto.response.PreparedProductImage(image.getId(), actor, image.getVersion(), image.getFinalKey(), image.getContentType());
+    }
+
+    @Override @Transactional
+    public void validatePreparedProductImage(Long actor, com.example.demo.media.dto.response.PreparedProductImage prepared) {
+        if (actor == null || !actor.equals(prepared.getOwner())) throw new ImageUploadNotFoundException();
+        java.util.List<Object[]> rows = repository.lockProductAttachmentSnapshot(prepared.getId());
+        if (rows.size() != 1) throw new ImageUploadNotFoundException();
+        Object[] image = rows.getFirst();
+        if (!actor.equals(((Number) image[1]).longValue())) throw new ImageUploadNotFoundException();
+        if (!prepared.getId().equals(image[0]) || !"COMPLETED".equals(image[5])
+                || !java.util.Objects.equals(((Number) image[2]).longValue(), prepared.getVersion())
+                || !java.util.Objects.equals(image[3], prepared.getFinalKey())
+                || !java.util.Objects.equals(image[4], prepared.getContentType())) throw new UploadStateConflictException();
+    }
+
+    @Override @Transactional(readOnly = true)
     public com.example.demo.media.dto.response.PreparedReviewImages prepareReviewImages(Long actor, java.util.List<UUID> ids) {
         if (actor == null || actor <= 0) throw new IdentityUnavailableException();
         java.util.Map<UUID, String> keys = new java.util.HashMap<>();
