@@ -1,0 +1,22 @@
+# Inventory write and replay contract
+
+1. Authorize through current-session JWT before dispatch. Validate and canonicalize immutable input. Read the committed journal by exact actor and operation UUID. If found, compare type, target UUID, delta and normalized reason. Return versioned stored result on equality, otherwise 409.
+2. Use a transaction-scoped nonblocking advisory fence keyed by Inventory namespace and a stable hash of full actor/operation identity. Re-read by full key in a fresh READ COMMITTED statement on both acquired and busy paths. Honor any committed hit before live eligibility. A busy miss yields retryable 409 without writes. Hash collision may transiently serialize unrelated operations and cannot imply equality.
+3. For an acquired miss, discover parent identity, acquire Product FOR SHARE then Variant FOR SHARE, and validate current parent link and state under those locks. A stale parent observation fails safely. Reject Archived. Accept Enabled or Disabled under Draft, Published and Unpublished with no Catalog mutation. Use a bounded transaction-local lock wait consistent with existing commerce behavior.
+4. Lock the existing live balance FOR UPDATE by stable identity and observe fresh counters. Validate invariants and safe delta bounds, guarding the on-hand-only update by the locked row and expected current counters. Require exactly one affected balance. Absent balance conflicts without auto-provisioning. Reject unexpected corruption without repair.
+5. Insert one journal event with matching locked balance and canonical payload in the same REQUIRED, READ COMMITTED transaction. Require exactly one event. Return success only after successful outer commit and V25 deferred checks. Any statement/flush/commit failure rolls back both writes. A named uniqueness failure is handled outside the rolled-back transaction with a fresh read for replay or conflict. Never catch it and continue within an aborted transaction. No blind automatic retry.
+
+| Path | Resource order |
+| --- | --- |
+| Inventory fresh write | Feature fence → Product share → Variant share → balance update lock → journal insert with retained-balance reference |
+| Checkout | Checkout receipt/fence → user/cart → ordered Products → ordered Variants → ordered balances → existing voucher and order/allocation writes |
+| Existing Order terminal action | Existing Order → ordered retained balances → owned allocations |
+| Catalog lifecycle | Existing revision/taxonomy protocol then Product claim before Variant writes |
+
+No Inventory Admin operation acquires Order, Cart, Voucher, User, taxonomy or Catalog locks after its balance lock. The journal FK targets the balance already held by the writer. V25 deferred balance validation relocks that balance and checks active quantity totals. Avoid use of live actor or live variant FKs that would add late resource edges. Product share serializes Archive against accepted stock writes. Variant share protects identity and lifecycle coherence even though Disabled is admissible. A successful replay reads committed immutable evidence without taking live resource locks.
+
+For reads, use Inventory-owned DTO projections through bounded queries with Catalog joins. Use a variant-first left join to the live balance, stable filtered totals and history by original UUID. No entity lazy queries, media signing, write locks, or order/customer joins. Keep conversion pure and derive counts from one coherent balance observation. Current Catalog/commerce, auth and global error contracts remain owned by their existing modules.
+
+## Commit evidence
+
+Keep Catalog and balance projections scalar and managed Catalog/Order entities clean. Use an outer proxied transaction and let flush, journal insertion and V25 deferred checks finish before a success is serialized. On a named journal uniqueness collision, exit and roll back the failed transaction before a new committed lookup; if no winner is visible return the retryable conflict. Test injected post-balance failure, journal failure and deferred commit rejection separately. Use independent connections and committed fixtures, observe real waits, and assert postcommit counters, exact ACTIVE allocation sum, actor/key event count and historical order/receipt integrity from a new transaction. Exercise both meaningful winner orders for commerce and Catalog races, including disable/enable without changing write eligibility. Inspect executed statements and flush/trigger effects for late Product, Variant, existing Order or allocation locks.

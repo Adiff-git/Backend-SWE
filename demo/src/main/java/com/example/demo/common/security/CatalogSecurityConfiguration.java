@@ -17,11 +17,17 @@ public class CatalogSecurityConfiguration {
 			CatalogSecurityProblemHandler problemHandler,
             com.example.demo.auth.security.CurrentStateJwtConverter converter) throws Exception {
 		http
-			.securityMatcher("/api/products", "/api/products/**", "/api/admin/catalog", "/api/admin/catalog/**")
+			.securityMatcher("/api/products", "/api/products/**", "/api/admin/catalog", "/api/admin/catalog/**", "/api/admin/inventory", "/api/admin/inventory/**")
 			.cors(org.springframework.security.config.Customizer.withDefaults())
 			// The planned catalog API uses Bearer credentials, not cookie authentication.
-			.csrf(csrf -> csrf.ignoringRequestMatchers("/api/products/**", "/api/admin/catalog", "/api/admin/catalog/**"))
+			.csrf(csrf -> csrf.ignoringRequestMatchers("/api/products/**", "/api/admin/catalog", "/api/admin/catalog/**", "/api/admin/inventory", "/api/admin/inventory/**"))
 			.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(HttpMethod.GET, "/api/admin/inventory/variants",
+                        "/api/admin/inventory/variants/{id}", "/api/admin/inventory/variants/{id}/history")
+                    .access((authentication, context) -> administrator(authentication.get()))
+                .requestMatchers(HttpMethod.POST, "/api/admin/inventory/variants/{id}/replenishments",
+                        "/api/admin/inventory/variants/{id}/corrections")
+                    .access((authentication, context) -> administrator(authentication.get()))
                 .requestMatchers("/api/admin/catalog", "/api/admin/catalog/**")
                     .access((authentication, context) -> administrator(authentication.get()))
 				.requestMatchers(HttpMethod.GET, "/api/products", "/api/products/{id}").permitAll()

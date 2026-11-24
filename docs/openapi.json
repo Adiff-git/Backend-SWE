@@ -3,7 +3,7 @@
   "info": {
     "title": "Backend-SWE API",
     "version": "1.3.0",
-    "description": "Source-derived current Backend-SWE contract, reviewed 2026-11-21 at draft/version-1 commit 5585ddd. Includes authentication/email/Google, profiles/addresses, search/filter/catalog/media/wishlist, behavior tracking, Inventory availability, Cart, atomic Checkout, Order history/cancellation, owned Voucher wallet, verified product reviews/ratings with optional images, and product recommendations. Inventory reservation/completion internals, admin granting/stock supply, payment, shipping-to-completed/received/failed and Voucher cancellation-quota policy do not expose new HTTP routes. Root bearer security is overridden for public operations. Authorities are current database grants, not OAuth scopes. Exact VND JSON integers may exceed JavaScript safe precision. Examples are synthetic. No runtime Swagger access or security policy is changed."
+    "description": "Source-derived current Backend-SWE contract, reviewed 2026-11-21 at draft/version-1 commit 5585ddd. Includes authentication/email/Google, profiles/addresses, search/filter/catalog/media/wishlist, behavior tracking, Inventory availability, Cart, atomic Checkout, Order history/cancellation, owned Voucher wallet, verified product reviews/ratings with optional images, and product recommendations. Inventory reservation/completion internals, admin granting, payment, shipping-to-completed/received/failed and Voucher cancellation-quota policy do not expose new HTTP routes. Root bearer security is overridden for public operations. Authorities are current database grants, not OAuth scopes. Exact VND JSON integers may exceed JavaScript safe precision. Examples are synthetic. No runtime Swagger access or security policy is changed."
   },
   "servers": [
     {
@@ -83,6 +83,644 @@
     }
   ],
   "paths": {
+    "/api/admin/inventory/variants": {
+      "get": {
+        "operationId": "listAdminInventory",
+        "summary": "listAdminInventory",
+        "description": "Requires a current ROLE_ADMIN bearer session. Quantities are exact decimal strings.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 20,
+              "maximum": 100
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "DRAFT",
+                  "PUBLISHED",
+                  "UNPUBLISHED",
+                  "ARCHIVED"
+                ]
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "variantId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "productId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "sku": {
+                            "type": "string"
+                          },
+                          "productStatus": {
+                            "type": "string"
+                          },
+                          "variantEnabled": {
+                            "type": "boolean"
+                          },
+                          "catalogSaleEligible": {
+                            "type": "boolean"
+                          },
+                          "onHand": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "reserved": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "available": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "stockStatus": {
+                            "enum": [
+                              "UNAVAILABLE",
+                              "OUT_OF_STOCK",
+                              "IN_STOCK"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "size": {
+                      "type": "integer"
+                    },
+                    "totalItems": {
+                      "type": "integer"
+                    },
+                    "totalPages": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Administrator access required"
+          },
+          "404": {
+            "description": "Inventory variant not found"
+          }
+        }
+      }
+    },
+    "/api/admin/inventory/variants/{variantId}": {
+      "get": {
+        "operationId": "getAdminInventory",
+        "summary": "getAdminInventory",
+        "description": "Requires a current ROLE_ADMIN bearer session. Quantities are exact decimal strings.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "variantId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "variantId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "productId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "productName": {
+                      "type": "string"
+                    },
+                    "sku": {
+                      "type": "string"
+                    },
+                    "productStatus": {
+                      "type": "string"
+                    },
+                    "variantEnabled": {
+                      "type": "boolean"
+                    },
+                    "catalogSaleEligible": {
+                      "type": "boolean"
+                    },
+                    "onHand": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "reserved": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "available": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "stockStatus": {
+                      "enum": [
+                        "UNAVAILABLE",
+                        "OUT_OF_STOCK",
+                        "IN_STOCK"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Administrator access required"
+          },
+          "404": {
+            "description": "Inventory variant not found"
+          }
+        }
+      }
+    },
+    "/api/admin/inventory/variants/{variantId}/history": {
+      "get": {
+        "operationId": "listAdminInventoryHistory",
+        "summary": "listAdminInventoryHistory",
+        "description": "Requires a current ROLE_ADMIN bearer session. Quantities are exact decimal strings.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "variantId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 20,
+              "maximum": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "operationId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "variantId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "adminId": {
+                            "type": "string",
+                            "pattern": "^(0|-?[1-9][0-9]*)$"
+                          },
+                          "delta": {
+                            "type": "string",
+                            "pattern": "^(0|-?[1-9][0-9]*)$"
+                          },
+                          "onHandBefore": {
+                            "type": "string",
+                            "pattern": "^(0|-?[1-9][0-9]*)$"
+                          },
+                          "onHandAfter": {
+                            "type": "string",
+                            "pattern": "^(0|-?[1-9][0-9]*)$"
+                          },
+                          "reservedObserved": {
+                            "type": "string",
+                            "pattern": "^(0|-?[1-9][0-9]*)$"
+                          },
+                          "availableAfter": {
+                            "type": "string",
+                            "pattern": "^(0|-?[1-9][0-9]*)$"
+                          },
+                          "operationType": {
+                            "enum": [
+                              "REPLENISHMENT",
+                              "CORRECTION"
+                            ]
+                          },
+                          "reason": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "occurredAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "size": {
+                      "type": "integer"
+                    },
+                    "totalItems": {
+                      "type": "integer"
+                    },
+                    "totalPages": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Administrator access required"
+          },
+          "404": {
+            "description": "Inventory variant not found"
+          }
+        }
+      }
+    },
+    "/api/admin/inventory/variants/{variantId}/replenishments": {
+      "post": {
+        "operationId": "replenishAdminInventory",
+        "summary": "replenishAdminInventory",
+        "description": "Requires a current ROLE_ADMIN bearer session. Quantities are exact decimal strings. Reusing an operation UUID with equivalent input returns the original committed response. Conflicting input returns 409.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "variantId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "operationId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "variantId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "adminId": {
+                      "type": "string",
+                      "pattern": "^(0|-?[1-9][0-9]*)$"
+                    },
+                    "delta": {
+                      "type": "string",
+                      "pattern": "^(0|-?[1-9][0-9]*)$"
+                    },
+                    "onHandBefore": {
+                      "type": "string",
+                      "pattern": "^(0|-?[1-9][0-9]*)$"
+                    },
+                    "onHandAfter": {
+                      "type": "string",
+                      "pattern": "^(0|-?[1-9][0-9]*)$"
+                    },
+                    "reservedObserved": {
+                      "type": "string",
+                      "pattern": "^(0|-?[1-9][0-9]*)$"
+                    },
+                    "availableAfter": {
+                      "type": "string",
+                      "pattern": "^(0|-?[1-9][0-9]*)$"
+                    },
+                    "operationType": {
+                      "enum": [
+                        "REPLENISHMENT",
+                        "CORRECTION"
+                      ]
+                    },
+                    "reason": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "occurredAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Administrator access required"
+          },
+          "404": {
+            "description": "Inventory variant not found"
+          },
+          "409": {
+            "description": "Inventory state or replay conflict"
+          },
+          "415": {
+            "description": "JSON media type required"
+          },
+          "422": {
+            "description": "Invalid quantity or reason"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "operationId",
+                  "delta"
+                ],
+                "properties": {
+                  "operationId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "delta": {
+                    "type": "string",
+                    "pattern": "^(0|-?[1-9][0-9]*)$"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "description": "At most 500 Unicode code points after trimming."
+                  }
+                }
+              },
+              "example": {
+                "operationId": "00000000-0000-4000-8000-000000000001",
+                "delta": "10",
+                "reason": "Stock count"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/inventory/variants/{variantId}/corrections": {
+      "post": {
+        "operationId": "correctAdminInventory",
+        "summary": "correctAdminInventory",
+        "description": "Requires a current ROLE_ADMIN bearer session. Quantities are exact decimal strings. Reusing an operation UUID with equivalent input returns the original committed response. Conflicting input returns 409.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "variantId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "operationId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "variantId": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "adminId": {
+                      "type": "string",
+                      "pattern": "^(0|-?[1-9][0-9]*)$"
+                    },
+                    "delta": {
+                      "type": "string",
+                      "pattern": "^(0|-?[1-9][0-9]*)$"
+                    },
+                    "onHandBefore": {
+                      "type": "string",
+                      "pattern": "^(0|-?[1-9][0-9]*)$"
+                    },
+                    "onHandAfter": {
+                      "type": "string",
+                      "pattern": "^(0|-?[1-9][0-9]*)$"
+                    },
+                    "reservedObserved": {
+                      "type": "string",
+                      "pattern": "^(0|-?[1-9][0-9]*)$"
+                    },
+                    "availableAfter": {
+                      "type": "string",
+                      "pattern": "^(0|-?[1-9][0-9]*)$"
+                    },
+                    "operationType": {
+                      "enum": [
+                        "REPLENISHMENT",
+                        "CORRECTION"
+                      ]
+                    },
+                    "reason": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "occurredAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Administrator access required"
+          },
+          "404": {
+            "description": "Inventory variant not found"
+          },
+          "409": {
+            "description": "Inventory state or replay conflict"
+          },
+          "415": {
+            "description": "JSON media type required"
+          },
+          "422": {
+            "description": "Invalid quantity or reason"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "operationId",
+                  "delta",
+                  "reason"
+                ],
+                "properties": {
+                  "operationId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "delta": {
+                    "type": "string",
+                    "pattern": "^(0|-?[1-9][0-9]*)$"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "description": "At most 500 Unicode code points after trimming."
+                  }
+                }
+              },
+              "example": {
+                "operationId": "00000000-0000-4000-8000-000000000001",
+                "delta": "-2",
+                "reason": "Stock count"
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/auth/register": {
       "post": {
         "tags": [
