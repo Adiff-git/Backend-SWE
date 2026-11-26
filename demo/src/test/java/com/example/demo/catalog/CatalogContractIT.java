@@ -48,11 +48,11 @@ class CatalogContractIT {
 			"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}");
 	private static final Set<String> PAGE_FIELDS = Set.of("items", "page", "size", "totalItems", "totalPages");
 	private static final Set<String> SUMMARY_FIELDS = Set.of("id", "name", "category", "primaryImageUrl",
-            "displayPrice", "representativeVariantId", "availability");
+            "displayPrice", "representativeVariantId", "availability", "pricing", "priceRange");
 	private static final Set<String> DETAIL_FIELDS = Set.of(
-			"id", "name", "category", "primaryImageUrl", "description", "brand", "variants", "images");
+			"id", "name", "category", "primaryImageUrl", "description", "brand", "variants", "images", "optionDimensions", "priceRange");
 	private static final Set<String> CATEGORY_FIELDS = Set.of("id", "name");
-	private static final Set<String> VARIANT_FIELDS = Set.of("id", "sku", "options", "sellingPrice", "technicalSpecifications", "availability");
+	private static final Set<String> VARIANT_FIELDS = Set.of("id", "sku", "options", "sellingPrice", "technicalSpecifications", "availability", "selectionOptions", "pricing");
 	private static final Set<String> PRICE_FIELDS = Set.of("amount", "currency");
 	private static final Set<String> IMAGE_FIELDS = Set.of(
 			"id", "url", "altText", "width", "height", "displayOrder", "isPrimary");
@@ -106,10 +106,10 @@ class CatalogContractIT {
             assertCanonicalUuid(item.get("representativeVariantId"));
             UUID productId = UUID.fromString(item.get("id").asText());
             Map<String, Object> expectedVariant = jdbc.queryForMap(
-                    "SELECT id,selling_price FROM product_variants WHERE product_id=? ORDER BY selling_price,id LIMIT 1", productId);
+                    "SELECT id,base_price FROM product_variants WHERE product_id=? ORDER BY base_price,id LIMIT 1", productId);
             assertThat(item.get("representativeVariantId").asText()).isEqualTo(expectedVariant.get("id").toString());
             assertThat(item.get("displayPrice").get("amount").bigIntegerValue())
-                    .isEqualTo(((BigDecimal) expectedVariant.get("selling_price")).toBigIntegerExact());
+                    .isEqualTo(((BigDecimal) expectedVariant.get("base_price")).toBigIntegerExact());
             assertThat(item.get("displayPrice").get("currency").asText()).isEqualTo("VND");
 			returnedIds.add(item.get("id").asText());
 		}

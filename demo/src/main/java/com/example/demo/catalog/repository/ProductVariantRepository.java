@@ -8,7 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.example.demo.catalog.entity.ProductVariant;
 
-public interface ProductVariantRepository extends JpaRepository<ProductVariant, UUID> {
+public interface ProductVariantRepository extends JpaRepository<ProductVariant, UUID>, CatalogPricingRepository {
+    @Query("SELECT DISTINCT p.id FROM ProductVariant v JOIN v.product p WHERE v.id IN :ids AND p.status = com.example.demo.catalog.entity.ProductStatus.PUBLISHED")
+    List<UUID> findPublishedParentIds(@Param("ids") Collection<UUID> ids);
+
     @Query(value = "SELECT id,product_id FROM product_variants WHERE id IN (:ids) ORDER BY id ASC", nativeQuery = true)
     List<Object[]> findCheckoutParents(@Param("ids") Collection<UUID> ids);
 
@@ -16,12 +19,12 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
     List<UUID> lockCheckoutVariants(@Param("ids") Collection<UUID> ids);
 
     @Query("SELECT v.id AS variantId, v.product.id AS productId, p.status AS status, "
-            + "CASE WHEN CAST(v.sellingPrice AS String) IN ('NaN','Infinity','-Infinity') THEN NULL ELSE v.sellingPrice END AS price, "
+            + "CASE WHEN CAST(v.basePrice AS String) IN ('NaN','Infinity','-Infinity') THEN NULL ELSE v.basePrice END AS price, "
             + "p.name AS productName, v.sku AS sku, v.optionCombination AS options "
             + "FROM ProductVariant v LEFT JOIN v.product p WHERE v.id IN :ids")
     List<CartVariantView> findCheckoutStates(@Param("ids") Collection<UUID> ids);
 
-    @Query("SELECT v.id AS variantId, p.id AS productId, p.status AS status, v.sellingPrice AS price, "
+    @Query("SELECT v.id AS variantId, p.id AS productId, p.status AS status, v.basePrice AS price, "
             + "p.name AS productName, v.sku AS sku, v.optionCombination AS options "
             + "FROM ProductVariant v JOIN v.product p WHERE v.id IN :ids")
     List<CartVariantView> findCartStates(@Param("ids") Collection<UUID> ids);

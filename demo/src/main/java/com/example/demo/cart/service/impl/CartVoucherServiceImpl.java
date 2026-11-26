@@ -26,9 +26,9 @@ public class CartVoucherServiceImpl implements CartVoucherService {
     }
     @Override public void removeVoucher(Long owner) { validator.owner(owner); transactions.removeVoucher(owner); }
     @Override public com.example.demo.voucher.dto.response.VoucherWalletPage getWalletPage(Long owner,int page,int size) {
-        validator.owner(owner);return vouchers.getWalletPage(owner,page,size,walletContext.getEligibleSubtotal(owner));
+        validator.owner(owner); var context=walletContext.getPricingContext(owner); return vouchers.getWalletPage(owner,page,size,context.getSubtotal(),context.getPricingInstant());
     }
     @Override public com.example.demo.voucher.dto.response.VoucherWalletDetail getWalletEntitlement(Long owner,Long grant) {
-        validator.owner(owner);return vouchers.getWalletEntitlement(owner,grant,walletContext.getEligibleSubtotal(owner));
+        validator.owner(owner); var context=walletContext.getPricingContext(owner); return vouchers.getWalletEntitlement(owner,grant,context.getSubtotal(),context.getPricingInstant());
     }
 }

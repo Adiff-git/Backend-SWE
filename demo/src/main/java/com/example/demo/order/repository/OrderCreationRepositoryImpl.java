@@ -26,10 +26,17 @@ public class OrderCreationRepositoryImpl implements OrderCreationRepository {
     }
 
     @Override public Long insertHistoricalItem(Long order, CreateOrderCommand.Item item) {
-        return ((Number)entities.createNativeQuery("INSERT INTO order_items(order_id,product_id,product_variant_id,product_name_snapshot,variant_sku_snapshot,variant_options_snapshot,quantity,unit_price_snapshot,line_total) VALUES (:order,:product,:variant,:name,:sku,CAST(:options AS JSONB),:quantity,:price,:line) RETURNING id")
+        var pricing = item.getPricing();
+        return ((Number)entities.createNativeQuery("INSERT INTO order_items(order_id,product_id,product_variant_id,product_name_snapshot,variant_sku_snapshot,variant_options_snapshot,quantity,unit_price_snapshot,line_total,original_unit_price_snapshot,direct_unit_discount_snapshot,direct_sale_percentage_snapshot,direct_sale_starts_at_snapshot,direct_sale_ends_at_snapshot,pricing_instant_snapshot) VALUES (:order,:product,:variant,:name,:sku,CAST(:options AS JSONB),:quantity,:price,:line,:original,:directDiscount,:percentage,:starts,:ends,:pricedAt) RETURNING id")
                 .setParameter("order",order).setParameter("product",item.getProductId()).setParameter("variant",item.getVariantId())
                 .setParameter("name",item.getProductName()).setParameter("sku",item.getSku()).setParameter("options",json.writeValueAsString(item.getOptions()))
                 .setParameter("quantity",item.getQuantity()).setParameter("price",new BigDecimal(item.getUnitPrice()))
-                .setParameter("line",new BigDecimal(item.getLineTotal())).getSingleResult()).longValue();
+                .setParameter("line",new BigDecimal(item.getLineTotal()))
+                .setParameter("original",pricing == null ? null : new BigDecimal(pricing.getOriginalPrice().getAmount()))
+                .setParameter("directDiscount",pricing == null ? null : new BigDecimal(pricing.getDirectUnitDiscount().getAmount()))
+                .setParameter("percentage",pricing == null ? null : pricing.getSalePercentage())
+                .setParameter("starts",pricing == null ? null : pricing.getSaleStartsAt())
+                .setParameter("ends",pricing == null ? null : pricing.getSaleEndsAt())
+                .setParameter("pricedAt",pricing == null ? null : pricing.getPricedAt()).getSingleResult()).longValue();
     }
 }

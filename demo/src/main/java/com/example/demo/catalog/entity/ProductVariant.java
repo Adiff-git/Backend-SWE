@@ -49,6 +49,29 @@ public class ProductVariant {
 	@Column(name = "technical_specifications", nullable = false, columnDefinition = "jsonb")
 	private Map<String, Object> technicalSpecifications = Map.of("schema_version", 1, "values", Map.of());
 
-	@Column(name = "selling_price", nullable = false, columnDefinition = "numeric")
-	private BigDecimal sellingPrice;
+	@Column(name = "base_price", nullable = false, columnDefinition = "numeric")
+	private BigDecimal basePrice;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @org.hibernate.annotations.Formula("(SELECT COALESCE(JSONB_OBJECT_AGG(catalog_option_identity_v1(e.key), "
+            + "JSONB_BUILD_OBJECT('label',e.key,'value',catalog_option_identity_v1(e.value #>> '{}'),'valueLabel',e.value #>> '{}')), "
+            + "'{}'::JSONB) FROM JSONB_EACH(option_combination) e)")
+    private Map<String, Map<String, String>> canonicalOptionLabels;
+
+    public Map<String, String> getSelectionOptions() {
+        if (canonicalOptionLabels == null) return Map.of();
+        Map<String, String> selection = new java.util.LinkedHashMap<>();
+        canonicalOptionLabels.forEach((key, entry) -> selection.put(key, entry.get("value")));
+        return Map.copyOf(selection);
+    }
+
+    /** Compatibility for existing in-process callers while effective-price projections migrate. */
+    public BigDecimal getSellingPrice() {
+        return basePrice;
+    }
+
+    /** Persist only the authoritative base; PostgreSQL maintains the deprecated storage mirror. */
+    public void setSellingPrice(BigDecimal price) {
+        basePrice = price;
+    }
 }

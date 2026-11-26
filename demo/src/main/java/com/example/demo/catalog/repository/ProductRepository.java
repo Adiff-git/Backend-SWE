@@ -13,6 +13,8 @@ import com.example.demo.catalog.entity.Product;
 import com.example.demo.catalog.entity.ProductStatus;
 
 public interface ProductRepository extends JpaRepository<Product, UUID>, ProductSearchRepository {
+    @Query(value = "SELECT id,status FROM products WHERE id IN (:ids) ORDER BY id", nativeQuery = true)
+    List<Object[]> findStatuses(@Param("ids") Collection<UUID> ids);
 
 	@Query(value = "SELECT id FROM products WHERE status = 'PUBLISHED' ORDER BY id ASC",
 			countQuery = "SELECT COUNT(*) FROM products WHERE status = 'PUBLISHED'", nativeQuery = true)

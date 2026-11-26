@@ -117,8 +117,8 @@ class CatalogConstraintsIT {
 				"status");
 		assertConstraint(() -> jdbc.update("UPDATE products SET status = 'HIDDEN' WHERE id = ?", productId),
 				"23514", "ck_products_status");
-		assertNotNull(() -> jdbc.update("UPDATE product_variants SET selling_price = NULL "
-				+ "WHERE product_id = ?", productId), "selling_price");
+		assertNotNull(() -> jdbc.update("UPDATE product_variants SET base_price = NULL "
+				+ "WHERE product_id = ?", productId), "base_price");
 	}
 
 	@Test
@@ -129,6 +129,7 @@ class CatalogConstraintsIT {
 				String.class, firstId);
 		assertConstraint(() -> insertVariant(secondId, firstSku.toUpperCase(), "{\"color\":\"blue\"}",
 				"1"), "23505", "uk_product_variants_sku_ci");
+        jdbc.update("UPDATE product_variants SET option_combination='{\"color\":\"red\",\"size\":\"M\"}' WHERE product_id=?",firstId);
 		insertVariant(firstId, "sku-" + UUID.randomUUID(), "{\"color\":\"blue\",\"size\":\"M\"}",
 				"1000");
 		assertConstraint(() -> insertVariant(firstId, "sku-" + UUID.randomUUID(),
@@ -136,10 +137,10 @@ class CatalogConstraintsIT {
 				"23505", "uk_product_variants_product_id_option_combination");
 		assertConstraint(() -> insertVariant(firstId, "sku-" + UUID.randomUUID(),
 				"{\"color\":\"red\"}", "1.5"),
-				"23514", "ck_product_variants_price_whole_finite");
+				"23514", "ck_product_variants_base_price");
 		assertConstraint(() -> insertVariant(firstId, "sku-" + UUID.randomUUID(),
 				"{\"color\":\"green\"}", "NaN"),
-				"23514", "ck_product_variants_price_whole_finite");
+				"23514", "ck_product_variants_base_price");
 		assertConstraint(() -> transactions.executeWithoutResult(status -> {
 			insertVariant(firstId, "sku-" + UUID.randomUUID(), "{\"color\":{\"nested\":\"x\"}}", "1");
 		}), "23514", "ct_product_variants_integrity");
@@ -212,7 +213,7 @@ class CatalogConstraintsIT {
 		UUID productId = persistProduct(ProductStatus.PUBLISHED);
 		transactions.executeWithoutResult(status -> {
 			Product product = products.findById(productId).orElseThrow();
-			ProductVariant second = CatalogFixtures.variant(product, Map.of("color", "blue"),
+			ProductVariant second = CatalogFixtures.variant(product, Map.of("choice", "blue"),
 					BigDecimal.TEN);
 			entityManager.persist(second);
 		});
@@ -288,7 +289,7 @@ class CatalogConstraintsIT {
 	}
 
 	private void insertVariant(UUID productId, String sku, String options, String price) {
-		jdbc.update("INSERT INTO product_variants (id, product_id, sku, option_combination, selling_price) "
+		jdbc.update("INSERT INTO product_variants (id, product_id, sku, option_combination, base_price) "
 				+ "VALUES (?, ?, ?, ?::jsonb, ?::numeric)", UUID.randomUUID(), productId, sku, options, price);
 	}
 

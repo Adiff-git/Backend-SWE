@@ -166,7 +166,7 @@ class RecommendationHttpIT {
                   + " Tablet ' END||i,'Sanitized synthetic electronics fixture','PUBLISHED' FROM"
                   + " generate_series(1,1500) i");
           jdbc.execute(
-              "INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price)"
+              "INSERT INTO product_variants(id,product_id,sku,option_combination,base_price)"
                   + " SELECT"
                   + " md5('rec-variant-'||i)::uuid,md5('rec-product-'||i)::uuid,'REC-'||i,'{}',5000000+i*10000"
                   + " FROM generate_series(1,1500) i");

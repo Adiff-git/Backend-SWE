@@ -23,6 +23,7 @@ final class CatalogSearchSql {
     CatalogSearchSql(SpecificationFilterRegistry registry){this.registry=registry;}
     Statement compile(ProductSearchCriteria c,double threshold,boolean fuzzy){
         Map<String,Object> params=new LinkedHashMap<>();
+        params.put("pricingAt",c.getPricingInstant());
         List<String> where=new ArrayList<>(List.of("p.status='PUBLISHED'"));
         String categoryRoot=c.getCategoryId()==null?"SELECT id FROM categories":"SELECT id FROM categories WHERE id=:category";
         if(c.getCategoryId()!=null){params.put("category",c.getCategoryId());where.add("p.category_id IN(SELECT id FROM category_scope)");}
@@ -43,9 +44,16 @@ final class CatalogSearchSql {
             ), selected_products AS MATERIALIZED (
                 SELECT p.id,p.category_id,p.name,catalog_search_safe_normalize_v2(p.name) AS normalized_name,
                     catalog_search_safe_normalize_v2(coalesce(b.name,'')) AS brand_name,
-                    catalog_search_safe_normalize_v2(coalesce(b.code,'')) AS brand_code,p.description,p.catalog_description_tokens_v1
+                    catalog_search_safe_normalize_v2(coalesce(b.code,'')) AS brand_code,p.description,p.catalog_description_tokens_v1,p.sale_percentage,p.sale_enabled,p.sale_starts_at,p.sale_ends_at
                 FROM products p LEFT JOIN brands b ON b.id=p.brand_id WHERE
             """).append(String.join(" AND ",where)).append(")");
+        sql.append("""
+            ,priced_variants AS MATERIALIZED (
+                SELECT v.id,v.product_id,v.sku,
+                    catalog_effective_price_v1(v.base_price,p.sale_percentage,p.sale_enabled,p.sale_starts_at,p.sale_ends_at,CAST(:pricingAt AS TIMESTAMPTZ)) AS effective_price
+                FROM product_variants v JOIN selected_products p ON p.id=v.product_id
+            )
+            """);
         List<String> factViews=new ArrayList<>();
         int definitionIndex=0;
         for(var d:registry.definitions().values().stream().sorted(Comparator.comparing(SpecificationFilterRegistry.Definition::key)).toList()){
@@ -67,8 +75,8 @@ final class CatalogSearchSql {
         sql.append(", safe_facts AS MATERIALIZED (").append(String.join(" UNION ALL ",factViews)).append(")");
         boolean keyword=c.getKeyword()!=null&&!c.getKeyword().getTokens().isEmpty();
         List<String> variantConditions=new ArrayList<>();
-        if(c.getMinPrice()!=null){variantConditions.add("v.selling_price>=:minPrice");params.put("minPrice",c.getMinPrice());}
-        if(c.getMaxPrice()!=null){variantConditions.add("v.selling_price<=:maxPrice");params.put("maxPrice",c.getMaxPrice());}
+        if(c.getMinPrice()!=null){variantConditions.add("v.effective_price>=:minPrice");params.put("minPrice",c.getMinPrice());}
+        if(c.getMaxPrice()!=null){variantConditions.add("v.effective_price<=:maxPrice");params.put("maxPrice",c.getMaxPrice());}
         List<String> support=new ArrayList<>();
         if(c.getSpecificationGroups()!=null){int g=0;
             for(var group:c.getSpecificationGroups()){
@@ -96,7 +104,7 @@ final class CatalogSearchSql {
                     +fuzzyCandidate+"))");
         }
         String unsupported=support.isEmpty()?"false":"EXISTS(SELECT 1 FROM categories WHERE id=:category) AND NOT EXISTS(SELECT 1 FROM category_scope cs WHERE "+String.join(" AND ",support)+")";
-        sql.append(", validation AS(SELECT ").append(unsupported).append(" AS unsupported),eligible_base AS MATERIALIZED(SELECT p.id AS product_id,v.id AS variant_id,v.selling_price AS display_amount,p.normalized_name FROM selected_products p LEFT JOIN product_variants v ON v.product_id=p.id");
+        sql.append(", validation AS(SELECT ").append(unsupported).append(" AS unsupported),eligible_base AS MATERIALIZED(SELECT p.id AS product_id,v.id AS variant_id,v.effective_price AS display_amount,p.normalized_name FROM selected_products p LEFT JOIN priced_variants v ON v.product_id=p.id");
         if(!variantConditions.isEmpty()){sql.append(" WHERE ").append(String.join(" AND ",variantConditions));}sql.append(")");
         if(keyword){
             params.put("phrase",c.getKeyword().getOriginalNormalized());params.put("phraseLength",c.getKeyword().getSequence().size());if(fuzzy){params.put("threshold",threshold);}
@@ -160,13 +168,15 @@ final class CatalogSearchSql {
         }else{sql.append(", ranked_variants AS(SELECT e.*,0 AS tier,0 AS class_sum,0 AS source_sum,0 AS similarity_sum FROM eligible_base e)");}
         sql.append("""
             ,representatives AS(SELECT DISTINCT ON(product_id) product_id,variant_id,display_amount FROM ranked_variants ORDER BY product_id,display_amount ASC NULLS LAST,variant_id ASC NULLS LAST),
+            range_maxima AS(SELECT DISTINCT ON(product_id) product_id,variant_id,display_amount FROM ranked_variants
+                WHERE variant_id IS NOT NULL AND display_amount IS NOT NULL ORDER BY product_id,display_amount DESC,variant_id ASC),
             best_ranks AS(SELECT DISTINCT ON(product_id) product_id,tier,class_sum,source_sum,similarity_sum FROM ranked_variants ORDER BY product_id,tier DESC,class_sum DESC,source_sum DESC,similarity_sum DESC),
             reduced AS(SELECT r.*,p.normalized_name,b.tier,b.class_sum,b.source_sum,b.similarity_sum FROM representatives r JOIN best_ranks b USING(product_id) JOIN selected_products p ON p.id=r.product_id),
             totals AS(SELECT count(*) AS total FROM reduced),candidate_page AS(SELECT * FROM reduced ORDER BY
             """);
         ProductSearchSort sort=c.getSort();String order=sort==null?(keyword?"tier DESC,class_sum DESC,source_sum DESC,similarity_sum DESC,product_id ASC":"product_id ASC"):switch(sort){case RELEVANCE->"tier DESC,class_sum DESC,source_sum DESC,similarity_sum DESC,product_id ASC";case PRICE_ASC->"display_amount ASC NULLS LAST,product_id ASC";case PRICE_DESC->"display_amount DESC NULLS LAST,product_id ASC";case NAME_ASC->"normalized_name COLLATE \"C\" ASC,product_id ASC";case NAME_DESC->"normalized_name COLLATE \"C\" DESC,product_id ASC";};
         params.put("size",c.getSize());params.put("offset",(long)c.getPage()*c.getSize());
-        sql.append(order).append(" LIMIT :size OFFSET :offset) SELECT p.product_id,p.variant_id,p.display_amount,t.total,v.unsupported FROM totals t CROSS JOIN validation v LEFT JOIN candidate_page p ON true ORDER BY ").append(order);
+        sql.append(order).append(" LIMIT :size OFFSET :offset) SELECT p.product_id,p.variant_id,p.display_amount,t.total,v.unsupported, representative.base_price,representative.base_price-p.display_amount, catalog_active_sale_percentage_v1(parent.sale_percentage,parent.sale_enabled,parent.sale_starts_at,parent.sale_ends_at,CAST(:pricingAt AS TIMESTAMPTZ)), parent.sale_starts_at,parent.sale_ends_at,mx.variant_id AS maximum_variant_id,mx.display_amount AS maximum_amount,maximum.base_price,maximum.base_price-mx.display_amount FROM totals t CROSS JOIN validation v LEFT JOIN candidate_page p ON true LEFT JOIN product_variants representative ON representative.id=p.variant_id LEFT JOIN products parent ON parent.id=p.product_id LEFT JOIN range_maxima mx ON mx.product_id=p.product_id LEFT JOIN product_variants maximum ON maximum.id=mx.variant_id ORDER BY ").append(order);
         return new Statement(fuzzy ? sql.toString() : sql.toString().replace("CASE WHEN w.fuzzy THEN round(similarity(q.token,w.token)::numeric,6) ELSE 0 END", "0::numeric"),params);
     }
     private static String literal(String trusted){return trusted==null?"NULL":"'"+trusted.replace("'","''")+"'";}

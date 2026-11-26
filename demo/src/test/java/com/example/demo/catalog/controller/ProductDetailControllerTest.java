@@ -59,6 +59,9 @@ class ProductDetailControllerTest {
 				.andExpect(jsonPath("$.id").value(PRODUCT_ID.toString()))
 				.andExpect(jsonPath("$.category.name").value("Category"))
 				.andExpect(jsonPath("$.variants.length()").value(1))
+				.andExpect(jsonPath("$.optionDimensions").isEmpty())
+                .andExpect(jsonPath("$.priceRange.minimum").isEmpty())
+				.andExpect(jsonPath("$.variants[0].selectionOptions").isEmpty())
 				.andExpect(jsonPath("$.images").isEmpty());
 		assertThat(service.requestedId).isEqualTo(PRODUCT_ID);
 	}
@@ -93,6 +96,9 @@ class ProductDetailControllerTest {
 	}
 
 	static class StubService implements ProductCatalogService {
+        @Override public java.util.Map<UUID, com.example.demo.catalog.dto.response.ProductPriceRange> getPriceRangesByIds(java.util.Collection<UUID> ids) {
+            throw new UnsupportedOperationException();
+        }
         @Override
         public com.example.demo.catalog.dto.response.ProductPage listProducts(
                 com.example.demo.catalog.dto.request.ProductSearchRequest request) {

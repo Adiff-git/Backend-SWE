@@ -25,6 +25,13 @@ public class CartPreviewServiceImpl implements CartPreviewService {
     private final CartCalculator calculator; private final CartConverter converter;
     private final CartValidator validator; private final VoucherService vouchers; private final Clock clock;
     @Override public CartResponse getCartResponse(Cart cart, List<CartItem> rows, Map<UUID,CartVariantState> states, boolean rejectInvalid) {
+        var at=states.values().stream().map(CartVariantState::getPricing).filter(java.util.Objects::nonNull)
+                .map(com.example.demo.catalog.dto.response.VariantPricing::getPricedAt).findFirst()
+                .orElseGet(() -> clock.instant().truncatedTo(ChronoUnit.MICROS));
+        return getCartResponse(cart,rows,states,rejectInvalid,at);
+    }
+    @Override public CartResponse getCartResponse(Cart cart,List<CartItem> rows,Map<UUID,CartVariantState> states,boolean rejectInvalid,java.time.Instant at) {
+        java.util.Objects.requireNonNull(at,"Prepared pricing instant is required");
         List<CartReadSeed> seeds = rows.stream().map(converter::toSeed).toList();
         Map<Long,String> reasons = new HashMap<>();
         for (CartReadSeed seed : seeds) {
@@ -33,7 +40,7 @@ public class CartPreviewServiceImpl implements CartPreviewService {
         }
         var response = converter.toResponse(calculator.calculate(seeds, states, reasons));
         if (cart == null || cart.getVoucherEntitlementId() == null) return response;
-        var preview = vouchers.getPreview(cart.getUserId(), cart.getVoucherEntitlementId(), response.getSelectedSubtotal().getAmount(), clock.instant().truncatedTo(ChronoUnit.MICROS));
+        var preview = vouchers.getPreview(cart.getUserId(), cart.getVoucherEntitlementId(), response.getSelectedSubtotal().getAmount(), at);
         if (preview.getReason() != null) {
             if (rejectInvalid) {
                 if ("VOUCHER_UNAVAILABLE".equals(preview.getReason())) throw new VoucherNotFoundException();

@@ -15,7 +15,7 @@ class CatalogCheckoutServiceIT extends CheckoutIntegrationSupport {
     com.example.demo.catalog.repository.ProductVariantRepository variants;
 
     @Test void getCheckoutVariantStates_shouldCaptureCurrentProtectedPriceAndOptions() {
-        jdbc.update("UPDATE product_variants SET selling_price=1234 WHERE id=?",fixture.variant());
+        jdbc.update("UPDATE product_variants SET base_price=1234 WHERE id=?",fixture.variant());
         transactions.executeWithoutResult(s -> {
             com.example.demo.catalog.dto.response.CheckoutVariantState state = service.getCheckoutVariantStates(List.of(fixture.variant())).get(fixture.variant());
             assertThat(state.getPrice()).isEqualByComparingTo(BigDecimal.valueOf(1234));
@@ -91,16 +91,14 @@ class CatalogCheckoutServiceIT extends CheckoutIntegrationSupport {
     @Test void getCheckoutVariantStates_shouldRepresentNonfinitePricesWithoutHidingDatabaseFailures() {
         for(String value : List.of("NaN","Infinity","-Infinity","-1","0.5")) {
             transactions.executeWithoutResult(s -> {
-                // Transactional corruption fixture; rollback restores both constraint and original value.
-                jdbc.execute("ALTER TABLE product_variants DROP CONSTRAINT ck_product_variants_price_whole_finite");
-                jdbc.update("UPDATE product_variants SET selling_price=CAST(? AS NUMERIC) WHERE id=?",value,fixture.variant());
+                // A transaction-local read view tests defensive handling without disabling schema integrity.
+                jdbc.execute("CREATE TEMP VIEW product_variants AS SELECT id,product_id,sku,option_combination,CAST('"+value+"' AS NUMERIC) AS base_price FROM public.product_variants");
                 com.example.demo.catalog.dto.response.CheckoutVariantState state=service.getCheckoutVariantStates(List.of(fixture.variant())).get(fixture.variant());
-                if(value.equals("-1") || value.equals("0.5")) assertThat(state.getPrice()).isEqualByComparingTo(new BigDecimal(value));
-                else assertThat(state.getPrice()).isNull();
+                assertThat(state.getPrice()).isNull();
                 s.setRollbackOnly();
             });
         }
-        assertThat(jdbc.queryForObject("SELECT selling_price FROM product_variants WHERE id=?",BigDecimal.class,fixture.variant()))
+        assertThat(jdbc.queryForObject("SELECT base_price FROM product_variants WHERE id=?",BigDecimal.class,fixture.variant()))
                 .isEqualByComparingTo(BigDecimal.valueOf(1000));
         assertThat(service.getCheckoutVariantStates(List.of(java.util.UUID.randomUUID()))).isEmpty();
     }

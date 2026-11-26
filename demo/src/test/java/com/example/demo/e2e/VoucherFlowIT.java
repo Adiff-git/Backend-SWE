@@ -52,6 +52,36 @@ class VoucherFlowIT extends CheckoutIntegrationSupport {
                 .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString());
     }
 
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.CsvSource({"1000000,20,1,800000", "101,12.50,3,267", "1000,100,1,0"})
+    void directSaleFlow_shouldPersistAuthoritativePricesAndStackSeparateVoucher(long base,java.math.BigDecimal percent,int quantity,long total) throws Exception {
+        jdbc.update("UPDATE product_variants SET base_price=? WHERE id=?",base,fixture.variant());
+        jdbc.update("UPDATE products SET sale_percentage=?,sale_enabled=TRUE WHERE id=?",percent,fixture.product());
+        jdbc.update("UPDATE cart_items SET quantity=? WHERE id=?",quantity,fixture.item());
+        if (base==1000000) {
+            long grant=transactions.execute(tx -> {
+                long voucher=com.example.demo.fixture.voucher.VoucherFixtures.definition(jdbc,"SALE_STACK","PERCENTAGE",java.math.BigDecimal.TEN,null,null);
+                long usage=com.example.demo.fixture.voucher.VoucherFixtures.usage(jdbc,voucher,fixture.owner());
+                return com.example.demo.fixture.voucher.VoucherFixtures.grant(jdbc,voucher,fixture.owner(),usage,Instant.now().minusSeconds(1));
+            });
+            mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put("/api/me/cart/voucher").header("Authorization",token).contentType("application/json")
+                .content(json.writeValueAsString(Map.of("walletEntitlementId",grant)))).andExpect(status().isOk());
+        }
+        var result=purchase("Sale_http_flow_12345");
+        assertThat(result.get("order").get("merchandiseTotal").get("amount").longValue()).isEqualTo(total);
+        assertThat(result.get("order").get("payableTotal").get("amount").longValue()).isEqualTo(total-(base==1000000 ? 80000 : 0));
+        long order=result.get("order").get("id").longValue();
+        var stored=jdbc.queryForMap("SELECT original_unit_price_snapshot,unit_price_snapshot,direct_unit_discount_snapshot,line_total,pricing_instant_snapshot FROM order_items WHERE order_id=?",order);
+        var item=result.get("order").get("items").get(0);
+        assertThat(((java.math.BigDecimal)stored.get("original_unit_price_snapshot")).longValueExact()).isEqualTo(base);
+        assertThat(((java.math.BigDecimal)stored.get("unit_price_snapshot")).toBigIntegerExact()).isEqualTo(item.get("unitPriceSnapshot").get("amount").bigIntegerValue());
+        assertThat(((java.math.BigDecimal)stored.get("line_total")).longValueExact()).isEqualTo(total);
+        assertThat(((java.sql.Timestamp)stored.get("pricing_instant_snapshot")).toInstant()).isEqualTo(Instant.parse(result.get("order").get("placedAt").asText()));
+        jdbc.update("UPDATE products SET sale_enabled=FALSE WHERE id=?",fixture.product());
+        jdbc.update("UPDATE product_variants SET base_price=99999 WHERE id=?",fixture.variant());
+        assertThat(purchase("Sale_http_flow_12345")).isEqualTo(result);
+    }
+
     @Test void voucherFlow_shouldKeepOtherGrantsSkippedRowsAndImmutableReceipts() throws Exception {
         Long[] grants=transactions.execute(tx -> {
             long definition=com.example.demo.fixture.voucher.VoucherFixtures.definition(jdbc,"FLOW","PERCENTAGE",new java.math.BigDecimal("12.34"),3L,3L);

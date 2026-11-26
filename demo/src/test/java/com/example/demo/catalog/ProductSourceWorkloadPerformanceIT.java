@@ -102,7 +102,7 @@ class ProductSourceWorkloadPerformanceIT {
             UUID product=UUID.randomUUID();productRows.add(new Object[]{product,categories.get(category),brands.get(brand),r.get("name").asString(),r.get("description").isNull()?null:r.get("description").asString()});
             variantRows.add(new Object[]{UUID.randomUUID(),product,"SOURCE-FIXTURE-"+(++position),position*100000L,json.writeValueAsString(r.get("specifications"))});
         }
-        tx.executeWithoutResult(st->{jdbc.batchUpdate("INSERT INTO products(id,category_id,brand_id,name,description,status) VALUES (?,?,?,?,?,'PUBLISHED')",productRows);jdbc.batchUpdate("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price,technical_specifications) VALUES (?,?,?,'{}'::jsonb,?,?::jsonb)",variantRows);});
+        tx.executeWithoutResult(st->{jdbc.batchUpdate("INSERT INTO products(id,category_id,brand_id,name,description,status) VALUES (?,?,?,?,?,'PUBLISHED')",productRows);jdbc.batchUpdate("INSERT INTO product_variants(id,product_id,sku,option_combination,base_price,technical_specifications) VALUES (?,?,?,'{}'::jsonb,?,?::jsonb)",variantRows);});
         jdbc.execute("ANALYZE products");jdbc.execute("ANALYZE product_variants");
         return new Seeded(frozen,categories,brands);
     }

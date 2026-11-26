@@ -62,7 +62,7 @@ class CheckoutFlowIT {
             Long unselected=add(client,token,variants[2],3);
             http(client,"PUT","/api/me/cart/items/"+unselected+"/selection",token,"{\"selected\":false}",null,200);
             jdbc.update("UPDATE products SET status='ARCHIVED',name='Hidden changed name' WHERE id=(SELECT product_id FROM product_variants WHERE id=?)",variants[1]);
-            jdbc.update("UPDATE product_variants SET selling_price=1250 WHERE id=?",variants[0]);
+            jdbc.update("UPDATE product_variants SET base_price=1250 WHERE id=?",variants[0]);
             String command=json.writeValueAsString(Map.of("addressId",addressId));
             String key="Full_flow_key_12345";
             HttpResponse<String> created=http(client,"POST","/api/me/cart/checkout",token,command,key,201);

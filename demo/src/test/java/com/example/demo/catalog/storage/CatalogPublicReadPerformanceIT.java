@@ -154,7 +154,7 @@ class CatalogPublicReadPerformanceIT {
 		transactions.executeWithoutResult(status -> {
 			jdbc.update("INSERT INTO categories(id, name) VALUES (?, ?)", categoryId, "Performance category");
 			jdbc.batchUpdate("INSERT INTO products(id, category_id, name, status) VALUES (?, ?, ?, ?)", products);
-			jdbc.batchUpdate("INSERT INTO product_variants(id, product_id, sku, option_combination, selling_price) "
+			jdbc.batchUpdate("INSERT INTO product_variants(id, product_id, sku, option_combination, base_price) "
 					+ "VALUES (?, ?, ?, ?::jsonb, ?)", variants);
 			jdbc.batchUpdate("INSERT INTO product_images(id, product_id, object_key, alt_text, content_type, "
 					+ "byte_size, width, height, display_order, is_primary, created_at) "

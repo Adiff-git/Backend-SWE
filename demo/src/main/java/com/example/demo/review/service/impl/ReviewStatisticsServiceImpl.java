@@ -21,6 +21,9 @@ public class ReviewStatisticsServiceImpl implements ReviewStatisticsService {
         catalog.getPublishedProductEntity(product);
         ProductReviewRepository.RatingAggregate aggregate = reviews.aggregate(product);
         BigDecimal average = aggregate.getReviewCount() == 0 ? null : aggregate.getAverageRating().setScale(2, RoundingMode.HALF_UP);
-        return new ProductRatingSummary(aggregate.getReviewCount(), average);
+        java.util.Map<String,Long> distribution=new java.util.LinkedHashMap<>();
+        for(int rating=1;rating<=5;rating++) distribution.put(Integer.toString(rating),0L);
+        for(var row:reviews.countRatings(product)) distribution.put(Integer.toString(row.getRating()),row.getRatingCount());
+        return new ProductRatingSummary(aggregate.getReviewCount(),average,java.util.Collections.unmodifiableMap(distribution));
     }
 }

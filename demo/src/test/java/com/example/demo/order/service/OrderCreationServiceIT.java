@@ -16,8 +16,13 @@ class OrderCreationServiceIT extends CheckoutIntegrationSupport {
     @Autowired OrderCreationService service;
     @Autowired com.example.demo.inventory.service.InventoryService inventory;
 
+    private com.example.demo.catalog.dto.response.VariantPricing pricing() {
+        var money=new com.example.demo.catalog.dto.response.SellingPrice(BigInteger.valueOf(100),"VND");
+        return new com.example.demo.catalog.dto.response.VariantPricing(money,money,
+                new com.example.demo.catalog.dto.response.SellingPrice(BigInteger.ZERO,"VND"),null,CheckoutFixtures.PLACED_AT);
+    }
     @Test void createOrder_shouldCommitCompletePendingHistoricalAggregate() {
-        CreateOrderCommand.Item item = new CreateOrderCommand.Item(fixture.item(),fixture.product(),fixture.variant(),"Product","SKU",Map.of(),2,BigInteger.valueOf(100),BigInteger.valueOf(200));
+        CreateOrderCommand.Item item = new CreateOrderCommand.Item(fixture.item(),fixture.product(),fixture.variant(),"Product","SKU",Map.of(),2,BigInteger.valueOf(100),BigInteger.valueOf(200),pricing());
         CreateOrderCommand command = new CreateOrderCommand(fixture.owner(),CheckoutFixtures.PLACED_AT,"Recipient","0123456789","Address",List.of(item),BigInteger.valueOf(200));
         com.example.demo.order.dto.response.CreatedOrderSeed created = transactions.execute(s -> {
             var result = service.createOrder(command);
@@ -35,7 +40,7 @@ class OrderCreationServiceIT extends CheckoutIntegrationSupport {
     @Test void createOrder_shouldRejectNumberCollisionWithoutPartialAggregateOrCartDeletion() {
         CheckoutFixtures.HistoricalOrder historical = transactions.execute(s -> CheckoutFixtures.order(jdbc,fixture.owner()));
         jdbc.update("UPDATE orders SET order_number=? WHERE id=?","ORD-"+(historical.id()+1),historical.id());
-        CreateOrderCommand.Item item = new CreateOrderCommand.Item(fixture.item(),fixture.product(),fixture.variant(),"Product","SKU",Map.of(),1,BigInteger.valueOf(100),BigInteger.valueOf(100));
+        CreateOrderCommand.Item item = new CreateOrderCommand.Item(fixture.item(),fixture.product(),fixture.variant(),"Product","SKU",Map.of(),1,BigInteger.valueOf(100),BigInteger.valueOf(100),pricing());
         CreateOrderCommand command = new CreateOrderCommand(fixture.owner(),CheckoutFixtures.PLACED_AT,"Recipient","0123456789","Address",List.of(item),BigInteger.valueOf(100));
         assertThatThrownBy(() -> service.createOrder(command)).hasStackTraceContaining("uk_orders_order_number");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM orders",Integer.class)).isEqualTo(1);

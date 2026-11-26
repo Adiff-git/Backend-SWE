@@ -17,6 +17,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderReviewReadServiceImpl implements OrderReviewReadService {
     private final OrderRepository orders;
     private final OrderItemRepository items;
+    private final tools.jackson.databind.json.JsonMapper json=tools.jackson.databind.json.JsonMapper.builder().build();
+    @Override @Transactional(readOnly=true)
+    public java.util.Map<Long,java.util.Map<String,String>> getReviewOptionSnapshots(java.util.Collection<Long> itemIds) {
+        if(itemIds==null || itemIds.size()>100 || itemIds.stream().anyMatch(id -> id==null || id<=0))
+            throw new IllegalArgumentException("Review option snapshot batch must contain at most100 positive item IDs");
+        if(itemIds.isEmpty()) return java.util.Map.of();
+        java.util.Map<Long,java.util.Map<String,String>> result=new java.util.HashMap<>();
+        for(Object[] row:items.findReviewOptionSnapshots(itemIds)) {
+            if(row[1]!=null) result.put(((Number)row[0]).longValue(),java.util.Map.copyOf(json.readValue(row[1].toString(),
+                    new tools.jackson.core.type.TypeReference<java.util.Map<String,String>>() {})));
+        }
+        return java.util.Map.copyOf(result);
+    }
     @org.springframework.beans.factory.annotation.Value("${order.lock-timeout-ms:5000}")
     private long lockTimeoutMs = 5000;
     @Override @Transactional

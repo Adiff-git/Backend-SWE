@@ -35,7 +35,12 @@ class ProductReviewControllerTest {
         when(reviews.getReviews(any(), any())).thenReturn(new ReviewPage(List.of(), 0, 20, 0, 0));
         mvc.perform(get(PATH)).andExpect(status().isOk()).andExpect(jsonPath("$.items").isEmpty());
     }
-    @ParameterizedTest @ValueSource(strings = {"size=0", "size=101", "page=-1", "page=x", "size=1&size=2", "rating=5", "sort=unknown,asc"})
+    @ParameterizedTest @ValueSource(strings = {"rating=5", "hasImages=true", "hasImages=false", "hasComment=true", "hasComment=false", "rating=1&hasImages=false&hasComment=true&sort=rating,asc"})
+    void list_shouldAcceptStrictReviewFilters(String query) throws Exception {
+        when(reviews.getReviews(any(), any())).thenReturn(new ReviewPage(List.of(), 0, 20, 0, 0));
+        mvc.perform(get(PATH + "?" + query)).andExpect(status().isOk());
+    }
+    @ParameterizedTest @ValueSource(strings = {"size=0", "size=101", "page=-1", "page=x", "size=1&size=2", "rating=0", "rating=6", "rating=1&rating=5", "rating=", "rating=null", "rating=1,2", "hasImages=True", "hasImages=", "hasComment=null", "hasComment=false&hasComment=true", "variantId=x", "from=2026-01-01", "sort=unknown,asc"})
     void list_shouldRejectUnsupportedParameters(String query) throws Exception {
         mvc.perform(get(PATH + "?" + query)).andExpect(status().isBadRequest());
     }

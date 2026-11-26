@@ -41,7 +41,7 @@ class ProductSearchPerformanceIT {
         UUID category=UUID.randomUUID();jdbc.update("INSERT INTO categories(id,name) VALUES (?,'Laptop')",category);
         tx.executeWithoutResult(status->{
             jdbc.update("INSERT INTO products(id,category_id,name,description,status) SELECT md5('search-product-'||i)::uuid,?, CASE WHEN i%4=0 THEN 'Samsung Galaxy A51' WHEN i%4=1 THEN 'Lenovo ThinkPad Laptop' WHEN i%4=2 THEN 'Sony Alpha Camera' ELSE 'Điện thoại Alpha' END||' '||i,repeat('electronics display quality portable ',3),'PUBLISHED' FROM generate_series(1,1500)i",category);
-            jdbc.execute("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price,technical_specifications) SELECT md5('search-variant-'||i)::uuid,md5('search-product-'||i)::uuid,'DEMO-'||i,'{}'::jsonb,i*1000,jsonb_build_object('schema_version',1,'values',jsonb_build_object('physical_ram',jsonb_build_object('value',16,'unit','GB'))) FROM generate_series(1,1500)i");
+            jdbc.execute("INSERT INTO product_variants(id,product_id,sku,option_combination,base_price,technical_specifications) SELECT md5('search-variant-'||i)::uuid,md5('search-product-'||i)::uuid,'DEMO-'||i,'{}'::jsonb,i*1000,jsonb_build_object('schema_version',1,'values',jsonb_build_object('physical_ram',jsonb_build_object('value',16,'unit','GB'))) FROM generate_series(1,1500)i");
         });jdbc.execute("ANALYZE products");jdbc.execute("ANALYZE product_variants");
         var observations=new ArrayList<Map<String,Object>>();
         for(String keyword:List.of("","samsnug","sony alpha","DEMO-1499","missingresult","combined")){

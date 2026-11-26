@@ -142,7 +142,7 @@ class ProductCatalogConverterTest {
         assertThat(item.getPrimaryImageUrl()).isEqualTo(summary.getPrimaryImageUrl());
         JsonNode body = json.valueToTree(item);
         assertThat(body.properties()).extracting(Map.Entry::getKey).containsExactlyInAnyOrder(
-                "id", "name", "category", "primaryImageUrl", "displayPrice", "representativeVariantId", "availability");
+                "id", "name", "category", "primaryImageUrl", "displayPrice", "representativeVariantId", "availability", "pricing", "priceRange");
         assertThat(json.valueToTree(summary).has("displayPrice")).isFalse();
         ProductPage page = new ProductPage(
                 List.of(item), 2, 20, 41, 3);

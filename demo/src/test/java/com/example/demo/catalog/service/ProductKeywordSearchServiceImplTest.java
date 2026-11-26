@@ -52,7 +52,8 @@ class ProductKeywordSearchServiceImplTest {
     private final ProductImageStorage storage = mock(ProductImageStorage.class);
     private final com.example.demo.inventory.service.InventoryService inventory = mock(com.example.demo.inventory.service.InventoryService.class);
     private final ProductCatalogServiceImpl service = new ProductCatalogServiceImpl(
-            products, images, variants, storage, new ProductCatalogConverter(), VALIDATION.getValidator(), inventory);
+            new ProductOptionServiceImpl(), products, images, variants, storage, new ProductCatalogConverter(), VALIDATION.getValidator(), inventory,
+            new com.example.demo.catalog.converter.VariantPricingConverter(), java.time.Clock.systemUTC());
 
     @org.junit.jupiter.api.BeforeEach void prepareZeroStockObservation() {
         when(inventory.getAvailability(anyCollection())).thenAnswer(call -> call.<java.util.Collection<UUID>>getArgument(0)
