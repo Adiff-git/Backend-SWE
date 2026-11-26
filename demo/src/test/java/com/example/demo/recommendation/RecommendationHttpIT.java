@@ -38,6 +38,7 @@ class RecommendationHttpIT {
   @Autowired com.example.demo.user.service.UserService users;
   @Autowired org.springframework.security.crypto.password.PasswordEncoder passwords;
   @MockitoSpyBean RecommendationAiClient ai;
+  @MockitoSpyBean Clock clock;
 
   @DynamicPropertySource
   static void aiService(DynamicPropertyRegistry registry) throws Exception {
@@ -153,6 +154,9 @@ class RecommendationHttpIT {
 
   @Test
   void actualTwoServices1500ProductsAndOutage() throws Exception {
+    // Compare complete cards from separate requests at the same controlled pricing instant.
+    doReturn(Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS))
+        .when(clock).instant();
     jdbc.execute("TRUNCATE users,categories CASCADE");
     jdbc.execute(
         "INSERT INTO categories(id,name) SELECT md5('category-'||i)::uuid,CASE i WHEN 0 THEN"
