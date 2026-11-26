@@ -25,6 +25,24 @@ public class OrderValidator {
                     || item.getQuantity() < 1 || item.getQuantity() > 999 || item.getUnitPrice() == null || item.getUnitPrice().signum() < 0
                     || item.getLineTotal() == null || !item.getLineTotal().equals(item.getUnitPrice().multiply(java.math.BigInteger.valueOf(item.getQuantity()))))
                 throw new InvalidOrderRequestException();
+            var pricing = item.getPricing();
+            if (pricing == null || pricing.getOriginalPrice() == null || pricing.getDirectUnitDiscount() == null
+                    || pricing.getEffectivePrice() == null || pricing.getOriginalPrice().getAmount()==null
+                    || pricing.getEffectivePrice().getAmount()==null || pricing.getDirectUnitDiscount().getAmount()==null
+                    || !command.getPlacedAt().equals(pricing.getPricedAt())
+                    || !"VND".equals(pricing.getOriginalPrice().getCurrency()) || !"VND".equals(pricing.getEffectivePrice().getCurrency())
+                    || !"VND".equals(pricing.getDirectUnitDiscount().getCurrency())
+                    || !item.getUnitPrice().equals(pricing.getEffectivePrice().getAmount())
+                    || pricing.getOriginalPrice().getAmount().signum()<0 || pricing.getDirectUnitDiscount().getAmount().signum()<0
+                    || !pricing.getOriginalPrice().getAmount().subtract(pricing.getDirectUnitDiscount().getAmount()).equals(item.getUnitPrice()))
+                throw new InvalidOrderRequestException();
+            if (pricing.getSalePercentage()==null) {
+                if (pricing.getDirectUnitDiscount().getAmount().signum()!=0 || pricing.getSaleStartsAt()!=null || pricing.getSaleEndsAt()!=null)
+                    throw new InvalidOrderRequestException();
+            } else if (pricing.getSalePercentage().signum()<=0 || pricing.getSalePercentage().compareTo(new java.math.BigDecimal("100"))>0
+                    || pricing.getSalePercentage().stripTrailingZeros().scale()>2
+                    || (pricing.getSaleStartsAt()!=null && pricing.getPricedAt().isBefore(pricing.getSaleStartsAt()))
+                    || (pricing.getSaleEndsAt()!=null && !pricing.getPricedAt().isBefore(pricing.getSaleEndsAt()))) throw new InvalidOrderRequestException();
             sum = sum.add(item.getLineTotal());
         }
         if (!sum.equals(command.getMerchandiseTotal()) || command.getVoucherDiscount()==null || command.getPayableTotal()==null

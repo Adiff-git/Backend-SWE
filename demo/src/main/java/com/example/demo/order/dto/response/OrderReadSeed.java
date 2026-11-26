@@ -57,9 +57,27 @@ public final class OrderReadSeed {
         BigDecimal unitPriceSnapshot;
         BigDecimal lineTotal;
         long rowCount;
+        BigDecimal originalUnitPriceSnapshot;
+        BigDecimal directUnitDiscountSnapshot;
+        BigDecimal directSalePercentageSnapshot;
+        Instant directSaleStartsAtSnapshot;
+        Instant directSaleEndsAtSnapshot;
+        Instant pricingInstantSnapshot;
+
 
         public Item(Long id, Long orderId, UUID productId, UUID productVariantId, String name, String sku,
                 Map<String, String> options, int quantity, BigDecimal price, BigDecimal lineTotal, long rowCount) {
+            this(id,orderId,productId,productVariantId,name,sku,options,quantity,price,lineTotal,rowCount,null,null,null,null,null,null);
+        }
+        public Item(Long id, Long orderId, UUID productId, UUID productVariantId, String name, String sku,
+                Map<String,String> options, int quantity, BigDecimal price, BigDecimal lineTotal, long rowCount,
+                BigDecimal originalUnitPriceSnapshot, BigDecimal directUnitDiscountSnapshot, BigDecimal directSalePercentageSnapshot, Instant directSaleStartsAtSnapshot, Instant directSaleEndsAtSnapshot, Instant pricingInstantSnapshot) {
+            this.originalUnitPriceSnapshot=originalUnitPriceSnapshot;
+            this.directUnitDiscountSnapshot=directUnitDiscountSnapshot;
+            this.directSalePercentageSnapshot=directSalePercentageSnapshot;
+            this.directSaleStartsAtSnapshot=directSaleStartsAtSnapshot;
+            this.directSaleEndsAtSnapshot=directSaleEndsAtSnapshot;
+            this.pricingInstantSnapshot=pricingInstantSnapshot;
             this.id = id; this.orderId = orderId; this.productId = productId; this.productVariantId = productVariantId;
             this.productNameSnapshot = name; this.variantSkuSnapshot = sku; this.variantOptionsSnapshot = Map.copyOf(options);
             this.quantity = quantity; this.unitPriceSnapshot = price; this.lineTotal = lineTotal; this.rowCount = rowCount;

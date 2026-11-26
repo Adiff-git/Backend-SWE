@@ -32,7 +32,7 @@ public class CheckoutValidator {
     public void matching(CheckoutReceipt receipt, Long address) {
         if (!address.equals(receipt.getRequestAddressId()) || !fingerprint(address).equals(receipt.getRequestFingerprint()))
             throw new CheckoutKeyConflictException();
-        if ((receipt.getReceiptVersion() != 1 && receipt.getReceiptVersion() != 2) || receipt.getResponseStatus() != 201) throw new IllegalStateException("Unsupported stored checkout receipt");
+        if ((receipt.getReceiptVersion() != 1 && receipt.getReceiptVersion() != 2 && receipt.getReceiptVersion() != 3) || receipt.getResponseStatus() != 201) throw new IllegalStateException("Unsupported stored checkout receipt");
     }
 
     public long fenceKey(Long owner, String key) { return ByteBuffer.wrap(digest("checkout:v1:"+owner+":"+key)).getLong(); }

@@ -36,7 +36,7 @@ class SearchQueryPlanIT {
         UUID category=UUID.randomUUID();jdbc.update("INSERT INTO categories(id,name) VALUES (?,'Laptop')",category);
         tx.executeWithoutResult(status->{
             jdbc.update("INSERT INTO products(id,category_id,name,description,status) SELECT md5('plan-product-'||i)::uuid,?,'Sony Alpha Camera '||i,repeat('Electronics portable photography ',3),'PUBLISHED' FROM generate_series(1,1500)i",category);
-            jdbc.execute("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price,technical_specifications) SELECT md5('plan-variant-'||i)::uuid,md5('plan-product-'||i)::uuid,'PLAN-'||i,'{}'::jsonb,i*1000,'{\"schema_version\":1,\"values\":{\"physical_ram\":{\"value\":16,\"unit\":\"GB\"}}}'::jsonb FROM generate_series(1,1500)i");
+            jdbc.execute("INSERT INTO product_variants(id,product_id,sku,option_combination,base_price,technical_specifications) SELECT md5('plan-variant-'||i)::uuid,md5('plan-product-'||i)::uuid,'PLAN-'||i,'{}'::jsonb,i*1000,'{\"schema_version\":1,\"values\":{\"physical_ram\":{\"value\":16,\"unit\":\"GB\"}}}'::jsonb FROM generate_series(1,1500)i");
         });jdbc.execute("ANALYZE products");jdbc.execute("ANALYZE product_variants");
         var output=Path.of("target","search-plans");Files.createDirectories(output);
         var normalizer=new ProductSearchNormalizer();
@@ -74,11 +74,11 @@ class SearchQueryPlanIT {
         UUID category=UUID.randomUUID();jdbc.update("INSERT INTO categories(id,name) VALUES (?,'Laptop')",category);
         tx.executeWithoutResult(st->{
             jdbc.update("INSERT INTO products(id,category_id,name,status) SELECT md5('scale-p-'||i)::uuid,?,'Scale Laptop '||i,'PUBLISHED' FROM generate_series(1,10000)i",category);
-            jdbc.execute("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) SELECT md5('scale-v-'||i||'-0')::uuid,md5('scale-p-'||i)::uuid,'SCALE-'||i,jsonb_build_object('option','0'),i*1000 FROM generate_series(1,10000)i");
+            jdbc.execute("INSERT INTO product_variants(id,product_id,sku,option_combination,base_price) SELECT md5('scale-v-'||i||'-0')::uuid,md5('scale-p-'||i)::uuid,'SCALE-'||i,jsonb_build_object('option','0'),i*1000 FROM generate_series(1,10000)i");
         });
         var output=Path.of("target","search-plans");Files.createDirectories(output);
         for(int fanout:List.of(1,5,20)){
-            if(fanout>1)tx.executeWithoutResult(st->jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) SELECT md5('scale-v-'||i||'-'||n)::uuid,md5('scale-p-'||i)::uuid,'SCALE-'||i||'-'||n,jsonb_build_object('option',n::text),i*1000+n FROM generate_series(1,1000)i CROSS JOIN generate_series(?,?)n",fanout==5?1:5,fanout-1));
+            if(fanout>1)tx.executeWithoutResult(st->jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,base_price) SELECT md5('scale-v-'||i||'-'||n)::uuid,md5('scale-p-'||i)::uuid,'SCALE-'||i||'-'||n,jsonb_build_object('option',n::text),i*1000+n FROM generate_series(1,1000)i CROSS JOIN generate_series(?,?)n",fanout==5?1:5,fanout-1));
             jdbc.execute("ANALYZE products");jdbc.execute("ANALYZE product_variants");
             var criteria=ProductSearchCriteria.builder().keyword(new ProductSearchNormalizer().normalizeQuery("SCALE-1499")).build();
             var statement=new CatalogSearchSql(new SpecificationFilterRegistry()).compile(criteria,.32,true);

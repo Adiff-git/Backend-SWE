@@ -23,7 +23,7 @@ class ReviewReadServiceImplTest {
         ProductReviewRepository reviews = mock(ProductReviewRepository.class); ProductReviewImageRepository images = mock(ProductReviewImageRepository.class);
         UserReviewReadService users = mock(UserReviewReadService.class); MediaService media = mock(MediaService.class);
         doThrow(new ProductNotFoundException()).when(catalog).getPublishedProductEntity(product);
-        assertThatThrownBy(() -> new ReviewReadServiceImpl(reviews, images, catalog, users, media, new ReviewConverter()).getReviews(product, new ReviewListRequest(0, 20, "createdAt,desc")))
+        assertThatThrownBy(() -> new ReviewReadServiceImpl(reviews, images, catalog, users, media, new ReviewConverter(),mock(com.example.demo.order.service.OrderReviewReadService.class)).getReviews(product, new ReviewListRequest(0, 20, "createdAt,desc")))
                 .isInstanceOf(ProductNotFoundException.class);
         verifyNoInteractions(reviews, images, users, media);
     }

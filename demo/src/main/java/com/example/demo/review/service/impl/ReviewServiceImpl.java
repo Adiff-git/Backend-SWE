@@ -22,6 +22,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final MediaService media;
     private final UserReviewReadService authors;
     private final ReviewConverter converter;
+    private final com.example.demo.order.service.OrderReviewReadService orders;
     @Override public ReviewResponse update(Long actor, Long review, com.example.demo.review.dto.request.PatchReviewRequest request) {
         requireEntryBoundary();
         patchValidator.validate(request);
@@ -39,7 +40,7 @@ public class ReviewServiceImpl implements ReviewService {
         com.example.demo.user.dto.response.ReviewAuthorSummary author = authors.getReviewAuthors(List.of(result.getReview().getAuthorId())).get(result.getReview().getAuthorId());
         java.util.Set<java.util.UUID> ids = new java.util.LinkedHashSet<>(result.getImageIds());
         if (author != null && author.getProfileImage() != null) ids.add(author.getProfileImage().getId());
-        return converter.toResponse(result.getReview(), result.getImageIds(), media.getSafeAttachedImages(ids), author);
+        return converter.toResponse(result.getReview(), result.getImageIds(), media.getSafeAttachedImages(ids), author,orders.getReviewOptionSnapshots(List.of(result.getReview().getOrderItemId())).get(result.getReview().getOrderItemId()));
     }
     private static void requireEntryBoundary() {
         if (org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())

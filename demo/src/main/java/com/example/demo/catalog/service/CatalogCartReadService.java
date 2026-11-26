@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface CatalogCartReadService {
+    com.example.demo.catalog.dto.response.PreparedOperationPricing preparePricing(Collection<UUID> ids, java.time.Instant at);
+    Map<UUID, CartVariantState> getCartPresentation(com.example.demo.catalog.dto.response.PreparedOperationPricing pricing, PreparedImageUrls urls);
+    Map<UUID, CartVariantState> getVariantStates(com.example.demo.catalog.dto.response.PreparedOperationPricing pricing);
     Map<UUID, CartVariantState> getVariantStates(Collection<UUID> variantIds);
     boolean hasImageCandidates(Collection<UUID> variantIds);
     Map<UUID, CartVariantState> getCartPresentation(Collection<UUID> variantIds, PreparedImageUrls imageUrls);

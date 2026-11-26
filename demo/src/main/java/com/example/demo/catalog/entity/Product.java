@@ -1,6 +1,8 @@
 package com.example.demo.catalog.entity;
 
 import java.util.UUID;
+import java.math.BigDecimal;
+import java.time.Instant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -49,4 +51,16 @@ public class Product {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false, columnDefinition = "varchar")
 	private ProductStatus status;
+
+    @Column(name = "sale_percentage", columnDefinition = "numeric")
+    private BigDecimal salePercentage;
+
+    @Column(name = "sale_enabled", nullable = false)
+    private boolean saleEnabled;
+
+    @Column(name = "sale_starts_at")
+    private Instant saleStartsAt;
+
+    @Column(name = "sale_ends_at")
+    private Instant saleEndsAt;
 }

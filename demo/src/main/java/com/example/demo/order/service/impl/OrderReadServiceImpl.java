@@ -50,6 +50,6 @@ public class OrderReadServiceImpl implements OrderReadService {
         Map<String, String> options = json.readValue(row.getOptionsJson(),new TypeReference<Map<String,String>>() { });
         return new OrderReadSeed.Item(row.getId(),row.getOrderId(),row.getProductId(),row.getProductVariantId(),
                 row.getProductNameSnapshot(),row.getVariantSkuSnapshot(),options,row.getQuantity(),
-                row.getUnitPriceSnapshot(),row.getLineTotal(),row.getRowCount());
+                row.getUnitPriceSnapshot(),row.getLineTotal(),row.getRowCount(),row.getOriginalUnitPriceSnapshot(),row.getDirectUnitDiscountSnapshot(),row.getDirectSalePercentageSnapshot(),row.getDirectSaleStartsAtSnapshot(),row.getDirectSaleEndsAtSnapshot(),row.getPricingInstantSnapshot());
     }
 }

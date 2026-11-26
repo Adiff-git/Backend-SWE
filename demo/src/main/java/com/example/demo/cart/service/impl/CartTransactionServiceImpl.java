@@ -57,7 +57,9 @@ public class CartTransactionServiceImpl implements CartTransactionService {
     public CartResponse getCart(Long owner, PreparedImageUrls urls) {
         validator.owner(owner);
         Cart cart = lockCart(owner, false);
-        return response(cart, cart == null ? List.of() : rows(cart), urls, null);
+        var rows = cart == null ? List.<CartItem>of() : rows(cart);
+        var prepared=prepare(rows,null);
+        return response(cart,rows,catalog.getCartPresentation(prepared,urls),prepared.getPricingInstant());
     }
 
     @Override
@@ -67,7 +69,8 @@ public class CartTransactionServiceImpl implements CartTransactionService {
         int quantity = validator.quantity(request.getQuantity());
         Cart cart = lockCart(owner, true);
         List<CartItem> rows = rows(cart);
-        CartVariantState state = catalog.getVariantStates(List.of(request.getProductVariantId())).get(request.getProductVariantId());
+        var prepared = prepare(rows, request.getProductVariantId());
+        CartVariantState state = catalog.getVariantStates(prepared).get(request.getProductVariantId());
         validator.eligible(state);
         CartItem item = rows.stream().filter(row -> row.getProductVariantId().equals(request.getProductVariantId())).findFirst().orElse(null);
         boolean created = item == null;
@@ -81,7 +84,7 @@ public class CartTransactionServiceImpl implements CartTransactionService {
             item.setQuantity(resultingQuantity);
         }
         items.saveAndFlush(item);
-        CartResponse response = response(cart, rows(cart), urls, request.getProductVariantId());
+        CartResponse response = response(cart, rows(cart), urls, request.getProductVariantId(), prepared);
         return new AddCartResult(created, item.getId(), response);
     }
 
@@ -92,12 +95,13 @@ public class CartTransactionServiceImpl implements CartTransactionService {
         Cart cart = lockCart(owner, false);
         CartItem source = validator.ownedItem(cart == null ? List.of() : rows(cart), itemId);
         UUID variantId = source.getProductVariantId();
-        CartVariantState state = catalog.getVariantStates(List.of(variantId)).get(variantId);
+        var prepared = prepare(rows(cart), variantId);
+        CartVariantState state = catalog.getVariantStates(prepared).get(variantId);
         validator.eligible(state);
         validator.stockEligible(state, quantity);
         source.setQuantity(quantity);
         items.flush();
-        return response(cart, rows(cart), urls, variantId);
+        return response(cart, rows(cart), urls, variantId, prepared);
     }
 
     @Override public CartResponse changeVariant(Long owner, Long itemId, ChangeCartVariantRequest request, PreparedImageUrls urls) {
@@ -107,7 +111,8 @@ public class CartTransactionServiceImpl implements CartTransactionService {
         List<CartItem> rows = cart == null ? List.of() : rows(cart);
         CartItem source = validator.ownedItem(rows, itemId);
         UUID targetId = request.getProductVariantId();
-        CartVariantState target = catalog.getVariantStates(List.of(targetId)).get(targetId);
+        var prepared = prepare(rows, targetId);
+        CartVariantState target = catalog.getVariantStates(prepared).get(targetId);
         validator.eligible(target);
         validator.sameProduct(source.getProductId(), target.getProductId());
         CartItem existing = rows.stream().filter(row -> row.getProductVariantId().equals(targetId)).findFirst().orElse(null);
@@ -122,7 +127,7 @@ public class CartTransactionServiceImpl implements CartTransactionService {
             }
         }
         items.flush();
-        return response(cart, rows(cart), urls, targetId);
+        return response(cart, rows(cart), urls, targetId, prepared);
     }
 
     @Override public void removeItem(Long owner, Long itemId) {
@@ -132,7 +137,8 @@ public class CartTransactionServiceImpl implements CartTransactionService {
         items.delete(source);
         items.flush();
         List<CartItem> remaining = rows(cart);
-        previews.getCartResponse(cart, remaining, catalog.getVariantStates(remaining.stream().map(CartItem::getProductVariantId).toList()), false);
+        var prepared=prepare(remaining,null);
+        previews.getCartResponse(cart,remaining,catalog.getVariantStates(prepared),false,prepared.getPricingInstant());
     }
 
     @Override public CartResponse selectItem(Long owner, Long itemId, CartSelectionRequest request, PreparedImageUrls urls) {
@@ -141,14 +147,15 @@ public class CartTransactionServiceImpl implements CartTransactionService {
         Cart cart = lockCart(owner, false);
         List<CartItem> rows = cart == null ? List.of() : rows(cart);
         CartItem item = validator.ownedItem(rows, itemId);
-        Map<UUID, CartVariantState> states = presentation(rows, urls);
+        var prepared = prepare(rows, null);
+        Map<UUID, CartVariantState> states = catalog.getCartPresentation(prepared, urls);
         if (selected) {
             validator.selectable(states.get(item.getProductVariantId()));
             validator.stockEligible(states.get(item.getProductVariantId()), item.getQuantity());
         }
         item.setSelected(selected);
         items.flush();
-        return selected ? response(cart, rows, urls, item.getProductVariantId()) : response(cart, rows, states);
+        return selected ? response(cart, rows, urls, item.getProductVariantId(), prepared) : response(cart, rows, states,prepared.getPricingInstant());
     }
 
     @Override public CartResponse selectAll(Long owner, CartSelectionRequest request, PreparedImageUrls urls) {
@@ -156,13 +163,14 @@ public class CartTransactionServiceImpl implements CartTransactionService {
         boolean selected = validator.selection(request.getSelected());
         Cart cart = lockCart(owner, false);
         List<CartItem> rows = cart == null ? List.of() : rows(cart);
-        Map<UUID, CartVariantState> states = presentation(rows, urls);
+        var prepared = prepare(rows, null);
+        Map<UUID, CartVariantState> states = catalog.getCartPresentation(prepared, urls);
         for (CartItem row : rows) {
             CartVariantState state = states.get(row.getProductVariantId());
             if (!selected || validator.ineligibleReason(state, row.getQuantity()) == null) row.setSelected(selected);
         }
         items.flush();
-        return response(cart, rows, states);
+        return response(cart, rows, states,prepared.getPricingInstant());
     }
 
     private Cart lockCart(Long owner, boolean create) {
@@ -183,23 +191,27 @@ public class CartTransactionServiceImpl implements CartTransactionService {
 
     private List<CartItem> rows(Cart cart) { return items.findByCartIdOrderByAddedAtDescIdAsc(cart.getId()); }
 
-    private CartResponse response(Cart cart, List<CartItem> rows, PreparedImageUrls urls, UUID target) {
-        Map<UUID, CartVariantState> states = presentation(rows, urls);
+    private CartResponse response(Cart cart, List<CartItem> rows, PreparedImageUrls urls, UUID target,
+            com.example.demo.catalog.dto.response.PreparedOperationPricing prepared) {
+        Map<UUID, CartVariantState> states = catalog.getCartPresentation(prepared, urls);
         if (target != null) {
             validator.eligible(states.get(target));
             CartItem affected = rows.stream().filter(row -> target.equals(row.getProductVariantId())).findFirst()
                     .orElseThrow(com.example.demo.cart.exception.CartStockConflictException::new);
             validator.stockEligible(states.get(target), affected.getQuantity());
         }
-        return response(cart, rows, states);
+        return response(cart, rows, states,prepared.getPricingInstant());
     }
 
-    private Map<UUID, CartVariantState> presentation(List<CartItem> rows, PreparedImageUrls urls) {
-        return catalog.getCartPresentation(rows.stream().map(CartItem::getProductVariantId).toList(), urls);
+    private com.example.demo.catalog.dto.response.PreparedOperationPricing prepare(List<CartItem> rows, UUID extra) {
+        var ids = new java.util.HashSet<UUID>();
+        rows.forEach(row -> ids.add(row.getProductVariantId()));
+        if (extra != null) ids.add(extra);
+        return catalog.preparePricing(ids, clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS));
     }
 
-    private CartResponse response(Cart cart, List<CartItem> rows, Map<UUID, CartVariantState> states) {
-        return previews.getCartResponse(cart, rows, states, false);
+    private CartResponse response(Cart cart, List<CartItem> rows, Map<UUID, CartVariantState> states,java.time.Instant at) {
+        return previews.getCartResponse(cart, rows, states, false,at);
     }
 
     private void snapshot(CartItem item, CartVariantState state) {

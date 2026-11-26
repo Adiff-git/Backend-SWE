@@ -53,6 +53,28 @@ import tools.jackson.databind.ObjectMapper;
 @TestPropertySource(properties = "spring.jpa.properties.hibernate.generate_statistics=true")
 @Import(ProductDetailApiIT.FakeStorageConfiguration.class)
 class ProductDetailApiIT {
+    @Test
+    void getProduct_shouldExposeVariantPairedOriginalAndEffectiveSalePrices() throws Exception {
+        DetailFixture fixture = persistDetailedProduct();
+        jdbc.update("UPDATE products SET sale_percentage=20,sale_enabled=TRUE WHERE id=?", fixture.productId());
+        mvc.perform(get("/api/products/{id}", fixture.productId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.priceRange.minimum.variantId").value(fixture.firstVariantId().toString()))
+                .andExpect(jsonPath("$.priceRange.minimum.pricing.originalPrice.amount").value(1000))
+                .andExpect(jsonPath("$.priceRange.minimum.pricing.effectivePrice.amount").value(800))
+                .andExpect(jsonPath("$.priceRange.minimum.pricing.salePercentage").value(20));
+    }
+    @Test
+    void getProduct_shouldExposeOrderedDimensionsAndCanonicalVariantSelections() throws Exception {
+        DetailFixture fixture = persistDetailedProduct();
+        mvc.perform(get("/api/products/{id}", fixture.productId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.optionDimensions[0].key").value("color"))
+                .andExpect(jsonPath("$.optionDimensions[0].values[0].key").value("blue"))
+                .andExpect(jsonPath("$.optionDimensions[0].values[1].key").value("red"))
+                .andExpect(jsonPath("$.variants[0].selectionOptions.color").exists())
+                .andExpect(jsonPath("$.variants[1].selectionOptions.color").exists());
+    }
     @Test void availability_shouldSerializeLongMaxExactlyWithoutApplyingTheCartLineLimit() throws Exception {
         DetailFixture fixture = persistDetailedProduct();
         com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, fixture.firstVariantId(), Long.MAX_VALUE);

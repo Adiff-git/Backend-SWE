@@ -76,7 +76,9 @@ public class CheckoutServiceImpl implements CheckoutService {
         receipts.setLockTimeout(lockTimeoutMs + "ms"); // User service installs its own timeout; reapply ours.
         CheckoutAddressSnapshot address = addresses.getCheckoutAddressSnapshot(owner,request.getAddressId());
         CheckoutCartSeed seed = carts.getCheckoutCartSeed(owner);
-        Map<UUID, CheckoutVariantState> states = catalog.getCheckoutVariantStates(seed.getRows().stream().map(CheckoutCartSeed.Row::getVariantId).toList());
+        var catalogView = catalog.getCheckoutCatalogView(seed.getRows().stream().map(CheckoutCartSeed.Row::getVariantId).toList());
+        Map<UUID, CheckoutVariantState> states = catalogView.getStates();
+        Instant at = catalogView.getPricingInstant();
         List<CheckoutCartSeed.Row> included = new ArrayList<>();
         List<SkippedCheckoutItem> skipped = new ArrayList<>();
         for (CheckoutCartSeed.Row row : seed.getRows()) {
@@ -101,12 +103,11 @@ public class CheckoutServiceImpl implements CheckoutService {
         if (included.isEmpty()) throw new NoEligibleCheckoutItemsException(skipped);
         CheckoutCalculation calculation = calculator.calculate(included,states);
         com.example.demo.voucher.dto.response.CheckoutVoucherQuote voucher = seed.getSelectedEntitlementId()==null
-                ? new com.example.demo.voucher.dto.response.CheckoutVoucherQuote(owner,null,calculation.getTotal(),clock.instant().truncatedTo(ChronoUnit.MICROS),null)
-                : vouchers.lockCheckoutVoucher(owner,seed.getSelectedEntitlementId(),calculation.getTotal());
-        Instant at = voucher.getEvent();
+                ? new com.example.demo.voucher.dto.response.CheckoutVoucherQuote(owner,null,calculation.getTotal(),at,null)
+                : vouchers.lockCheckoutVoucher(owner,seed.getSelectedEntitlementId(),calculation.getTotal(),at);
         List<CreateOrderCommand.Item> items = calculation.getLines().stream().map(line -> new CreateOrderCommand.Item(
                 line.getRow().getId(),line.getState().getProductId(),line.getState().getVariantId(),line.getState().getProductName(),
-                line.getState().getSku(),line.getState().getOptions(),line.getRow().getQuantity(),line.getUnitPrice(),line.getLineTotal())).toList();
+                line.getState().getSku(),line.getState().getOptions(),line.getRow().getQuantity(),line.getUnitPrice(),line.getLineTotal(),line.getState().getPricing())).toList();
         CreatedOrderSeed created = orders.createOrder(new CreateOrderCommand(owner,at,address.getRecipientName(),
                 address.getRecipientPhone(),address.getDeliveryAddress(),items,calculation.getTotal(),voucher.getDiscount(),calculation.getTotal().subtract(voucher.getDiscount()),voucher.getSnapshot()));
         inventory.reserveReservations(new com.example.demo.inventory.dto.request.ReservationCommand(created.getId(), at,
@@ -117,7 +118,7 @@ public class CheckoutServiceImpl implements CheckoutService {
         if (voucher.getSnapshot()!=null) carts.clearCheckoutVoucher(owner,seed);
         CheckoutReceiptResponse response = converter.toReceipt(created,skipped);
         String body = converter.encode(response);
-        converter.decode(body,2); // Prove durable representation is decodable before committing any outcome.
+        converter.decode(body,3); // Prove durable representation is decodable before committing any outcome.
         receipts.insertSuccess(owner,key,request.getAddressId(),validator.fingerprint(request.getAddressId()),
                 created.getId(),"/api/me/orders/"+created.getId(),body,at);
         return response;

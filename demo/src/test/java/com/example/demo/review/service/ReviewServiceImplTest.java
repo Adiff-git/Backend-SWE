@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 class ReviewServiceImplTest {
     @Test void create_shouldRejectAmbientTransactionBeforeAnyStorageOrWriterWork() {
         ReviewWriteService writer = mock(ReviewWriteService.class); MediaService media = mock(MediaService.class);
-        ReviewServiceImpl service = new ReviewServiceImpl(writer, mock(ReviewValidator.class), mock(PatchReviewValidator.class), media, mock(UserReviewReadService.class), new ReviewConverter());
+        ReviewServiceImpl service = new ReviewServiceImpl(writer, mock(ReviewValidator.class), mock(PatchReviewValidator.class), media, mock(UserReviewReadService.class), new ReviewConverter(),mock(com.example.demo.order.service.OrderReviewReadService.class));
         org.springframework.transaction.support.TransactionSynchronizationManager.setActualTransactionActive(true);
         try {
             assertThatThrownBy(() -> service.create(1L, 2L, 3L, new CreateReviewRequest())).isInstanceOf(IllegalStateException.class);
@@ -29,7 +29,7 @@ class ReviewServiceImplTest {
         ReviewWriteService writer = mock(ReviewWriteService.class); MediaService media = mock(MediaService.class);
         ReviewValidator validator = mock(ReviewValidator.class); CreateReviewRequest request = new CreateReviewRequest();
         doThrow(new InvalidReviewRequestException()).when(validator).validate(request);
-        ReviewServiceImpl service = new ReviewServiceImpl(writer, validator, mock(PatchReviewValidator.class), media, mock(UserReviewReadService.class), new ReviewConverter());
+        ReviewServiceImpl service = new ReviewServiceImpl(writer, validator, mock(PatchReviewValidator.class), media, mock(UserReviewReadService.class), new ReviewConverter(),mock(com.example.demo.order.service.OrderReviewReadService.class));
         assertThatThrownBy(() -> service.create(1L, 2L, 3L, request)).isInstanceOf(InvalidReviewRequestException.class);
         verifyNoInteractions(writer, media);
     }

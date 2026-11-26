@@ -158,7 +158,7 @@ class CheckoutServiceIT extends CheckoutIntegrationSupport {
     com.example.demo.checkout.converter.CheckoutConverter codec;
 
     @Test void checkout_shouldCommitOneCurrentPricePendingOrderAndConsumeOnlySelectedRows() {
-        jdbc.update("UPDATE product_variants SET selling_price=1500 WHERE id=?",fixture.variant());
+        jdbc.update("UPDATE product_variants SET base_price=1500 WHERE id=?",fixture.variant());
         CheckoutReceiptResponse receipt = service.checkout(fixture.owner(),"First_checkout_123",new CheckoutRequest(fixture.address()));
         assertThat(receipt.getOrder().getStatus().name()).isEqualTo("PENDING");
         assertThat(receipt.getOrder().getPayableTotal().getAmount()).isEqualTo(BigInteger.valueOf(3000));
@@ -184,7 +184,7 @@ class CheckoutServiceIT extends CheckoutIntegrationSupport {
         java.util.Map<String,Object> order = jdbc.queryForMap("SELECT * FROM orders WHERE id=?",id);
         jdbc.update("UPDATE addresses SET recipient_name='Changed',address_text='Changed' WHERE id=?",fixture.address());
         jdbc.update("UPDATE products SET name='Changed hidden product',status='ARCHIVED' WHERE id=?",fixture.product());
-        jdbc.update("UPDATE product_variants SET selling_price=9999,sku=?,option_combination='{}' WHERE id=?","CHANGED-"+java.util.UUID.randomUUID(),fixture.variant());
+        jdbc.update("UPDATE product_variants SET base_price=9999,sku=?,option_combination='{}' WHERE id=?","CHANGED-"+java.util.UUID.randomUUID(),fixture.variant());
         jdbc.update("DELETE FROM addresses WHERE id=?",fixture.address());
         assertThat(jdbc.queryForMap("SELECT * FROM orders WHERE id=?",id)).isEqualTo(order);
         assertThat(orderReads.getOrder(fixture.owner(),id).getDeliveryAddressSnapshot()).isEqualTo("Address");
@@ -237,7 +237,7 @@ class CheckoutServiceIT extends CheckoutIntegrationSupport {
     @org.junit.jupiter.params.provider.ValueSource(ints={1,999})
     void checkout_shouldPreserveQuantityBoundariesAtCurrentZeroPrice(int quantity) {
         jdbc.update("UPDATE cart_items SET quantity=? WHERE id=?",quantity,fixture.item());
-        jdbc.update("UPDATE product_variants SET selling_price=0 WHERE id=?",fixture.variant());
+        jdbc.update("UPDATE product_variants SET base_price=0 WHERE id=?",fixture.variant());
         CheckoutReceiptResponse receipt=service.checkout(fixture.owner(),"Quantity_boundary_123",new CheckoutRequest(fixture.address()));
         assertThat(receipt.getOrder().getItems().getFirst().getQuantity()).isEqualTo(quantity);
         assertThat(receipt.getOrder().getPayableTotal().getAmount()).isZero();
@@ -367,7 +367,7 @@ class CheckoutServiceIT extends CheckoutIntegrationSupport {
         assertThat(jdbc.queryForObject("SELECT state FROM voucher_entitlements WHERE id=?", String.class, other)).isEqualTo("AVAILABLE");
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM voucher_redemptions WHERE order_id=?", Integer.class, receipt.getOrder().getId())).isOne();
         assertThat(jdbc.queryForObject("SELECT voucher_entitlement_id FROM carts WHERE id=?", Long.class, fixture.cart())).isNull();
-        assertThat(jdbc.queryForObject("SELECT receipt_version FROM checkout_receipts WHERE order_id=?", Integer.class, receipt.getOrder().getId())).isEqualTo(2);
+        assertThat(jdbc.queryForObject("SELECT receipt_version FROM checkout_receipts WHERE order_id=?", Integer.class, receipt.getOrder().getId())).isEqualTo(3);
         Long laterRow=transactions.execute(tx -> com.example.demo.fixture.checkout.CheckoutFixtures.additionalItem(entities,fixture.cart(),true).getId());
         cartVouchers.applyVoucher(fixture.owner(),other);
         var originalDetail=orderReads.getOrder(fixture.owner(),receipt.getOrder().getId());
@@ -430,7 +430,7 @@ class CheckoutServiceIT extends CheckoutIntegrationSupport {
     @org.junit.jupiter.params.provider.ValueSource(strings={"12.34","0.01"})
     void checkout_shouldPersistExactPercentageIncludingRoundedZero(String percent) {
         long grant=voucherGrant();
-        jdbc.update("UPDATE product_variants SET selling_price=1 WHERE id=?",fixture.variant());
+        jdbc.update("UPDATE product_variants SET base_price=1 WHERE id=?",fixture.variant());
         jdbc.update("UPDATE vouchers SET discount_type='PERCENTAGE',discount_value=? WHERE id=(SELECT voucher_id FROM voucher_entitlements WHERE id=?)",new java.math.BigDecimal(percent),grant);
         cartVouchers.applyVoucher(fixture.owner(),grant);
         var receipt=service.checkout(fixture.owner(),"Voucher_percent_123",new CheckoutRequest(fixture.address()));

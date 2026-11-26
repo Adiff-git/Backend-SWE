@@ -42,7 +42,11 @@ public class OrderConverter {
         List<OrderItemResponse> rows = seed.getItems().stream().map(row -> new OrderItemResponse(row.getId(),row.getProductId(),
                 row.getProductVariantId(),row.getProductNameSnapshot(),row.getVariantSkuSnapshot(),row.getVariantOptionsSnapshot(),
                 row.getQuantity(),money(row.getUnitPriceSnapshot()),money(row.getLineTotal()),
-                row.getProductId() == null ? null : urls.get(row.getProductId()))).toList();
+                row.getProductId() == null ? null : urls.get(row.getProductId()),
+                row.getOriginalUnitPriceSnapshot()==null ? null : money(row.getOriginalUnitPriceSnapshot()),
+                row.getDirectUnitDiscountSnapshot()==null ? null : money(row.getDirectUnitDiscountSnapshot()),
+                row.getDirectSalePercentageSnapshot()==null ? null : new com.example.demo.order.dto.response.DirectSaleSnapshot(
+                    row.getDirectSalePercentageSnapshot(),row.getDirectSaleStartsAtSnapshot(),row.getDirectSaleEndsAtSnapshot()),row.getPricingInstantSnapshot())).toList();
         return new OrderDetailResponse(header.getId(),header.getOrderNumber(),header.getPlacedAt(),header.getStatus(),
                 header.getRecipientNameSnapshot(),header.getRecipientPhoneSnapshot(),header.getDeliveryAddressSnapshot(),rows,
                 money(header.getMerchandiseTotal()),money(header.getPayableTotal()),header.getCancelledAt(),header.getCompletedAt(),header.getCancellationReason(),money(header.getVoucherDiscount()),header.getVoucherSnapshot());

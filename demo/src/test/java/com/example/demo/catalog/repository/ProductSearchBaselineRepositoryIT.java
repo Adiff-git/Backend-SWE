@@ -164,10 +164,10 @@ class ProductSearchBaselineRepositoryIT {
     @Test
     void rejectsInvalidCriteriaBeforeExecutingSql() {
         List<ProductSearchCriteria> unsupported = new ArrayList<>();
-        unsupported.add(ProductSearchCriteria.builder().specificationGroups(List.of(new SpecificationGroup())).build());
-        unsupported.add(ProductSearchCriteria.builder().page(-1).build());
-        unsupported.add(ProductSearchCriteria.builder().size(0).build());
-        unsupported.add(ProductSearchCriteria.builder().size(101).build());
+        unsupported.add(ProductSearchCriteria.builder().pricingInstant(java.time.Instant.parse("2026-11-26T00:00:00Z")).specificationGroups(List.of(new SpecificationGroup())).build());
+        unsupported.add(ProductSearchCriteria.builder().pricingInstant(java.time.Instant.parse("2026-11-26T00:00:00Z")).page(-1).build());
+        unsupported.add(ProductSearchCriteria.builder().pricingInstant(java.time.Instant.parse("2026-11-26T00:00:00Z")).size(0).build());
+        unsupported.add(ProductSearchCriteria.builder().pricingInstant(java.time.Instant.parse("2026-11-26T00:00:00Z")).size(101).build());
         SessionFactory factory = entityManagerFactory.unwrap(SessionFactory.class);
         factory.getStatistics().clear();
         for (ProductSearchCriteria criteria : unsupported) {
@@ -216,7 +216,7 @@ class ProductSearchBaselineRepositoryIT {
     private ProductCandidatePage page(int page, int size) {
         SessionFactory factory = entityManagerFactory.unwrap(SessionFactory.class);
         factory.getStatistics().clear();
-        ProductCandidatePage result = products.findPublishedCandidates(ProductSearchCriteria.builder().page(page).size(size).build());
+        ProductCandidatePage result = products.findPublishedCandidates(ProductSearchCriteria.builder().pricingInstant(java.time.Instant.parse("2026-11-26T00:00:00Z")).page(page).size(size).build());
         long statements = factory.getStatistics().getPrepareStatementCount();
         assertThat(statements).isEqualTo(1);
         observe(Map.of("scenario", "legacy-page", "page", page, "size", size,

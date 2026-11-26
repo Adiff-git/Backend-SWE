@@ -37,6 +37,7 @@ class CartTransactionServiceImplTest {
         CartRepository carts = mock(CartRepository.class);
         CartItemRepository items = mock(CartItemRepository.class);
         CatalogCartReadService catalog = mock(CatalogCartReadService.class);
+        when(catalog.getVariantStates(any(com.example.demo.catalog.dto.response.PreparedOperationPricing.class))).thenAnswer(call -> call.<com.example.demo.catalog.dto.response.PreparedOperationPricing>getArgument(0).getStates());
         Cart cart = mock(Cart.class);
         when(cart.getVoucherEntitlementId()).thenReturn(null);
         when(cart.getId()).thenReturn(7L);
@@ -49,7 +50,7 @@ class CartTransactionServiceImplTest {
         when(items.findByCartIdOrderByAddedAtDescIdAsc(7L)).thenReturn(List.of(existing));
         var state = new CartVariantState(variant, UUID.randomUUID(), true, BigInteger.TEN, "P", "S", Map.of(), null,
                 new com.example.demo.inventory.dto.response.InventoryAvailability(3, "IN_STOCK"));
-        when(catalog.getVariantStates(anyCollection())).thenReturn(Map.of(variant, state));
+        when(catalog.preparePricing(anyCollection(),any())).thenAnswer(call -> new com.example.demo.catalog.dto.response.PreparedOperationPricing(call.getArgument(1),Map.of(variant, state)));
         var service = new CartTransactionServiceImpl(carts, items, mock(UserService.class), catalog,
                 new CartValidator(), new CartCalculator(), new CartConverter(), Clock.systemUTC(), previewService());
         ReflectionTestUtils.setField(service, "lockTimeoutMs", 5000L);
@@ -64,6 +65,7 @@ class CartTransactionServiceImplTest {
         CartRepository carts = mock(CartRepository.class);
         CartItemRepository items = mock(CartItemRepository.class);
         CatalogCartReadService catalog = mock(CatalogCartReadService.class);
+        when(catalog.getVariantStates(any(com.example.demo.catalog.dto.response.PreparedOperationPricing.class))).thenAnswer(call -> call.<com.example.demo.catalog.dto.response.PreparedOperationPricing>getArgument(0).getStates());
         Cart cart = mock(Cart.class);
         when(cart.getVoucherEntitlementId()).thenReturn(null);
         when(cart.getId()).thenReturn(7L);
@@ -79,9 +81,11 @@ class CartTransactionServiceImplTest {
         eligible.setPublicProductName("P"); eligible.setPublicSku("B"); eligible.setPublicOptions(Map.of());
         when(items.findByCartIdOrderByAddedAtDescIdAsc(7L)).thenReturn(List.of(shortage, eligible));
         var availability = new com.example.demo.inventory.dto.response.InventoryAvailability(3, "IN_STOCK");
-        when(catalog.getCartPresentation(anyCollection(), org.mockito.ArgumentMatchers.isNull())).thenReturn(Map.of(
+        var preparedStates=Map.of(
                 a, new CartVariantState(a, product, true, BigInteger.TEN, "P", "A", Map.of(), null, availability),
-                b, new CartVariantState(b, product, true, BigInteger.TEN, "P", "B", Map.of(), null, availability)));
+                b, new CartVariantState(b, product, true, BigInteger.TEN, "P", "B", Map.of(), null, availability));
+        when(catalog.preparePricing(anyCollection(),any())).thenAnswer(call -> new com.example.demo.catalog.dto.response.PreparedOperationPricing(call.getArgument(1),preparedStates));
+        when(catalog.getCartPresentation(any(com.example.demo.catalog.dto.response.PreparedOperationPricing.class),org.mockito.ArgumentMatchers.isNull())).thenReturn(preparedStates);
         var service = new CartTransactionServiceImpl(carts, items, mock(UserService.class), catalog,
                 new CartValidator(), new CartCalculator(), new CartConverter(), Clock.systemUTC(), previewService());
         ReflectionTestUtils.setField(service, "lockTimeoutMs", 5000L);
@@ -100,6 +104,7 @@ class CartTransactionServiceImplTest {
         CartItemRepository items = mock(CartItemRepository.class);
         UserService users = mock(UserService.class);
         CatalogCartReadService catalog = mock(CatalogCartReadService.class);
+        when(catalog.getVariantStates(any(com.example.demo.catalog.dto.response.PreparedOperationPricing.class))).thenAnswer(call -> call.<com.example.demo.catalog.dto.response.PreparedOperationPricing>getArgument(0).getStates());
         Cart winner = mock(Cart.class);
         when(winner.getVoucherEntitlementId()).thenReturn(null);
         when(winner.getId()).thenReturn(7L);
@@ -111,8 +116,8 @@ class CartTransactionServiceImplTest {
         });
         UUID variant = UUID.randomUUID();
         var state = new CartVariantState(variant, UUID.randomUUID(), true, BigInteger.TEN, "P", "S", Map.of(), null, new com.example.demo.inventory.dto.response.InventoryAvailability(999, "IN_STOCK"));
-        when(catalog.getVariantStates(anyCollection())).thenReturn(Map.of(variant, state));
-        when(catalog.getCartPresentation(anyCollection(), org.mockito.ArgumentMatchers.isNull())).thenReturn(Map.of(variant,state));
+        when(catalog.preparePricing(anyCollection(),any())).thenAnswer(call -> new com.example.demo.catalog.dto.response.PreparedOperationPricing(call.getArgument(1),Map.of(variant, state)));
+        when(catalog.getCartPresentation(any(com.example.demo.catalog.dto.response.PreparedOperationPricing.class), org.mockito.ArgumentMatchers.isNull())).thenReturn(Map.of(variant,state));
         var service = new CartTransactionServiceImpl(carts, items, users, catalog,
                 new CartValidator(), new CartCalculator(), new CartConverter(), Clock.systemUTC(), previewService());
         ReflectionTestUtils.setField(service, "lockTimeoutMs", 5000L);
@@ -129,6 +134,7 @@ class CartTransactionServiceImplTest {
         CartRepository carts = mock(CartRepository.class);
         CartItemRepository items = mock(CartItemRepository.class);
         CatalogCartReadService catalog = mock(CatalogCartReadService.class);
+        when(catalog.getVariantStates(any(com.example.demo.catalog.dto.response.PreparedOperationPricing.class))).thenAnswer(call -> call.<com.example.demo.catalog.dto.response.PreparedOperationPricing>getArgument(0).getStates());
         Cart cart = mock(Cart.class);
         when(cart.getVoucherEntitlementId()).thenReturn(null);
         when(cart.getId()).thenReturn(7L);
@@ -143,8 +149,8 @@ class CartTransactionServiceImplTest {
         target.setPublicProductName("Prior target name"); target.setPublicSku("Prior target SKU"); target.setPublicOptions(Map.of());
         when(items.findByCartIdOrderByAddedAtDescIdAsc(7L)).thenReturn(List.of(source, target), List.of(target));
         CartVariantState state = new CartVariantState(second, parent, true, BigInteger.TEN, "P", "S", Map.of(), null, new com.example.demo.inventory.dto.response.InventoryAvailability(999, "IN_STOCK"));
-        when(catalog.getVariantStates(anyCollection())).thenReturn(Map.of(second, state));
-        when(catalog.getCartPresentation(anyCollection(), org.mockito.ArgumentMatchers.isNull())).thenReturn(Map.of(second,state));
+        when(catalog.preparePricing(anyCollection(),any())).thenAnswer(call -> new com.example.demo.catalog.dto.response.PreparedOperationPricing(call.getArgument(1),Map.of(second, state)));
+        when(catalog.getCartPresentation(any(com.example.demo.catalog.dto.response.PreparedOperationPricing.class), org.mockito.ArgumentMatchers.isNull())).thenReturn(Map.of(second,state));
         CartTransactionServiceImpl service = new CartTransactionServiceImpl(carts, items, mock(UserService.class), catalog,
                 new CartValidator(), new CartCalculator(), new CartConverter(), Clock.systemUTC(), previewService());
         ReflectionTestUtils.setField(service, "lockTimeoutMs", 5000L);
@@ -162,6 +168,7 @@ class CartTransactionServiceImplTest {
         CartRepository carts = mock(CartRepository.class);
         CartItemRepository items = mock(CartItemRepository.class);
         CatalogCartReadService catalog = mock(CatalogCartReadService.class);
+        when(catalog.getVariantStates(any(com.example.demo.catalog.dto.response.PreparedOperationPricing.class))).thenAnswer(call -> call.<com.example.demo.catalog.dto.response.PreparedOperationPricing>getArgument(0).getStates());
         Cart cart = mock(Cart.class);
         when(cart.getVoucherEntitlementId()).thenReturn(null);
         when(cart.getId()).thenReturn(7L);
@@ -176,8 +183,8 @@ class CartTransactionServiceImplTest {
         });
         UUID variant = UUID.randomUUID();
         CartVariantState state = new CartVariantState(variant, UUID.randomUUID(), true, BigInteger.TEN, "P", "S", Map.of(), null, new com.example.demo.inventory.dto.response.InventoryAvailability(999, "IN_STOCK"));
-        when(catalog.getVariantStates(anyCollection())).thenReturn(Map.of(variant,state));
-        when(catalog.getCartPresentation(anyCollection(), org.mockito.ArgumentMatchers.isNull())).thenReturn(Map.of(variant,state));
+        when(catalog.preparePricing(anyCollection(),any())).thenAnswer(call -> new com.example.demo.catalog.dto.response.PreparedOperationPricing(call.getArgument(1),Map.of(variant,state)));
+        when(catalog.getCartPresentation(any(com.example.demo.catalog.dto.response.PreparedOperationPricing.class), org.mockito.ArgumentMatchers.isNull())).thenReturn(Map.of(variant,state));
         CartTransactionServiceImpl service = new CartTransactionServiceImpl(carts, items, mock(UserService.class),
                 catalog, new CartValidator(), new CartCalculator(), new CartConverter(), Clock.systemUTC(), previewService());
         ReflectionTestUtils.setField(service, "lockTimeoutMs", 5000L);

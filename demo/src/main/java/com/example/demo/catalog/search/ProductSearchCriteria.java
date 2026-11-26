@@ -11,6 +11,8 @@ import lombok.Value;
 @Value
 @Builder
 public class ProductSearchCriteria {
+    @Builder.Default
+    java.time.Instant pricingInstant = java.time.Instant.now();
     ProductSearchNormalizer.Query keyword;
     int page;
     @Builder.Default
