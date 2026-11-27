@@ -1,0 +1,48 @@
+{
+  "version": "demo-commerce-distributions-v1",
+  "seed": 20261126,
+  "random_algorithm": "sha256-counter-rejection-fisher-yates-v1",
+  "counts": {"products": 1500, "customers": 500, "designated_login_accounts": 12, "addresses": 512, "populated_carts": 300, "wishlists": 3500, "behavior_events": 360},
+  "orders": {"completed_minimum": 9000, "PENDING": 900, "CONFIRMED": 750, "SHIPPING": 750, "CANCELLED": 400, "FAILED": 200, "items_per_order": [1, 4], "review_capacity_policy": "DERIVE_AND_FREEZE_SUFFICIENT_COMPLETED_CAPACITY_WITH_POPULARITY"},
+  "popularity": [
+    {"name": "best-selling", "products": 75, "item_weight_percent": 40},
+    {"name": "popular", "products": 225, "item_weight_percent": 30},
+    {"name": "regular", "products": 600, "item_weight_percent": 25},
+    {"name": "low-demand", "products": 450, "item_weight_percent": 5},
+    {"name": "never-purchased", "products": 150, "item_weight_percent": 0}
+  ],
+  "reviews": {
+    "count_groups": [
+      {"products": 300, "minimum": 0, "maximum": 0},
+      {"products": 300, "minimum": 1, "maximum": 10},
+      {"products": 525, "minimum": 11, "maximum": 50},
+      {"products": 300, "minimum": 51, "maximum": 100},
+      {"products": 75, "minimum": 101, "maximum": 1000}
+    ],
+    "average_groups": [
+      {"products": 60, "lower": "1.0", "upper": "2.0", "lower_inclusive": true},
+      {"products": 120, "lower": "2.0", "upper": "3.0", "lower_inclusive": false},
+      {"products": 300, "lower": "3.0", "upper": "4.0", "lower_inclusive": false},
+      {"products": 420, "lower": "4.0", "upper": "4.5", "lower_inclusive": false},
+      {"products": 300, "lower": "4.5", "upper": "5.0", "lower_inclusive": false}
+    ],
+    "count_sampling": "DISCRETE_UNIFORM_INCLUSIVE_NO_BUDGET_RESAMPLING",
+    "average_rounding": "TWO_DECIMALS_HALF_UP_FROM_ACTUAL_INTEGER_REVIEWS",
+    "group_tolerance": 0
+  },
+  "stock": [{"percent": 90, "available": [20, 200]}, {"percent": 8, "available": [1, 5]}, {"percent": 2, "available": [0, 0]}],
+  "sales": {"none": 900, "active": 300, "scheduled": 150, "expired": 75, "disabled": 75, "percentages": [5, 10, 15, 20, 30]},
+  "vouchers": [
+    {"code": "DEMO_FIXED", "scenario": "valid-fixed", "type": "FIXED_AMOUNT", "value": 100000, "minimum": 500000},
+    {"code": "DEMO_PERCENT", "scenario": "valid-percentage", "type": "PERCENTAGE", "value": 10, "maximum_discount": 300000, "minimum": 500000},
+    {"code": "DEMO_MINIMUM", "scenario": "minimum-spend-unmet", "type": "FIXED_AMOUNT", "value": 200000, "minimum": 5000000},
+    {"code": "DEMO_EXPIRED", "scenario": "expired", "type": "FIXED_AMOUNT", "value": 100000, "minimum": 500000},
+    {"code": "DEMO_SCHEDULED", "scenario": "scheduled", "type": "FIXED_AMOUNT", "value": 100000, "minimum": 500000},
+    {"code": "DEMO_DISABLED", "scenario": "disabled", "type": "FIXED_AMOUNT", "value": 100000, "minimum": 500000},
+    {"code": "DEMO_GLOBAL", "scenario": "globally-exhausted", "type": "FIXED_AMOUNT", "value": 100000, "minimum": 500000, "global_limit": 20, "historical_redemptions": 20},
+    {"code": "DEMO_CUSTOMER", "scenario": "customer-exhausted", "type": "FIXED_AMOUNT", "value": 100000, "minimum": 500000, "customer_limit": 1, "historical_redemptions": 1}
+  ],
+  "voucher_defaults": {"global_limit": 5000, "customer_limit": 2, "available_grants_per_designated_account_per_definition": 1},
+  "time": {"timezone": "UTC", "completed_history_months": 12, "recent_open_order_days": 7, "recent_event_days": 30, "active_promotion_days": 30, "scheduled_voucher_start_days": 7, "month_day_policy": "CLAMP_TO_MONTH_END"},
+  "usage_scope": {"scope_decision_status": "COMPLETE", "usage_scope": "PRIVATE_NONCOMMERCIAL_UNIVERSITY_COURSE", "access_audience": ["TEAM_MEMBERS", "INSTRUCTOR"], "public_redistribution_verification": "NOT_APPLICABLE_CURRENT_SCOPE", "public_redistribution_approved": false, "commercial_use_allowed": false, "copyright_clearance_status": "UNVERIFIED", "permission_evidence_status": "UNVERIFIED", "future_permission_verification_required": true}
+}

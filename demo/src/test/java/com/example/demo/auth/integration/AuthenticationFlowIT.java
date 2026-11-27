@@ -9,6 +9,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(OutputCaptureExtension.class)
 class AuthenticationFlowIT extends AuthPostgresTestSupport {
     @org.springframework.beans.factory.annotation.Autowired com.example.demo.auth.config.JwtProperties jwtProperties;
+    @Test void swaggerDocumentationIsPublicWhileCustomerEndpointsStayProtected() throws Exception {
+        mvc.perform(get("/swagger-ui/index.html")).andExpect(status().isOk());
+        mvc.perform(get("/swagger-ui.html")).andExpect(status().is3xxRedirection());
+        mvc.perform(get("/v3/api-docs/swagger-config")).andExpect(status().isOk());
+        mvc.perform(get("/v3/api-docs"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.info.title").value("Backend SWE API"))
+            .andExpect(jsonPath("$.components.securitySchemes.bearerAuth.scheme").value("bearer"))
+            .andExpect(jsonPath("$.paths['/api/me'].get.security[0].bearerAuth").isArray())
+            .andExpect(jsonPath("$.paths['/api/products/{id}/images'].post.security[0].bearerAuth").isArray())
+            .andExpect(jsonPath("$.paths['/api/auth/login'].post.responses['200'].headers.Authorization").exists())
+            .andExpect(jsonPath("$.paths['/api/me/orders'].get.parameters[*].name")
+                .value(org.hamcrest.Matchers.hasItems("page", "size", "status", "sort")))
+            .andExpect(jsonPath("$.paths['/api/products/{productId}/reviews'].get.parameters[*].name")
+                .value(org.hamcrest.Matchers.hasItems("productId", "page", "size", "rating", "hasImages", "hasComment")))
+            .andExpect(jsonPath("$.paths['/api/me/wishlist/{productId}'].post.requestBody").doesNotExist())
+            .andExpect(jsonPath("$.paths['/api/products'].get.security").doesNotExist());
+        mvc.perform(get("/api/me")).andExpect(status().isUnauthorized());
+        mvc.perform(post("/v3/api-docs")).andExpect(status().isUnauthorized());
+    }
     @Test void execute_shouldVerifyFullFlowPreservesContractsWithoutLeakingCredentials(CapturedOutput output) throws Exception {
         Pair p=register("Alice");
         assertThat(access(p)).isEqualTo(200);
