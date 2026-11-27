@@ -41,7 +41,7 @@ class CheckoutValidatorTest {
 
     @Test void reason_shouldRejectDisabledVariantBeforePriceAndQuantity() {
         UUID product=UUID.randomUUID(), variant=UUID.randomUUID();
-        var state=new CheckoutVariantState(variant,product,ProductStatus.PUBLISHED,false,BigDecimal.TEN,"P","S",Map.of());
+        var state=new CheckoutVariantState(variant,product,ProductStatus.PUBLISHED,false,BigDecimal.TEN,"P","S",Map.of(),null);
         assertThat(validator.reason(new CheckoutCartSeed.Row(1L,product,variant,1,true),state))
                 .isEqualTo(SkippedCheckoutItem.Reason.VARIANT_UNAVAILABLE);
     }
@@ -62,7 +62,7 @@ class CheckoutValidatorTest {
         assertThat(validator.reason(invalidQuantity,new CheckoutVariantState(variant,product,ProductStatus.PUBLISHED,null,"Product","SKU",Map.of())))
                 .isEqualTo(SkippedCheckoutItem.Reason.INVALID_QUANTITY);
         CheckoutCartSeed.Row valid=new CheckoutCartSeed.Row(1L,product,variant,1,true);
-        for (BigDecimal price : java.util.Arrays.asList(null,BigDecimal.ZERO,BigDecimal.valueOf(-1),BigDecimal.valueOf(0.5))) {
+        for (BigDecimal price : java.util.Arrays.asList(null,BigDecimal.valueOf(-1),BigDecimal.valueOf(0.5))) {
             assertThat(validator.reason(valid,new CheckoutVariantState(variant,product,ProductStatus.PUBLISHED,price,"Product","SKU",Map.of())))
                     .isEqualTo(SkippedCheckoutItem.Reason.INVALID_PRICE);
         }

@@ -1,5 +1,7 @@
 # Verification guide — UC-037
 
+On `draft/version-1`, Admin Catalog is V31 and Admin Inventory is V32. The recorded V28/V29 results below refer to the original admin branch.
+
 Use the focused commands for diagnosis and the unrestricted command for development acceptance.
 
 ## Prerequisites and commands
@@ -58,7 +60,7 @@ Created source and test files in this branch:
 - [AdminInventoryMutationService.java](../../demo/src/main/java/com/example/demo/inventory/service/AdminInventoryMutationService.java)
 - [AdminInventoryReadService.java](../../demo/src/main/java/com/example/demo/inventory/service/AdminInventoryReadService.java)
 - [AdminInventoryValidator.java](../../demo/src/main/java/com/example/demo/inventory/validator/AdminInventoryValidator.java)
-- [V29__admin_inventory_journal.sql](../../demo/src/main/resources/db/migration/V29__admin_inventory_journal.sql)
+- [V32__admin_inventory_journal.sql](../../demo/src/main/resources/db/migration/V32__admin_inventory_journal.sql)
 - [AdminInventoryFixtures.java](../../demo/src/test/java/com/example/demo/fixture/inventory/AdminInventoryFixtures.java)
 - [AdminInventorySecurityIT.java](../../demo/src/test/java/com/example/demo/inventory/controller/admin/AdminInventorySecurityIT.java)
 - [AdminInventoryStockStatusConverterTest.java](../../demo/src/test/java/com/example/demo/inventory/converter/AdminInventoryStockStatusConverterTest.java)

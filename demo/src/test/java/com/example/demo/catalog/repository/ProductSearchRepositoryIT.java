@@ -62,6 +62,18 @@ class ProductSearchRepositoryIT {
             var tab=CatalogFixtures.category();tab.setName("Tablet");em.persist(tab);tablet=tab.getId();});
     }
     @AfterEach void cleanup(){jdbc.execute("TRUNCATE product_image_uploads,product_images,catalog_source_links,wishlist_items,product_variants,products,brands,categories CASCADE");}
+    @Test
+    void salePricing_shouldFilterSortAndCountUsingEffectiveVariantAmounts() {
+        Owned sale = seed("Sale Laptop", null, "SALE-PRICE", 1000, 8, laptop);
+        Owned regular = seed("Regular Laptop", null, "REGULAR-PRICE", 900, 8, laptop);
+        jdbc.update("UPDATE products SET sale_percentage=20,sale_enabled=TRUE WHERE id=?", sale.product());
+        ProductCandidatePage filtered = search(Map.of("maxPrice", List.of("850")));
+        assertThat(ids(filtered)).containsExactly(sale.product());
+        assertThat(filtered.getTotalElements()).isEqualTo(1);
+        assertThat(filtered.getItems().getFirst().getDisplayAmount()).isEqualTo(BigInteger.valueOf(800));
+        assertThat(ids(search(Map.of("sort", List.of("price-asc")))))
+                .containsExactly(sale.product(), regular.product());
+    }
     record Owned(UUID product,UUID variant){}
     Owned seed(String name,String brand,String sku,int price,int ram,UUID cat){
         return tx.execute(s->{var f=CatalogFixtures.persistReadyProduct(em);f.product().setName(name);
@@ -266,7 +278,7 @@ class ProductSearchRepositoryIT {
             tx.executeWithoutResult(st->{
                 // Connection-local read view supplies legacy shapes;public rows/constraints are untouched.
                 // Documents above are fixed test literals,never request-derived SQL.
-                em.createNativeQuery("CREATE TEMP VIEW product_variants AS SELECT id,product_id,sku,enabled,selling_price,'"+document+"'::jsonb AS technical_specifications FROM public.product_variants").executeUpdate();
+                em.createNativeQuery("CREATE TEMP VIEW product_variants AS SELECT id,product_id,sku,enabled,selling_price,base_price,'"+document+"'::jsonb AS technical_specifications FROM public.product_variants").executeUpdate();
                 try{
                     assertThat(search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(filter))).getTotalElements()).isZero();
                     assertThat(search(Map.of("q",List.of("16 GB"))).getTotalElements()).isZero();
@@ -279,7 +291,7 @@ class ProductSearchRepositoryIT {
         String document=tools.jackson.databind.json.JsonMapper.builder().build().writeValueAsString(facts).replace("'","''");
         tx.executeWithoutResult(state -> {
             // Connection-local historical read snapshot, not an accepted Admin mutation or persisted repair.
-            em.createNativeQuery("CREATE TEMP VIEW product_variants AS SELECT id,product_id,sku,enabled,selling_price,CASE WHEN id='"
+            em.createNativeQuery("CREATE TEMP VIEW product_variants AS SELECT id,product_id,sku,enabled,selling_price,base_price,CASE WHEN id='"
                     +variant+"'::uuid THEN '"+document+"'::jsonb ELSE technical_specifications END AS technical_specifications FROM public.product_variants").executeUpdate();
             try{assertions.run();}finally{em.createNativeQuery("DROP VIEW pg_temp.product_variants").executeUpdate();}
         });

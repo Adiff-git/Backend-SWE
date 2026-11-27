@@ -21,7 +21,7 @@ The preserved final run passed957 Surefire and862 Failsafe tests with no failure
 
 ## Deployment boundary
 
-The official synthetic demo database remains V27/read-only. The current application maps V28 fields and may run Flyway at startup: **do not start it against that demo or an existing developer database without separate target authorization and G3 readiness**. G1 is verified only for the recorded frozen synthetic demo snapshot; G2 covers the corrected V28 disposable rehearsal/restore. They are not deployment permission. Read the rollout handoff before using Compose/application defaults; do not infer an authorized target from environment variables.
+The official synthetic demo database remains V27/read-only. The current application maps V31/V32 fields and may run Flyway at startup: **do not start it against that demo or an existing developer database without separate target authorization and G3 readiness**. G1 is verified only for the recorded frozen synthetic demo snapshot; The recorded G2 evidence covers the earlier V28 admin-branch rehearsal/restore. They are not deployment permission. Read the rollout handoff before using Compose/application defaults; do not infer an authorized target from environment variables.
 
 Use current decimal-string Product/taxonomy revisions for every existing-Product/child mutation. Reload on stale409; do not auto-retry. The legacy attachment route now also requires these revisions. Draft may have no variants; Publish requires valid Enabled choices and primary gallery, **not positive stock**. Restore is Archived→Draft; enable does not republish. Optional Brand/description omission, null and empty values have distinct semantics.
 

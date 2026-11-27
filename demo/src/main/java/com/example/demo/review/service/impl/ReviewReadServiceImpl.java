@@ -32,13 +32,15 @@ public class ReviewReadServiceImpl implements ReviewReadService {
     private final UserReviewReadService users;
     private final MediaService media;
     private final ReviewConverter converter;
+    private final com.example.demo.order.service.OrderReviewReadService orders;
     @Override @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
     public ReviewPage getReviews(UUID product, ReviewListRequest request) {
         catalog.getPublishedProductEntity(product);
-        long count = reviews.countByProductId(product);
+        long count = reviews.countMatching(product,request);
         long pages = count / request.getSize() + (count % request.getSize() == 0 ? 0 : 1);
         if (request.pageable().getOffset() >= count) return new ReviewPage(List.of(), request.getPage(), request.getSize(), count, pages);
-        List<ProductReview> rows = reviews.findByProductId(product, request.pageable()).getContent();
+        List<ProductReview> rows = reviews.findMatching(product,request);
+        var purchased=orders.getReviewOptionSnapshots(rows.stream().map(ProductReview::getOrderItemId).toList());
         List<Long> ids = rows.stream().map(ProductReview::getId).toList();
         Map<Long, List<UUID>> ordered = new HashMap<>();
         List<ProductReviewImage> imageRows = ids.isEmpty() ? List.of() : references.findByReviewIdInOrderByReviewIdAscDisplayOrderAsc(ids);
@@ -47,7 +49,7 @@ public class ReviewReadServiceImpl implements ReviewReadService {
         java.util.Set<UUID> imageIds = new java.util.LinkedHashSet<>(imageRows.stream().map(ProductReviewImage::getImageId).toList());
         authors.values().stream().map(ReviewAuthorSummary::getProfileImage).filter(java.util.Objects::nonNull).forEach(avatar -> imageIds.add(avatar.getId()));
         Map<UUID, ImageAccessResponse> images = media.getSafeAttachedImages(imageIds);
-        List<ReviewResponse> items = rows.stream().map(row -> converter.toResponse(row, ordered.getOrDefault(row.getId(), List.of()), images, authors.get(row.getAuthorId()))).toList();
+        List<ReviewResponse> items = rows.stream().map(row -> converter.toResponse(row, ordered.getOrDefault(row.getId(), List.of()), images, authors.get(row.getAuthorId()),purchased.get(row.getOrderItemId()))).toList();
         return new ReviewPage(items, request.getPage(), request.getSize(), count, pages);
     }
 }

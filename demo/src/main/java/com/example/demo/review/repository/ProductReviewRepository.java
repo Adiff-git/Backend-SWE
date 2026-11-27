@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 
-public interface ProductReviewRepository extends JpaRepository<ProductReview, Long> {
+public interface ProductReviewRepository extends JpaRepository<ProductReview, Long>, ProductReviewQueryRepository {
     org.springframework.data.domain.Page<ProductReview> findByProductId(java.util.UUID productId, org.springframework.data.domain.Pageable pageable);
     long countByProductId(java.util.UUID productId);
     @Query(value = "SELECT COUNT(*) AS reviewCount, AVG(rating::NUMERIC) AS averageRating FROM product_reviews WHERE product_id=:product", nativeQuery = true)
@@ -16,6 +16,9 @@ public interface ProductReviewRepository extends JpaRepository<ProductReview, Lo
         long getReviewCount();
         java.math.BigDecimal getAverageRating();
     }
+    @Query(value="SELECT rating,COUNT(*) AS ratingCount FROM product_reviews WHERE product_id=:product GROUP BY rating ORDER BY rating",nativeQuery=true)
+    java.util.List<RatingCount> countRatings(java.util.UUID product);
+    interface RatingCount { int getRating(); long getRatingCount(); }
     boolean existsByOrderItemId(Long item);
     Optional<ProductReview> findByIdAndAuthorId(Long id, Long author);
     @Lock(LockModeType.PESSIMISTIC_WRITE)

@@ -57,12 +57,12 @@ class CatalogCartReadServiceIT {
 
     @Test void getVariantStates_shouldKeepPreparationPricesUnavailableAndRejectPublishedZero() {
         UUID variant = transactions.execute(status -> CatalogFixtures.persistProduct(entities, ProductStatus.DRAFT).variant().getId());
-        jdbc.update("UPDATE product_variants SET selling_price=-1 WHERE id=?", variant);
-        assertThat(service.getVariantStates(List.of(variant)).get(variant).getAmount()).isNull();
-        jdbc.update("UPDATE product_variants SET selling_price=0 WHERE id=?", variant);
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> jdbc.update("UPDATE product_variants SET base_price=-1 WHERE id=?", variant))
+                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+        jdbc.update("UPDATE product_variants SET base_price=0 WHERE id=?", variant);
         assertThat(service.getVariantStates(List.of(variant)).get(variant).isPurchasable()).isFalse();
         UUID published=transactions.execute(status -> CatalogFixtures.persistReadyProduct(entities).variant().getId());
-        org.assertj.core.api.Assertions.assertThatThrownBy(() -> jdbc.update("UPDATE product_variants SET selling_price=0 WHERE id=?",published))
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> jdbc.update("UPDATE product_variants SET base_price=0 WHERE id=?",published))
                 .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
     }
 
@@ -70,7 +70,7 @@ class CatalogCartReadServiceIT {
         UUID variant = transactions.execute(status -> CatalogFixtures.persistReadyProduct(entities).variant().getId());
         for (String price : List.of("0.5", "NaN", "Infinity", "-Infinity")) {
             org.assertj.core.api.Assertions.assertThatThrownBy(() -> jdbc.update(
-                    "UPDATE product_variants SET selling_price=CAST(? AS numeric) WHERE id=?", price, variant))
+                    "UPDATE product_variants SET base_price=CAST(? AS numeric) WHERE id=?", price, variant))
                     .as(price).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
         }
     }

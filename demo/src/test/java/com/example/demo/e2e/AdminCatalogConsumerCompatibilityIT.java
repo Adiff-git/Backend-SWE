@@ -127,8 +127,8 @@ class AdminCatalogConsumerCompatibilityIT extends CheckoutIntegrationSupport {
         assertThatThrownBy(() -> variants.update(fixture.product(),fixture.variant(),price(before,BigDecimal.ZERO)))
                 .isInstanceOf(AdminCatalogException.class);
         assertThat(admin.get(fixture.product()).getVersion()).isEqualTo(before.getVersion());
-        assertThat(jdbc.queryForObject("SELECT selling_price FROM product_variants WHERE id=?",BigDecimal.class,fixture.variant())).isEqualByComparingTo("1000");
-        assertThatThrownBy(() -> jdbc.update("UPDATE product_variants SET selling_price=0 WHERE id=?",fixture.variant()))
+        assertThat(jdbc.queryForObject("SELECT base_price FROM product_variants WHERE id=?",BigDecimal.class,fixture.variant())).isEqualByComparingTo("1000");
+        assertThatThrownBy(() -> jdbc.update("UPDATE product_variants SET base_price=0 WHERE id=?",fixture.variant()))
                 .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
         transition(Action.UNPUBLISH);
         var unpublished=admin.get(fixture.product());

@@ -32,7 +32,7 @@ public class CheckoutValidator {
     public void matching(CheckoutReceipt receipt, Long address) {
         if (!address.equals(receipt.getRequestAddressId()) || !fingerprint(address).equals(receipt.getRequestFingerprint()))
             throw new CheckoutKeyConflictException();
-        if ((receipt.getReceiptVersion() != 1 && receipt.getReceiptVersion() != 2) || receipt.getResponseStatus() != 201) throw new IllegalStateException("Unsupported stored checkout receipt");
+        if ((receipt.getReceiptVersion() != 1 && receipt.getReceiptVersion() != 2 && receipt.getReceiptVersion() != 3) || receipt.getResponseStatus() != 201) throw new IllegalStateException("Unsupported stored checkout receipt");
     }
 
     public long fenceKey(Long owner, String key) { return ByteBuffer.wrap(digest("checkout:v1:"+owner+":"+key)).getLong(); }
@@ -48,7 +48,7 @@ public class CheckoutValidator {
         if (state.getProductId() == null || state.getStatus() == null) return SkippedCheckoutItem.Reason.PRODUCT_UNAVAILABLE;
         if (state.getStatus() != ProductStatus.PUBLISHED) return SkippedCheckoutItem.Reason.PRODUCT_NOT_FOR_SALE;
         if (row.getQuantity() < 1 || row.getQuantity() > 999) return SkippedCheckoutItem.Reason.INVALID_QUANTITY;
-        if (state.getPrice() == null || state.getPrice().signum() <= 0) return SkippedCheckoutItem.Reason.INVALID_PRICE;
+        if (state.getPrice() == null || state.getPrice().signum() < 0) return SkippedCheckoutItem.Reason.INVALID_PRICE;
         try { state.getPrice().toBigIntegerExact(); }
         catch (ArithmeticException invalid) { return SkippedCheckoutItem.Reason.INVALID_PRICE; }
         return null;

@@ -68,6 +68,7 @@ class CartServiceIT {
         assertThat(row.isPurchasable()).isFalse();
         assertThat(row.getAvailabilityReason()).isEqualTo("INSUFFICIENT_STOCK");
         assertThat(row.getUnitPrice()).isNotNull();
+        assertThat(row.getPricing()).isNull();
         assertThat(row.getSubtotal()).isNull();
         assertThat(row.getAvailability().getAvailableQuantity()).isEqualTo(2);
         assertThatThrownBy(() -> service.selectItem(owner, item, selection(true))).isInstanceOf(com.example.demo.cart.exception.CartStockConflictException.class);
@@ -125,6 +126,7 @@ class CartServiceIT {
         assertThat(row.getAvailability().getAvailableQuantity()).isZero();
         assertThat(row.getAvailability().getStatus()).isEqualTo("INVENTORY_UNAVAILABLE");
         assertThat(row.getUnitPrice()).isNotNull();
+        assertThat(row.getPricing()).isNull();
         assertThat(row.getSubtotal()).isNull();
         assertThat(service.selectItem(owner, item, selection(false)).getItems().getFirst().isSelected()).isFalse();
         service.removeItem(owner, item);
@@ -146,7 +148,7 @@ class CartServiceIT {
                 if (!continueRead.await(10, TimeUnit.SECONDS)) throw new IllegalStateException("Final cart observation timed out");
             }
             return call.callRealMethod();
-        }).when(catalogBoundary).getCartPresentation(org.mockito.ArgumentMatchers.anyCollection(), org.mockito.ArgumentMatchers.any());
+        }).when(catalogBoundary).getCartPresentation(org.mockito.ArgumentMatchers.any(com.example.demo.catalog.dto.response.PreparedOperationPricing.class), org.mockito.ArgumentMatchers.any());
         try (var worker = Executors.newSingleThreadExecutor()) {
             var changed = worker.submit(() -> {
                 Thread.currentThread().setName("inventory-cart-mutation");
@@ -229,7 +231,7 @@ class CartServiceIT {
     UUID sibling() {
         return transactions.execute(s -> {
             var parent = entities.find(com.example.demo.catalog.entity.Product.class, product);
-            var target = CatalogFixtures.variant(parent, java.util.Map.of("color", UUID.randomUUID().toString()), java.math.BigDecimal.TEN);
+            var target = CatalogFixtures.variant(parent, java.util.Map.of("choice", UUID.randomUUID().toString()), java.math.BigDecimal.TEN);
             entities.persist(target);
             entities.flush();
             com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(entities, target.getId(), 1000);
@@ -297,8 +299,8 @@ class CartServiceIT {
         UUID other = transactions.execute(s -> CatalogFixtures.persistReadyProduct(entities).variant().getId());
         com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, other, 1000);
         service.addItem(owner, addRequest(other, 3));
-        jdbc.update("UPDATE product_variants SET selling_price=100 WHERE id=?", variant);
-        jdbc.update("UPDATE product_variants SET selling_price=50 WHERE id=?", other);
+        jdbc.update("UPDATE product_variants SET base_price=100 WHERE id=?", variant);
+        jdbc.update("UPDATE product_variants SET base_price=50 WHERE id=?", other);
         assertThat(service.getCart(owner).getFinalTotal().getAmount()).isEqualTo(350);
         assertThat(service.selectItem(owner, first, selection(false)).getFinalTotal().getAmount()).isEqualTo(150);
         service.selectAll(owner, selection(true));
@@ -447,13 +449,15 @@ class CartServiceIT {
         assertThat(service.getCart(owner).getItems()).isEmpty();
     }
 
-    @Test void update_shouldRecoverUnavailableSourceThroughEligibleSiblingAndRejectRetainedInvalidPrice() {
+    @Test void update_shouldRejectInvalidBaseAndRecoverStockUnavailableSourceThroughEligibleSibling() {
         Long source = service.addItem(owner, addRequest(2)).getItemId();
         UUID target = sibling();
-        assertThatThrownBy(()->jdbc.update("UPDATE product_variants SET selling_price=-1 WHERE id=?",variant))
-                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
-        // Disabled preparation may retain a basic-valid negative price; Enabled sibling stays sellable.
-        jdbc.update("UPDATE product_variants SET enabled=FALSE,selling_price=-1 WHERE id=?",variant);
+        assertThatThrownBy(() -> jdbc.update("UPDATE product_variants SET base_price=-1 WHERE id=?", variant))
+                .hasStackTraceContaining("ck_product_variants_base_price");
+        com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(jdbc, variant, 0);
+        assertThatThrownBy(() -> service.updateQuantity(owner, source, quantity(3)))
+                .isInstanceOf(com.example.demo.cart.exception.CartStockConflictException.class);
+        jdbc.update("UPDATE product_variants SET enabled=FALSE WHERE id=?",variant);
         assertThatThrownBy(() -> service.updateQuantity(owner, source, quantity(3))).isInstanceOf(CartItemUnavailableException.class);
         var response = service.changeVariant(owner, source, variant(target));
         assertThat(response.getItems().getFirst().getId()).isEqualTo(source);

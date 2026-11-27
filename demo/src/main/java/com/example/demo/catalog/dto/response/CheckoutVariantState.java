@@ -16,14 +16,20 @@ public class CheckoutVariantState {
     String productName;
     String sku;
     Map<String, String> options;
+    VariantPricing pricing;
 
     public CheckoutVariantState(UUID variantId, UUID productId, ProductStatus status, BigDecimal price,
             String productName, String sku, Map<String, String> options) {
-        this(variantId, productId, status, true, price, productName, sku, options);
+        this(variantId, productId, status, price, productName, sku, options, null);
+    }
+
+    public CheckoutVariantState(UUID variantId, UUID productId, ProductStatus status, BigDecimal price,
+            String productName, String sku, Map<String, String> options, VariantPricing pricing) {
+        this(variantId, productId, status, true, price, productName, sku, options, pricing);
     }
 
     public CheckoutVariantState(UUID variantId, UUID productId, ProductStatus status, boolean enabled, BigDecimal price,
-            String productName, String sku, Map<String, String> options) {
+            String productName, String sku, Map<String, String> options, VariantPricing pricing) {
         this.enabled = enabled;
         this.variantId = variantId;
         this.productId = productId;
@@ -32,5 +38,6 @@ public class CheckoutVariantState {
         this.productName = productName;
         this.sku = sku;
         this.options = options == null ? Map.of() : Map.copyOf(options);
+        this.pricing = pricing;
     }
 }

@@ -20,6 +20,19 @@ class VoucherServiceIT extends CheckoutIntegrationSupport {
     @Autowired CartVoucherService wallet;
     @Autowired CheckoutService checkout;
     @MockitoSpyBean com.example.demo.storage.service.ImageUrlResolver images;
+    @MockitoSpyBean java.time.Clock eventClock;
+    @Test void wallet_shouldShareOnePreparedSaleAndVoucherEventThenRefreshNextRequest() {
+        long grant=grant(fixture.owner(),"SALE_EVENT");
+        Instant at=Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS),end=at.plusSeconds(1);
+        jdbc.update("UPDATE products SET sale_percentage=20,sale_enabled=TRUE,sale_ends_at=? WHERE id=?",java.sql.Timestamp.from(end),fixture.product());
+        jdbc.update("UPDATE vouchers SET minimum_subtotal=1800,valid_until=? WHERE id=(SELECT voucher_id FROM voucher_entitlements WHERE id=?)",java.sql.Timestamp.from(end),grant);
+        org.mockito.Mockito.doReturn(at,end.plusSeconds(1)).when(eventClock).instant();
+        org.mockito.Mockito.clearInvocations(eventClock);
+        assertThat(wallet.getWalletEntitlement(fixture.owner(),grant).getIneligibilityReason()).isEqualTo("MINIMUM_SUBTOTAL_NOT_MET");
+        org.mockito.Mockito.verify(eventClock).instant();
+        assertThat(wallet.getWalletEntitlement(fixture.owner(),grant).getIneligibilityReason()).isEqualTo("VOUCHER_EXPIRED");
+        assertThat(jdbc.queryForObject("SELECT state FROM voucher_entitlements WHERE id=?",String.class,grant)).isEqualTo("AVAILABLE");
+    }
     private long grant(long owner,String code) {
         return transactions.execute(tx -> {
             long definition=VoucherFixtures.definition(jdbc,code,"FIXED_AMOUNT",BigDecimal.TEN,null,null);

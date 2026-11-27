@@ -104,7 +104,7 @@ class ProductDetailRepositoryIT {
 	private UUID persistPublishedWithGallery() {
 		return transactions.execute(transaction -> {
 			ProductFixture fixture = CatalogFixtures.persistProduct(entityManager, ProductStatus.PUBLISHED);
-			ProductVariant second = CatalogFixtures.variant(fixture.product(), Map.of("color", "blue"),
+			ProductVariant second = CatalogFixtures.variant(fixture.product(), Map.of("choice", "blue"),
 					BigDecimal.valueOf(123456789));
 			entityManager.persist(second);
 			entityManager.persist(CatalogFixtures.image(fixture.product(), 3, false));

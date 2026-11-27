@@ -18,16 +18,25 @@ public class CartVariantState {
     String primaryImageUrl;
     com.example.demo.inventory.dto.response.InventoryAvailability availability;
 
+    VariantPricing pricing;
+
     public CartVariantState(UUID variantId, UUID productId, boolean published, BigInteger amount,
             String productName, String sku, Map<String, String> options, String primaryImageUrl,
             com.example.demo.inventory.dto.response.InventoryAvailability availability) {
-        this(variantId, productId, published, true, amount, productName, sku, options, primaryImageUrl, availability);
+        this(variantId, productId, published, amount, productName, sku, options, primaryImageUrl, availability, null);
+    }
+
+    public CartVariantState(UUID variantId, UUID productId, boolean published, BigInteger amount,
+            String productName, String sku, Map<String, String> options, String primaryImageUrl,
+            com.example.demo.inventory.dto.response.InventoryAvailability availability, VariantPricing pricing) {
+        this(variantId, productId, published, true, amount, productName, sku, options, primaryImageUrl, availability, pricing);
     }
 
     public CartVariantState(UUID variantId, UUID productId, boolean published, boolean enabled, BigInteger amount,
             String productName, String sku, Map<String, String> options, String primaryImageUrl,
-            com.example.demo.inventory.dto.response.InventoryAvailability availability) {
+            com.example.demo.inventory.dto.response.InventoryAvailability availability, VariantPricing pricing) {
         boolean visible = published && enabled;
+        this.pricing = visible ? pricing : null;
         this.variantId = variantId;
         this.productId = productId;
         this.published = published;
@@ -40,5 +49,11 @@ public class CartVariantState {
         this.availability = visible ? availability : null;
     }
 
-    public boolean isPurchasable() { return published && enabled && amount != null && amount.signum() > 0; }
+    public CartVariantState withObservation(boolean visible, String image,
+            com.example.demo.inventory.dto.response.InventoryAvailability availability) {
+        return new CartVariantState(variantId, productId, published && visible, enabled, amount, productName, sku,
+                options, image, availability, pricing);
+    }
+
+    public boolean isPurchasable() { return published && enabled && amount != null; }
 }

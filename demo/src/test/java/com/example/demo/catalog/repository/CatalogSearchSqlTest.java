@@ -19,13 +19,13 @@ class CatalogSearchSqlTest {
                 .keyword(new ProductSearchNormalizer().normalizeQuery("phone")).build();
         var sql=new CatalogSearchSql(new SpecificationFilterRegistry());
         var current=sql.recheck(criteria,.32,true,List.of(product),List.of(variant));
-        assertThat(current.sql()).contains(CatalogApplicabilitySql.registryCtes(),"v.enabled=true","v.selling_price>0",
+        assertThat(current.sql()).contains(CatalogApplicabilitySql.registryCtes(),"v.enabled=true",
                 "p.brand_id IN(:brands)","p.category_id IN(SELECT id FROM category_scope)",
-                "v.selling_price>=:minPrice","v.selling_price<=:maxPrice","v.id IN(:recheckVariants)",
+                "v.effective_price>=:minPrice","v.effective_price<=:maxPrice","v.id IN(:recheckVariants)",
                 "p.id IN(:recheckProducts)","i.active=true AND i.is_primary=true","FROM ranked_variants r");
         assertThat(current.sql()).doesNotContain("LIMIT :size","OFFSET :offset",product.toString(),variant.toString());
         assertThat(current.parameters()).containsEntry("recheckProducts",List.of(product)).containsEntry("recheckVariants",List.of(variant))
                 .containsEntry("minPrice",BigInteger.TEN).containsEntry("maxPrice",BigInteger.valueOf(1000));
-        assertThat(sql.compile(criteria,.32,true).sql()).contains("JOIN product_variants v", "v.enabled=true", "v.selling_price>0");
+        assertThat(sql.compile(criteria,.32,true).sql()).contains("JOIN product_variants v", "v.enabled=true");
     }
 }

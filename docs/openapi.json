@@ -6509,7 +6509,17 @@
                             "lineTotal": {
                               "amount": 200000,
                               "currency": "VND"
-                            }
+                            },
+                            "originalUnitPriceSnapshot": {
+                              "amount": 100000,
+                              "currency": "VND"
+                            },
+                            "directUnitDiscountSnapshot": {
+                              "amount": 0,
+                              "currency": "VND"
+                            },
+                            "directSaleSnapshot": null,
+                            "pricingInstantSnapshot": "2026-11-20T13:00:00.000000Z"
                           }
                         ],
                         "merchandiseTotal": {
@@ -6798,7 +6808,7 @@
       "get": {
         "operationId": "listProductReviews",
         "summary": "List reviews of a published product",
-        "description": "Anonymous access for PUBLISHED products only. Reject unknown/repeated query parameters. Empty out-of-range pages are valid. Stable sort uses id DESC for ties. Inactive authors remain visible as Former customer with null avatar. Reviews are not limited by the page used for the rating summary.",
+        "description": "Anonymous access for PUBLISHED products only. Reject unknown/repeated query parameters. Empty out-of-range pages are valid. Stable sort uses id DESC for ties. Inactive authors remain visible as Former customer with null avatar. Reviews are not limited by the page used for the rating summary. Filters combine by AND; totals are filtered and every sort appends ID descending. Unknown/repeated parameters are rejected. Rating summary remains product-wide.",
         "tags": [
           "Reviews"
         ],
@@ -6853,6 +6863,35 @@
               "default": "createdAt,desc"
             },
             "description": "Review ID descending breaks every tie."
+          },
+          {
+            "name": "rating",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "description": "Exactly one ASCII digit1-5. Empty, literal null, sets and repeated values are rejected."
+          },
+          {
+            "name": "hasImages",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Exactly lowercase true/false; omission means either state. Presence uses attached image references, independent of URL signing."
+          },
+          {
+            "name": "hasComment",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Exactly lowercase true/false; omission means either state. Presence requires a character outside the fixed Unicode White_Space set."
           }
         ],
         "security": [],
@@ -8734,6 +8773,22 @@
           },
           "availability": {
             "$ref": "#/components/schemas/InventoryAvailability"
+          },
+          "selectionOptions": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "pricing": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VariantPricing"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -8841,6 +8896,16 @@
                 "type": "null"
               }
             ]
+          },
+          "optionDimensions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionDimension"
+            },
+            "description": "Canonical code-point order; labels come from the lowest variant UUID. Empty for a sole default variant."
+          },
+          "priceRange": {
+            "$ref": "#/components/schemas/ProductPriceRange"
           }
         },
         "required": [
@@ -9257,6 +9322,19 @@
                 "type": "null"
               }
             ]
+          },
+          "pricing": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VariantPricing"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "priceRange": {
+            "$ref": "#/components/schemas/ProductPriceRange"
           }
         },
         "oneOf": [
@@ -10263,6 +10341,17 @@
                 "type": "null"
               }
             ]
+          },
+          "pricing": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VariantPricing"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Prepared price evidence only for eligible rows. Hidden/unavailable rows do not expose original/sale metadata; existing effective unit-price rules remain."
           }
         },
         "required": [
@@ -10592,6 +10681,47 @@
           },
           "lineTotal": {
             "$ref": "#/components/schemas/SellingPrice"
+          },
+          "originalUnitPriceSnapshot": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SellingPrice"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "directUnitDiscountSnapshot": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SellingPrice"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "directSaleSnapshot": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DirectSaleSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pricingInstantSnapshot": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -11007,7 +11137,7 @@
           "voucher"
         ],
         "additionalProperties": false,
-        "description": "All new purchases use this shape, with 0/null for no Voucher. Receipt version is internal, not an input selector or extra response field."
+        "description": "Immutable historical v2 replay shape. New purchases use v3; existing v1/v2 bodies remain unchanged."
       },
       "SkippedCheckoutItem": {
         "type": "object",
@@ -11047,6 +11177,9 @@
               },
               {
                 "$ref": "#/components/schemas/CheckoutOrderReceiptV2"
+              },
+              {
+                "$ref": "#/components/schemas/CheckoutOrderReceiptV3"
               }
             ]
           },
@@ -11277,6 +11410,20 @@
           "verifiedPurchase": {
             "type": "boolean",
             "const": true
+          },
+          "purchasedOptions": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Historic presentation labels from the purchased order item, not current catalog options. Null only when the historical source is absent; no order/customer/recipient identifiers."
           }
         },
         "required": [
@@ -11347,6 +11494,45 @@
             "maximum": 5,
             "multipleOf": 0.01,
             "description": "Committed reviews only. HALF_UP to two decimal places; null when reviewCount=0. JSON numeric formatting may omit trailing zeros."
+          },
+          "ratingDistribution": {
+            "type": "object",
+            "properties": {
+              "1": {
+                "type": "integer",
+                "format": "int64",
+                "minimum": 0
+              },
+              "2": {
+                "type": "integer",
+                "format": "int64",
+                "minimum": 0
+              },
+              "3": {
+                "type": "integer",
+                "format": "int64",
+                "minimum": 0
+              },
+              "4": {
+                "type": "integer",
+                "format": "int64",
+                "minimum": 0
+              },
+              "5": {
+                "type": "integer",
+                "format": "int64",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "additionalProperties": false,
+            "description": "Product-wide counts, independent of list filters; all five keys are present and their sum is reviewCount."
           }
         },
         "required": [
@@ -11370,6 +11556,313 @@
           "items"
         ],
         "additionalProperties": false
+      },
+      "OptionValue": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      "OptionDimension": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionValue"
+            }
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "values"
+        ],
+        "additionalProperties": false
+      },
+      "VariantPricing": {
+        "type": "object",
+        "properties": {
+          "originalPrice": {
+            "$ref": "#/components/schemas/SellingPrice"
+          },
+          "effectivePrice": {
+            "$ref": "#/components/schemas/SellingPrice"
+          },
+          "directUnitDiscount": {
+            "$ref": "#/components/schemas/SellingPrice"
+          },
+          "salePercentage": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100,
+                "multipleOf": 0.01
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pricedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "originalPrice",
+          "effectivePrice",
+          "directUnitDiscount",
+          "salePercentage",
+          "pricedAt"
+        ],
+        "additionalProperties": false,
+        "description": "One operation-local SQL pricing view. Effective = original - floor(original * active percentage / 100); inactive sale has null percentage and zero direct discount. Exact integral VND."
+      },
+      "ProductPriceRangeEndpoint": {
+        "type": "object",
+        "properties": {
+          "variantId": {
+            "$ref": "#/components/schemas/Uuid"
+          },
+          "pricing": {
+            "$ref": "#/components/schemas/VariantPricing"
+          }
+        },
+        "required": [
+          "variantId",
+          "pricing"
+        ],
+        "additionalProperties": false
+      },
+      "ProductPriceRange": {
+        "type": "object",
+        "properties": {
+          "minimum": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProductPriceRangeEndpoint"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "maximum": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProductPriceRangeEndpoint"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "minimum",
+          "maximum"
+        ],
+        "additionalProperties": false,
+        "description": "Each endpoint retains its own real variant UUID and original/effective pair; equal effective amounts use the lowest UUID. No fabricated price for an absent endpoint."
+      },
+      "DirectSaleSnapshot": {
+        "type": "object",
+        "properties": {
+          "percentage": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100,
+            "multipleOf": 0.01
+          },
+          "startsAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "endsAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "percentage",
+          "startsAt",
+          "endsAt"
+        ],
+        "additionalProperties": false
+      },
+      "CheckoutItemReceiptV3": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "maximum": 9223372036854775807
+          },
+          "productNameSnapshot": {
+            "type": "string"
+          },
+          "variantSkuSnapshot": {
+            "type": "string"
+          },
+          "variantOptionsSnapshot": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999
+          },
+          "unitPriceSnapshot": {
+            "$ref": "#/components/schemas/SellingPrice"
+          },
+          "lineTotal": {
+            "$ref": "#/components/schemas/SellingPrice"
+          },
+          "originalUnitPriceSnapshot": {
+            "$ref": "#/components/schemas/SellingPrice"
+          },
+          "directUnitDiscountSnapshot": {
+            "$ref": "#/components/schemas/SellingPrice"
+          },
+          "directSaleSnapshot": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DirectSaleSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pricingInstantSnapshot": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "productNameSnapshot",
+          "variantSkuSnapshot",
+          "variantOptionsSnapshot",
+          "quantity",
+          "unitPriceSnapshot",
+          "lineTotal",
+          "originalUnitPriceSnapshot",
+          "directUnitDiscountSnapshot",
+          "directSaleSnapshot",
+          "pricingInstantSnapshot"
+        ],
+        "additionalProperties": false,
+        "description": "Every current purchase has complete immutable evidence, including no-sale and zero-price items. Original minus direct unit discount equals paid unit price; pricing instant equals order placedAt. Voucher discount stays at order level."
+      },
+      "CheckoutOrderReceiptV3": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64",
+            "minimum": 1,
+            "maximum": 9223372036854775807
+          },
+          "orderNumber": {
+            "type": "string"
+          },
+          "placedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "const": "PENDING"
+          },
+          "recipientNameSnapshot": {
+            "type": "string"
+          },
+          "recipientPhoneSnapshot": {
+            "type": "string"
+          },
+          "deliveryAddressSnapshot": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CheckoutItemReceiptV3"
+            },
+            "minItems": 1
+          },
+          "merchandiseTotal": {
+            "$ref": "#/components/schemas/SellingPrice"
+          },
+          "payableTotal": {
+            "$ref": "#/components/schemas/SellingPrice"
+          },
+          "voucherDiscount": {
+            "$ref": "#/components/schemas/SellingPrice"
+          },
+          "voucher": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/VoucherSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "orderNumber",
+          "placedAt",
+          "status",
+          "recipientNameSnapshot",
+          "recipientPhoneSnapshot",
+          "deliveryAddressSnapshot",
+          "items",
+          "merchandiseTotal",
+          "payableTotal",
+          "voucherDiscount",
+          "voucher"
+        ],
+        "additionalProperties": false,
+        "description": "Current new-purchase shape. Pricing, order, voucher and reservation share one captured instant; later replay never enriches or recalculates the stored receipt."
       }
     },
     "responses": {
@@ -11641,10 +12134,11 @@
   "x-request-limiting": "No request quotas, cooldowns, failed-proof lockouts, 429 or Retry-After behavior. Proof expiry, single use and supersession are independent of request frequency.",
   "x-source-review": {
     "date": "2026-11-21",
-    "commit": "5585dddd12677a038de1e5645696cc51c6181e88",
+    "commit": "86512d7ab1e0bb262f783c05c0051d6be46b1983",
     "controllerSourceRoot": "demo/src/main/java/com/example/demo",
     "runtimeAccess": "Swagger UI and /v3/api-docs remain behind deny-all fallback; this is a standalone contract.",
     "scope": "Source/contract/schema validation only; no application changes or application test run for this documentation update.",
-    "branch": "draft/version-1"
+    "branch": "draft/version-1",
+    "workingTreeFeature": "013-variant-review-sale (uncommitted implementation)"
   }
 }

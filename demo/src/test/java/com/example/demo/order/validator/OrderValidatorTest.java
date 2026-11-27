@@ -37,7 +37,9 @@ class OrderValidatorTest {
     @Test void validateCreation_shouldKeepItemSumsAndRejectIncoherentDiscountOrSnapshot() {
         var amount = java.math.BigInteger.valueOf(100);
         var discount = java.math.BigInteger.TEN;
-        var item = new com.example.demo.order.dto.request.CreateOrderCommand.Item(1L,java.util.UUID.randomUUID(),java.util.UUID.randomUUID(),"Product","SKU",java.util.Map.of(),1,amount,amount);
+        var item = new com.example.demo.order.dto.request.CreateOrderCommand.Item(1L,java.util.UUID.randomUUID(),java.util.UUID.randomUUID(),"Product","SKU",java.util.Map.of(),1,amount,amount,
+            new com.example.demo.catalog.dto.response.VariantPricing(new com.example.demo.catalog.dto.response.SellingPrice(amount,"VND"),
+                new com.example.demo.catalog.dto.response.SellingPrice(amount,"VND"),new com.example.demo.catalog.dto.response.SellingPrice(java.math.BigInteger.ZERO,"VND"),null,OrderTestData.PLACED));
         var money = new com.example.demo.catalog.dto.response.SellingPrice(amount,"VND");
         var snapshot = new com.example.demo.voucher.dto.response.VoucherSnapshot(1L,1L,"TEN","Ten","FIXED_AMOUNT",java.math.BigDecimal.TEN,
             new com.example.demo.catalog.dto.response.SellingPrice(java.math.BigInteger.ZERO,"VND"),null,money,

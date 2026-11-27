@@ -34,16 +34,17 @@ public class CartVoucherTransactionServiceImpl implements CartVoucherTransaction
         carts.setLockTimeout(lockTimeoutMs + "ms");
         Cart cart = carts.findOwnedForUpdate(owner).orElse(null);
         List<CartItem> rows = cart == null ? List.of() : items.findByCartIdOrderByAddedAtDescIdAsc(cart.getId());
-        var states = catalog.getCartPresentation(rows.stream().map(CartItem::getProductVariantId).toList(), urls);
+        var prepared = catalog.preparePricing(rows.stream().map(CartItem::getProductVariantId).toList(), clock.instant().truncatedTo(ChronoUnit.MICROS));
+        var states = catalog.getCartPresentation(prepared, urls);
         // Calculate the merchandise base without evaluating or clearing an old selection.
-        CartResponse base = previews.getCartResponse(null, rows, states, false);
-        var quote = vouchers.getPreview(owner, grant, base.getSelectedSubtotal().getAmount(), clock.instant().truncatedTo(ChronoUnit.MICROS));
+        CartResponse base = previews.getCartResponse(null, rows, states, false,prepared.getPricingInstant());
+        var quote = vouchers.getPreview(owner, grant, base.getSelectedSubtotal().getAmount(), prepared.getPricingInstant());
         if ("VOUCHER_UNAVAILABLE".equals(quote.getReason())) throw new VoucherNotFoundException();
         if (quote.getReason()!=null) throw new VoucherNotApplicableException(quote.getReason());
         if (cart == null) throw new VoucherNotApplicableException("NO_ELIGIBLE_ITEMS");
         cart.selectVoucher(grant);
-        var finalStates = catalog.getCartPresentation(rows.stream().map(CartItem::getProductVariantId).toList(), urls);
-        return previews.getCartResponse(cart, rows, finalStates, true);
+        var finalStates = catalog.getCartPresentation(prepared, urls);
+        return previews.getCartResponse(cart, rows, finalStates, true,prepared.getPricingInstant());
     }
     @Override public void removeVoucher(Long owner) {
         validator.owner(owner); carts.setLockTimeout(lockTimeoutMs + "ms");

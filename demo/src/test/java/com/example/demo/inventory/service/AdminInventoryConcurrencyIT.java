@@ -384,7 +384,7 @@ class AdminInventoryConcurrencyIT extends PostgresTestSupport {
         UUID category = UUID.randomUUID(), product = UUID.randomUUID(), variant = UUID.randomUUID();
         jdbc.update("INSERT INTO categories(id,name) VALUES (?,?)", category, "Inventory " + category);
         jdbc.update("INSERT INTO products(id,category_id,name,status) VALUES (?,?,?,'DRAFT')", product, category, "Concurrency");
-        jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) VALUES (?,?,?,'{}',100)", variant, product, "INV_" + variant);
+        jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,base_price) VALUES (?,?,?,'{}',100)", variant, product, "INV_" + variant);
         return variant;
     }
 

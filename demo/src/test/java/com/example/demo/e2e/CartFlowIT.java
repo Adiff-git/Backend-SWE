@@ -48,7 +48,7 @@ class CartFlowIT {
         cleanup();
         UUID[] variants = transactions.execute(s -> {
             var product = CatalogFixtures.persistReadyProduct(entities);
-            var second = CatalogFixtures.variant(product.product(), Map.of("color", "blue"), BigDecimal.valueOf(50));
+            var second = CatalogFixtures.variant(product.product(), Map.of("choice", "blue"), BigDecimal.valueOf(50));
             entities.persist(second);
             return new UUID[]{product.variant().getId(), second.getId()};
         });

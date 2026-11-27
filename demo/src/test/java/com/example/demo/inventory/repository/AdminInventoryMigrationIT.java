@@ -12,26 +12,26 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class AdminInventoryMigrationIT {
     @ParameterizedTest
-    @ValueSource(ints = {0, 27, 28})
+    @ValueSource(ints = {0, 27, 31})
     void cleanAndStagedUpgradePreserveStockAndEnforceJournal(int baseline) throws Exception {
         String url = "jdbc:tc:postgresql:17-alpine:///inventory_" + UUID.randomUUID().toString().replace("-", "");
         UUID category = UUID.randomUUID(), product = UUID.randomUUID(), variant = UUID.randomUUID();
         try (var connection = DriverManager.getConnection(url, "test", "test"); var db = connection.createStatement()) {
             if (baseline != 0) flyway(url, baseline).migrate();
-            if (baseline == 0) flyway(url, 29).migrate();
+            if (baseline == 0) flyway(url, 32).migrate();
             connection.setAutoCommit(false);
             db.execute("INSERT INTO categories(id,name) VALUES ('" + category + "','Test category')");
             db.execute("INSERT INTO products(id,category_id,name,status) VALUES ('" + product + "','" + category + "','Test product','DRAFT')");
-            db.execute("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) VALUES ('"
+            db.execute("INSERT INTO product_variants(id,product_id,sku,option_combination," + (baseline == 27 ? "selling_price" : "base_price") + ") VALUES ('"
                     + variant + "','" + product + "','INV','{}',100)");
             db.execute("UPDATE inventory_balances SET stock=7");
             connection.commit();
             connection.setAutoCommit(true);
-            if (baseline == 27) flyway(url, 28).migrate();
-            String before = scalar(db, "SELECT string_agg(version||':'||checksum,',' ORDER BY installed_rank) FROM flyway_schema_history WHERE version::int <= 28");
-            if (baseline != 0) flyway(url, 29).migrate();
-            flyway(url, 29).validate();
-            assertThat(scalar(db, "SELECT string_agg(version||':'||checksum,',' ORDER BY installed_rank) FROM flyway_schema_history WHERE version::int <= 28")).isEqualTo(before);
+            if (baseline == 27) flyway(url, 31).migrate();
+            String before = scalar(db, "SELECT string_agg(version||':'||checksum,',' ORDER BY installed_rank) FROM flyway_schema_history WHERE version::int <= 31");
+            if (baseline != 0) flyway(url, 32).migrate();
+            flyway(url, 32).validate();
+            assertThat(scalar(db, "SELECT string_agg(version||':'||checksum,',' ORDER BY installed_rank) FROM flyway_schema_history WHERE version::int <= 31")).isEqualTo(before);
             assertThat(scalar(db, "SELECT stock||':'||reserved FROM inventory_balances")).isEqualTo("7:0");
             assertThat(scalar(db, "SELECT count(*) FROM admin_inventory_operations")).isEqualTo("0");
             db.execute("""

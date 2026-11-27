@@ -42,7 +42,7 @@ class AdminInventorySecurityIT extends PostgresTestSupport {
         UUID category = UUID.randomUUID(), product = UUID.randomUUID(), variant = UUID.randomUUID();
         jdbc.update("INSERT INTO categories(id,name) VALUES (?,?)", category, "Inventory " + category);
         jdbc.update("INSERT INTO products(id,category_id,name,status) VALUES (?,?,?,'DRAFT')", product, category, "Test inventory");
-        jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price,enabled) VALUES (?,?,?,'{}',100,false)", variant, product, "INV_" + variant);
+        jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,base_price,enabled) VALUES (?,?,?,'{}',100,false)", variant, product, "INV_" + variant);
         String detail = BASE + "/" + variant;
         String replenishment = detail + "/replenishments";
         String correction = detail + "/corrections";
@@ -75,7 +75,7 @@ class AdminInventorySecurityIT extends PostgresTestSupport {
         assertThat(found.path("items").get(0).path("variantEnabled").asBoolean()).isFalse();
         UUID missing = UUID.randomUUID(), otherProduct = UUID.randomUUID();
         jdbc.update("INSERT INTO products(id,category_id,name,status) VALUES (?,?,?,'DRAFT')", otherProduct, category, "Missing");
-        jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price,enabled) VALUES (?,?,?,?::jsonb,100,false)",
+        jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,base_price,enabled) VALUES (?,?,?,?::jsonb,100,false)",
                 missing, otherProduct, "INV_" + missing, "{\"model\":\"other\"}");
         jdbc.update("DELETE FROM inventory_balances WHERE product_variant_id=?", missing);
         var unavailable = json.readTree(call(HttpMethod.GET, BASE + "/" + missing, admin.token(), null, 200));

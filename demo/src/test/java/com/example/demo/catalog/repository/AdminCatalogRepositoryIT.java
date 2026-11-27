@@ -100,7 +100,7 @@ class AdminCatalogRepositoryIT {
         assertThatThrownBy(()->transactions.executeWithoutResult(status->{
             mutations.lockTaxonomy(false);mutations.lockVersions(Resource.PRODUCT,List.of(product),true);
             mutations.claim(Resource.PRODUCT,product,0);
-            jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) VALUES (?,?,'ROLLBACK-CHILD','{}',1000)",variant,product);
+            jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,base_price) VALUES (?,?,'ROLLBACK-CHILD','{}',1000)",variant,product);
             assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_balances WHERE original_variant_id=?",Integer.class,variant)).isOne();
             throw new IllegalStateException("Synthetic child commit failure");
         })).isInstanceOf(IllegalStateException.class);

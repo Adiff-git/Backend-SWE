@@ -24,23 +24,39 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductCatalogConverter {
 
+    public ProductDetail toPreparedDetail(com.example.demo.catalog.repository.CatalogPublicViews.Product product,List<com.example.demo.catalog.repository.CatalogDetailVariantRow> rows,
+            List<com.example.demo.catalog.repository.CatalogPublicViews.Image> images,Map<UUID,String> urls,
+            Map<UUID,com.example.demo.inventory.dto.response.InventoryAvailability> availability,
+            List<com.example.demo.catalog.dto.response.OptionDimension> dimensions,
+            Map<UUID,com.example.demo.catalog.dto.response.VariantPricing> prices,
+            com.example.demo.catalog.dto.response.ProductPriceRange range) {
+
+        List<VariantSummary> summaries=rows.stream().map(row -> {
+            var state=row.pricing();
+            Map<String,String> selection=row.canonicalLabels().entrySet().stream().collect(java.util.stream.Collectors.toUnmodifiableMap(
+                    Map.Entry::getKey,entry -> entry.getValue().get("value")));
+            return new VariantSummary(state.variantId(),state.sku(),state.options(),prices.get(state.variantId()).getEffectivePrice(),
+                    row.specifications(),availability.get(state.variantId()),selection,prices.get(state.variantId()));
+        }).toList();
+        return toPublicDetail(product, images, urls, summaries, dimensions, range);
+    }
+
+
     public ProductSummary toSummary(com.example.demo.catalog.repository.CatalogPublicViews.Product product,String url){
         return new ProductSummary(product.getId(),product.getName(),new CategorySummary(product.getCategoryId(),product.getCategoryName()),url);
     }
 
-    public ProductDetail toPublicDetail(com.example.demo.catalog.repository.CatalogPublicViews.Product product,
-            List<com.example.demo.catalog.repository.CatalogPublicViews.Variant> variants,
+    private ProductDetail toPublicDetail(com.example.demo.catalog.repository.CatalogPublicViews.Product product,
             List<com.example.demo.catalog.repository.CatalogPublicViews.Image> images,Map<UUID,String> urls,
-            Map<UUID,com.example.demo.inventory.dto.response.InventoryAvailability> availability){
+            List<VariantSummary> choices, List<com.example.demo.catalog.dto.response.OptionDimension> dimensions,
+            com.example.demo.catalog.dto.response.ProductPriceRange range){
         var gallery=images.stream().map(i -> new ProductImageSummary(i.getId(),urls.get(i.getId()),i.getAltText(),
                 i.getWidth(),i.getHeight(),i.getDisplayOrder(),i.getPrimaryImage())).toList();
-        var choices=variants.stream().map(v -> new VariantSummary(v.getId(),v.getSku(),Map.copyOf(v.getOptions()),
-                new SellingPrice(v.getPrice().toBigIntegerExact(),"VND"),Map.copyOf(v.getSpecifications()),availability.get(v.getId()))).toList();
         String primary=images.stream().filter(com.example.demo.catalog.repository.CatalogPublicViews.Image::getPrimaryImage)
                 .map(i -> urls.get(i.getId())).findFirst().orElse(null);
         var summary=toSummary(product,primary);
         BrandSummary brand=product.getBrandId()==null?null:new BrandSummary(product.getBrandId(),product.getBrandCode(),product.getBrandName());
-        return new ProductDetail(summary.getId(),summary.getName(),summary.getCategory(),primary,product.getDescription(),brand,choices,gallery);
+        return new ProductDetail(summary.getId(),summary.getName(),summary.getCategory(),primary,product.getDescription(),brand,choices,gallery,dimensions,range);
     }
 
 	public ProductSummary toSummary(Product product, String primaryImageUrl) {
@@ -52,14 +68,39 @@ public class ProductCatalogConverter {
     /** All values have already been selected/loaded by the owning workflow; no variant selection here. */
     public ProductListingItem toListingItem(ProductSummary summary, BigInteger displayAmount,
             UUID representativeVariantId, com.example.demo.inventory.dto.response.InventoryAvailability availability) {
+        return toListingItem(summary, displayAmount, representativeVariantId, availability, null,
+                new com.example.demo.catalog.dto.response.ProductPriceRange(null, null));
+    }
+
+    public ProductListingItem toListingItem(ProductSummary summary, BigInteger displayAmount,
+            UUID representativeVariantId, com.example.demo.inventory.dto.response.InventoryAvailability availability,
+            com.example.demo.catalog.dto.response.VariantPricing pricing,
+            com.example.demo.catalog.dto.response.ProductPriceRange range) {
         SellingPrice price = displayAmount == null ? null : new SellingPrice(displayAmount, "VND");
         return new ProductListingItem(summary.getId(), summary.getName(), summary.getCategory(),
-                summary.getPrimaryImageUrl(), price, representativeVariantId, availability);
+                summary.getPrimaryImageUrl(), price, representativeVariantId, availability, pricing, range);
     }
 
 	public ProductDetail toDetail(Product product, List<ProductVariant> variants,
 			List<ProductImage> images, Map<UUID, String> approvedImageUrls,
             Map<UUID, com.example.demo.inventory.dto.response.InventoryAvailability> availability) {
+        return toDetail(product, variants, images, approvedImageUrls, availability, List.of());
+    }
+
+    public ProductDetail toDetail(Product product, List<ProductVariant> variants,
+            List<ProductImage> images, Map<UUID, String> approvedImageUrls,
+            Map<UUID, com.example.demo.inventory.dto.response.InventoryAvailability> availability,
+            List<com.example.demo.catalog.dto.response.OptionDimension> optionDimensions) {
+        return toDetail(product, variants, images, approvedImageUrls, availability, optionDimensions, Map.of(),
+                new com.example.demo.catalog.dto.response.ProductPriceRange(null, null));
+    }
+
+    public ProductDetail toDetail(Product product, List<ProductVariant> variants,
+            List<ProductImage> images, Map<UUID, String> approvedImageUrls,
+            Map<UUID, com.example.demo.inventory.dto.response.InventoryAvailability> availability,
+            List<com.example.demo.catalog.dto.response.OptionDimension> optionDimensions,
+            Map<UUID, com.example.demo.catalog.dto.response.VariantPricing> prices,
+            com.example.demo.catalog.dto.response.ProductPriceRange range) {
 		String primaryImageUrl = null;
 		List<ProductImageSummary> imageSummaries = new ArrayList<>();
 		for (ProductImage image : images) {
@@ -74,14 +115,16 @@ public class ProductCatalogConverter {
 		for (ProductVariant variant : variants) {
 			variantSummaries.add(new VariantSummary(variant.getId(), variant.getSku(),
 					Map.copyOf(variant.getOptionCombination()),
-					new SellingPrice(variant.getSellingPrice().toBigIntegerExact(), "VND"),
-					Map.copyOf(variant.getTechnicalSpecifications()), availability.get(variant.getId())));
+                    prices.containsKey(variant.getId()) ? prices.get(variant.getId()).getEffectivePrice()
+                            : new SellingPrice(variant.getSellingPrice().toBigIntegerExact(), "VND"),
+					Map.copyOf(variant.getTechnicalSpecifications()), availability.get(variant.getId()),
+                    variant.getSelectionOptions(), prices.get(variant.getId())));
 		}
 		ProductSummary summary = toSummary(product, primaryImageUrl);
 		Brand brand = product.getBrand();
 		BrandSummary brandSummary = brand == null ? null
 				: new BrandSummary(brand.getId(), brand.getCode(), brand.getName());
 		return new ProductDetail(summary.getId(), summary.getName(), summary.getCategory(),
-				summary.getPrimaryImageUrl(), product.getDescription(), brandSummary, variantSummaries, imageSummaries);
+				summary.getPrimaryImageUrl(), product.getDescription(), brandSummary, variantSummaries, imageSummaries, optionDimensions, range);
 	}
 }

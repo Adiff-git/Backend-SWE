@@ -49,7 +49,7 @@ class CatalogCompatibilityAuditIT {
         assertThat(result).isZero();assertThat(output.toString()).contains("\"status\":\"COMPLETE\"");assertThat(rollbacks.get()).isEqualTo(1);
         assertThat(String.join("\n",statements)).doesNotContain("catalog_taxonomy_state","v.enabled","i.active","last_restored_at");
         try(Connection owner=database.owner()) { assertThat(V27AuditDatabase.fingerprint(owner)).isEqualTo(before); }
-        assertThat(Files.exists(Path.of("target/classes/db/migration/V28__admin_catalog_management.sql"))).isTrue();
+        assertThat(Files.exists(Path.of("target/classes/db/migration/V31__admin_catalog_management.sql"))).isTrue();
     }
     @Test void postgres_shouldEnforceBothLeastPrivilegeAndTransactionReadOnly() throws Exception {
         try(Connection reader=database.reader()) {

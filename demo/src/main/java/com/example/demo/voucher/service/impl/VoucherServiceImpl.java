@@ -38,16 +38,25 @@ public class VoucherServiceImpl implements VoucherService {
         BigInteger discount = reason == null ? calculator.calculate(base, definition.getDiscountType(), definition.getDiscountValue(), definition.getMaximumDiscount() == null ? null : definition.getMaximumDiscount().toBigIntegerExact()) : BigInteger.ZERO;
         return converter.toPreview(definition, grant, base, discount, reason);
     }
+    /** Compatibility entry: retain post-lock time sampling for callers without a prepared operation. */
     @Override @Transactional(isolation=Isolation.READ_COMMITTED)
     public com.example.demo.voucher.dto.response.CheckoutVoucherQuote lockCheckoutVoucher(Long owner, Long grant, BigInteger base) {
+        return lockCheckoutQuote(owner,grant,base,() -> clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS));
+    }
+    @Override @Transactional(isolation=Isolation.READ_COMMITTED)
+    public com.example.demo.voucher.dto.response.CheckoutVoucherQuote lockCheckoutVoucher(Long owner, Long grant, BigInteger base, Instant event) {
+        java.util.Objects.requireNonNull(event,"Captured pricing instant is required");
+        return lockCheckoutQuote(owner,grant,base,() -> event);
+    }
+    private com.example.demo.voucher.dto.response.CheckoutVoucherQuote lockCheckoutQuote(Long owner,Long grant,BigInteger base,java.util.function.Supplier<Instant> eventSource) {
         if (owner==null || owner<=0) throw new IdentityUnavailableException();
-        if (grant==null) return new com.example.demo.voucher.dto.response.CheckoutVoucherQuote(owner, null, base, clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS), null);
+        if (grant==null) return new com.example.demo.voucher.dto.response.CheckoutVoucherQuote(owner, null, base, eventSource.get(), null);
         var discovered = grants.findOwned(owner, grant).orElseThrow(() -> new com.example.demo.voucher.exception.CheckoutVoucherNotApplicableException("VOUCHER_UNAVAILABLE"));
         var definition = definitions.lockDefinition(discovered.getVoucherId()).orElseThrow(com.example.demo.voucher.exception.VoucherConflictException::new);
         var usage = usages.lockUsage(discovered.getVoucherId(), owner).orElseThrow(com.example.demo.voucher.exception.VoucherConflictException::new);
         var locked = grants.lockOwned(owner, grant).orElseThrow(() -> new com.example.demo.voucher.exception.CheckoutVoucherNotApplicableException("VOUCHER_UNAVAILABLE"));
         if (!discovered.getVoucherId().equals(locked.getVoucherId())) throw new com.example.demo.voucher.exception.VoucherConflictException();
-        Instant event = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+        Instant event=eventSource.get();
         String reason = validator.eligibilityReason(true, locked.getState(), definition.getEnabled(), definition.getValidFrom(), definition.getValidUntil(),
             definition.getRedeemedCount(), definition.getGlobalUsageLimit(), usage.getRedeemedCount(), definition.getPerCustomerUsageLimit(), base, definition.getMinimumSubtotal().toBigIntegerExact(), event);
         if (reason != null) throw new com.example.demo.voucher.exception.CheckoutVoucherNotApplicableException(reason);
@@ -72,20 +81,27 @@ public class VoucherServiceImpl implements VoucherService {
 
     @Override @Transactional(readOnly=true,isolation=Isolation.READ_COMMITTED)
     public com.example.demo.voucher.dto.response.VoucherWalletPage getWalletPage(Long owner,int page,int size,BigInteger base) {
+        return getWalletPage(owner,page,size,base,clock.instant());
+    }
+    @Override @Transactional(readOnly=true,isolation=Isolation.READ_COMMITTED)
+    public com.example.demo.voucher.dto.response.VoucherWalletPage getWalletPage(Long owner,int page,int size,BigInteger base,Instant event) {
         if(owner==null || owner<=0) throw new IdentityUnavailableException();
         if(page<0 || size<1 || size>100 || base==null || base.signum()<0) throw new com.example.demo.voucher.exception.InvalidVoucherRequestException();
         long count=definitions.countWallet(owner),offset=(long)page*size;
         if(offset>=count) return new com.example.demo.voucher.dto.response.VoucherWalletPage(java.util.List.of(),page,size,count);
-        Instant event=clock.instant();
         var rows=definitions.findWalletPage(owner,offset,size).stream().map(row -> converter.toWallet(row,walletReason(row,base,event))).toList();
         return new com.example.demo.voucher.dto.response.VoucherWalletPage(rows,page,size,count);
     }
     @Override @Transactional(readOnly=true,isolation=Isolation.READ_COMMITTED)
     public com.example.demo.voucher.dto.response.VoucherWalletDetail getWalletEntitlement(Long owner,Long grant,BigInteger base) {
+        return getWalletEntitlement(owner,grant,base,clock.instant());
+    }
+    @Override @Transactional(readOnly=true,isolation=Isolation.READ_COMMITTED)
+    public com.example.demo.voucher.dto.response.VoucherWalletDetail getWalletEntitlement(Long owner,Long grant,BigInteger base,Instant event) {
         if(owner==null || owner<=0) throw new IdentityUnavailableException();
         if(grant==null || grant<=0 || base==null || base.signum()<0) throw new com.example.demo.voucher.exception.InvalidVoucherRequestException();
         var row=definitions.findWalletDetail(owner,grant).orElseThrow(com.example.demo.voucher.exception.VoucherNotFoundException::new);
-        return new com.example.demo.voucher.dto.response.VoucherWalletDetail(converter.toWallet(row,walletReason(row,base,clock.instant())),row.getEntitlementState(),row.getConsumedAt());
+        return new com.example.demo.voucher.dto.response.VoucherWalletDetail(converter.toWallet(row,walletReason(row,base,event)),row.getEntitlementState(),row.getConsumedAt());
     }
     private String walletReason(VoucherRepository.WalletRow row,BigInteger base,Instant event) {
         return validator.eligibilityReason(true,row.getEntitlementState(),row.getEnabled(),row.getValidFrom(),row.getValidUntil(),row.getRedeemedCount(),row.getGlobalUsageLimit(),row.getCustomerRedeemedCount(),row.getPerCustomerUsageLimit(),base,row.getMinimumSubtotal().toBigIntegerExact(),event);

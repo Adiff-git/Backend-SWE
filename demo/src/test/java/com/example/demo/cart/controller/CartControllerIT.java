@@ -86,7 +86,7 @@ class CartControllerIT {
         JsonNode second = body(add(user.access(), 3, 200));
         assertThat(second.get("items").get(0).get("id")).isEqualTo(first.get("items").get(0).get("id"));
         assertThat(second.get("selectedTotalQuantity").asLong()).isEqualTo(5);
-        jdbc.update("UPDATE product_variants SET selling_price=50 WHERE id=?", variant);
+        jdbc.update("UPDATE product_variants SET base_price=50 WHERE id=?", variant);
         assertThat(body(mvc.perform(get("/api/me/cart").header("Authorization", user.access()))
                 .andExpect(status().isOk()).andReturn()).get("finalTotal").get("amount").asLong()).isEqualTo(250);
         Credentials other = register();
@@ -100,7 +100,7 @@ class CartControllerIT {
         jdbc.update("UPDATE cart_items SET selected=FALSE WHERE id=?", source);
         UUID sibling = transactions.execute(s -> {
             var parent = entities.find(com.example.demo.catalog.entity.ProductVariant.class, variant).getProduct();
-            var target = CatalogFixtures.variant(parent, Map.of("color", "sibling"), java.math.BigDecimal.TEN);
+            var target = CatalogFixtures.variant(parent, Map.of("choice", "sibling"), java.math.BigDecimal.TEN);
             entities.persist(target);
             entities.flush();
             com.example.demo.fixture.inventory.InventoryFixtures.supplyStock(entities, target.getId(), 1000);

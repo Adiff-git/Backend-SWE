@@ -42,7 +42,7 @@ class CatalogMigrationsIT {
 	void migrateSchema() throws SQLException {
 		containerAnchor = openConnection();
 		Flyway.configure().dataSource(JDBC_URL, USERNAME, PASSWORD)
-				.locations("classpath:db/migration").target("27").load().migrate(); // Historical pre-Admin contract.
+				.locations("classpath:db/migration").target("30").load().migrate(); // Historical pre-Admin contract.
 	}
 
 	@AfterAll
@@ -62,8 +62,8 @@ class CatalogMigrationsIT {
 	@Test
 	void migrations_shouldPreserveCatalogVersionsAndDeferredTriggers() throws SQLException {
 		try (Connection connection = openConnection()) {
-			assertThat(count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success")).isEqualTo(27);
-			assertThat(count(connection, "SELECT COUNT(DISTINCT version) FROM flyway_schema_history WHERE success")).isEqualTo(27);
+			assertThat(count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success")).isEqualTo(30);
+			assertThat(count(connection, "SELECT COUNT(DISTINCT version) FROM flyway_schema_history WHERE success")).isEqualTo(30);
 			assertThat(count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version IN ('1','2','3','4','5','6','7','8','9','10','11','12') AND success")).isEqualTo(12);
 			assertThat(count(connection, "SELECT COUNT(*) FROM pg_trigger WHERE tgname IN "
 					+ "('ct_products_variant_integrity', 'ct_product_variants_integrity', "
@@ -253,17 +253,17 @@ class CatalogMigrationsIT {
 					"other-" + UUID.randomUUID(), "{\"color\":\"variant0\"}", BigDecimal.ONE),
 					"23505", "uk_product_variants_product_id_option_combination");
 			assertConstraintFailure(() -> execute(connection,
-					"INSERT INTO product_variants (id, product_id, sku, option_combination, selling_price) "
+					"INSERT INTO product_variants (id, product_id, sku, option_combination, base_price) "
 							+ "VALUES (?, ?, ?, '{}'::JSONB, 1.5)",
 					UUID.randomUUID(), seed.productId(), "fraction-" + UUID.randomUUID()),
-					"23514", "ck_product_variants_price_whole_finite");
+					"23514", "ck_product_variants_base_price");
 			assertConstraintFailure(() -> execute(connection,
-					"INSERT INTO product_variants (id, product_id, sku, option_combination, selling_price) "
+					"INSERT INTO product_variants (id, product_id, sku, option_combination, base_price) "
 							+ "VALUES (?, ?, ?, '{}'::JSONB, 'NaN'::NUMERIC)",
 					UUID.randomUUID(), seed.productId(), "nan-" + UUID.randomUUID()),
-					"23514", "ck_product_variants_price_whole_finite");
-			insertVariant(connection, seed.productId(), "negative-" + UUID.randomUUID(),
-					"{\"color\":\"other\"}", BigDecimal.valueOf(-1));
+					"23514", "ck_product_variants_base_price");
+			assertConstraintFailure(() -> insertVariant(connection, seed.productId(), "negative-" + UUID.randomUUID(),
+					"{\"color\":\"other\"}", BigDecimal.valueOf(-1)), "23514", "ck_product_variants_base_price");
 		}
 	}
 
@@ -284,7 +284,7 @@ class CatalogMigrationsIT {
 					"UPDATE product_variants SET option_combination = '[]'::JSONB WHERE id = ?",
 					seed.variantIds().get(0))).isInstanceOf(SQLException.class);
 			assertThatThrownBy(() -> execute(connection,
-					"UPDATE product_variants SET selling_price = 'Infinity'::NUMERIC WHERE id = ?",
+					"UPDATE product_variants SET base_price = 'Infinity'::NUMERIC WHERE id = ?",
 					seed.variantIds().get(0))).isInstanceOf(SQLException.class);
 			execute(connection,
 				"UPDATE product_variants SET option_combination = '{\"color\":\"red\",\"size\":\"m\"}'::JSONB "
@@ -547,7 +547,7 @@ class CatalogMigrationsIT {
 			String options, BigDecimal price) throws SQLException {
 		UUID id = UUID.randomUUID();
 		execute(connection, "INSERT INTO product_variants "
-				+ "(id, product_id, sku, option_combination, selling_price) VALUES (?, ?, ?, ?::JSONB, ?)",
+				+ "(id, product_id, sku, option_combination, base_price) VALUES (?, ?, ?, ?::JSONB, ?)",
 				id, productId, sku, options, price);
 		return id;
 	}

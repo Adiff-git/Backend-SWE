@@ -41,7 +41,11 @@ public class ProductSearchRepositoryImpl implements ProductSearchRepository {
             Object[] row=(Object[])value;
             if(java.util.Objects.equals(expected.get(row[0]),row[1]))result.add(new CurrentCandidate(
                     (java.util.UUID)row[0],(java.util.UUID)row[1],((BigDecimal)row[2]).toBigIntegerExact(),
-                    (String)row[3],(java.util.UUID)row[4],(String)row[5],(String)row[6]));
+                    (String)row[3],(java.util.UUID)row[4],(String)row[5],(String)row[6],
+                    new ProductCandidatePage.Candidate((java.util.UUID)row[0], (java.util.UUID)row[1], integer(row[2]),
+                            integer(row[7]), integer(row[8]), (BigDecimal)row[9], row[9]==null?null:instant(row[10]),
+                            row[9]==null?null:instant(row[11]),criteria.getPricingInstant(), (java.util.UUID)row[12],
+                            integer(row[13]), integer(row[14]), integer(row[15]))));
         }
         return java.util.List.copyOf(result);
     }
@@ -71,7 +75,9 @@ public class ProductSearchRepositoryImpl implements ProductSearchRepository {
             if(Boolean.TRUE.equals(first[4])){throw new InvalidCatalogRequestException("Unsupported specification filters for selected category");}
             var items=new ArrayList<ProductCandidatePage.Candidate>();
             for(Object result:rows){var row=(Object[])result;if(row[0]!=null){items.add(new ProductCandidatePage.Candidate(
-                    (java.util.UUID)row[0],(java.util.UUID)row[1],row[2]==null?null:((BigDecimal)row[2]).toBigIntegerExact()));}}
+                    (java.util.UUID)row[0],(java.util.UUID)row[1],integer(row[2]),integer(row[5]),integer(row[6]),(BigDecimal)row[7],
+                    row[7]==null?null:instant(row[8]),row[7]==null?null:instant(row[9]),criteria.getPricingInstant(),
+                    (java.util.UUID)row[10],integer(row[11]),integer(row[12]),integer(row[13])));}}
             return new ProductCandidatePage(items,((Number)first[3]).longValue());
         }catch(jakarta.persistence.PersistenceException exception){
             if(keyword){for(Throwable cause=exception;cause!=null;cause=cause.getCause()){
@@ -82,4 +88,15 @@ public class ProductSearchRepositoryImpl implements ProductSearchRepository {
             }}throw exception;
         }
     }
+    private static java.math.BigInteger integer(Object value) {
+        return value == null ? null : ((BigDecimal)value).toBigIntegerExact();
+    }
+    private static java.time.Instant instant(Object value) {
+        if (value == null) return null;
+        if (value instanceof java.time.Instant at) return at;
+        if (value instanceof java.time.OffsetDateTime at) return at.toInstant();
+        if (value instanceof java.sql.Timestamp at) return at.toInstant();
+        throw new IllegalStateException("Unsupported pricing timestamp projection");
+    }
+
 }

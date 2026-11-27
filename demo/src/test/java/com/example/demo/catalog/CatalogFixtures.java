@@ -75,7 +75,7 @@ public final class CatalogFixtures {
 		variant.setProduct(product);
 		variant.setSku("SKU-" + UUID.randomUUID());
 		variant.setOptionCombination(options);
-		variant.setSellingPrice(price);
+		variant.setBasePrice(price);
 		return variant;
 	}
 

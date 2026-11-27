@@ -11,12 +11,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 @Service @RequiredArgsConstructor
 public class CartWalletReadServiceImpl implements CartWalletReadService {
-    private final CartRepository carts;private final CartItemRepository items;private final CatalogCartReadService catalog;private final CartPreviewService previews;
+    private final CartRepository carts;private final CartItemRepository items;private final CatalogCartReadService catalog;private final CartPreviewService previews; private final java.time.Clock clock;
     @Override @Transactional(readOnly=true)
-    public BigInteger getEligibleSubtotal(Long owner) {
+    public BigInteger getEligibleSubtotal(Long owner) { return getPricingContext(owner).getSubtotal(); }
+    @Override @Transactional(readOnly=true)
+    public com.example.demo.cart.dto.response.CartWalletContext getPricingContext(Long owner) {
         var cart=carts.findByUserId(owner).orElse(null);
         var rows=cart==null ? List.<com.example.demo.cart.entity.CartItem>of() : items.findByCartIdOrderByAddedAtDescIdAsc(cart.getId());
-        var states=catalog.getVariantStates(rows.stream().map(com.example.demo.cart.entity.CartItem::getProductVariantId).toList());
-        return previews.getCartResponse(null,rows,states,false).getSelectedSubtotal().getAmount();
+        var prepared=catalog.preparePricing(rows.stream().map(com.example.demo.cart.entity.CartItem::getProductVariantId).toList(),clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS));
+        var states=catalog.getVariantStates(prepared);
+        var at=prepared.getPricingInstant();
+        return new com.example.demo.cart.dto.response.CartWalletContext(previews.getCartResponse(null,rows,states,false,at).getSelectedSubtotal().getAmount(),at);
     }
 }

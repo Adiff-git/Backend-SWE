@@ -46,4 +46,16 @@ public class OrderItem {
     private BigDecimal unitPriceSnapshot;
     @Column(nullable = false, updatable = false, columnDefinition = "NUMERIC")
     private BigDecimal lineTotal;
+    @Column(updatable = false, columnDefinition = "NUMERIC")
+    private BigDecimal originalUnitPriceSnapshot;
+    @Column(updatable = false, columnDefinition = "NUMERIC")
+    private BigDecimal directUnitDiscountSnapshot;
+    @Column(updatable = false, columnDefinition = "NUMERIC")
+    private BigDecimal directSalePercentageSnapshot;
+    @Column(updatable = false)
+    private java.time.Instant directSaleStartsAtSnapshot;
+    @Column(updatable = false)
+    private java.time.Instant directSaleEndsAtSnapshot;
+    @Column(updatable = false)
+    private java.time.Instant pricingInstantSnapshot;
 }

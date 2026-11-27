@@ -54,23 +54,24 @@ class AdminInventoryUpgradeIT {
                 jdbc.update("UPDATE inventory_balances SET stock=stock-1,reserved=reserved-2 WHERE id=?", balance);
             });
             assertThat(jdbc.queryForObject("SELECT state FROM inventory_reservations WHERE order_id=?", String.class, active)).isEqualTo("ACTIVE");
-            var before28 = protectedRows(jdbc);
-            Flyway.configure().dataSource(source).target("28").load().migrate();
-            assertThat(protectedRows(jdbc)).isEqualTo(before28);
+            Flyway.configure().dataSource(source).target("30").load().migrate();
+            var beforeCatalogAdmin = protectedRows(jdbc);
+            Flyway.configure().dataSource(source).target("31").load().migrate();
+            assertThat(protectedRows(jdbc)).isEqualTo(beforeCatalogAdmin);
             assertThat(jdbc.queryForObject("SELECT enabled FROM product_variants WHERE id=?", Boolean.class, variant)).isTrue();
             jdbc.update("UPDATE product_variants SET enabled=false WHERE id=?", variant);
             for (ProductStatus lifecycle : ProductStatus.values()) {
                 AdminInventoryFixtures.variant(jdbc, transactions, lifecycle, true);
                 AdminInventoryFixtures.variant(jdbc, transactions, lifecycle, false);
             }
-            var before29 = protectedRows(jdbc);
+            var beforeInventoryAdmin = protectedRows(jdbc);
             var checksums = history(jdbc);
 
             String user = database.getUsername(), db = database.getDatabaseName();
-            assertThat(database.execInContainer("pg_dump", "-U", user, "-Fc", "-f", "/tmp/uc037-v28.dump", db).getExitCode()).isZero();
+            assertThat(database.execInContainer("pg_dump", "-U", user, "-Fc", "-f", "/tmp/uc037-v31.dump", db).getExitCode()).isZero();
             assertThat(database.execInContainer("createdb", "-U", user, "uc037_restore").getExitCode()).isZero();
             var restore = database.execInContainer("sh", "-ec", """
-                    pg_restore --no-owner --no-acl --file=/tmp/uc037-restore.sql /tmp/uc037-v28.dump
+                    pg_restore --no-owner --no-acl --file=/tmp/uc037-restore.sql /tmp/uc037-v31.dump
                     old="SELECT pg_catalog.set_config('search_path', '', false);"
                     test "$(grep -Fxc "$old" /tmp/uc037-restore.sql)" -eq 1
                     sed "s/^SELECT pg_catalog.set_config('search_path', '', false);$/SELECT pg_catalog.set_config('search_path', 'pg_catalog,public', false);/" /tmp/uc037-restore.sql > /tmp/uc037-restore-reviewed.sql
@@ -82,7 +83,7 @@ class AdminInventoryUpgradeIT {
                     user, database.getPassword());
             var restored = new JdbcTemplate(clone);
             assertThat(history(restored)).isEqualTo(checksums);
-            assertThat(protectedRows(restored)).isEqualTo(before29);
+            assertThat(protectedRows(restored)).isEqualTo(beforeInventoryAdmin);
             var forcedFailure = new org.flywaydb.core.api.callback.Callback() {
                 @Override public boolean supports(org.flywaydb.core.api.callback.Event event,
                         org.flywaydb.core.api.callback.Context context) {
@@ -92,17 +93,17 @@ class AdminInventoryUpgradeIT {
                         org.flywaydb.core.api.callback.Context context) { return true; }
                 @Override public void handle(org.flywaydb.core.api.callback.Event event,
                         org.flywaydb.core.api.callback.Context context) {
-                    throw new org.flywaydb.core.api.FlywayException("Injected V29 rollback");
+                    throw new org.flywaydb.core.api.FlywayException("Injected V32 rollback");
                 }
                 @Override public String getCallbackName() { return "uc037-injected-rollback"; }
             };
-            assertThatThrownBy(() -> Flyway.configure().dataSource(clone).target("29").callbacks(forcedFailure)
-                    .load().migrate()).hasStackTraceContaining("Injected V29 rollback");
+            assertThatThrownBy(() -> Flyway.configure().dataSource(clone).target("32").callbacks(forcedFailure)
+                    .load().migrate()).hasStackTraceContaining("Injected V32 rollback");
             assertThat(restored.queryForObject("SELECT to_regclass('admin_inventory_operations') IS NULL", Boolean.class)).isTrue();
-            assertThat(restored.queryForObject("SELECT max(version::int) FROM flyway_schema_history", Integer.class)).isEqualTo(28);
-            assertThat(protectedRows(restored)).isEqualTo(before29);
-            Flyway.configure().dataSource(clone).target("29").load().migrate();
-            assertThat(protectedRows(restored)).isEqualTo(before29);
+            assertThat(restored.queryForObject("SELECT max(version::int) FROM flyway_schema_history", Integer.class)).isEqualTo(31);
+            assertThat(protectedRows(restored)).isEqualTo(beforeInventoryAdmin);
+            Flyway.configure().dataSource(clone).target("32").load().migrate();
+            assertThat(protectedRows(restored)).isEqualTo(beforeInventoryAdmin);
             assertThat(history(restored)).isEqualTo(checksums);
             assertThat(restored.queryForObject("SELECT count(*) FROM admin_inventory_operations", Long.class)).isZero();
         }
@@ -127,7 +128,7 @@ class AdminInventoryUpgradeIT {
 
     private List<String> history(JdbcTemplate jdbc) {
         return jdbc.queryForList("""
-                SELECT version||':'||checksum FROM flyway_schema_history WHERE version::int <= 28 ORDER BY installed_rank
+                SELECT version||':'||checksum FROM flyway_schema_history WHERE version::int <= 31 ORDER BY installed_rank
                 """, String.class);
     }
 }

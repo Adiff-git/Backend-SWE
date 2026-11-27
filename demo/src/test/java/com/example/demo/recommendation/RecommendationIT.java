@@ -80,6 +80,20 @@ class RecommendationIT {
   }
 
   @Test
+  void similarCardsShouldExposeTheSamePreparedEffectiveSalePriceAsCatalogCards() throws Exception {
+    jdbc.update("UPDATE product_variants SET base_price=1000000 WHERE product_id=?",second);
+    jdbc.update("UPDATE products SET sale_percentage=20,sale_enabled=TRUE WHERE id=?",second);
+    doReturn(List.of(second)).when(ai).rank(any());
+    mvc.perform(get("/api/products/"+first+"/similar"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.items[0].id").value(second.toString()))
+        .andExpect(jsonPath("$.items[0].displayPrice.amount").value(800000))
+        .andExpect(jsonPath("$.items[0].pricing.originalPrice.amount").value(1000000))
+        .andExpect(jsonPath("$.items[0].pricing.effectivePrice.amount").value(800000))
+        .andExpect(jsonPath("$.items[0].priceRange.maximum.pricing.effectivePrice.amount").value(800000));
+  }
+
+  @Test
   void similarCardsUseCurrentRepresentativeVariantInventory() throws Exception {
     UUID variant = store.catalog().stream()
         .filter(row -> row.candidate().productId().equals(second)).findFirst().orElseThrow().variantId();
@@ -198,7 +212,7 @@ class RecommendationIT {
             .orElseThrow();
     UUID variant = UUID.randomUUID();
     jdbc.update(
-        "INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price)"
+        "INSERT INTO product_variants(id,product_id,sku,option_combination,base_price)"
             + " VALUES(?,?,?,'{\"choice\":\"cheaper\"}',500)",
         variant,
         first,
@@ -230,7 +244,7 @@ class RecommendationIT {
     mvc.perform(get("/api/recommendations").param("limit", "1"))
         .andExpect(jsonPath("$.items[0].id").value(first.toString()))
         .andExpect(jsonPath("$.items[0].representativeVariantId").value(variant.toString()));
-    assertThatThrownBy(() -> jdbc.update("UPDATE product_variants SET selling_price=-1 WHERE product_id=?",second))
+    assertThatThrownBy(() -> jdbc.update("UPDATE product_variants SET base_price=-1 WHERE product_id=?",second))
         .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
     assertThat(store.catalog().stream().filter(r -> r.candidate().productId().equals(second)).findFirst().orElseThrow().candidate().price())
         .isEqualByComparingTo("1000");
@@ -343,7 +357,7 @@ class RecommendationIT {
                   + " generate_series(1,3001) i",
               category);
           jdbc.execute(
-              "INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price)"
+              "INSERT INTO product_variants(id,product_id,sku,option_combination,base_price)"
                   + " SELECT"
                   + " md5('capacity-v-'||i)::uuid,md5('capacity-'||i)::uuid,'capacity-'||i,'{}',1"
                   + " FROM generate_series(1,3001) i");

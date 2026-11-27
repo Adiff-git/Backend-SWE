@@ -5,6 +5,7 @@ import java.util.Map;
 import lombok.Value;
 
 @Value
+@lombok.experimental.NonFinal
 public class CheckoutItemReceipt {
     Long id;
     String productNameSnapshot;

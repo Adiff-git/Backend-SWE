@@ -17,7 +17,7 @@ class AdminInventoryQueryBudgetIT {
                 .withCommand("postgres", "-c", "shared_preload_libraries=pg_stat_statements")) {
             database.start();
             var source = new DriverManagerDataSource(database.getJdbcUrl(), database.getUsername(), database.getPassword());
-            Flyway.configure().dataSource(source).target("29").load().migrate();
+            Flyway.configure().dataSource(source).target("32").load().migrate();
             var jdbc = new JdbcTemplate(source);
             jdbc.execute("CREATE EXTENSION pg_stat_statements");
             var repository = new AdminInventoryReadRepository(JdbcClient.create(source));
@@ -25,10 +25,10 @@ class AdminInventoryQueryBudgetIT {
             UUID category = UUID.randomUUID(), product = UUID.randomUUID(), variant = UUID.randomUUID();
             jdbc.update("INSERT INTO categories(id,name) VALUES (?, 'Budget')", category);
             jdbc.update("INSERT INTO products(id,category_id,name,status) VALUES (?,?,'Budget','DRAFT')", product, category);
-            jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) VALUES (?,?,?,?::jsonb,100)",
+            jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,base_price) VALUES (?,?,?,?::jsonb,100)",
                     variant, product, "Budget%SKU", "{\"model\":\"primary\"}");
             for (int n = 1; n <= 2; n++) {
-                jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) VALUES (?,?,?,?::jsonb,100)",
+                jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,base_price) VALUES (?,?,?,?::jsonb,100)",
                         UUID.randomUUID(), product, "Budget%SKU-" + n, "{\"model\":\"" + n + "\"}");
             }
             for (int size : new int[]{1, 20, 100}) {

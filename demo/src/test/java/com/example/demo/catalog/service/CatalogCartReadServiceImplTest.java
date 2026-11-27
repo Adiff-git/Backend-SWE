@@ -28,6 +28,13 @@ class CatalogCartReadServiceImplTest {
     ProductImageRepository images = mock(ProductImageRepository.class);
     com.example.demo.inventory.service.InventoryService inventory = mock(com.example.demo.inventory.service.InventoryService.class);
 
+    private com.example.demo.catalog.repository.CatalogPricingRow priced(CartVariantView row, java.time.Instant at) {
+        var amount = row.getPrice();
+        boolean valid = amount != null && amount.signum()>=0 && amount.stripTrailingZeros().scale()<=0;
+        return new com.example.demo.catalog.repository.CatalogPricingRow(row.getVariantId(),row.getProductId(),row.getStatus(),
+                row.getProductName(),row.getSku(),row.getOptions()==null ? Map.of() : row.getOptions(),amount,valid ? amount : null,
+                valid ? BigDecimal.ZERO : null,null,null,null,at,Boolean.TRUE.equals(row.getEnabled()));
+    }
     @org.junit.jupiter.api.BeforeEach void prepareKnownZeroStock() {
         when(inventory.getAvailability(anyCollection())).thenAnswer(call -> call.<Collection<UUID>>getArgument(0)
                 .stream().collect(java.util.stream.Collectors.toMap(id -> id,
@@ -40,7 +47,7 @@ class CatalogCartReadServiceImplTest {
         when(row.getVariantId()).thenReturn(id); when(row.getProductId()).thenReturn(id);
         when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getEnabled()).thenReturn(true); when(row.getPrice()).thenReturn(BigDecimal.TEN);
         when(row.getProductName()).thenReturn("P"); when(row.getSku()).thenReturn("S"); when(row.getOptions()).thenReturn(Map.of());
-        when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
+        when(variants.findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any())).thenAnswer(call -> List.of(priced(row,call.getArgument(1))));
         when(inventory.getAvailability(List.of(id))).thenReturn(Map.of(id, new com.example.demo.inventory.dto.response.InventoryAvailability(0, "OUT_OF_STOCK")));
         var state = new CatalogCartReadServiceImpl(variants, products, images, inventory).getVariantStates(List.of(id)).get(id);
         assertThat(state.getAvailability().getStatus()).isEqualTo("OUT_OF_STOCK");
@@ -56,7 +63,7 @@ class CatalogCartReadServiceImplTest {
         when(row.getStatus()).thenReturn(ProductStatus.ARCHIVED);
         when(row.getPrice()).thenReturn(BigDecimal.TEN);
         when(row.getProductName()).thenReturn("Hidden new name");
-        when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
+        when(variants.findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any())).thenAnswer(call -> List.of(priced(row,call.getArgument(1))));
         CartVariantState state = new CatalogCartReadServiceImpl(variants, products, images, inventory).getVariantStates(List.of(variant)).get(variant);
         assertThat(state.isPurchasable()).isFalse();
         assertThat(state.getProductName()).isNull();
@@ -74,7 +81,7 @@ class CatalogCartReadServiceImplTest {
         when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getEnabled()).thenReturn(true);
         when(row.getPrice()).thenReturn(BigDecimal.ONE);
         when(row.getOptions()).thenReturn(Map.of());
-        when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
+        when(variants.findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any())).thenAnswer(call -> List.of(priced(row,call.getArgument(1))));
         when(images.findCartPrimaryImages(anyCollection())).thenReturn(List.<Object[]>of(new Object[]{product,"images/key"}));
         when(products.lockStatusesForShare(anyCollection())).thenReturn(List.<Object[]>of(new Object[]{product,"ARCHIVED"}));
         com.example.demo.storage.service.PreparedImageUrls urls = mock(com.example.demo.storage.service.PreparedImageUrls.class);
@@ -94,7 +101,7 @@ class CatalogCartReadServiceImplTest {
             when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getEnabled()).thenReturn(true); when(row.getPrice()).thenReturn(BigDecimal.TEN);
             when(row.getOptions()).thenReturn(Map.of()); rows.put(id, row);
         }
-        when(variants.findCartStates(anyCollection())).thenAnswer(call -> ((Collection<UUID>)call.getArgument(0)).stream().map(rows::get).toList());
+        when(variants.findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any())).thenAnswer(call -> ((Collection<UUID>)call.getArgument(0)).stream().map(rows::get).map(row -> priced(row,call.getArgument(1))).toList());
         when(images.findCartPrimaryImages(anyCollection())).thenAnswer(call -> ((Collection<UUID>)call.getArgument(0)).stream()
                 .map(id -> new Object[]{id, "image/"+id}).toList());
         when(products.lockStatusesForShare(anyCollection())).thenAnswer(call -> ((Collection<UUID>)call.getArgument(0)).stream()
@@ -107,7 +114,7 @@ class CatalogCartReadServiceImplTest {
         List<String> ordered = locks.getAllValues().stream().flatMap(Collection::stream).map(UUID::toString).toList();
         assertThat(ordered).isSorted();
         assertThat(locks.getAllValues().getFirst()).hasSize(100);
-        verify(variants, times(4)).findCartStates(anyCollection());
+        verify(variants, times(2)).findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any());
         verify(images, times(2)).findCartPrimaryImages(anyCollection());
         org.assertj.core.api.Assertions.assertThatThrownBy(() -> new CatalogCartReadServiceImpl(variants, products, images, inventory)
                 .getCartPresentation(rows.keySet(), null)).isInstanceOf(com.example.demo.catalog.exception.CatalogStorageUnavailableException.class);
@@ -122,13 +129,17 @@ class CatalogCartReadServiceImplTest {
             when(row.getOptions()).thenReturn(Map.of());
         }
         when(before.getPrice()).thenReturn(BigDecimal.TEN); when(after.getPrice()).thenReturn(BigDecimal.valueOf(25));
-        when(variants.findCartStates(anyCollection())).thenReturn(List.of(before),List.of(after));
+        var instant = java.time.Instant.now();
+        var beforePricing = List.of(priced(before,instant));
+        var afterPricing = List.of(priced(after,instant));
+        when(variants.findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any()))
+                .thenReturn(beforePricing, afterPricing);
         when(products.lockStatusesForShare(List.of(id))).thenReturn(List.<Object[]>of(new Object[]{id,"PUBLISHED"}));
         var state=new CatalogCartReadServiceImpl(variants,products,images,inventory).getCartPresentation(List.of(id),null).get(id);
         assertThat(state.getAmount()).isEqualTo(java.math.BigInteger.valueOf(25));
         var order=org.mockito.Mockito.inOrder(variants,products,inventory);
-        order.verify(variants).findCartStates(anyCollection()); order.verify(products).lockStatusesForShare(List.of(id));
-        order.verify(variants).findCartStates(anyCollection()); order.verify(inventory).getAvailability(List.of(id));
+        order.verify(variants).findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any()); order.verify(products).lockStatusesForShare(List.of(id));
+        order.verify(variants).findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any()); order.verify(inventory).getAvailability(List.of(id));
     }
 
     @Test void getVariantStates_shouldMaskDisabledVariantAndExcludeInventory() {
@@ -136,24 +147,24 @@ class CatalogCartReadServiceImplTest {
         when(row.getVariantId()).thenReturn(id); when(row.getProductId()).thenReturn(id);
         when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getEnabled()).thenReturn(false);
         when(row.getPrice()).thenReturn(BigDecimal.TEN); when(row.getProductName()).thenReturn("private");
-        when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
+        when(variants.findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any())).thenAnswer(call -> List.of(priced(row,call.getArgument(1))));
         var state=new CatalogCartReadServiceImpl(variants,products,images,inventory).getVariantStates(List.of(id)).get(id);
         assertThat(state.isPurchasable()).isFalse(); assertThat(state.getProductName()).isNull();
         assertThat(state.getAvailability()).isNull(); verifyNoInteractions(inventory);
     }
 
-    @Test void getVariantStates_shouldRejectFractionalNegativeAndZeroPrices() {
+    @Test void getVariantStates_shouldRejectFractionalAndNegativePricesAndAllowZeroEffectivePrice() {
         UUID id = UUID.randomUUID();
         CartVariantView row = mock(CartVariantView.class);
         when(row.getVariantId()).thenReturn(id); when(row.getProductId()).thenReturn(id);
         when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getEnabled()).thenReturn(true); when(row.getOptions()).thenReturn(Map.of());
-        when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
+        when(variants.findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any())).thenAnswer(call -> List.of(priced(row,call.getArgument(1))));
         var service = new CatalogCartReadServiceImpl(variants, products, images, inventory);
         for (BigDecimal price : List.of(new BigDecimal("0.5"), BigDecimal.valueOf(-1))) {
             when(row.getPrice()).thenReturn(price);
             assertThat(service.getVariantStates(List.of(id)).get(id).isPurchasable()).isFalse();
         }
         when(row.getPrice()).thenReturn(BigDecimal.ZERO);
-        assertThat(service.getVariantStates(List.of(id)).get(id).isPurchasable()).isFalse();
+        assertThat(service.getVariantStates(List.of(id)).get(id).isPurchasable()).isTrue();
     }
 }

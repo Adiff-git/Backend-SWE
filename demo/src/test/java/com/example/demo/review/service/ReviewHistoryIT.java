@@ -14,6 +14,23 @@ import tools.jackson.databind.json.JsonMapper;
 class ReviewHistoryIT extends ReviewIntegrationSupport {
     @Autowired ReviewService reviews;
     @Autowired ReviewStatisticsService statistics;
+    @Autowired ReviewReadService reads;
+    @Test void purchasedOptions_shouldComeFromOrderSnapshotAfterLiveVariantRenameAndRemoval() {
+        JsonMapper json=JsonMapper.builder().build();
+        var created=reviews.create(purchase.owner(),purchase.order(),purchase.item(),json.readValue("{\"rating\":5}",CreateReviewRequest.class));
+        var original=json.readTree(jdbc.queryForObject("SELECT variant_options_snapshot::TEXT FROM order_items WHERE id=?",String.class,purchase.item()));
+        transactions.executeWithoutResult(tx -> {
+            var product=entities.getReference(com.example.demo.catalog.entity.Product.class,purchase.product());
+            entities.persist(com.example.demo.catalog.CatalogFixtures.variant(product,java.util.Map.of("choice","replacement"),java.math.BigDecimal.ONE));
+            entities.flush();
+            jdbc.update("UPDATE product_variants SET option_combination='{\"choice\":\"renamed\"}' WHERE id=(SELECT product_variant_id FROM order_items WHERE id=?)",purchase.item());
+            jdbc.update("DELETE FROM product_variants WHERE id=(SELECT product_variant_id FROM order_items WHERE id=?)",purchase.item());
+        });
+        var response=json.valueToTree(reads.getReviews(purchase.product(),new com.example.demo.review.dto.request.ReviewListRequest(0,20,"createdAt,desc")));
+        assertThat(response.get("items").get(0).get("purchasedOptions")).isEqualTo(original);
+        assertThat(response.toString()).doesNotContain("orderId","customerId","recipientName","deliveryAddress");
+        assertThat(response.get("items").get(0).get("id").longValue()).isEqualTo(created.getId());
+    }
     @Test void reviewHistory_shouldSurviveCatalogRemovalAndRemainEditable() {
         JsonMapper json = JsonMapper.builder().build();
         ReviewResponse created = reviews.create(purchase.owner(), purchase.order(), purchase.item(), json.readValue("{\"rating\":1}", CreateReviewRequest.class));

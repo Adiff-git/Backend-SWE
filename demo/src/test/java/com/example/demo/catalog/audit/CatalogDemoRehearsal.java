@@ -44,7 +44,7 @@ public final class CatalogDemoRehearsal {
         }
         List<Map<String,String>> locks=new ArrayList<>();long started=System.nanoTime();
         try(var executor=Executors.newSingleThreadExecutor()){
-            var migration=executor.submit(()->Flyway.configure().dataSource(url,user,password).target("28").load().migrate());
+            var migration=executor.submit(()->Flyway.configure().dataSource(url,user,password).target("31").load().migrate());
             while(!migration.isDone()){
                 try(Connection monitor=prepared.owner("rehearsal")){
                     locks.add(Map.of("elapsedMillis",Long.toString((System.nanoTime()-started)/1_000_000),
@@ -61,7 +61,7 @@ public final class CatalogDemoRehearsal {
             after=preserved(db);assertThat(after).isEqualTo(before);integrity(db);
         }
         String prefix=url.substring(0,url.lastIndexOf('/')+1);
-        Flyway.configure().dataSource(prefix+"admin013_fresh28",user,password).target("28").load().migrate();
+        Flyway.configure().dataSource(prefix+"admin013_fresh28",user,password).target("31").load().migrate();
         String schema=schema(container,"admin013_rehearsal",user);
         assertThat(schema(container,"admin013_fresh28",user)).isEqualTo(schema);
         String dump="/tmp/admin013-upgraded.dump";
@@ -107,7 +107,7 @@ public final class CatalogDemoRehearsal {
         db.setReadOnly(true);db.setAutoCommit(false);
         try{
             execute(db,"SET TRANSACTION READ ONLY");
-            assertThat(scalar(db,"SELECT MAX(version::int) FROM flyway_schema_history WHERE success")).isEqualTo("28");
+            assertThat(scalar(db,"SELECT MAX(version::int) FROM flyway_schema_history WHERE success")).isEqualTo("31");
             assertThat(scalar(db,"SELECT COUNT(*) FROM catalog_taxonomy_state WHERE id=1 AND version=0")).isEqualTo("1");
             assertThat(scalar(db,"SELECT COUNT(*) FROM products WHERE version<>0 OR last_restored_at IS NOT NULL OR status NOT IN ('DRAFT','PUBLISHED','UNPUBLISHED','ARCHIVED')")).isEqualTo("0");
             assertThat(scalar(db,"SELECT COUNT(*) FROM product_variants WHERE NOT enabled")).isEqualTo("0");

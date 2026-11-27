@@ -30,6 +30,7 @@ class InventoryMigrationIT {
     @AfterAll static void stopDatabase() { DATABASE.stop(); }
 
     @BeforeEach void prepareV24() {
+        saleSchemaInstalled=false;
         source = new DriverManagerDataSource(DATABASE.getJdbcUrl(), DATABASE.getUsername(), DATABASE.getPassword());
         jdbc = new JdbcTemplate(source);
         jdbc.execute("DROP SCHEMA public CASCADE");
@@ -40,6 +41,8 @@ class InventoryMigrationIT {
         variant = catalogVariant();
     }
 
+    private boolean saleSchemaInstalled;
+
     private UUID catalogVariant() {
         UUID category = UUID.randomUUID();
         UUID product = UUID.randomUUID();
@@ -47,15 +50,15 @@ class InventoryMigrationIT {
         transactions.executeWithoutResult(s -> {
             jdbc.update("INSERT INTO categories(id,name) VALUES (?,'Inventory category')", category);
             jdbc.update("INSERT INTO products(id,category_id,name,status) VALUES (?,?,'Inventory product','DRAFT')", product, category);
-            jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) VALUES (?,?,?,'{\"choice\":\"original\"}',100)", id, product, "INV-" + id);
+            jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination," + (saleSchemaInstalled ? "base_price" : "selling_price") + ") VALUES (?,?,?,'{\"choice\":\"original\"}',100)", id, product, "INV-" + id);
         });
         return id;
     }
 
     private void migrateInventory() {
-        // Preserve this historical V25–V27 upgrade contract; T013/T014 cover V28.
-        Flyway.configure().dataSource(source).target("27").load().migrate();
-        assertThat(jdbc.queryForObject("SELECT MAX(version::INTEGER) FROM flyway_schema_history WHERE success", Integer.class)).isEqualTo(27);
+        Flyway.configure().dataSource(source).load().migrate();
+        saleSchemaInstalled=true;
+        assertThat(jdbc.queryForObject("SELECT MAX(version::INTEGER) FROM flyway_schema_history WHERE success", Integer.class)).isEqualTo(32);
     }
 
     private long balance() {
@@ -64,7 +67,7 @@ class InventoryMigrationIT {
 
     private void addSiblingVariant() {
         UUID sibling = UUID.randomUUID();
-        jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) SELECT ?,product_id,?,'{\"replacement\":\"yes\"}',100 FROM product_variants WHERE id=?", sibling, "INV-" + sibling, variant);
+        jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination,base_price) SELECT ?,product_id,?,'{\"choice\":\"replacement\"}',100 FROM product_variants WHERE id=?", sibling, "INV-" + sibling, variant);
     }
 
     private long managedOrder(int quantity) {
@@ -91,6 +94,9 @@ class InventoryMigrationIT {
         jdbc.update("INSERT INTO carts(user_id) VALUES (?)", owner);
         var cartsBefore = jdbc.queryForList("SELECT id,user_id FROM carts");
         var before = jdbc.queryForMap("SELECT * FROM order_items WHERE order_id=?", historical);
+        for (String column : java.util.List.of("original_unit_price_snapshot", "direct_unit_discount_snapshot",
+                "direct_sale_percentage_snapshot", "direct_sale_starts_at_snapshot", "direct_sale_ends_at_snapshot",
+                "pricing_instant_snapshot")) before.put(column, null);
         migrateInventory();
         assertThat(jdbc.queryForList("SELECT * FROM checkout_receipts")).isEqualTo(receiptsBefore);
         assertThat(jdbc.queryForList("SELECT id,user_id FROM carts")).isEqualTo(cartsBefore);

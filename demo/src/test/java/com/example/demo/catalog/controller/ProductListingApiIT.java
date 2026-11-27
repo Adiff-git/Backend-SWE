@@ -56,6 +56,7 @@ class ProductListingApiIT {
 	@Autowired private TransactionTemplate transactions;
 	@Autowired private JdbcTemplate jdbc;
 	@Autowired private FakeStorage storage;
+    @org.springframework.test.context.bean.override.mockito.MockitoSpyBean private java.time.Clock clock;
 
 	@BeforeEach
 	void setup() {
@@ -134,6 +135,7 @@ class ProductListingApiIT {
 
 	@Test
 	void emptyOutOfRangeAndRepeatedPagesHaveAccurateStableMetadata() throws Exception {
+        org.mockito.Mockito.doReturn(java.time.Instant.parse("2026-11-26T00:00:00Z")).when(clock).instant();
 		persistProduct(ProductStatus.DRAFT, false);
 		mvc.perform(get("/api/products"))
 				.andExpect(status().isOk())

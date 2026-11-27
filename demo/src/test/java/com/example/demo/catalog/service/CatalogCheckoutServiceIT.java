@@ -15,7 +15,7 @@ class CatalogCheckoutServiceIT extends CheckoutIntegrationSupport {
     com.example.demo.catalog.repository.ProductVariantRepository variants;
 
     @Test void getCheckoutVariantStates_shouldCaptureCurrentProtectedPriceAndOptions() {
-        jdbc.update("UPDATE product_variants SET selling_price=1234 WHERE id=?",fixture.variant());
+        jdbc.update("UPDATE product_variants SET base_price=1234 WHERE id=?",fixture.variant());
         transactions.executeWithoutResult(s -> {
             com.example.demo.catalog.dto.response.CheckoutVariantState state = service.getCheckoutVariantStates(List.of(fixture.variant())).get(fixture.variant());
             assertThat(state.getPrice()).isEqualByComparingTo(BigDecimal.valueOf(1234));
@@ -91,7 +91,7 @@ class CatalogCheckoutServiceIT extends CheckoutIntegrationSupport {
     @Test void getCheckoutVariantStates_shouldKeepValidSnapshotWhenInvalidPricesFailRealGuards() {
         for(String value : List.of("NaN","Infinity","-Infinity","-1","0","0.5")) {
             org.assertj.core.api.Assertions.assertThatThrownBy(() -> jdbc.update(
-                    "UPDATE product_variants SET selling_price=CAST(? AS NUMERIC) WHERE id=?",value,fixture.variant()))
+                    "UPDATE product_variants SET base_price=CAST(? AS NUMERIC) WHERE id=?",value,fixture.variant()))
                     .as(value).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
             var state=service.getCheckoutVariantStates(List.of(fixture.variant())).get(fixture.variant());
             assertThat(state.getPrice()).isEqualByComparingTo(BigDecimal.valueOf(1000));

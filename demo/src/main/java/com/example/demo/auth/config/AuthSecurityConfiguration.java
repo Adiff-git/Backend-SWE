@@ -79,6 +79,7 @@ public class AuthSecurityConfiguration {
             .logout(c->c.disable())
             .exceptionHandling(e->e.authenticationEntryPoint(entry).accessDeniedHandler(denied))
         .authorizeHttpRequests(a->a
+                .requestMatchers(org.springframework.http.HttpMethod.GET,"/swagger-ui.html","/swagger-ui/**","/v3/api-docs","/v3/api-docs/**","/v3/api-docs.yaml").permitAll()
                 .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/me/behavior/events").access((authentication, context) -> {
                     var actor = authentication.get();
                     var grants = actor.getAuthorities().stream().map(org.springframework.security.core.GrantedAuthority::getAuthority).toList();

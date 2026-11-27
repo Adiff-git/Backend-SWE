@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class AdminCatalogMigrationSourceTest {
     @Test
     void finalGuards_shouldCoverProductStatusAndChildren_andValidateExistingRows() throws Exception {
-        String sql = Files.readString(Path.of("src/main/resources/db/migration/V28__admin_catalog_management.sql"));
+        String sql = Files.readString(Path.of("src/main/resources/db/migration/V31__admin_catalog_management.sql"));
         String original = Files.readString(Path.of("src/main/resources/db/migration/V3__enforce_catalog_relationships.sql"));
         assertThat(sql).contains("CREATE OR REPLACE FUNCTION check_catalog_variant_invariants",
                 "CREATE OR REPLACE FUNCTION check_product_gallery_invariants", "FOR UPDATE", "ORDER BY id",
@@ -23,7 +23,7 @@ class AdminCatalogMigrationSourceTest {
 
     @Test
     void migration_shouldKeepExistingBusinessRecordsAndIdentityConstraints() throws Exception {
-        String sql = Files.readString(Path.of("src/main/resources/db/migration/V28__admin_catalog_management.sql"));
+        String sql = Files.readString(Path.of("src/main/resources/db/migration/V31__admin_catalog_management.sql"));
         assertThat(sql).contains("DEFAULT TRUE", "UNPUBLISHED", "version BIGINT NOT NULL DEFAULT 0",
                 "last_restored_at TIMESTAMPTZ", "uk_categories_root_name_key", "uk_categories_parent_name_key", "uk_brands_name_key");
         assertThat(sql).doesNotContain("UPDATE products SET", "UPDATE product_variants SET", "DELETE FROM",
@@ -35,7 +35,7 @@ class AdminCatalogMigrationSourceTest {
 
     @Test
     void nameNormalizer_shouldUseApprovedOuterWhitespaceWithoutRewritingNames() throws Exception {
-        String sql = Files.readString(Path.of("src/main/resources/db/migration/V28__admin_catalog_management.sql"));
+        String sql = Files.readString(Path.of("src/main/resources/db/migration/V31__admin_catalog_management.sql"));
         String preflight = Files.readString(Path.of("../specs/013-admin-catalog-management/contracts/data-preflight.sql"));
         String whitespace = "U&'\\0009\\000A\\000B\\000C\\000D\\0020\\0085\\00A0\\1680\\2000\\2001\\2002\\2003\\2004\\2005\\2006\\2007\\2008\\2009\\200A\\2028\\2029\\202F\\205F\\3000'";
         assertThat(sql).contains(whitespace, "LOWER(public.catalog_name_trim(value))");

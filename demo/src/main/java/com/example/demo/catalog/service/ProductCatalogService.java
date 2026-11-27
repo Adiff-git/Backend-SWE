@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface ProductCatalogService {
+    /** Internal bounded card pricing; one fresh evaluation instant per invocation. */
+    Map<UUID, com.example.demo.catalog.dto.response.ProductPriceRange> getPriceRangesByIds(Collection<UUID> ids);
 
 	int DEFAULT_PAGE = 0;
 	int DEFAULT_SIZE = 20;

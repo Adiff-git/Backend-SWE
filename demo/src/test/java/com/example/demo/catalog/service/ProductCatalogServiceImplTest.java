@@ -38,8 +38,9 @@ class ProductCatalogServiceImplTest {
     private final ProductImageStorage storage = mock(ProductImageStorage.class);
     private final com.example.demo.inventory.service.InventoryService inventory = mock(com.example.demo.inventory.service.InventoryService.class);
     private final ProductCatalogServiceImpl service = new ProductCatalogServiceImpl(
-            products, images, variants, storage, new ProductCatalogConverter(),
-            jakarta.validation.Validation.buildDefaultValidatorFactory().getValidator(), inventory);
+            new ProductOptionServiceImpl(), products, images, variants, storage, new ProductCatalogConverter(),
+            jakarta.validation.Validation.buildDefaultValidatorFactory().getValidator(), inventory,
+            new com.example.demo.catalog.converter.VariantPricingConverter(), java.time.Clock.systemUTC());
 
     @Test
     void getPublishedProductEntity_shouldReturnReference_whenPublished() {
@@ -261,9 +262,9 @@ class ProductCatalogServiceImplTest {
     @Test void getProduct_shouldExcludeDisabledVariantsAndLoadActiveGalleryAfterParentProtection(){
         var fixture=CatalogFixtures.publishedProduct();Product product=fixture.product();UUID id=UUID.randomUUID();
         ReflectionTestUtils.setField(product,"id",id);ReflectionTestUtils.setField(fixture.variant(),"id",UUID.randomUUID());
-        var disabled=CatalogFixtures.variant(product,Map.of("choice","disabled"),java.math.BigDecimal.ZERO);disabled.setEnabled(false);
         when(products.findPublishedForShare(id)).thenReturn(Optional.of(view(product)));
-        when(variants.findPublicVariants(id)).thenReturn(List.of(variantView(fixture.variant()),variantView(disabled)));
+        when(variants.findProductPricedVariants(org.mockito.ArgumentMatchers.eq(id),org.mockito.ArgumentMatchers.any()))
+                .thenAnswer(call -> List.of(detailRow(id, fixture.variant(), call.getArgument(1))));
         var image=CatalogFixtures.image(product,0,true);ReflectionTestUtils.setField(image,"id",UUID.randomUUID());
         stubImages(List.of(image));var signer=mock(PreparedReadSigner.class);when(storage.prepareReadSigner()).thenReturn(signer);
         when(signer.signReadUrl(image.getObjectKey())).thenReturn("signed");
@@ -271,14 +272,24 @@ class ProductCatalogServiceImplTest {
         assertThat(service.getProduct(id).getVariants()).hasSize(1);
         var order=org.mockito.Mockito.inOrder(products,variants,images);
         order.verify(images).findCartPrimaryImages(List.of(id));order.verify(products).findPublishedForShare(id);
-        order.verify(variants).findPublicVariants(id);order.verify(images).findPublicGallery(id);
+        order.verify(images).findPublicGallery(id);
+        order.verify(variants).findProductPricedVariants(org.mockito.ArgumentMatchers.eq(id),org.mockito.ArgumentMatchers.any());
     }
 
     @Test void getProduct_shouldRejectCorruptPublishedEnabledZeroPrice(){
         var fixture=CatalogFixtures.publishedProduct();UUID id=UUID.randomUUID();ReflectionTestUtils.setField(fixture.product(),"id",id);
         fixture.variant().setSellingPrice(java.math.BigDecimal.ZERO);
         when(products.findPublishedForShare(id)).thenReturn(Optional.of(view(fixture.product())));
-        when(variants.findPublicVariants(id)).thenReturn(List.of(variantView(fixture.variant())));
+        var image=CatalogFixtures.image(fixture.product(),0,true);
+        ReflectionTestUtils.setField(image,"id",UUID.randomUUID());
+        stubImages(List.of(image));
+        var signer=mock(PreparedReadSigner.class);
+        when(storage.prepareReadSigner()).thenReturn(signer);
+        when(signer.signReadUrl(image.getObjectKey())).thenReturn("signed");
+        when(images.findPublicGallery(id)).thenReturn(List.of(imageView(image)));
+        ReflectionTestUtils.setField(fixture.variant(),"id",UUID.randomUUID());
+        when(variants.findProductPricedVariants(org.mockito.ArgumentMatchers.eq(id),org.mockito.ArgumentMatchers.any()))
+                .thenAnswer(call -> List.of(detailRow(id, fixture.variant(), call.getArgument(1))));
         assertThatThrownBy(() -> service.getProduct(id)).isInstanceOf(com.example.demo.catalog.exception.CatalogConflictException.class);
     }
 
@@ -288,10 +299,13 @@ class ProductCatalogServiceImplTest {
                 com.example.demo.catalog.repository.CatalogPublicViews.Product.class,
                 Map.of("id",p.getId(),"name",p.getName(),"categoryId",UUID.randomUUID(),"categoryName",p.getCategory().getName()));
     }
-    private com.example.demo.catalog.repository.CatalogPublicViews.Variant variantView(com.example.demo.catalog.entity.ProductVariant v){
-        return new org.springframework.data.projection.SpelAwareProxyProjectionFactory().createProjection(
-                com.example.demo.catalog.repository.CatalogPublicViews.Variant.class,
-                Map.of("id",v.getId()==null?UUID.randomUUID():v.getId(),"sku",v.getSku(),"enabled",v.isEnabled(),"price",v.getSellingPrice(),"options",v.getOptionCombination(),"specifications",v.getTechnicalSpecifications()));
+    private com.example.demo.catalog.repository.CatalogDetailVariantRow detailRow(UUID productId,
+            com.example.demo.catalog.entity.ProductVariant variant, java.time.Instant at) {
+        var price = variant.getSellingPrice();
+        var pricing = new com.example.demo.catalog.repository.CatalogPricingRow(variant.getId(),productId,
+                ProductStatus.PUBLISHED,variant.getProduct().getName(),variant.getSku(),variant.getOptionCombination(),
+                price,price,java.math.BigDecimal.ZERO,null,null,null,at);
+        return new com.example.demo.catalog.repository.CatalogDetailVariantRow(pricing,variant.getTechnicalSpecifications(),Map.of());
     }
     private com.example.demo.catalog.repository.CatalogPublicViews.Image imageView(ProductImage v){
         return new org.springframework.data.projection.SpelAwareProxyProjectionFactory().createProjection(

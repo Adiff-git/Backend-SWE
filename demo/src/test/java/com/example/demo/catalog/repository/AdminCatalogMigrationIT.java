@@ -17,13 +17,13 @@ class AdminCatalogMigrationIT {
     @Test void freshInstall_shouldAllowVariantlessDraftAndRetainZeroStockTrigger() throws Exception {
         String url=url();
         try(Connection db=connection(url)) {
-            flyway(url,"28").migrate();
+            flyway(url,"31").migrate();
             UUID category=UUID.randomUUID(),product=UUID.randomUUID(),variant=UUID.randomUUID();
             execute(db,"INSERT INTO categories(id,name) VALUES (?,?)",category,"Draft category");
             execute(db,"INSERT INTO products(id,category_id,name,status) VALUES (?,?,?,'DRAFT')",product,category,"Draft");
             assertThat(scalar(db,"SELECT count(*) FROM product_variants")).isEqualTo("0");
             assertThat(scalar(db,"SELECT version FROM catalog_taxonomy_state WHERE id=1")).isEqualTo("0");
-            execute(db,"INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price) VALUES (?,?,?,'{}',0)",variant,product,"zero-preparation");
+            execute(db,"INSERT INTO product_variants(id,product_id,sku,option_combination,base_price) VALUES (?,?,?,'{}',0)",variant,product,"zero-preparation");
             assertThat(scalar(db,"SELECT enabled FROM product_variants WHERE id='"+variant+"'")).isEqualTo("t");
             assertThat(scalar(db,"SELECT stock||':'||reserved FROM inventory_balances WHERE product_variant_id='"+variant+"'")).isEqualTo("0:0");
             assertThatThrownBy(()->execute(db,"UPDATE products SET status='PUBLISHED' WHERE id=?",product)).satisfies(failure -> assertSqlState(failure,"23514"));
@@ -36,15 +36,16 @@ class AdminCatalogMigrationIT {
         try(Connection db=connection(url)) {
             flyway(url,"27").migrate();
             UUID product=seed(db,true);
+            flyway(url,"30").migrate();
             String before=fingerprint(db);
             String history=history(db);
-            flyway(url,"28").migrate();
+            flyway(url,"31").migrate();
             assertThat(fingerprint(db)).isEqualTo(before);
             assertThat(history(db)).isEqualTo(history);
             assertThat(scalar(db,"SELECT count(*) FROM pg_trigger WHERE tgname='ct_product_variants_inventory_initialize' AND NOT tgisinternal")).isEqualTo("1");
             assertThat(scalar(db,"SELECT version||':'||status FROM products WHERE id='"+product+"'")).isEqualTo("0:PUBLISHED");
             assertThat(scalar(db,"SELECT active FROM product_images WHERE product_id='"+product+"'")).isEqualTo("t");
-            flyway(url,"28").validate();
+            flyway(url,"31").validate();
         }
     }
 
@@ -54,17 +55,18 @@ class AdminCatalogMigrationIT {
         try(Connection db=connection(url)) {
             flyway(url,"27").migrate();
             UUID product=seed(db,!kind.equals("imageless"));
+            flyway(url,"30").migrate();
             switch(kind) {
                 case "root-name" -> execute(db,"INSERT INTO categories(id,name) VALUES (?,?)",UUID.randomUUID(),"  laptop  ");
                 case "brand-name" -> execute(db,"INSERT INTO brands(id,code,name) VALUES (?,'another','  BRAND  ')",UUID.randomUUID());
-                case "price" -> execute(db,"UPDATE product_variants SET selling_price=0 WHERE product_id=?",product);
+                case "price" -> execute(db,"UPDATE product_variants SET base_price=0 WHERE product_id=?",product);
                 case "cycle" -> execute(db,"UPDATE categories SET parent_category_id=id");
                 default -> { }
             }
             String before=fingerprint(db),history=history(db);
-            assertThatThrownBy(()->flyway(url,"28").migrate()).isInstanceOf(org.flywaydb.core.api.FlywayException.class);
+            assertThatThrownBy(()->flyway(url,"31").migrate()).isInstanceOf(org.flywaydb.core.api.FlywayException.class);
             assertThat(scalar(db,"SELECT count(*) FROM information_schema.columns WHERE table_schema='public' AND table_name='products' AND column_name='version'")).isEqualTo("0");
-            assertThat(scalar(db,"SELECT max(version::int) FROM flyway_schema_history WHERE success")).isEqualTo("27");
+            assertThat(scalar(db,"SELECT max(version::int) FROM flyway_schema_history WHERE success")).isEqualTo("30");
             assertThat(fingerprint(db)).isEqualTo(before); assertThat(history(db)).isEqualTo(history);
             assertThat(scalar(db,"SELECT to_regclass('public.catalog_taxonomy_state') IS NULL")).isEqualTo("t");
         }
@@ -73,7 +75,7 @@ class AdminCatalogMigrationIT {
     @Test void gallery_shouldRetainInactiveIdentityAndRequirePublishedPrimaryAtCommit() throws Exception {
         String url=url();
         try(Connection db=connection(url)) {
-            flyway(url,"27").migrate(); UUID product=seed(db,true); flyway(url,"28").migrate();
+            flyway(url,"27").migrate(); UUID product=seed(db,true); flyway(url,"31").migrate();
             assertThatThrownBy(()->execute(db,"UPDATE product_images SET active=FALSE,is_primary=FALSE WHERE product_id=?",product)).satisfies(failure -> assertSqlState(failure,"23514"));
             assertThat(scalar(db,"SELECT active FROM product_images WHERE product_id='"+product+"'")).isEqualTo("t");
             db.setAutoCommit(false);
@@ -89,7 +91,7 @@ class AdminCatalogMigrationIT {
     @Test void nameKey_shouldResolveItsHelperUnderRestrictedIndexBuildSearchPath() throws Exception {
         String url=url();
         try(Connection db=connection(url)) {
-            flyway(url,"28").migrate();
+            flyway(url,"31").migrate();
             execute(db,"SET search_path=pg_catalog");
             assertThat(scalar(db,"SELECT public.catalog_name_key(E'\\t MiXeD \\t')")).isEqualTo("mixed");
         }
@@ -128,7 +130,7 @@ class AdminCatalogMigrationIT {
         }
         return result.toString();
     }
-    private String history(Connection db) throws SQLException { return scalar(db,"SELECT string_agg(version||':'||checksum,',' ORDER BY installed_rank) FROM flyway_schema_history WHERE version::int<=27 AND success"); }
+    private String history(Connection db) throws SQLException { return scalar(db,"SELECT string_agg(version||':'||checksum,',' ORDER BY installed_rank) FROM flyway_schema_history WHERE version::int<=30 AND success"); }
     private String scalar(Connection db,String sql) throws SQLException { try(Statement s=db.createStatement();ResultSet r=s.executeQuery(sql)) { assertThat(r.next()).isTrue(); return r.getString(1); } }
     private void assertSqlState(Throwable failure,String expected) {
         for(Throwable cause=failure;cause!=null;cause=cause.getCause()) if(cause instanceof SQLException sql) {

@@ -18,14 +18,14 @@ public final class AdminInventoryFixtures {
             jdbc.update("INSERT INTO products(id,category_id,name,status) VALUES (?,?,?,'DRAFT')",
                     product, category, V28 + " " + lifecycle);
             jdbc.update("""
-                    INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price,enabled)
+                    INSERT INTO product_variants(id,product_id,sku,option_combination,base_price,enabled)
                     VALUES (?,?,?,'{"model":"test"}',100,?)
                     """, variant, product, "INV-" + variant, enabled);
             if (lifecycle == ProductStatus.PUBLISHED) {
                 if (!enabled) {
                     UUID sibling = UUID.randomUUID();
                     jdbc.update("""
-                            INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price,enabled)
+                            INSERT INTO product_variants(id,product_id,sku,option_combination,base_price,enabled)
                             VALUES (?,?,?,'{"model":"enabled-sibling"}',100,true)
                             """, sibling, product, "INV-" + sibling);
                 }

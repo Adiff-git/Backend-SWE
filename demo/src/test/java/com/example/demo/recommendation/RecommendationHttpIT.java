@@ -38,6 +38,7 @@ class RecommendationHttpIT {
   @Autowired com.example.demo.user.service.UserService users;
   @Autowired org.springframework.security.crypto.password.PasswordEncoder passwords;
   @MockitoSpyBean RecommendationAiClient ai;
+  @MockitoSpyBean Clock clock;
 
   @DynamicPropertySource
   static void aiService(DynamicPropertyRegistry registry) throws Exception {
@@ -153,6 +154,9 @@ class RecommendationHttpIT {
 
   @Test
   void actualTwoServices1500ProductsAndOutage() throws Exception {
+    // Compare complete cards from separate requests at the same controlled pricing instant.
+    doReturn(Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS))
+        .when(clock).instant();
     jdbc.execute("TRUNCATE users,categories CASCADE");
     jdbc.execute(
         "INSERT INTO categories(id,name) SELECT md5('category-'||i)::uuid,CASE i WHEN 0 THEN"
@@ -166,7 +170,7 @@ class RecommendationHttpIT {
                   + " Tablet ' END||i,'Sanitized synthetic electronics fixture','PUBLISHED' FROM"
                   + " generate_series(1,1500) i");
           jdbc.execute(
-              "INSERT INTO product_variants(id,product_id,sku,option_combination,selling_price)"
+              "INSERT INTO product_variants(id,product_id,sku,option_combination,base_price)"
                   + " SELECT"
                   + " md5('rec-variant-'||i)::uuid,md5('rec-product-'||i)::uuid,'REC-'||i,'{}',5000000+i*10000"
                   + " FROM generate_series(1,1500) i");

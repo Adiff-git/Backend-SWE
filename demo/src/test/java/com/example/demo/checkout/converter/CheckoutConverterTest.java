@@ -8,6 +8,23 @@ import tools.jackson.databind.json.JsonMapper;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CheckoutConverterTest {
+    @Test
+    void versionThree_shouldRoundTripFrozenDirectSaleEvidenceWithoutEnrichingLegacyVersions() {
+        CheckoutConverter converter = new CheckoutConverter();
+        JsonMapper json = JsonMapper.builder().build();
+        String old = json.writeValueAsString(CheckoutTestData.receipt(5L, 7L, CheckoutFixtures.PLACED_AT));
+        tools.jackson.databind.JsonNode root = json.readTree(old);
+        tools.jackson.databind.node.ObjectNode order = (tools.jackson.databind.node.ObjectNode) root.get("order");
+        order.set("voucherDiscount", json.readTree("{\"amount\":0,\"currency\":\"VND\"}"));
+        order.putNull("voucher");
+        tools.jackson.databind.node.ObjectNode item = (tools.jackson.databind.node.ObjectNode) order.get("items").get(0);
+        item.set("originalUnitPriceSnapshot", json.readTree("{\"amount\":125,\"currency\":\"VND\"}"));
+        item.set("directUnitDiscountSnapshot", json.readTree("{\"amount\":25,\"currency\":\"VND\"}"));
+        item.set("directSaleSnapshot", json.readTree("{\"percentage\":20,\"startsAt\":null,\"endsAt\":null}"));
+        item.put("pricingInstantSnapshot", CheckoutFixtures.PLACED_AT.toString());
+        assertThat(json.readTree(converter.encode(converter.decode(json.writeValueAsString(root), 3)))).isEqualTo(root);
+        assertThat(converter.encode(converter.decode(old, 1))).doesNotContain("originalUnitPriceSnapshot", "directSaleSnapshot");
+    }
     @Test void stockSkipReasons_shouldRoundTripWithoutAddingLiveAvailabilityToReceipt() {
         CheckoutConverter converter = new CheckoutConverter();
         String body = JsonMapper.builder().build().writeValueAsString(CheckoutTestData.receipt(5L, 7L, CheckoutFixtures.PLACED_AT));

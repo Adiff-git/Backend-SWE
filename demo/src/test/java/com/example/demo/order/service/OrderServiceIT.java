@@ -132,7 +132,7 @@ class OrderServiceIT {
         jdbc.update("INSERT INTO addresses(user_id,recipient_name,recipient_phone,address_text,is_default) VALUES (?,'New recipient','0123456789','Changed address',TRUE)",owner);
         transactions.executeWithoutResult(s -> {
             jdbc.update("UPDATE products SET name='Changed product',status='ARCHIVED' WHERE id=?",product);
-            jdbc.update("UPDATE product_variants SET sku='Changed SKU',option_combination='{\"color\":\"Red\"}',selling_price=999 WHERE id=?",variant);
+            jdbc.update("UPDATE product_variants SET sku='Changed SKU',option_combination='{\"color\":\"Red\"}',base_price=999 WHERE id=?",variant);
         });
         assertThat(service.getOrder(owner,id)).usingRecursiveComparison().isEqualTo(before);
         transactions.executeWithoutResult(s -> {

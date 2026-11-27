@@ -50,10 +50,43 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
     @Autowired com.example.demo.order.service.OrderService orderService;
     @Autowired javax.sql.DataSource dataSource;
     @Autowired com.example.demo.common.exception.ApiErrorFactory errors;
+    @MockitoSpyBean java.time.Clock eventClock;
     Answer<?> delegate;
 
     @BeforeEach void captureRealRepositoryDelegate() {
         delegate=mockingDetails(receipts).getMockCreationSettings().getDefaultAnswer();
+    }
+
+    @ParameterizedTest @org.junit.jupiter.params.provider.ValueSource(strings={"inventory_balances","vouchers"})
+    void checkout_shouldKeepCapturedSaleAndVoucherInstantAcrossInventoryLockWait(String table) throws Exception {
+        long grant=selectVoucher();
+        Instant event=Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+        Instant end=event.plusSeconds(1);
+        jdbc.update("UPDATE products SET sale_percentage=20,sale_enabled=TRUE,sale_ends_at=? WHERE id=?",java.sql.Timestamp.from(end),fixture.product());
+        jdbc.update("UPDATE vouchers SET valid_until=? WHERE id=(SELECT voucher_id FROM voucher_entitlements WHERE id=?)",java.sql.Timestamp.from(end),grant);
+        org.mockito.Mockito.doReturn(event).when(eventClock).instant();
+        ExecutorService worker=Executors.newSingleThreadExecutor();
+        try(java.sql.Connection holder=dataSource.getConnection()) {
+            holder.setAutoCommit(false);
+            String query=table.equals("inventory_balances") ? "SELECT id FROM inventory_balances WHERE original_variant_id=? FOR UPDATE"
+                    : "SELECT id FROM vouchers WHERE id=(SELECT voucher_id FROM voucher_entitlements WHERE id=?) FOR UPDATE";
+            try(var lock=holder.prepareStatement(query)) {
+                lock.setObject(1,table.equals("inventory_balances") ? fixture.variant() : grant); lock.executeQuery();
+            }
+            Future<CheckoutReceiptResponse> pending=worker.submit(() -> checkout(KEY));
+            awaitDatabaseLock(table);
+            org.mockito.Mockito.doReturn(end.plusSeconds(1)).when(eventClock).instant();
+            holder.rollback();
+            var receipt=pending.get(WAIT_SECONDS,TimeUnit.SECONDS);
+            assertThat(receipt.getOrder().getPlacedAt()).isEqualTo(event);
+            assertThat(receipt.getOrder().getMerchandiseTotal().getAmount()).isEqualTo(java.math.BigInteger.valueOf(1600));
+            assertThat(receipt.getOrder().getPayableTotal().getAmount()).isEqualTo(java.math.BigInteger.valueOf(1590));
+            var item=(com.example.demo.checkout.dto.response.CheckoutItemReceiptV3)receipt.getOrder().getItems().getFirst();
+            assertThat(item.getPricingInstantSnapshot()).isEqualTo(event);
+            assertThat(item.getDirectSaleSnapshot().getEndsAt()).isEqualTo(end);
+            assertThat(checkout(KEY)).usingRecursiveComparison().isEqualTo(receipt);
+            assertOneCommittedOutcome();
+        } finally { stop(worker); }
     }
 
     private CheckoutReceiptResponse checkout(String key) {
@@ -366,7 +399,8 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
         if(adminFirst){
             doAnswer(call->{call.callRealMethod();held.countDown();await(release);return null;}).when(adminClaims).claim(org.mockito.ArgumentMatchers.eq(com.example.demo.catalog.repository.CatalogMutationRepository.Resource.PRODUCT),org.mockito.ArgumentMatchers.eq(fixture.product()),anyLong());
         }else{
-            doAnswer(call->{Object result=call.callRealMethod();held.countDown();await(release);return result;}).when(catalogBoundary).getCheckoutVariantStates(any());
+            Answer<?> delegate=mockingDetails(catalogBoundary).getMockCreationSettings().getDefaultAnswer();
+            doAnswer(call->{Object result=delegate.answer(call);held.countDown();await(release);return result;}).when(catalogBoundary).getCheckoutCatalogView(any());
         }
         java.util.concurrent.Callable<Object> editCommand=()->{
             switch(edit){
@@ -423,7 +457,7 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
             assertInventoryIntegrity();
         }finally{release.countDown();stop(workers);org.mockito.Mockito.reset(adminClaims);}
     }
-    enum DomainMutation { ADDRESS_UPDATE, ADDRESS_DELETE, UNPUBLISH, PRODUCT_NAME, VARIANT_PRICE_OPTIONS, PRODUCT_DELETE, VARIANT_DELETE }
+    enum DomainMutation { ADDRESS_UPDATE, ADDRESS_DELETE, UNPUBLISH, PRODUCT_NAME, VARIANT_PRICE_OPTIONS, SALE_CONFIGURATION, PRODUCT_DELETE, VARIANT_DELETE }
 
     static java.util.stream.Stream<org.junit.jupiter.params.provider.Arguments> domainCases() {
         return java.util.Arrays.stream(DomainMutation.values()).flatMap(mutation -> java.util.stream.Stream.of(
@@ -447,7 +481,7 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
                 held.countDown();
                 await(release);
                 return result;
-            }).when(catalogBoundary).getCheckoutVariantStates(any());
+            }).when(catalogBoundary).getCheckoutCatalogView(any());
         }
         ExecutorService workers=Executors.newFixedThreadPool(2);
         try {
@@ -488,7 +522,7 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
                 assertThat(receipt.getOrder().getDeliveryAddressSnapshot()).isEqualTo(mutationFirst && mutation==DomainMutation.ADDRESS_UPDATE ? "Changed address" : "Address");
                 assertThat(receipt.getOrder().getItems().getFirst().getProductNameSnapshot()).isEqualTo(mutationFirst && mutation==DomainMutation.PRODUCT_NAME ? "Concurrent product name" : originalName);
                 assertThat(receipt.getOrder().getItems().getFirst().getVariantSkuSnapshot()).isEqualTo(mutationFirst && mutation==DomainMutation.VARIANT_PRICE_OPTIONS ? "CHANGED-"+fixture.variant() : originalSku);
-                assertThat(receipt.getOrder().getPayableTotal().getAmount()).isEqualTo(java.math.BigInteger.valueOf(mutationFirst && mutation==DomainMutation.VARIANT_PRICE_OPTIONS ? 3500 : 2000));
+                assertThat(receipt.getOrder().getPayableTotal().getAmount()).isEqualTo(java.math.BigInteger.valueOf(mutationFirst && mutation==DomainMutation.VARIANT_PRICE_OPTIONS ? 3500 : mutationFirst && mutation==DomainMutation.SALE_CONFIGURATION ? 1600 : 2000));
                 assertThat(checkout(KEY)).usingRecursiveComparison().isEqualTo(receipt);
                 if (activeDeletion) {
                     assertThat(jdbc.queryForObject("SELECT state FROM inventory_reservations WHERE order_id=?", String.class, receipt.getOrder().getId())).isEqualTo("ACTIVE");
@@ -536,12 +570,14 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
             case VARIANT_PRICE_OPTIONS -> {
                 // V3's deferred invariant also locks the parent. Cooperative catalog writers acquire it first.
                 jdbc.queryForObject("SELECT id FROM products WHERE id=? FOR UPDATE",java.util.UUID.class,fixture.product());
-                jdbc.update("UPDATE product_variants SET selling_price=1750,sku=?,option_combination='{\"choice\":\"changed\"}' WHERE id=?","CHANGED-"+fixture.variant(),fixture.variant());
+                jdbc.update("UPDATE product_variants SET base_price=1750,sku=?,option_combination='{\"choice\":\"changed\"}' WHERE id=?","CHANGED-"+fixture.variant(),fixture.variant());
             }
+            case SALE_CONFIGURATION -> jdbc.update("UPDATE products SET sale_percentage=20,sale_enabled=TRUE WHERE id=?",fixture.product());
             case PRODUCT_DELETE, VARIANT_DELETE -> {
                 // Existing FK policy restricts deletion while cart rows refer to catalog. Respect the cart writer protocol.
                 jdbc.queryForObject("SELECT id FROM carts WHERE id=? FOR UPDATE",Long.class,fixture.cart());
                 jdbc.update("DELETE FROM cart_items WHERE product_variant_id=?",fixture.variant());
+                jdbc.queryForObject("SELECT id FROM products WHERE id=? FOR UPDATE",java.util.UUID.class,fixture.product());
                 if(mutation==DomainMutation.PRODUCT_DELETE) {
                     // Historical physical-delete drill only; ready fixtures now retain gallery metadata.
                     jdbc.update("DELETE FROM product_images WHERE product_id=?",fixture.product());
@@ -610,7 +646,7 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
         ExecutorService workers=Executors.newFixedThreadPool(2);
         try {
             Future<?> writer=workers.submit(() -> transactions.executeWithoutResult(s -> {
-                jdbc.update("UPDATE product_variants SET selling_price=1750 WHERE id=?",fixture.variant());
+                jdbc.update("UPDATE product_variants SET base_price=1750 WHERE id=?",fixture.variant());
                 variantHeld.countDown();
                 try { await(releaseWriter); } catch(InterruptedException failure) { Thread.currentThread().interrupt();throw new IllegalStateException(failure); }
                 // V3 deferred validation takes the product lock at commit, deliberately reversing checkout order.
@@ -638,7 +674,7 @@ class CheckoutConcurrencyIT extends CheckoutIntegrationSupport {
                 assertThat(receipt.getOrder().getPayableTotal().getAmount()).isEqualTo(java.math.BigInteger.valueOf(3500));
             } else {
                 assertThat(receipt.getOrder().getPayableTotal().getAmount()).isEqualTo(java.math.BigInteger.valueOf(2000));
-                assertThat(jdbc.queryForObject("SELECT selling_price FROM product_variants WHERE id=?",java.math.BigDecimal.class,fixture.variant()))
+                assertThat(jdbc.queryForObject("SELECT base_price FROM product_variants WHERE id=?",java.math.BigDecimal.class,fixture.variant()))
                         .isEqualByComparingTo(java.math.BigDecimal.valueOf(1000));
             }
             assertOneCommittedOutcome();

@@ -35,7 +35,7 @@ class VoucherConcurrencyIT extends CheckoutIntegrationSupport {
         when(clock.instant()).thenAnswer(call -> current.get());
     }
     @ParameterizedTest @ValueSource(booleans={true,false})
-    void checkout_shouldUsePostLockTime_whenVoucherExpiresDuringObservedWait(boolean expired) throws Exception {
+    void checkout_shouldUseCapturedCatalogTime_whenVoucherExpiresDuringObservedWait(boolean expired) throws Exception {
         Instant before = current.get(); Instant end = before.plusSeconds(10);
         Long[] ids = transactions.execute(tx -> {
             long voucher = VoucherFixtures.definition(jdbc, "WAIT_" + System.nanoTime(), "FIXED_AMOUNT", BigDecimal.TEN, 1L, 1L);
@@ -65,24 +65,15 @@ class VoucherConcurrencyIT extends CheckoutIntegrationSupport {
                 return pending;
             }); // Releasing actual lock happens at commit, after advancing controlled time.
             Object outcome = result.get(10, TimeUnit.SECONDS);
-            if (expired) {
-                assertThat(outcome).isInstanceOf(com.example.demo.common.exception.ApplicationException.class);
-                var error = (com.example.demo.common.exception.ApplicationException)outcome;
-                assertThat(error.getStatus()).isEqualTo(409);
-                assertThat(error.getProperties()).containsEntry("reason", "VOUCHER_EXPIRED");
-                assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM orders", Long.class)).isZero();
-                assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM voucher_redemptions", Long.class)).isZero();
-                assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM inventory_reservations", Long.class)).isZero();
-                assertThat(jdbc.queryForObject("SELECT voucher_entitlement_id FROM carts WHERE id=?", Long.class, fixture.cart())).isEqualTo(ids[1]);
-                assertThat(jdbc.queryForObject("SELECT state FROM voucher_entitlements WHERE id=?", String.class, ids[1])).isEqualTo("AVAILABLE");
-            } else {
-                assertThat(outcome).isInstanceOf(com.example.demo.checkout.dto.response.CheckoutReceiptResponse.class);
-                var receipt = (com.example.demo.checkout.dto.response.CheckoutReceiptResponse)outcome;
-                assertThat(receipt.getOrder().getPlacedAt()).isEqualTo(current.get());
-                assertThat(jdbc.queryForObject("SELECT redeemed_at FROM voucher_redemptions WHERE order_id=?", java.sql.Timestamp.class, receipt.getOrder().getId()).toInstant()).isEqualTo(current.get());
-                assertThat(jdbc.queryForObject("SELECT reserved_at FROM inventory_reservations WHERE order_id=?", java.sql.Timestamp.class, receipt.getOrder().getId()).toInstant()).isEqualTo(current.get());
-                assertThat(jdbc.queryForObject("SELECT created_at FROM checkout_receipts WHERE order_id=?", java.sql.Timestamp.class, receipt.getOrder().getId()).toInstant()).isEqualTo(current.get());
-            }
+            assertThat(outcome).isInstanceOf(com.example.demo.checkout.dto.response.CheckoutReceiptResponse.class);
+            var receipt = (com.example.demo.checkout.dto.response.CheckoutReceiptResponse)outcome;
+            assertThat(receipt.getOrder().getPlacedAt()).isEqualTo(before);
+            assertThat(jdbc.queryForObject("SELECT redeemed_at FROM voucher_redemptions WHERE order_id=?", java.sql.Timestamp.class, receipt.getOrder().getId()).toInstant()).isEqualTo(before);
+            assertThat(jdbc.queryForObject("SELECT reserved_at FROM inventory_reservations WHERE order_id=?", java.sql.Timestamp.class, receipt.getOrder().getId()).toInstant()).isEqualTo(before);
+            assertThat(jdbc.queryForObject("SELECT created_at FROM checkout_receipts WHERE order_id=?", java.sql.Timestamp.class, receipt.getOrder().getId()).toInstant()).isEqualTo(before);
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM orders", Long.class)).isOne();
+            assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM voucher_redemptions", Long.class)).isOne();
+            assertThat(jdbc.queryForObject("SELECT state FROM voucher_entitlements WHERE id=?", String.class, ids[1])).isEqualTo("CONSUMED");
         }
     }
 
@@ -195,7 +186,7 @@ class VoucherConcurrencyIT extends CheckoutIntegrationSupport {
                 if(!releaseSelection.await(10,TimeUnit.SECONDS)) throw new IllegalStateException("Selection barrier timed out");
             }
             return result;
-        }).when(previews).getCartResponse(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.anyList(),org.mockito.ArgumentMatchers.anyMap(),org.mockito.ArgumentMatchers.anyBoolean());
+        }).when(previews).getCartResponse(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.anyList(),org.mockito.ArgumentMatchers.anyMap(),org.mockito.ArgumentMatchers.anyBoolean(),org.mockito.ArgumentMatchers.any(Instant.class));
         var workers=Executors.newFixedThreadPool(2);
         try {
             var purchase=workers.submit(() -> transactions.execute(tx -> {
