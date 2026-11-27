@@ -1,0 +1,67 @@
+# Private helper only; scripts/start-dev.sh selects services explicitly.
+services:
+  bootstrap:
+    image: backend-swe-demo-bootstrap:local
+    build:
+      context: ./tools/demo-bootstrap
+      dockerfile: Dockerfile
+    user: "10001:10001"
+    group_add:
+      - "${BOOTSTRAP_HOST_GID:-10001}"
+    env_file:
+      - .env.local
+    environment:
+      COMPOSE_PROJECT_NAME: backend-swe-demo
+      BOOTSTRAP_DAEMON_ID: ${BOOTSTRAP_DAEMON_ID:-}
+      LOCAL_DB_HOST: postgres
+      LOCAL_DB_PORT: "5432"
+      LOCAL_DB_NAME: ${LOCAL_DB_NAME:?Configure LOCAL_DB_NAME}
+      LOCAL_DB_USER: ${LOCAL_DB_USER:?Configure LOCAL_DB_USER}
+      LOCAL_DB_PASSWORD: ${LOCAL_DB_PASSWORD:?Configure private LOCAL_DB_PASSWORD}
+      LOCAL_STORAGE_BUCKET: ${LOCAL_STORAGE_BUCKET:?Configure LOCAL_STORAGE_BUCKET}
+      LOCAL_STORAGE_ENDPOINT: http://localstack:4567
+      AWS_EC2_METADATA_DISABLED: "true"
+      AWS_PROFILE: ""
+      AWS_DEFAULT_PROFILE: ""
+      AWS_ENDPOINT_URL: ""
+      AWS_ENDPOINT_URL_S3: ""
+    networks:
+      - default
+      - storage-private
+    volumes:
+      - type: bind
+        source: ./data/Catalog-Data
+        target: /source
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./demo/src/main/resources/db/migration
+        target: /migrations
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./scripts/start-dev.sh
+        target: /startup-script
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${DEMO_BOOTSTRAP_ARTIFACT:?Configure reviewed DEMO_BOOTSTRAP_ARTIFACT}
+        target: /artifact
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./.private/demo-bootstrap/reports
+        target: /reports
+        bind:
+          create_host_path: false
+      - type: volume
+        source: product-checkpoints
+        target: /catalog-checkpoints
+    labels:
+      demo-bootstrap.role: private-helper
+      demo-bootstrap.database: backend_demo
+      demo-bootstrap.bucket: backend-demo-images
