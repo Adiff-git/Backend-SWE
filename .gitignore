@@ -28,6 +28,9 @@ Thumbs.db
 
 # Private runtime credentials and backups
 /.private/
+**/.private/
+# Restricted course source package; preserve it locally, never redistribute it.
+/data/Catalog-Data/
 /tools/catalog-import/output/
 __pycache__/
 *.py[cod]
@@ -46,3 +49,17 @@ htmlcov/
 *.orig
 *~
 Desktop.ini
+
+# Standalone Python build artifacts
+dist/
+*.egg-info/
+
+# Generated review exports, chat evidence, and local runtime reports
+/output/
+/specs/013-variant-review-sale/changed-files.md
+/specs/013-variant-review-sale/implementation.diff
+/specs/013-variant-review-sale/validation/final-packaging.json
+/specs/013-variant-review-sale/validation/performance-run*/
+/specs/013-variant-review-sale/validation/scratch-checkout-recovery.json
+/specs/013-variant-review-sale/validation/t019-evidence/
+/specs/013-variant-review-sale/validation/working-tree-source-manifest.json

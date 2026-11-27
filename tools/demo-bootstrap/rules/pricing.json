@@ -1,0 +1,13 @@
+{
+  "version": "demo-pricing-v1",
+  "currency": "VND",
+  "cosmetic_adjustment": "0",
+  "log2_coefficients": {"Storage": "0.15", "RAM": "0.10", "Capacity": "0.10", "Power": "0.10", "Cable Length": "0.05"},
+  "linear_ratio_dimensions": ["Pack Size"],
+  "combined_multiplier_bounds": ["0.50", "1.50"],
+  "base_price_rounding": "ROUND_HALF_UP",
+  "direct_sale_discount_rounding": "FLOOR",
+  "unsupported_dimension_policy": "PRICE_NEUTRAL_AND_FLAGGED",
+  "original_price_policy": "PRESERVE_APPROVED_BASE_PRICE_EXACTLY",
+  "synthetic_price_disclaimer": "Synthetic demo rules; not market-price claims"
+}

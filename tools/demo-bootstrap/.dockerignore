@@ -1,0 +1,19 @@
+# Only this narrow tool directory is the build context.
+.git
+.env*
+__pycache__
+*.py[cod]
+.venv
+venv
+dist
+*.egg-info
+*.log*
+.private
+data
+artifacts
+reports
+**/.env*
+**/.private
+**/data
+**/artifacts
+**/reports
