@@ -102,7 +102,7 @@ class CatalogRelationshipsIT {
 	}
 
 	private void insertVariant(UUID productId, String options, String sku) {
-		jdbc.update("INSERT INTO product_variants (id, product_id, sku, option_combination, selling_price) "
+		jdbc.update("INSERT INTO product_variants (id, product_id, sku, option_combination, base_price) "
 				+ "VALUES (?, ?, ?, CAST(? AS JSONB), ?)", UUID.randomUUID(), productId, sku,
 				options, BigDecimal.valueOf(1000));
 	}

@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ProductCatalogServiceImpl implements ProductCatalogService {
+    private final ProductOptionService options;
 
 	private final ProductRepository products;
 	private final ProductImageRepository images;
@@ -46,6 +47,27 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 	private final ProductCatalogConverter converter;
 	private final Validator validator;
     private final com.example.demo.inventory.service.InventoryService inventory;
+    private final com.example.demo.catalog.converter.VariantPricingConverter pricingConverter;
+    private final java.time.Clock clock;
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<UUID, com.example.demo.catalog.dto.response.ProductPriceRange> getPriceRangesByIds(Collection<UUID> ids) {
+        if (ids == null || ids.size() > MAX_SIZE || ids.stream().anyMatch(java.util.Objects::isNull)) {
+            throw new InvalidCatalogRequestException("Invalid pricing identifiers");
+        }
+        if (ids.isEmpty()) return Map.of();
+        var at = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+        Map<UUID, Map<UUID, com.example.demo.catalog.dto.response.VariantPricing>> grouped = new HashMap<>();
+        for (var row : variants.findPricingForProducts(ids, at)) {
+            if (row.status() != ProductStatus.PUBLISHED) continue;
+            var pricing = pricingConverter.toPricing(row);
+            if (pricing != null) grouped.computeIfAbsent(row.productId(), key -> new HashMap<>()).put(row.variantId(), pricing);
+        }
+        Map<UUID, com.example.demo.catalog.dto.response.ProductPriceRange> result = new HashMap<>();
+        grouped.forEach((id, prices) -> result.put(id, priceRange(prices)));
+        return Map.copyOf(result);
+    }
 
 	@Override
 	@Transactional(readOnly = true)
@@ -132,7 +154,8 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 				.categoryId(request.getCategoryId() == null ? null : UUID.fromString(request.getCategoryId()))
 				.brandIds(request.getBrandIds() == null ? null : request.getBrandIds().stream().map(UUID::fromString).toList())
 				.minPrice(request.getMinPrice()).maxPrice(request.getMaxPrice()).sort(request.getSort())
-				.specificationGroups(request.getSpecificationGroups()).build();
+				.specificationGroups(request.getSpecificationGroups())
+                .pricingInstant(clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS)).build();
 		ProductCandidatePage candidatePage = products.findPublishedCandidates(criteria);
 		List<UUID> ids = candidatePage.getItems().stream().map(ProductCandidatePage.Candidate::getProductId).toList();
 		int totalPages = (int) Math.min(Integer.MAX_VALUE,
@@ -188,7 +211,8 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 			if (product != null) {
 				summaries.add(converter.toListingItem(converter.toSummary(product, signedUrls.get(id)),
 						candidate.getDisplayAmount(), candidate.getRepresentativeVariantId(),
-                        candidate.getRepresentativeVariantId() == null ? null : availability.get(candidate.getRepresentativeVariantId())));
+                        candidate.getRepresentativeVariantId() == null ? null : availability.get(candidate.getRepresentativeVariantId()),
+                        pricingConverter.toPricing(candidate), pricingConverter.toRange(candidate)));
 			}
 		}
 		return new ProductPage(List.copyOf(summaries), request.getPage(), request.getSize(),
@@ -200,10 +224,6 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 	public ProductDetail getProduct(UUID id) {
 		Product product = products.findByIdAndStatusWithCategory(id, ProductStatus.PUBLISHED)
 				.orElseThrow(ProductNotFoundException::new);
-		List<ProductVariant> ownedVariants = variants.findByProduct_IdOrderByIdAsc(id);
-		if (ownedVariants.isEmpty()) {
-			throw new CatalogConflictException();
-		}
 		List<ProductImage> gallery = images.findByProduct_IdOrderByDisplayOrderAsc(id);
 		Map<UUID, String> urls = new HashMap<>();
 		if (gallery.isEmpty()) {
@@ -222,9 +242,39 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 				}
 			}
 		}
-		return converter.toDetail(product, ownedVariants, gallery, urls,
-                inventory.getAvailability(ownedVariants.stream().map(ProductVariant::getId).toList()));
+        java.time.Instant at = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+        Map<UUID, com.example.demo.catalog.dto.response.VariantPricing> prices = new HashMap<>();
+        var ownedVariants=variants.findProductPricedVariants(id,at);
+        if(ownedVariants.isEmpty()) throw new CatalogConflictException();
+        for (var prepared : ownedVariants) {
+            com.example.demo.catalog.repository.CatalogPricingRow row=prepared.pricing();
+            if (!id.equals(row.productId())) throw new CatalogConflictException();
+            if (row.status() != ProductStatus.PUBLISHED) throw new ProductNotFoundException();
+            com.example.demo.catalog.dto.response.VariantPricing price = pricingConverter.toPricing(row);
+            if (price != null) prices.put(row.variantId(), price);
+        }
+        if (prices.size() != ownedVariants.size()) throw new CatalogConflictException();
+		return converter.toPreparedDetail(product, ownedVariants, gallery, urls,
+                inventory.getAvailability(ownedVariants.stream().map(row -> row.pricing().variantId()).toList()),
+                options.getPreparedDimensions(ownedVariants.stream().collect(java.util.stream.Collectors.toMap(
+                        row -> row.pricing().variantId(),com.example.demo.catalog.repository.CatalogDetailVariantRow::canonicalLabels))),
+                prices, priceRange(prices));
 	}
+
+    private com.example.demo.catalog.dto.response.ProductPriceRange priceRange(
+            Map<UUID, com.example.demo.catalog.dto.response.VariantPricing> prices) {
+        if (prices.isEmpty()) return new com.example.demo.catalog.dto.response.ProductPriceRange(null, null);
+        java.util.Comparator<Map.Entry<UUID, com.example.demo.catalog.dto.response.VariantPricing>> order =
+                java.util.Comparator.comparing((Map.Entry<UUID, com.example.demo.catalog.dto.response.VariantPricing> entry) ->
+                        entry.getValue().getEffectivePrice().getAmount());
+        Map.Entry<UUID, com.example.demo.catalog.dto.response.VariantPricing> minimum = prices.entrySet().stream()
+                .min(order.thenComparing(entry -> entry.getKey().toString())).orElseThrow();
+        Map.Entry<UUID, com.example.demo.catalog.dto.response.VariantPricing> maximum = prices.entrySet().stream()
+                .min(order.reversed().thenComparing(entry -> entry.getKey().toString())).orElseThrow();
+        return new com.example.demo.catalog.dto.response.ProductPriceRange(
+                new com.example.demo.catalog.dto.response.ProductPriceRange.Endpoint(minimum.getKey(), minimum.getValue()),
+                new com.example.demo.catalog.dto.response.ProductPriceRange.Endpoint(maximum.getKey(), maximum.getValue()));
+    }
 
 	private Map<UUID, Product> indexProducts(List<Product> fetched) {
 		Map<UUID, Product> byId = new HashMap<>();

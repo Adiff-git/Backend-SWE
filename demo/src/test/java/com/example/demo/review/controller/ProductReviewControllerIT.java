@@ -23,9 +23,11 @@ class ProductReviewControllerIT extends ReviewIntegrationSupport {
                 .andExpect(status().isOk()).andExpect(header().string("Cache-Control", "no-store"))
                 .andExpect(jsonPath("$.items[0].author.displayName").value("Former customer"))
                 .andExpect(jsonPath("$.items[0].author.profileImage").isEmpty())
-                .andExpect(jsonPath("$.items[0].authorId").doesNotExist());
+                .andExpect(jsonPath("$.items[0].authorId").doesNotExist())
+                .andExpect(jsonPath("$.items[0].purchasedOptions").isMap());
         mvc.perform(get("/api/products/" + purchase.product() + "/rating-summary"))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.reviewCount").value(1)).andExpect(jsonPath("$.averageRating").value(4));
+                .andExpect(status().isOk()).andExpect(jsonPath("$.reviewCount").value(1)).andExpect(jsonPath("$.averageRating").value(4))
+                .andExpect(jsonPath("$.ratingDistribution.4").value(1)).andExpect(jsonPath("$.ratingDistribution.1").value(0));
     }
     @Test void list_shouldReturn404ForUnpublishedProductAnd401ForInvalidSuppliedToken() throws Exception {
         jdbc.update("UPDATE products SET status='ARCHIVED' WHERE id=?", purchase.product());

@@ -51,13 +51,17 @@ class CheckoutServiceImplTest {
         com.example.demo.cart.dto.response.CheckoutCartSeed.Row row=new com.example.demo.cart.dto.response.CheckoutCartSeed.Row(3L,product,variant,2,true);
         com.example.demo.cart.dto.response.CheckoutCartSeed seed=new com.example.demo.cart.dto.response.CheckoutCartSeed(1L,2L,java.util.List.of(row));
         Clock clock=mock(Clock.class);
-        when(clock.instant()).thenReturn(java.time.Instant.parse("2026-11-18T03:00:00.123456789Z"));
         when(receipts.tryFence(anyLong())).thenReturn(true);
         when(carts.getCheckoutCartSeed(1L)).thenReturn(seed);
         when(addresses.getCheckoutAddressSnapshot(1L,1L)).thenReturn(new com.example.demo.user.dto.response.CheckoutAddressSnapshot("Recipient","0123456789","Address"));
-        when(catalog.getCheckoutVariantStates(java.util.List.of(variant))).thenReturn(java.util.Map.of(variant,
+        var at = java.time.Instant.parse("2026-11-18T03:00:00.123456Z");
+        var pricing = new com.example.demo.catalog.dto.response.VariantPricing(
+                new com.example.demo.catalog.dto.response.SellingPrice(java.math.BigInteger.valueOf(500),"VND"),
+                new com.example.demo.catalog.dto.response.SellingPrice(java.math.BigInteger.valueOf(500),"VND"),
+                new com.example.demo.catalog.dto.response.SellingPrice(java.math.BigInteger.ZERO,"VND"),null,at);
+        when(catalog.getCheckoutCatalogView(java.util.List.of(variant))).thenReturn(new com.example.demo.catalog.dto.response.CheckoutCatalogView(at,java.util.Map.of(variant,
                 new com.example.demo.catalog.dto.response.CheckoutVariantState(variant,product,com.example.demo.catalog.entity.ProductStatus.PUBLISHED,
-                        java.math.BigDecimal.valueOf(500),"Current name","SKU",java.util.Map.of())));
+                        java.math.BigDecimal.valueOf(500),"Current name","SKU",java.util.Map.of(),pricing))));
         when(inventory.lockAvailability(java.util.List.of(variant))).thenReturn(java.util.Map.of(variant,new com.example.demo.inventory.dto.response.InventoryAvailability(2,"IN_STOCK")));
         when(orders.createOrder(org.mockito.ArgumentMatchers.any())).thenAnswer(invocation -> {
             com.example.demo.order.dto.request.CreateOrderCommand command=invocation.getArgument(0);
@@ -69,7 +73,7 @@ class CheckoutServiceImplTest {
         com.example.demo.checkout.dto.response.CheckoutReceiptResponse receipt=service.checkout(1L,"Clock_sample_12345",new CheckoutRequest(1L));
         assertThat(receipt.getOrder().getPlacedAt()).isEqualTo(java.time.Instant.parse("2026-11-18T03:00:00.123456Z"));
         assertThat(receipt.getOrder().getPayableTotal().getAmount()).isEqualTo(java.math.BigInteger.valueOf(1000));
-        org.mockito.Mockito.verify(clock).instant();
+        org.mockito.Mockito.verifyNoInteractions(clock);
         org.mockito.ArgumentCaptor<com.example.demo.inventory.dto.request.ReservationCommand> allocation=org.mockito.ArgumentCaptor.forClass(com.example.demo.inventory.dto.request.ReservationCommand.class);
         org.mockito.Mockito.verify(inventory).reserveReservations(allocation.capture());
         assertThat(allocation.getValue().getOrderId()).isEqualTo(9L);

@@ -38,8 +38,9 @@ class ProductCatalogServiceImplTest {
     private final ProductImageStorage storage = mock(ProductImageStorage.class);
     private final com.example.demo.inventory.service.InventoryService inventory = mock(com.example.demo.inventory.service.InventoryService.class);
     private final ProductCatalogServiceImpl service = new ProductCatalogServiceImpl(
-            products, images, variants, storage, new ProductCatalogConverter(),
-            jakarta.validation.Validation.buildDefaultValidatorFactory().getValidator(), inventory);
+            new ProductOptionServiceImpl(), products, images, variants, storage, new ProductCatalogConverter(),
+            jakarta.validation.Validation.buildDefaultValidatorFactory().getValidator(), inventory,
+            new com.example.demo.catalog.converter.VariantPricingConverter(), java.time.Clock.systemUTC());
 
     @Test
     void getPublishedProductEntity_shouldReturnReference_whenPublished() {

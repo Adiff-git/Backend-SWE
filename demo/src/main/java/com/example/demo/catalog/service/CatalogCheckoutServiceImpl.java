@@ -22,10 +22,18 @@ public class CatalogCheckoutServiceImpl implements CatalogCheckoutService {
     private static final int BATCH_SIZE = 100;
     private final ProductRepository products;
     private final ProductVariantRepository variants;
+    private final com.example.demo.catalog.converter.VariantPricingConverter pricingConverter;
+    private final java.time.Clock clock;
 
     @Override
     @Transactional
     public Map<UUID, CheckoutVariantState> getCheckoutVariantStates(Collection<UUID> requested) {
+        return getCheckoutCatalogView(requested).getStates();
+    }
+
+    @Override
+    @Transactional
+    public com.example.demo.catalog.dto.response.CheckoutCatalogView getCheckoutCatalogView(Collection<UUID> requested) {
         List<UUID> ids = requested.stream().distinct().sorted(Comparator.comparing(UUID::toString)).toList();
         Map<UUID, UUID> candidateParents = new HashMap<>();
         for (List<UUID> batch : batches(ids)) {
@@ -36,15 +44,16 @@ public class CatalogCheckoutServiceImpl implements CatalogCheckoutService {
         Set<UUID> parentSet = Set.copyOf(parents);
         List<UUID> candidates = candidateParents.keySet().stream().sorted(Comparator.comparing(UUID::toString)).toList();
         for (List<UUID> batch : batches(candidates)) variants.lockCheckoutVariants(batch);
+        java.time.Instant at = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
         Map<UUID, CheckoutVariantState> result = new HashMap<>();
-        for (List<UUID> batch : batches(candidates)) {
-            for (CartVariantView row : variants.findCheckoutStates(batch)) {
-                if (!parentSet.contains(row.getProductId())) throw new CatalogConflictException();
-                result.put(row.getVariantId(),new CheckoutVariantState(row.getVariantId(),row.getProductId(),row.getStatus(),
-                        row.getPrice(),row.getProductName(),row.getSku(),row.getOptions()));
+        for (com.example.demo.catalog.repository.CatalogPricingRow row : variants.findPricedVariants(candidates, at)) {
+            if (!parentSet.contains(row.productId()) || !row.productId().equals(candidateParents.get(row.variantId()))) {
+                throw new CatalogConflictException();
             }
+            result.put(row.variantId(), new CheckoutVariantState(row.variantId(), row.productId(), row.status(),
+                    row.effective(), row.productName(), row.sku(), row.options(), pricingConverter.toPricing(row)));
         }
-        return Map.copyOf(result);
+        return new com.example.demo.catalog.dto.response.CheckoutCatalogView(at, result);
     }
 
     private List<List<UUID>> batches(List<UUID> ids) {

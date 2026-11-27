@@ -20,6 +20,33 @@ class ReviewReadServiceIT extends ReviewIntegrationSupport {
     @Autowired ReviewReadService reads;
     @Autowired ReviewStatisticsService statistics;
     @Autowired EntityManagerFactory factory;
+    @Test void filters_shouldUseUnicodeCommentPresenceAndKeepProductWideStatisticsAndHistory() {
+        transactions.executeWithoutResult(tx -> {
+            for (int i=0;i<4;i++) {
+                long item = i==0 ? purchase.item() : ReviewFixtures.additionalItem(entities,purchase.owner(),purchase.product());
+                entities.persist(new ProductReview(item,purchase.owner(),purchase.product(),i==0 ? 1 : 5,
+                        new String[]{null,"\u00a0\u2003\u3000", " text ", "\u200b"}[i],Instant.EPOCH));
+            }
+        });
+        var params = new org.springframework.util.LinkedMultiValueMap<String,String>();
+        params.add("rating","5"); params.add("hasComment","true"); params.add("hasImages","false");
+        var result = reads.getReviews(purchase.product(),ReviewListRequest.parse(params));
+        assertThat(result.getTotalElements()).isEqualTo(2);
+        assertThat(result.getItems()).extracting(com.example.demo.review.dto.response.ReviewResponse::getComment).containsExactly("\u200b"," text ");
+        var json=tools.jackson.databind.json.JsonMapper.builder().build().valueToTree(result);
+        assertThat(json.get("items").get(0).has("purchasedOptions")).isTrue();
+        assertThat(json.toString()).doesNotContain("recipientName", "orderId", "customerId");
+        params.set("hasComment","false");
+        assertThat(reads.getReviews(purchase.product(),ReviewListRequest.parse(params)).getTotalElements()).isEqualTo(1);
+        params.set("page","100");
+        var empty=reads.getReviews(purchase.product(),ReviewListRequest.parse(params));
+        assertThat(empty.getItems()).isEmpty(); assertThat(empty.getTotalElements()).isEqualTo(1);
+        var summary=tools.jackson.databind.json.JsonMapper.builder().build().valueToTree(statistics.getSummary(purchase.product()));
+        assertThat(summary.get("reviewCount").asLong()).isEqualTo(4);
+        assertThat(summary.get("ratingDistribution").get("1").asLong()).isEqualTo(1);
+        assertThat(summary.get("ratingDistribution").get("5").asLong()).isEqualTo(3);
+        assertThat(summary.get("ratingDistribution").get("2").asLong()).isZero();
+    }
     @Test void getSummary_shouldExcludeUncommittedReview() {
         try (java.util.concurrent.ExecutorService executor = java.util.concurrent.Executors.newSingleThreadExecutor()) {
             transactions.executeWithoutResult(status -> {

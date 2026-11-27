@@ -13,6 +13,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReviewConverter {
     public ReviewResponse toResponse(ProductReview review, List<UUID> imageIds, Map<UUID, ImageAccessResponse> images, ReviewAuthorSummary author) {
+        return toResponse(review,imageIds,images,author,null);
+    }
+    public ReviewResponse toResponse(ProductReview review, List<UUID> imageIds, Map<UUID,ImageAccessResponse> images,
+            ReviewAuthorSummary author,Map<String,String> purchasedOptions) {
         List<ReviewImageResponse> ordered = imageIds.stream().map(id -> {
             ImageAccessResponse access = images.get(id);
             return new ReviewImageResponse(id, access == null ? null : access.getFinalUrl());
@@ -23,6 +27,6 @@ public class ReviewConverter {
             safe = new ReviewAuthorSummary(safe.getDisplayName(), avatar == null ? safe.getProfileImage() : avatar);
         }
         return new ReviewResponse(review.getId(), review.getRating(), review.getComment(), ordered,
-                safe, review.getCreatedAt(), review.getUpdatedAt(), true);
+                safe, review.getCreatedAt(), review.getUpdatedAt(), true,purchasedOptions==null ? null : Map.copyOf(purchasedOptions));
     }
 }

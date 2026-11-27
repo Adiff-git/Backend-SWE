@@ -29,10 +29,11 @@ class CartVoucherServiceImplTest {
         verifyNoInteractions(items, catalog, images);
     }
     @Test void wallet_shouldPrepareContextBeforeVoucherReadWithoutImagesOrMutation() {
-        org.mockito.Mockito.when(walletContext.getEligibleSubtotal(1L)).thenReturn(java.math.BigInteger.TEN);
+        var at=java.time.Instant.EPOCH;
+        org.mockito.Mockito.when(walletContext.getPricingContext(1L)).thenReturn(new com.example.demo.cart.dto.response.CartWalletContext(java.math.BigInteger.TEN,at));
         service.getWalletPage(1L,0,20);
         var order=org.mockito.Mockito.inOrder(walletContext,vouchers);
-        order.verify(walletContext).getEligibleSubtotal(1L);order.verify(vouchers).getWalletPage(1L,0,20,java.math.BigInteger.TEN);
+        order.verify(walletContext).getPricingContext(1L);order.verify(vouchers).getWalletPage(1L,0,20,java.math.BigInteger.TEN,at);
         verifyNoInteractions(transactions,items,catalog,images);
     }
 }

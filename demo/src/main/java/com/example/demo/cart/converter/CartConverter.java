@@ -30,7 +30,7 @@ public class CartConverter {
                     published ? state.getPrimaryImageUrl() : null,
                     published ? money(state.getAmount()) : null, seed.getQuantity(), seed.isSelected(), purchasable,
                     cart.getIneligibleReasons().get(seed.getId()), money(cart.getSubtotals().get(seed.getId())),
-                    published ? state.getAvailability() : null);
+                    published ? state.getAvailability() : null, purchasable ? state.getPricing() : null);
         }).toList();
         SellingPrice total = money(cart.getSelectedSubtotal());
         return new CartResponse(items, cart.getSelectedItemCount(), cart.getSelectedTotalQuantity(), total, total);

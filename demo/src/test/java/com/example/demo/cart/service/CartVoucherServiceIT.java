@@ -14,6 +14,44 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @org.springframework.context.annotation.Import(com.example.demo.config.SqlCaptureConfiguration.class)
 class CartVoucherServiceIT extends CheckoutIntegrationSupport {
+    @Test
+    void directSale_shouldPrecedeVoucherEligibilityAndOrderLevelDiscount() {
+        long grant = grant();
+        jdbc.update("UPDATE products SET sale_percentage=20,sale_enabled=TRUE WHERE id=?", fixture.product());
+        var response = vouchers.applyVoucher(fixture.owner(), grant);
+        assertThat(response.getSelectedSubtotal().getAmount()).isEqualTo(BigInteger.valueOf(1600));
+        assertThat(response.getVoucherDiscount().getAmount()).isEqualTo(BigInteger.TEN);
+        assertThat(response.getFinalTotal().getAmount()).isEqualTo(BigInteger.valueOf(1590));
+    }
+    @Test void sale_shouldApplyMinimumAndPercentageCapToAfterSaleSubtotalAndClearFreeCartSelection() {
+        long grant=grant();
+        jdbc.update("UPDATE products SET sale_percentage=20,sale_enabled=TRUE WHERE id=?",fixture.product());
+        jdbc.update("UPDATE vouchers SET minimum_subtotal=1800 WHERE id=(SELECT voucher_id FROM voucher_entitlements WHERE id=?)",grant);
+        assertThatThrownBy(() -> vouchers.applyVoucher(fixture.owner(),grant)).isInstanceOf(com.example.demo.voucher.exception.VoucherNotApplicableException.class);
+        jdbc.update("UPDATE vouchers SET minimum_subtotal=0,discount_type='PERCENTAGE',discount_value=12.50,maximum_discount=100 WHERE id=(SELECT voucher_id FROM voucher_entitlements WHERE id=?)",grant);
+        var applied=vouchers.applyVoucher(fixture.owner(),grant);
+        assertThat(applied.getSelectedSubtotal().getAmount()).isEqualTo(BigInteger.valueOf(1600));
+        assertThat(applied.getVoucherDiscount().getAmount()).isEqualTo(BigInteger.valueOf(100));
+        jdbc.update("UPDATE products SET sale_percentage=100 WHERE id=?",fixture.product());
+        var free=carts.getCart(fixture.owner());
+        assertThat(free.getSelectedSubtotal().getAmount()).isZero();
+        assertThat(free.getVoucherDiscount().getAmount()).isZero();
+        assertThat(free.getVoucherSelectionClearedReason()).isEqualTo("NO_ELIGIBLE_ITEMS");
+        assertThat(jdbc.queryForObject("SELECT state FROM voucher_entitlements WHERE id=?",String.class,grant)).isEqualTo("AVAILABLE");
+    }
+    @org.springframework.test.context.bean.override.mockito.MockitoSpyBean java.time.Clock eventClock;
+    @Test void hiddenCart_shouldRetainPreparedVoucherEventWithoutSamplingClockAgain() {
+        long grant=grant(); vouchers.applyVoucher(fixture.owner(),grant);
+        Instant at=Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS),end=at.plusSeconds(1);
+        jdbc.update("UPDATE products SET status='ARCHIVED' WHERE id=?",fixture.product());
+        jdbc.update("UPDATE vouchers SET valid_until=? WHERE id=(SELECT voucher_id FROM voucher_entitlements WHERE id=?)",java.sql.Timestamp.from(end),grant);
+        org.mockito.Mockito.doReturn(at,end.plusSeconds(1)).when(eventClock).instant();
+        org.mockito.Mockito.clearInvocations(eventClock);
+        var result=carts.getCart(fixture.owner());
+        assertThat(result.getVoucherSelectionClearedReason()).isEqualTo("NO_ELIGIBLE_ITEMS");
+        assertThat(result.getItems().getFirst().getPricing()).isNull();
+        org.mockito.Mockito.verify(eventClock).instant();
+    }
     @Autowired CartVoucherService vouchers;
     @Autowired CartService carts;
     private long grant() {

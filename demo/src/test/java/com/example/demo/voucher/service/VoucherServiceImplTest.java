@@ -59,7 +59,8 @@ class VoucherServiceImplTest {
         assertThat(preview.getReason()).isNull();
         org.mockito.Mockito.verify(definitions, org.mockito.Mockito.never()).incrementGlobal(3L);
     }
-    @Test void lockCheckoutVoucher_shouldSampleAuthoritativeTimeOnlyAfterEveryRequiredLock() {
+    @org.junit.jupiter.params.ParameterizedTest @org.junit.jupiter.params.provider.ValueSource(booleans={false,true})
+    void lockCheckoutVoucher_shouldKeepLockOrderAndUseCapturedTimeOrLegacyPostLockClock(boolean captured) {
         var clock = mock(Clock.class);
         var grant = mock(VoucherEntitlementRepository.GrantRow.class);
         when(grant.getId()).thenReturn(2L); when(grant.getVoucherId()).thenReturn(3L);
@@ -77,14 +78,14 @@ class VoucherServiceImplTest {
         when(grants.lockOwned(1L, 2L)).thenReturn(Optional.of(grant));
         when(clock.instant()).thenReturn(event);
         var lockedService = new VoucherServiceImpl(definitions, grants, usages, new VoucherValidator(), new VoucherCalculator(), new VoucherConverter(), clock);
-        var quote = lockedService.lockCheckoutVoucher(1L, 2L, BigInteger.TEN);
+        var quote = captured ? lockedService.lockCheckoutVoucher(1L,2L,BigInteger.TEN,event) : lockedService.lockCheckoutVoucher(1L, 2L, BigInteger.TEN);
         assertThat(quote.getEvent()).isEqualTo(event);
         var sequence = org.mockito.Mockito.inOrder(definitions, usages, grants, clock);
         sequence.verify(grants).findOwned(1L, 2L);
         sequence.verify(definitions).lockDefinition(3L);
         sequence.verify(usages).lockUsage(3L, 1L);
         sequence.verify(grants).lockOwned(1L, 2L);
-        sequence.verify(clock).instant();
+        if(captured) org.mockito.Mockito.verifyNoInteractions(clock); else sequence.verify(clock).instant();
     }
     @Test void wallet_shouldCountFirstAndBindLongOffsetForNonemptyOverflow() {
         when(definitions.countWallet(1L)).thenReturn(20L);

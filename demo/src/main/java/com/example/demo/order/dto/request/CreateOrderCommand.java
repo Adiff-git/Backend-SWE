@@ -50,9 +50,16 @@ public class CreateOrderCommand {
         int quantity;
         BigInteger unitPrice;
         BigInteger lineTotal;
+        com.example.demo.catalog.dto.response.VariantPricing pricing;
 
         public Item(Long cartItemId, UUID productId, UUID variantId, String productName, String sku,
                 Map<String, String> options, int quantity, BigInteger unitPrice, BigInteger lineTotal) {
+            this(cartItemId, productId, variantId, productName, sku, options, quantity, unitPrice, lineTotal, null);
+        }
+        public Item(Long cartItemId, UUID productId, UUID variantId, String productName, String sku,
+                Map<String, String> options, int quantity, BigInteger unitPrice, BigInteger lineTotal,
+                com.example.demo.catalog.dto.response.VariantPricing pricing) {
+            this.pricing = pricing;
             this.cartItemId = cartItemId;
             this.productId = productId;
             this.variantId = variantId;

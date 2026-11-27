@@ -56,9 +56,14 @@ class CatalogCartReadServiceIT {
 
     @Test void getVariantStates_shouldTreatNegativePriceAsUnavailableWithoutChangingCatalog() {
         UUID variant = transactions.execute(status -> CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED).variant().getId());
-        jdbc.update("UPDATE product_variants SET selling_price=-1 WHERE id=?", variant);
-        assertThat(service.getVariantStates(List.of(variant)).get(variant).getAmount()).isNull();
-        jdbc.update("UPDATE product_variants SET selling_price=0 WHERE id=?", variant);
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> jdbc.update("UPDATE product_variants SET base_price=-1 WHERE id=?", variant))
+                .hasStackTraceContaining("ck_product_variants_base_price");
+        transactions.executeWithoutResult(tx -> {
+            jdbc.execute("CREATE TEMP VIEW product_variants AS SELECT id,product_id,sku,option_combination,-1::NUMERIC AS base_price FROM public.product_variants");
+            assertThat(service.getVariantStates(List.of(variant)).get(variant).getAmount()).isNull();
+            tx.setRollbackOnly();
+        });
+        jdbc.update("UPDATE product_variants SET base_price=0 WHERE id=?", variant);
         assertThat(service.getVariantStates(List.of(variant)).get(variant).isPurchasable()).isTrue();
     }
 
@@ -66,7 +71,7 @@ class CatalogCartReadServiceIT {
         UUID variant = transactions.execute(status -> CatalogFixtures.persistProduct(entities, ProductStatus.PUBLISHED).variant().getId());
         for (String price : List.of("0.5", "NaN", "Infinity", "-Infinity")) {
             org.assertj.core.api.Assertions.assertThatThrownBy(() -> jdbc.update(
-                    "UPDATE product_variants SET selling_price=CAST(? AS numeric) WHERE id=?", price, variant))
+                    "UPDATE product_variants SET base_price=CAST(? AS numeric) WHERE id=?", price, variant))
                     .as(price).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
         }
     }

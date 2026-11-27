@@ -28,6 +28,13 @@ class CatalogCartReadServiceImplTest {
     ProductImageRepository images = mock(ProductImageRepository.class);
     com.example.demo.inventory.service.InventoryService inventory = mock(com.example.demo.inventory.service.InventoryService.class);
 
+    private com.example.demo.catalog.repository.CatalogPricingRow priced(CartVariantView row, java.time.Instant at) {
+        var amount = row.getPrice();
+        boolean valid = amount != null && amount.signum()>=0 && amount.stripTrailingZeros().scale()<=0;
+        return new com.example.demo.catalog.repository.CatalogPricingRow(row.getVariantId(),row.getProductId(),row.getStatus(),
+                row.getProductName(),row.getSku(),row.getOptions()==null ? Map.of() : row.getOptions(),amount,valid ? amount : null,
+                valid ? BigDecimal.ZERO : null,null,null,null,at);
+    }
     @org.junit.jupiter.api.BeforeEach void prepareKnownZeroStock() {
         when(inventory.getAvailability(anyCollection())).thenAnswer(call -> call.<Collection<UUID>>getArgument(0)
                 .stream().collect(java.util.stream.Collectors.toMap(id -> id,
@@ -40,7 +47,7 @@ class CatalogCartReadServiceImplTest {
         when(row.getVariantId()).thenReturn(id); when(row.getProductId()).thenReturn(id);
         when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getPrice()).thenReturn(BigDecimal.TEN);
         when(row.getProductName()).thenReturn("P"); when(row.getSku()).thenReturn("S"); when(row.getOptions()).thenReturn(Map.of());
-        when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
+        when(variants.findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any())).thenAnswer(call -> List.of(priced(row,call.getArgument(1))));
         when(inventory.getAvailability(List.of(id))).thenReturn(Map.of(id, new com.example.demo.inventory.dto.response.InventoryAvailability(0, "OUT_OF_STOCK")));
         var state = new CatalogCartReadServiceImpl(variants, products, images, inventory).getVariantStates(List.of(id)).get(id);
         assertThat(state.getAvailability().getStatus()).isEqualTo("OUT_OF_STOCK");
@@ -56,7 +63,7 @@ class CatalogCartReadServiceImplTest {
         when(row.getStatus()).thenReturn(ProductStatus.ARCHIVED);
         when(row.getPrice()).thenReturn(BigDecimal.TEN);
         when(row.getProductName()).thenReturn("Hidden new name");
-        when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
+        when(variants.findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any())).thenAnswer(call -> List.of(priced(row,call.getArgument(1))));
         CartVariantState state = new CatalogCartReadServiceImpl(variants, products, images, inventory).getVariantStates(List.of(variant)).get(variant);
         assertThat(state.isPurchasable()).isFalse();
         assertThat(state.getProductName()).isNull();
@@ -74,7 +81,7 @@ class CatalogCartReadServiceImplTest {
         when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED);
         when(row.getPrice()).thenReturn(BigDecimal.ZERO);
         when(row.getOptions()).thenReturn(Map.of());
-        when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
+        when(variants.findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any())).thenAnswer(call -> List.of(priced(row,call.getArgument(1))));
         when(images.findCartPrimaryImages(anyCollection())).thenReturn(List.<Object[]>of(new Object[]{product,"images/key"}));
         when(products.lockStatusesForShare(anyCollection())).thenReturn(List.<Object[]>of(new Object[]{product,"ARCHIVED"}));
         com.example.demo.storage.service.PreparedImageUrls urls = mock(com.example.demo.storage.service.PreparedImageUrls.class);
@@ -94,7 +101,7 @@ class CatalogCartReadServiceImplTest {
             when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getPrice()).thenReturn(BigDecimal.TEN);
             when(row.getOptions()).thenReturn(Map.of()); rows.put(id, row);
         }
-        when(variants.findCartStates(anyCollection())).thenAnswer(call -> ((Collection<UUID>)call.getArgument(0)).stream().map(rows::get).toList());
+        when(variants.findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any())).thenAnswer(call -> ((Collection<UUID>)call.getArgument(0)).stream().map(rows::get).map(row -> priced(row,call.getArgument(1))).toList());
         when(images.findCartPrimaryImages(anyCollection())).thenAnswer(call -> ((Collection<UUID>)call.getArgument(0)).stream()
                 .map(id -> new Object[]{id, "image/"+id}).toList());
         when(products.lockStatusesForShare(anyCollection())).thenAnswer(call -> ((Collection<UUID>)call.getArgument(0)).stream()
@@ -107,7 +114,7 @@ class CatalogCartReadServiceImplTest {
         List<String> ordered = locks.getAllValues().stream().flatMap(Collection::stream).map(UUID::toString).toList();
         assertThat(ordered).isSorted();
         assertThat(locks.getAllValues().getFirst()).hasSize(100);
-        verify(variants, times(2)).findCartStates(anyCollection());
+        verify(variants).findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any());
         verify(images, times(4)).findCartPrimaryImages(anyCollection());
         assertThat(new CatalogCartReadServiceImpl(variants, products, images, inventory).getCartPresentation(rows.keySet(), null).values())
                 .allMatch(row -> row.getPrimaryImageUrl() == null);
@@ -118,7 +125,7 @@ class CatalogCartReadServiceImplTest {
         CartVariantView row = mock(CartVariantView.class);
         when(row.getVariantId()).thenReturn(id); when(row.getProductId()).thenReturn(id);
         when(row.getStatus()).thenReturn(ProductStatus.PUBLISHED); when(row.getOptions()).thenReturn(Map.of());
-        when(variants.findCartStates(anyCollection())).thenReturn(List.of(row));
+        when(variants.findPricedVariants(anyCollection(),org.mockito.ArgumentMatchers.any())).thenAnswer(call -> List.of(priced(row,call.getArgument(1))));
         var service = new CatalogCartReadServiceImpl(variants, products, images, inventory);
         for (BigDecimal price : List.of(new BigDecimal("0.5"), BigDecimal.valueOf(-1))) {
             when(row.getPrice()).thenReturn(price);

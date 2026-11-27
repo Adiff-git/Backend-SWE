@@ -57,6 +57,21 @@ class ProductListingControllerTest {
         when(service.listProducts(any(ProductSearchRequest.class))).thenReturn(new ProductPage(List.of(), 0, 20, 0, 0));
     }
 
+    @Test void listing_shouldExposePairedSaleEvidenceAndRangeEndpointIdentity() throws Exception {
+        UUID product=UUID.randomUUID(),variant=UUID.randomUUID();
+        var price=new com.example.demo.catalog.dto.response.VariantPricing(new SellingPrice(BigInteger.valueOf(1000),"VND"),
+                new SellingPrice(BigInteger.valueOf(800),"VND"),new SellingPrice(BigInteger.valueOf(200),"VND"),java.math.BigDecimal.valueOf(20),java.time.Instant.parse("2026-11-26T00:00:00Z"));
+        var endpoint=new com.example.demo.catalog.dto.response.ProductPriceRange.Endpoint(variant,price);
+        var item=new ProductListingItem(product,"Product",new CategorySummary(UUID.randomUUID(),"Category"),null,
+                price.getEffectivePrice(),variant,null,price,new com.example.demo.catalog.dto.response.ProductPriceRange(endpoint,endpoint));
+        when(service.listProducts(any(ProductSearchRequest.class))).thenReturn(new ProductPage(List.of(item),0,20,1,1));
+        mvc.perform(get("/api/products")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].displayPrice.amount").value(800))
+                .andExpect(jsonPath("$.items[0].pricing.originalPrice.amount").value(1000))
+                .andExpect(jsonPath("$.items[0].priceRange.minimum.variantId").value(variant.toString()))
+                .andExpect(jsonPath("$.items[0].priceRange.maximum.pricing.effectivePrice.amount").value(800));
+    }
+
     @Test
     void anonymousDefaultAndOutOfRangePagesUseCanonicalResponse() throws Exception {
         mvc.perform(get("/api/products"))

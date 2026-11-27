@@ -118,7 +118,13 @@ public class CatalogQueryCountIT {
 		});
 		SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
 		sessionFactory.getStatistics().clear();
-		ProductDetail detail = service.getProduct(id);
+		SqlCapture.begin();
+        ProductDetail detail;
+        java.util.List<String> statements;
+        try { detail=service.getProduct(id); } finally { statements=SqlCapture.end(); }
+        recordSql("detail-with-prepared-pricing",statements);
+        // Count direct JDBC too: metadata and prices share one projection without increasing the inherited total.
+        assertThat(statements).hasSizeLessThanOrEqualTo(5);
 		assertThat(detail.getVariants()).hasSize(5);
 		assertThat(detail.getImages()).hasSize(10);
 		assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isLessThanOrEqualTo(5);
@@ -144,7 +150,7 @@ public class CatalogQueryCountIT {
         environment.put("database", jdbc.queryForMap("SELECT current_database() AS database,current_schema() AS schema,version() AS version,"
                 + "current_setting('server_encoding') AS encoding,current_setting('default_transaction_isolation') AS default_isolation"));
         environment.put("extensions", jdbc.queryForList("SELECT extname,extversion FROM pg_extension ORDER BY extname"));
-        environment.put("collation", jdbc.queryForList("SELECT collname,collisdeterministic,collversion FROM pg_collation WHERE collname='und-x-icu'"));
+        environment.put("collation", jdbc.queryForList("SELECT collname,collprovider,collisdeterministic,collversion,pg_collation_actual_version(oid) AS actual_version FROM pg_collation WHERE collname IN ('und-x-icu','catalog_option_root_v1')"));
         environment.put("history", jdbc.queryForList("SELECT installed_rank,version,checksum,success FROM flyway_schema_history ORDER BY installed_rank"));
         environment.put("jdbcUrl", jdbc.execute((org.springframework.jdbc.core.ConnectionCallback<String>) connection -> connection.getMetaData().getURL()));
         environment.put("serialExecution", true);
