@@ -63,7 +63,7 @@ class CatalogEnhancementMigrationIT {
         }
     }
     @Test
-    void incompatibleImagelessUpgradePreservesV27RowsAndHistory() throws Exception {
+    void incompatibleImagelessUpgradeRejectsV31AndPreservesLegacyRows() throws Exception {
         String url = "jdbc:tc:postgresql:17-alpine:///catalog_admin_incompatible_upgrade_test";
         try (Connection anchor = DriverManager.getConnection(url, "test", "test")) {
             Flyway.configure().dataSource(url, "test", "test").target("27").load().migrate();
@@ -79,19 +79,21 @@ class CatalogEnhancementMigrationIT {
             assertThatThrownBy(() -> Flyway.configure().dataSource(url, "test", "test").load().migrate())
                     .hasStackTraceContaining("Invalid catalog gallery");
             try (Statement sql = anchor.createStatement(); var rows = sql.executeQuery(
-                    "SELECT p.id,p.status,v.id,v.sku,v.selling_price FROM products p JOIN product_variants v ON v.product_id=p.id")) {
+                    "SELECT p.id,p.status,v.id,v.sku,v.selling_price,v.base_price FROM products p JOIN product_variants v ON v.product_id=p.id")) {
                 assertThat(rows.next()).isTrue();
                 assertThat(rows.getObject(1)).isEqualTo(product);
                 assertThat(rows.getString(2)).isEqualTo("PUBLISHED");
                 assertThat(rows.getObject(3)).isEqualTo(variant);
                 assertThat(rows.getString(4)).isEqualTo("legacy-imageless");
                 assertThat(rows.getBigDecimal(5)).isEqualByComparingTo("1234");
+                assertThat(rows.getBigDecimal(6)).isEqualByComparingTo("1234");
                 assertThat(rows.next()).isFalse();
             }
             try (Statement sql = anchor.createStatement(); var rows = sql.executeQuery(
                     "SELECT MAX(version::integer) FROM flyway_schema_history WHERE success")) {
                 assertThat(rows.next()).isTrue();
-                assertThat(rows.getInt(1)).isEqualTo(27);
+                // Flyway commits V28–V30 individually before V31 rolls back.
+                assertThat(rows.getInt(1)).isEqualTo(30);
             }
             try (Statement sql = anchor.createStatement(); var rows = sql.executeQuery(
                     "SELECT COUNT(*) FROM information_schema.columns WHERE table_schema='public' AND table_name='products' AND column_name='version'")) {

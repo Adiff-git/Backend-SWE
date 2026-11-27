@@ -11,6 +11,7 @@ import com.example.demo.config.CheckoutIntegrationSupport;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Map;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,15 @@ class OrderSaleSnapshotIT extends CheckoutIntegrationSupport {
     @Autowired private CheckoutService checkout;
     @Autowired private CheckoutConverter converter;
 
+    @Test
+    void publishedVariantRejectsZeroBasePrice() {
+        assertThatThrownBy(() -> jdbc.update(
+                "UPDATE product_variants SET base_price=0 WHERE id=?", fixture.variant()))
+                .hasStackTraceContaining("Invalid Published variants");
+    }
+
     @ParameterizedTest
-    @CsvSource({"1000,,1000,0,false", "101,12.50,89,12,false", "0,100,0,0,false", "1000,20,800,200,true", "1000,100,0,1000,false"})
+    @CsvSource({"1000,,1000,0,false", "101,12.50,89,12,false", "1000,20,800,200,true", "1000,100,0,1000,false"})
     void checkout_shouldCommitReloadableImmutableSaleEvidenceAndReplayOriginalReceipt(
             long base, BigDecimal percentage, long paid, long discount, boolean bounded) {
         jdbc.update("UPDATE product_variants SET base_price=? WHERE id=?", base, fixture.variant());

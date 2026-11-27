@@ -48,7 +48,7 @@ class InventoryMigrationIT {
         UUID product = UUID.randomUUID();
         UUID id = UUID.randomUUID();
         transactions.executeWithoutResult(s -> {
-            jdbc.update("INSERT INTO categories(id,name) VALUES (?,'Inventory category')", category);
+            jdbc.update("INSERT INTO categories(id,name) VALUES (?,?)", category, "Inventory category " + category);
             jdbc.update("INSERT INTO products(id,category_id,name,status) VALUES (?,?,'Inventory product','DRAFT')", product, category);
             jdbc.update("INSERT INTO product_variants(id,product_id,sku,option_combination," + (saleSchemaInstalled ? "base_price" : "selling_price") + ") VALUES (?,?,?,'{\"choice\":\"original\"}',100)", id, product, "INV-" + id);
         });

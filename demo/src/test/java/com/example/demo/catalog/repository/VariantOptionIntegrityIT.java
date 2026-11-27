@@ -84,7 +84,7 @@ class VariantOptionIntegrityIT {
         UUID product = seed(Map.of("Color", "Red"));
         assertThatThrownBy(() -> transactions.executeWithoutResult(status ->
                 jdbc.update("DELETE FROM product_variants WHERE product_id=?", product)))
-                .hasStackTraceContaining("requires at least one variant");
+                .hasStackTraceContaining("Invalid Published variants");
         transactions.executeWithoutResult(status -> insert(product, "{\"Color\":\"Blue\"}"));
         transactions.executeWithoutResult(status -> jdbc.update(
                 "DELETE FROM product_variants WHERE product_id=? AND option_combination->>'Color'='Blue'", product));
@@ -114,6 +114,7 @@ class VariantOptionIntegrityIT {
             entities.persist(fixture.category());
             entities.persist(fixture.product());
             entities.persist(fixture.variant());
+            entities.persist(CatalogFixtures.image(fixture.product(), 0, true));
             return fixture.product().getId();
         });
     }
