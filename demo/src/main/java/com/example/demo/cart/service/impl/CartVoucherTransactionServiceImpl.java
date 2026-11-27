@@ -43,8 +43,7 @@ public class CartVoucherTransactionServiceImpl implements CartVoucherTransaction
         if (quote.getReason()!=null) throw new VoucherNotApplicableException(quote.getReason());
         if (cart == null) throw new VoucherNotApplicableException("NO_ELIGIBLE_ITEMS");
         cart.selectVoucher(grant);
-        var finalStates = catalog.getCartPresentation(prepared, urls);
-        return previews.getCartResponse(cart, rows, finalStates, true,prepared.getPricingInstant());
+        return previews.getCartResponse(cart, rows, states, true,prepared.getPricingInstant());
     }
     @Override public void removeVoucher(Long owner) {
         validator.owner(owner); carts.setLockTimeout(lockTimeoutMs + "ms");

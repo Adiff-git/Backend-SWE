@@ -12,8 +12,13 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.Instant;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.sql.DataSource;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -40,35 +45,28 @@ class CartPreparedPricingIT extends CheckoutIntegrationSupport {
         if (edit.equals("enabled") || edit.equals("start") || edit.equals("end")) {
             jdbc.update("UPDATE products SET sale_percentage=20,sale_enabled=FALSE WHERE id=?", fixture.product());
         }
-        AtomicBoolean changed = new AtomicBoolean();
-        doAnswer(invocation -> {
-            CartResponse response = (CartResponse) invocation.callRealMethod();
-            if (invocation.getArgument(0) == null && changed.compareAndSet(false, true)) {
-                // Direct connection is independent of the operation's Spring transaction.
-                try (Connection connection = source.getConnection()) {
-                    String sql = edit.equals("base") ? "UPDATE product_variants SET base_price=2000 WHERE id=?"
-                            : switch (edit) {
-                                case "percentage", "enabled" -> "UPDATE products SET sale_percentage=20,sale_enabled=TRUE WHERE id=?";
-                                case "start" -> "UPDATE products SET sale_enabled=TRUE,sale_starts_at=CURRENT_TIMESTAMP-INTERVAL '1 hour' WHERE id=?";
-                                case "end" -> "UPDATE products SET sale_enabled=TRUE,sale_ends_at=CURRENT_TIMESTAMP+INTERVAL '1 hour' WHERE id=?";
-                                default -> throw new IllegalArgumentException(edit);
-                            };
-                    try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                        statement.setObject(1, edit.equals("base") ? fixture.variant() : fixture.product());
-                        statement.executeUpdate();
-                    }
+        var writeStarted = new CountDownLatch(1);
+        var pendingWrite = new AtomicReference<Future<Integer>>();
+        try (var writer = Executors.newSingleThreadExecutor()) {
+            doAnswer(invocation -> {
+                CartResponse response = (CartResponse) invocation.callRealMethod();
+                if (invocation.getArgument(0) == null) {
+                    pendingWrite.set(writer.submit(() -> updatePrice(edit, writeStarted)));
+                    assertThat(writeStarted.await(10, TimeUnit.SECONDS)).isTrue();
                 }
-            }
-            return response;
-        }).when(previews).getCartResponse(any(), any(), any(), anyBoolean(),any());
+                return response;
+            }).when(previews).getCartResponse(any(), any(), any(), anyBoolean(), any());
 
-        org.mockito.Mockito.clearInvocations(pricingRows);
-        CartResponse operation = vouchers.applyVoucher(fixture.owner(), grant);
-        assertThat(changed).isTrue();
-        org.mockito.Mockito.verify(pricingRows).findPricedVariants(any(),any());
-        assertThat(operation.getSelectedSubtotal().getAmount()).isEqualTo(BigInteger.valueOf(2000));
-        assertThat(operation.getVoucherDiscount().getAmount()).isEqualTo(BigInteger.TEN);
-        assertThat(operation.getFinalTotal().getAmount()).isEqualTo(BigInteger.valueOf(1990));
+            org.mockito.Mockito.clearInvocations(pricingRows);
+            CartResponse operation = vouchers.applyVoucher(fixture.owner(), grant);
+            assertThat(pendingWrite.get()).isNotNull();
+            assertThat(pendingWrite.get().get(15, TimeUnit.SECONDS)).isEqualTo(1);
+            // Discover the parent, then refresh once while holding its publication lock.
+            org.mockito.Mockito.verify(pricingRows, org.mockito.Mockito.times(2)).findPricedVariants(any(), any());
+            assertThat(operation.getSelectedSubtotal().getAmount()).isEqualTo(BigInteger.valueOf(2000));
+            assertThat(operation.getVoucherDiscount().getAmount()).isEqualTo(BigInteger.TEN);
+            assertThat(operation.getFinalTotal().getAmount()).isEqualTo(BigInteger.valueOf(1990));
+        }
         CartResponse next = carts.getCart(fixture.owner());
         BigInteger current = BigInteger.valueOf(edit.equals("base") ? 4000 : 1600);
         assertThat(next.getSelectedSubtotal().getAmount()).isEqualTo(current);
@@ -82,6 +80,23 @@ class CartPreparedPricingIT extends CheckoutIntegrationSupport {
         var purchase = checkout.checkout(fixture.owner(),"Prepared_checkout_123",new com.example.demo.checkout.dto.request.CheckoutRequest(fixture.address()));
         assertThat(purchase.getOrder().getMerchandiseTotal().getAmount()).isEqualTo(current);
         assertThat(purchase.getOrder().getPayableTotal().getAmount()).isEqualTo(current.subtract(BigInteger.TEN));
-        org.mockito.Mockito.verify(pricingRows,org.mockito.Mockito.times(edit.equals("base") ? 4 : 3)).findPricedVariants(any(),any());
+        org.mockito.Mockito.verify(pricingRows,org.mockito.Mockito.times(edit.equals("base") ? 6 : 5)).findPricedVariants(any(),any());
+    }
+
+    private int updatePrice(String edit, CountDownLatch writeStarted) throws SQLException {
+        String sql = switch (edit) {
+            case "base" -> "UPDATE product_variants SET base_price=2000 WHERE id=?";
+            case "percentage", "enabled" -> "UPDATE products SET sale_percentage=20,sale_enabled=TRUE WHERE id=?";
+            case "start" -> "UPDATE products SET sale_enabled=TRUE,sale_starts_at=CURRENT_TIMESTAMP-INTERVAL '1 hour' WHERE id=?";
+            case "end" -> "UPDATE products SET sale_enabled=TRUE,sale_ends_at=CURRENT_TIMESTAMP+INTERVAL '1 hour' WHERE id=?";
+            default -> throw new IllegalArgumentException(edit);
+        };
+        try (Connection connection = source.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setQueryTimeout(10);
+            statement.setObject(1, edit.equals("base") ? fixture.variant() : fixture.product());
+            writeStarted.countDown();
+            return statement.executeUpdate();
+        }
     }
 }
