@@ -4,12 +4,17 @@
 
 Run the commands below from the repository root, where `compose.dev.yaml` is located.
 
+All tracked text uses LF except Windows batch scripts. See
+[the line-ending policy](docs/line-ending-policy.md) for the normalized source
+pin, artifact release lineage, audit command, and existing-database guidance.
+
 ### 1. Prepare your environment
 
 - Install Git and Docker with Docker Compose v2, and start the local Docker daemon.
-- To run the bootstrap script, use Linux Bash or Ubuntu/WSL2. On Windows, enable
-  Docker Desktop integration for your WSL distribution and open its terminal.
-  PowerShell and Git Bash are not supported runtimes for this script.
+- Windows: use Windows PowerShell 5.1+ or PowerShell 7 with Docker Desktop in
+  Linux-container mode. WSL2/Bash is not required for the PowerShell scripts.
+- Linux: use Bash with a local Docker daemon. Ubuntu/WSL2 Bash can use the Linux
+  scripts when Docker Desktop integration is enabled for that distribution.
 - A host Java installation is not required for Docker startup. Java 25 is needed
   only if you run the Maven application/build directly on your computer.
 
@@ -26,6 +31,8 @@ For a **new setup**, copy the example configuration:
 ```bash
 cp .env.example .env.local
 ```
+
+In PowerShell, use `Copy-Item .env.example .env.local` instead.
 
 If `.env.local` already exists, preserve it instead of overwriting your credentials.
 Edit it and supply three distinct private values:
@@ -44,7 +51,7 @@ COMPOSE_PROJECT_NAME=backend-swe-demo
 LOCAL_DB_NAME=backend_demo
 LOCAL_DB_USER=backend
 LOCAL_STORAGE_BUCKET=backend-demo-images
-DEMO_BOOTSTRAP_ARTIFACT=.private/demo-bootstrap/artifacts/demo-v3
+DEMO_BOOTSTRAP_ARTIFACT=.private/demo-bootstrap/artifacts/demo-v6
 SERVER_PORT=18081
 LOCAL_DB_PORT=55433
 LOCAL_STORAGE_PORT=14567
@@ -58,27 +65,64 @@ Keep `.env.local` private. Do not commit passwords, JWT secrets or tokens.
 Google login and email verification are optional features and need their own
 configuration before enabling them.
 
-### 3. Obtain the private demo inputs
+### 3. Configure the demo inputs
 
-Ask the maintainer for the approved source checkout and frozen artifact through
-the team's private sharing channel. They are not supplied by a normal Git clone:
+The setup scripts clone the pinned `Catalog-Data` source if missing, then fetch
+its `bootstrap` branch and install all missing `demo-v...` artifact directories.
+No separate artifact download or manual copy is required. Git access to
+`https://github.com/Adiff-git/Catalog-Data.git` and its `bootstrap` branch is required.
+The local layout is:
 
 ```text
 data/Catalog-Data/                         # Source Git checkout, including .git
-.private/demo-bootstrap/artifacts/demo-v3/ # Complete approved artifact directory
+.private/demo-bootstrap/artifacts/demo-v6/ # Complete approved artifact directory
 ```
 
-The source checkout must be at commit
-`c5dcfaabdf61b244783d46a1403107e19cd2b02c`. The artifact must include its
+The source checkout stays at commit
+`89e3b6c5bc95b533386a349c65305613617d8709`. The artifact must include its
 `manifest.json`, `release-approval.json` and all referenced files. Keep source
 files/manifests and the frozen artifact unchanged; do not regenerate them during
-ordinary setup. Extract private bundles as your normal user and ensure their
-files are readable by the helper through your host group.
+ordinary setup. Setup exports artifact files from one fetched Git commit without
+checkout line-ending conversion. Existing local artifact versions are never
+overwritten. Only the version selected in `DEMO_BOOTSTRAP_ARTIFACT` is verified
+for startup; downloading older versions does not select or approve them for the
+current importer. If that version is absent from the branch, setup stops.
 
 No AI API key or runtime AI call is needed. Dataset preparation and review are
 separate maintainer activities.
 
-### 4. Build the bootstrap helper
+### 4. Run the setup script for your terminal
+
+Windows PowerShell:
+
+```powershell
+.\scripts\setup-dev.ps1
+```
+
+Linux terminal:
+
+```bash
+bash scripts/setup-dev.sh
+```
+
+These are the two setup entry points. Each builds the helper, obtains the pinned
+source if missing, downloads missing artifact versions from `Catalog-Data` branch
+`bootstrap`, verifies the selected artifact, then invokes its platform's
+`start-dev` orchestrator. Synthetic data is downloaded as frozen files, never
+generated during setup. PowerShell also requires Windows' `tar.exe`; Linux needs `tar`.
+
+Use the approved `demo-v6` artifact matching this implementation. It preserves
+the `demo-v3` dataset and records the current importer and both startup script
+hashes. If compatibility is rejected, preserve the artifact and ask the maintainer
+for the matching release; do not edit its manifest or approval.
+
+An existing database imported with `demo-v3` retains that release's identity.
+Normal startup with `demo-v6` will refuse to adopt or overwrite it. To replace
+that database, use the optional `--fresh` procedure below only when you intend
+to delete its records and import again. Updating the artifact setting alone
+does not migrate an existing installation.
+
+For an already prepared installation, the helper can also be built directly:
 
 ```bash
 docker build -t backend-swe-demo-bootstrap:local tools/demo-bootstrap
@@ -90,6 +134,12 @@ the approved artifact; changing importer code or artifact contents can cause a
 compatibility rejection.
 
 ### 5. Start the backend and import demo data
+
+Setup already performs this step. On later runs, use the command for your terminal:
+
+```powershell
+.\scripts\start-dev.ps1
+```
 
 ```bash
 bash scripts/start-dev.sh
@@ -157,6 +207,10 @@ version containing the Swagger integration.
 
 For normal use, run the same command again:
 
+```powershell
+.\scripts\start-dev.ps1
+```
+
 ```bash
 bash scripts/start-dev.sh
 ```
@@ -182,6 +236,10 @@ stored demo-login passwords.
 
 Use this only when you intentionally want to delete **all records in
 `backend_demo`, including your later demo activity**, and import again:
+
+```powershell
+.\scripts\start-dev.ps1 --fresh
+```
 
 ```bash
 bash scripts/start-dev.sh --fresh

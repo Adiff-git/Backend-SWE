@@ -35,7 +35,22 @@ Record actual reviewer decisions against the payload digest; no automatic approv
 PostgreSQL validation evidence bound to this candidate digest. Changed content
 requires a new candidate and review. Do not edit an already frozen artifact.
 
-Normal user startup is `bash scripts/start-dev.sh`; fresh startup is
+Windows setup is `.\scripts\setup-dev.ps1`; Linux setup is
+`bash scripts/setup-dev.sh`. Setup fetches the `Catalog-Data` `bootstrap` branch
+and installs missing versions from `demo-bootstrap/artifacts/` under the private
+local artifacts directory. The original source checkout stays pinned. Existing
+artifact versions are preserved, and the selected version must pass compatibility
+verification before startup. No separate artifact sharing is required.
+Windows normal startup is `.\scripts\start-dev.ps1` and fresh startup is
+`.\scripts\start-dev.ps1 --fresh`.
+
+To prepare a dual-shell release, freeze with `--startup-script` pointing to the
+reviewed `start-dev.sh` and `--additional-startup-script` pointing to the reviewed
+`start-dev.ps1` (both mounted read-only in the preparation container). The frozen
+manifest records both hashes; approval must cover the new artifact digest and
+current importer. Never modify an existing frozen manifest to bypass compatibility.
+
+Linux normal user startup is `bash scripts/start-dev.sh`; fresh startup is
 `bash scripts/start-dev.sh --fresh`. Fresh requires exact typed
 `RESET backend_demo`. No automatic confirmation bypass is supported. Only the
 dedicated database and exact ledger-owned assets may be reset; PostgreSQL volume
@@ -85,7 +100,7 @@ completed work and outstanding acceptance.
    `release-approval.json` is the detached record and intentionally lies outside
    the manifest payload to avoid a digest cycle. Never manufacture approval.
 8. Set DEMO_BOOTSTRAP_ARTIFACT to that release and configure a private demo password.
-   Use only the two Bash startup commands above. Passwords/hashes never appear in
+   Use the matching PowerShell or Bash startup command above. Passwords/hashes never appear in
    summaries. Startup binds source/artifact/migrations read-only and exposes no
    helper or temporary backend ports.
 
@@ -102,6 +117,35 @@ by age: prove matching orchestrator/helpers/migrator have stopped before exact
 token-checked removal. Post-commit readiness/report failures do not authorize reset.
 
 ## Current evidence
+
+The 2026-11-28 repository-wide LF release supersedes the byte fingerprints below.
+The default is `demo-v6`, digest
+`fd81f6e0eee5b0ab8aeda6a03c6d2f7144593f044f44312c2e9abe1028e32be3`;
+reissued `demo-v5` has digest
+`dd04df8b1933614b37dab998547ef734707e787052e59588f82c18591c4627bf`.
+All payload files remain unchanged, all 30 logical Flyway checksums match the
+previous migration history, and fresh isolated PostgreSQL candidate validation
+passed. Catalog-Data records the complete old/new digest map in
+`demo-bootstrap/line-ending-release.json`. See ../../docs/line-ending-policy.md.
+Older evidence below describes the preserved prior releases, not current hashes.
+
+Windows console-handling release `demo-v5` has digest
+`02f591ce46160977029d14a982b467306002bec31fc9ffceed48e9ea76d6635e`.
+It binds the PowerShell startup fix: plain progress, no Compose Bake delegation,
+and noninteractive helper/migrator containers. All 19 payload files and the
+importer are unchanged from `demo-v4`. Release integrity checks matched both
+startup hashes; startup and tests were not run for this fix. The owner-authorized
+detached approval records that scope. Select `demo-v5` in `DEMO_BOOTSTRAP_ARTIFACT`.
+
+Tooling-only release `demo-v4` is frozen with digest
+`b0303f20a3eec17c0dba70e4273909e759abfd4648a08a950359817e90fa3f81`.
+All 19 payload files are byte-identical to `demo-v3`; the manifest binds importer
+`db8603035c84e038bbb664b72e4b09ec9c31e11feae652e27f41cda0ddfc1938`
+and both platform startup hashes. Its detached approval records the project
+owner's explicit instruction to prepare and approve this updated release, without
+claiming independent human digest inspection or new lifecycle tests. Existing
+database-validation evidence was reused for the unchanged candidate/migrations.
+Previous artifacts are preserved; `demo-v4` is superseded by `demo-v5` above.
 
 The private candidate `demo-v6-candidate` contains 1,500 products, 2,257 variants,
 83,561 reviews and 178,538 orders (175,538 completed). The user approved its 711

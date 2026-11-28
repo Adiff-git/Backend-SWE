@@ -1,4 +1,4 @@
-# Private helper only; scripts/start-dev.sh selects services explicitly.
+# Private helper only; the platform start-dev script selects services explicitly.
 services:
   bootstrap:
     image: backend-swe-demo-bootstrap:local
@@ -21,8 +21,10 @@ services:
       LOCAL_STORAGE_BUCKET: ${LOCAL_STORAGE_BUCKET:?Configure LOCAL_STORAGE_BUCKET}
       LOCAL_STORAGE_ENDPOINT: http://localstack:4567
       AWS_EC2_METADATA_DISABLED: "true"
-      AWS_PROFILE: ""
-      AWS_DEFAULT_PROFILE: ""
+      # Null removes these variables rather than passing an empty profile name.
+      # Boto3 treats an empty string as a requested profile and raises ProfileNotFound.
+      AWS_PROFILE: null
+      AWS_DEFAULT_PROFILE: null
       AWS_ENDPOINT_URL: ""
       AWS_ENDPOINT_URL_S3: ""
     networks:
@@ -42,7 +44,7 @@ services:
         bind:
           create_host_path: false
       - type: bind
-        source: ./scripts/start-dev.sh
+        source: ${BOOTSTRAP_STARTUP_SCRIPT:-./scripts/start-dev.sh}
         target: /startup-script
         read_only: true
         bind:

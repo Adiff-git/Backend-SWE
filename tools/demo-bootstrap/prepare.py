@@ -414,7 +414,7 @@ def migration_state(root: Path, migrations: Path) -> dict:
     return {'state':'READY' if ready else 'NEEDS_MIGRATION','business_imported':False,'payload_digest':summary['payload_digest']}
 
 
-def freeze(source: Path, root: Path, output: Path, decisions: Path, migrations: Path, startup_script: Path) -> dict:
+def freeze(source: Path, root: Path, output: Path, decisions: Path, migrations: Path, startup_script: Path, additional_startup_scripts=()) -> dict:
     from runtime import importer_digest
     summary=read_json(root/'candidate.json')
     review=validate_reviews(root,decisions)
@@ -436,6 +436,11 @@ def freeze(source: Path, root: Path, output: Path, decisions: Path, migrations: 
     compatibility['schema_fingerprint']=validation['schema_fingerprint']
     require(startup_script.is_file() and not startup_script.is_symlink(),'STARTUP_IDENTITY','Mount the actual startup script read-only for release identity')
     compatibility['startup_sha256']=digest_file(startup_script)
+    # Both platform orchestrators must be reviewed before approving a dual-shell release.
+    startup_scripts=[startup_script,*additional_startup_scripts]
+    for script in startup_scripts:
+        require(script.is_file() and not script.is_symlink(),'STARTUP_IDENTITY','Every approved startup script must be a regular file')
+    compatibility['startup_sha256s']=sorted({digest_file(script) for script in startup_scripts})
     manifest={'contract_version':ARTIFACT_VERSION,'dataset_id':'university-private-commerce-demo','dataset_version':output.name,
               'source':{'revision':SOURCE_REVISION,'manifest_sha256':digest_file(source/'manifests/catalog_manifest.json'),
                         'files':{p.relative_to(source).as_posix():digest_file(p) for p in sorted(source.rglob('*'))
@@ -477,6 +482,7 @@ def main() -> None:
     parser.add_argument('--model')
     parser.add_argument('--prompt',type=Path)
     parser.add_argument('--startup-script',type=Path,default=Path('/startup-script'))
+    parser.add_argument('--additional-startup-script',type=Path,action='append',default=[])
     args = parser.parse_args()
     if args.stage == "analyze":
         result = analyze(args.source, args.output)
@@ -529,7 +535,7 @@ def main() -> None:
     elif args.stage == 'database-validate':
         result = database_validate(args.workspace,args.migrations,args.decisions)
     elif args.stage == 'freeze':
-        result = freeze(args.source,args.workspace,args.output,args.decisions,args.migrations,args.startup_script)
+        result = freeze(args.source,args.workspace,args.output,args.decisions,args.migrations,args.startup_script,args.additional_startup_script)
     else:
         result = validate_reviews(args.workspace, args.decisions)
     print(canonical_bytes(result).decode())

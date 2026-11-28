@@ -9,7 +9,7 @@ if (( $# )); then
     [[ $# == 1 && $1 == --fresh ]] || fail 2 'Usage: bash scripts/start-dev.sh [--fresh]'
     mode=fresh
 fi
-[[ $(uname -s) == Linux ]] || fail 2 'Run this entry point in Linux or WSL2 Bash.'
+case "$(uname -s)" in Linux) ;; *) fail 2 'Use Linux Bash or start-dev.ps1 in Windows PowerShell.' ;; esac
 command -v docker >/dev/null || fail 2 'Docker CLI is required.'
 command -v git >/dev/null || fail 2 'Git is required for source revision verification.'
 for override in AWS_PROFILE AWS_DEFAULT_PROFILE AWS_ENDPOINT_URL AWS_ENDPOINT_URL_S3 DB_URL DATABASE_URL; do
@@ -24,17 +24,19 @@ image=backend-swe-demo-bootstrap:local
 project=backend-swe-demo
 lock_name=backend-swe-demo-bootstrap-lock
 compose=(docker compose --project-name "$project" --env-file "$repo/.env.local" -f "$repo/compose.dev.yaml")
+export BOOTSTRAP_STARTUP_SCRIPT=./scripts/start-dev.sh
+unset BOOTSTRAP_FRESH_CONFIRMED BOOTSTRAP_FAULT
 export BOOTSTRAP_HOST_GID
 BOOTSTRAP_HOST_GID=$(id -g)
 endpoint=$(docker context inspect --format '{{.Endpoints.docker.Host}}') || fail 2 'Cannot inspect local Docker context.'
-if [[ -n ${DOCKER_HOST:-} ]]; then endpoint=$DOCKER_HOST; fi
-case "$endpoint" in unix:///*|npipe:////./pipe/dockerDesktopLinuxEngine) ;; *) fail 2 'Only a local Docker daemon is permitted.' ;; esac
-docker info >/dev/null 2>&1 || fail 5 'Local Docker daemon is unavailable.'
+case "$endpoint" in unix:///*) ;; *) fail 2 'Only a local Docker daemon is permitted.' ;; esac
+case "${DOCKER_HOST:-$endpoint}" in unix:///*) ;; *) fail 2 'Remote Docker daemon forbidden.' ;; esac
+[[ $(docker info --format '{{.OSType}}') == linux ]] || fail 5 'Local Linux-container Docker daemon is unavailable.'
 BOOTSTRAP_DAEMON_ID=$(docker info --format '{{.ID}}') || fail 5 'Cannot establish Docker daemon identity.'
 [[ -n $BOOTSTRAP_DAEMON_ID ]] || fail 5 'Docker daemon identity is absent.'
 export BOOTSTRAP_DAEMON_ID
 docker image inspect "$image" >/dev/null 2>&1 || fail 2 'Build the approved tools/demo-bootstrap image first.'
-[[ $(git -C "$repo/data/Catalog-Data" rev-parse HEAD) == c5dcfaabdf61b244783d46a1403107e19cd2b02c ]] || fail 4 'Source Git revision is incompatible.'
+[[ $(git -C "$repo/data/Catalog-Data" rev-parse HEAD) == 89e3b6c5bc95b533386a349c65305613617d8709 ]] || fail 4 'Source Git revision is incompatible.'
 
 # Compose parses .env as data; helper consumes JSON over stdin, never shell-sources it.
 timeout_values=$("${compose[@]}" config --format json |
@@ -44,11 +46,11 @@ IFS=$'\t' read -r infrastructure_timeout backend_timeout storage_timeout <<< "$t
 
 if [[ $mode == fresh ]]; then
     printf 'Fresh startup resets only backend_demo and importer-owned assets. Type RESET backend_demo: ' >&2
-    read -r confirmation || fail 2 'Fresh startup confirmation was not supplied.'
+    IFS= read -r confirmation || fail 2 'Fresh startup confirmation was not supplied.'
     [[ $confirmation == 'RESET backend_demo' ]] || fail 2 'Fresh startup confirmation did not match; nothing was reset.'
 fi
 
-token=$(cat /proc/sys/kernel/random/uuid)
+if [[ -r /proc/sys/kernel/random/uuid ]]; then token=$(cat /proc/sys/kernel/random/uuid); else token=$(uuidgen | tr A-Z a-z); fi
 lock_id=''
 child_pid=''
 migrator_id=''
@@ -177,10 +179,12 @@ done
 full_compose=("${compose[@]}" -f "$repo/compose.bootstrap.yaml")
 artifact=$("${full_compose[@]}" config --format json |
     docker run --rm -i --network none --entrypoint python "$image" /app/bootstrap.py host-artifact) || fail 2 'Configure an existing reviewed private artifact.'
-artifact=$(realpath -e -- "$artifact") || fail 2 'Reviewed artifact directory is missing.'
+[[ ! -L $artifact ]] || fail 2 'Reviewed artifact must not be a symlink.'
+artifact=$(CDPATH= cd -- "$artifact" && pwd -P) || fail 2 'Reviewed artifact directory is missing.'
 case "$artifact" in "$repo"/.private/demo-bootstrap/artifacts/*) ;; *) fail 2 'Artifact must be under the private artifacts directory.' ;; esac
 [[ -d $artifact && ! -L $artifact ]] || fail 2 'Reviewed artifact must be a regular private directory.'
 run_supervised docker run --rm --network none \
+    --group-add "$BOOTSTRAP_HOST_GID" \
     --mount "type=bind,source=$artifact,target=/artifact,readonly" \
     --mount "type=bind,source=$repo/data/Catalog-Data,target=/source,readonly" \
     --mount "type=bind,source=$repo/demo/src/main/resources/db/migration,target=/migrations,readonly" \
@@ -195,6 +199,7 @@ if [[ -n $backend_id ]]; then
     "${compose[@]}" stop backend >/dev/null || fail 5 'Cannot stop backend before initialization.'
 fi
 reports="$repo/.private/demo-bootstrap/reports"
+[[ ! -L $reports ]] || fail 4 'Reports directory must not be a symlink.'
 mkdir -p -- "$reports"
 chmod 2770 "$reports"
 helper() {

@@ -1,8 +1,3 @@
-*.py text eol=lf
-*.sql text eol=lf
-*.json text eol=lf
-*.md text eol=lf
-# The approved dependency-lock fingerprint includes these CRLF bytes.
-requirements.lock text eol=crlf
-Dockerfile text eol=lf
-.dockerignore text eol=lf
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf

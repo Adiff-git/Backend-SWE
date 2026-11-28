@@ -99,7 +99,10 @@ def main():
     require(manifest['importer_compatibility'].get('importer_digest')==importer_digest(),
             'IMPORTER_INCOMPATIBLE','Importer code differs from the approved artifact')
     check_migration_files(args.migrations,manifest)
-    require(digest_file(Path('/startup-script'))==manifest['importer_compatibility'].get('startup_sha256'),
+    compatibility=manifest['importer_compatibility']
+    approved_startups=compatibility.get('startup_sha256s',[compatibility.get('startup_sha256')])
+    require(isinstance(approved_startups,list) and bool(approved_startups)
+            and digest_file(Path('/startup-script')) in approved_startups,
             'STARTUP_INCOMPATIBLE','Startup script differs from the reviewed release')
     if args.stage=='artifact':
         source_check(args.source,manifest)
