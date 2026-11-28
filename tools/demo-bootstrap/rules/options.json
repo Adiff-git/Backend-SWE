@@ -1,0 +1,35 @@
+{
+  "version": "demo-option-vocabulary-v1",
+  "minimum_variants": 1,
+  "enriched_variant_range": [2, 6],
+  "maximum_total_variants": 9000,
+  "missing_original_fact_policy": "RETAIN_SINGLE_VARIANT_AND_FLAG",
+  "dimension_definitions": {
+    "Color": {"type": "text", "cosmetic": true},
+    "RAM": {"type": "quantity", "unit": "GB"},
+    "Storage": {"type": "quantity", "unit": "GB"},
+    "Capacity": {"type": "quantity", "unit": "mAh"},
+    "Power": {"type": "quantity", "unit": "W"},
+    "Cable Length": {"type": "quantity", "unit": "m"},
+    "Pack Size": {"type": "integer", "unit": "count"},
+    "Size": {"type": "text"},
+    "Material": {"type": "text"}
+  },
+  "category_candidates": {
+    "Laptop": ["Color", "RAM", "Storage"],
+    "Tablet": ["Color", "Storage", "RAM"],
+    "Smartphone": ["Color", "Storage", "RAM"],
+    "Smartwatch": ["Color", "Size", "Material"],
+    "Headphone & Earbuds": ["Color", "Pack Size"],
+    "Speaker": ["Color", "Pack Size"],
+    "Charger & Power Bank": ["Color", "Capacity", "Power", "Pack Size"],
+    "Phone Accessories": ["Color", "Cable Length", "Pack Size", "Material"],
+    "Computer Accessories": ["Color", "Cable Length", "Pack Size", "Material"]
+  },
+  "candidate_policy": "Candidates are not automatic manufacturer facts; reviewed product-specific evidence determines applicability",
+  "application_filter_keys": {
+    "Laptop": ["physical_ram", "installed_storage_gb", "display_diagonal", "display_resolution"],
+    "Tablet": ["display_diagonal"]
+  },
+  "canonical_identity_authority": "PostgreSQL catalog_option_map_v1"
+}

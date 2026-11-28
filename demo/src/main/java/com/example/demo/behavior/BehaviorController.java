@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RestController
 @RequiredArgsConstructor
 @SecurityRequirement(name="bearerAuth")
-@io.swagger.v3.oas.annotations.security.SecurityScheme(name="bearerAuth", type=io.swagger.v3.oas.annotations.enums.SecuritySchemeType.HTTP, scheme="bearer", bearerFormat="JWT")
 public class BehaviorController {
     private final BehaviorService service;
     private final CurrentUserIdProvider identity;
