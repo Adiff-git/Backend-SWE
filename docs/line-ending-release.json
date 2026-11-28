@@ -115,5 +115,32 @@
   "startup_sha256s": [
     "7535cda34f0f0542029123277a28e263f49f14fdc9d67ac1a85e099adea17b3f",
     "9a0bfa7df832f5ac5c5284c782ac862ef25d429b79733bde3924174dca8dbb5e"
-  ]
+  ],
+  "verification": {
+    "average_rating_groups": [
+      60,
+      120,
+      300,
+      420,
+      300
+    ],
+    "business_elapsed_seconds": 2034.234667,
+    "deferred_constraints_seconds": 1678.240075,
+    "existing_database_reset_or_repair": false,
+    "full_import": "PASS",
+    "full_native_orchestrator_lifecycle": "NOT_RUN_TO_PROTECT_EXISTING_FIXED_PROJECT",
+    "invariant_checks": 14,
+    "invariant_error_total": 0,
+    "native_ubuntu_setup_validation": "PASS_FRESH_AND_REPEAT_STARTUP_SUPPRESSED",
+    "normal_repeat": "PASS_SKIPPED",
+    "repeat_preserves_counts_passwords_sequences_anchor": true,
+    "review_count_groups": [
+      300,
+      300,
+      525,
+      300,
+      75
+    ],
+    "windows_setup_validation": "PASS_STARTUP_SUPPRESSED"
+  }
 }
