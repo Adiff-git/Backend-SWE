@@ -81,8 +81,8 @@ public final class ProductSearchParameterParser {
         }
         if (parameters.containsKey("specFilters")) {
             String raw = first(parameters, "specFilters");
-            if (raw.codePointCount(0, raw.length()) > 4096 || request.getCategoryId() == null) {
-                throw invalid("specFilters/categoryId");
+            if (raw.codePointCount(0, raw.length()) > 4096) {
+                throw invalid("specFilters");
             }
             request.setSpecFilters(raw);
             request.setSpecificationGroups(groups(raw));

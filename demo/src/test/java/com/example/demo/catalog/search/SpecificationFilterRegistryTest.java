@@ -9,9 +9,8 @@ import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 class SpecificationFilterRegistryTest {
-    @Test void registry_shouldContainOnlyFourApprovedDefinitions_andNeverSourceCategoryUuids(){
-        var registry=new SpecificationFilterRegistry();assertThat(registry.definitions()).hasSize(4).containsOnlyKeys("display_diagonal","physical_ram","installed_storage_gb","display_resolution");
-        assertThat(registry.definitions().get("display_diagonal").categoryRoots()).containsExactly("Laptop","Tablet");
+    @Test void registry_shouldContainFiveApprovedDefinitions_andNeverSourceCategoryUuids(){
+        var registry=new SpecificationFilterRegistry();assertThat(registry.definitions()).hasSize(5).containsOnlyKeys("display_diagonal","physical_ram","installed_storage_gb","display_resolution","cpu_family");
         assertThatThrownBy(()->registry.get("battery_capacity_mah")).isInstanceOf(InvalidCatalogRequestException.class);
     }
     @Test void filters_shouldEnforceTypesUnitsAndCategoryBeforeSql(){

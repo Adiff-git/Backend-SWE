@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.Set;
 import tools.jackson.databind.json.JsonMapper;
 
-/** Owner-approved definitions;actual category IDs are resolved from authoritative Backend rows in SQL. */
+/** Validated global specification definitions; category and brand are optional search constraints. */
 public final class SpecificationFilterRegistry {
-    public record Definition(String key, String type, String unit, List<String> categoryRoots,
+    public record Definition(String key, String type, String unit,
             Set<String> operators, boolean searchable, boolean filterable) { }
     private final Map<String, Definition> definitions;
     public SpecificationFilterRegistry() { this(SpecificationFilterRegistry.class.getResourceAsStream("/catalog/specification-filter-registry.json")); }
@@ -29,32 +29,27 @@ public final class SpecificationFilterRegistry {
             }
             for (var d : root.get("definitions")) {
                 String key = d.get("key").asString();
-                if (!Set.of("physical_ram", "installed_storage_gb", "display_diagonal", "display_resolution").contains(key)
+                if (!Set.of("physical_ram", "installed_storage_gb", "display_diagonal", "display_resolution", "cpu_family").contains(key)
                         || !"APPROVED_BY_PROJECT_OWNER".equals(d.get("approval").asString())) {
                     throw new IllegalStateException("Unapproved specification definition");
                 }
-                var categories = new java.util.ArrayList<String>();
-                d.get("categoryRoots").forEach(v -> categories.add(v.asString()));
                 var operators = new java.util.HashSet<String>();
                 d.get("operators").forEach(v -> operators.add(v.asString()));
                 String type = d.get("type").asString();
                 String unit = d.get("unit").isNull() ? null : d.get("unit").asString();
-                if (Set.copyOf(categories).size()!=categories.size() || !Set.copyOf(categories).equals(key.equals("display_diagonal") ? Set.of("Laptop", "Tablet") : Set.of("Laptop"))
-                        || !d.get("searchable").asBoolean() || !d.get("filterable").asBoolean()
-                        || !Set.of("Laptop", "Tablet").containsAll(categories)
-                        || categories.contains("Tablet") && !key.equals("display_diagonal")
+                if (!d.get("searchable").asBoolean() || !d.get("filterable").asBoolean()
                         || !Set.of("quantity", "text").contains(type)
-                        || key.equals("display_resolution") != type.equals("text")
+                        || Set.of("display_resolution", "cpu_family").contains(key) != type.equals("text")
                         || !java.util.Objects.equals(unit, key.equals("display_diagonal") ? "inch"
-                                : key.equals("display_resolution") ? null : "GB")
+                                : Set.of("display_resolution", "cpu_family").contains(key) ? null : "GB")
                         || !operators.equals(type.equals("text") ? Set.of("eq", "prefix", "contains")
                                 : Set.of("eq", "gt", "gte", "lt", "lte", "between"))
                         || d.get("identifier").asBoolean()) { throw new IllegalStateException("Invalid registry definition"); }
-                var definition = new Definition(key, type, unit, List.copyOf(categories), Set.copyOf(operators),
+                var definition = new Definition(key, type, unit, Set.copyOf(operators),
                         d.get("searchable").asBoolean(), d.get("filterable").asBoolean());
                 if (loaded.put(key, definition) != null) { throw new IllegalStateException("Duplicate registry key"); }
             }
-            if (loaded.size() != 4) { throw new IllegalStateException("Incomplete registry"); }
+            if (loaded.size() != 5) { throw new IllegalStateException("Incomplete registry"); }
         } catch (IOException | RuntimeException exception) { throw new IllegalStateException("Invalid specification registry", exception); }
         definitions = Map.copyOf(loaded);
     }
@@ -66,7 +61,6 @@ public final class SpecificationFilterRegistry {
     }
     public void validate(List<SpecificationGroup> groups, java.util.UUID categoryId) {
         if (groups == null) { return; }
-        if (categoryId == null) { throw new InvalidCatalogRequestException("specFilters requires categoryId"); }
         for (var group : groups) {
             if(group==null || group.getAlternatives()==null || group.getAlternatives().isEmpty()){throw new InvalidCatalogRequestException("Invalid specification group");}
             var d = get(group.getKey());

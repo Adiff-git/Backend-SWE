@@ -55,6 +55,14 @@ class ProductSearchControllerIT {
     record Fixture(UUID product,UUID variant){}
     @BeforeEach void setup(){clean();laptop=tx.execute(status->{var c=CatalogFixtures.category();c.setName("Laptop");em.persist(c);em.flush();return c.getId();});}
     @AfterEach void clean(){jdbc.execute("TRUNCATE users,categories,brands CASCADE");}
+    @Test void specificationFiltersDoNotRequireCategoryId() throws Exception {
+        var fixture = product("Global RAM Device", "GLOBAL-RAM", 100, 16);
+        String filters = "[{\"key\":\"physical_ram\",\"alternatives\":[{\"op\":\"eq\",\"value\":16,\"unit\":\"GB\"}]}]";
+        mvc.perform(get("/api/products").param("specFilters", filters))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalItems").value(1))
+                .andExpect(jsonPath("$.items[0].id").value(fixture.product().toString()));
+    }
     Fixture product(String name,String sku,int price,int ram){return tx.execute(status->{var f=CatalogFixtures.persistProduct(em,ProductStatus.PUBLISHED);f.product().setName(name);f.product().setCategory(em.find(Category.class,laptop));f.variant().setSku(sku);f.variant().setSellingPrice(BigDecimal.valueOf(price));f.variant().setTechnicalSpecifications(Map.of("schema_version",1,"values",Map.of("physical_ram",Map.of("value",ram,"unit","GB"))));em.persist(CatalogFixtures.image(f.product(),0,true));em.flush();return new Fixture(f.product().getId(),f.variant().getId());});}
     JsonNode request(Map<String,String> parameters)throws Exception{
         var req=get("/api/products");parameters.forEach(req::param);

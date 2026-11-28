@@ -54,6 +54,8 @@ No endpoint request quotas, resend cooldowns or failed-proof lockouts apply. Aut
 | POST | `/api/image-uploads/{imageId}/complete` | Bearer | 200 |
 | GET | `/api/image-uploads/{imageId}/download-url` | Bearer | 200 |
 | GET | `/api/products` | Public | 200 |
+| GET | `/api/brands` | Public | 200; brand identities and published product counts |
+| GET | `/api/product-filter-options` | Public | 200; global specification values and distinct published product counts; categoryId and brandId optional |
 | GET | `/api/products/{id}` | Public | 200 |
 | POST | `/api/products/{id}/images` | Bearer + ROLE_ADMIN | 201, 200 |
 | GET | `/api/me/wishlist` | Bearer + MANAGE_WISHLIST | 200 |
@@ -115,8 +117,28 @@ Review reads are anonymous for PUBLISHED products; missing, removed, DRAFT and A
 
 All three recommendation routes accept only one optional `limit` (1..20, default 10) and return `{ "items": [...] }` using the current ProductListingItem shape. General recommendations use aggregate popularity/diversity; personalized recommendations derive the owner from a Customer JWT, and similar products exclude the published source. Unknown/repeated query keys are invalid. AI failures use safe deterministic fallback; fewer or empty results are valid. All review/recommendation success responses use `Cache-Control: no-store`.
 
+## Specification filter options
+
+`GET /api/product-filter-options` returns all available option groups across all categories without requiring any parameters. Optional `categoryId` narrows to a category and its descendants; optional repeated `brandId` narrows to those brands. Each group has `key`, `type`, `unit` (null for text), and `options: [{value, productCount}]`. Only valid facts on published products contribute. Counts are distinct products per option; they can overlap. Empty groups are omitted. This endpoint accepts only `categoryId` and `brandId`.
+
+The global groups are `physical_ram` (GB), `installed_storage_gb` (GB), `cpu_family` (text), `display_diagonal` (inch), and `display_resolution` (text). Numeric values are sorted numerically; text values are normalized and sorted alphabetically. Valid facts contribute regardless of category. Values come from stored specifications, so an absent fact is not an invented option.
+
+Use returned values in `GET /api/products` with a URL-encoded `specFilters` JSON array. Category, brand, and pagination parameters are optional. Example decoded JSON:
+
+```json
+[
+  {"key":"physical_ram","alternatives":[{"op":"eq","value":16,"unit":"GB"}]},
+  {"key":"installed_storage_gb","alternatives":[{"op":"gte","value":512,"unit":"GB"}]},
+  {"key":"cpu_family","alternatives":[{"op":"eq","value":"core i5"}]},
+  {"key":"display_diagonal","alternatives":[{"op":"eq","value":15.6,"unit":"inch"}]},
+  {"key":"display_resolution","alternatives":[{"op":"eq","value":"1920 x 1080"}]}
+]
+```
+
+Groups use AND on the same variant; alternatives within one group use OR (up to four). Numeric operators are `eq`, `gt`, `gte`, `lt`, `lte`, `between`; text operators are `eq`, `prefix`, `contains`. A numeric `between` alternative uses `min`, `max`, and `unit` instead of `value`.
+
 ## Verification
 
-Run `python docs/validate_openapi.py` from the repository root. [openapi-validation.json](openapi-validation.json) records the current source/structure check: **59 controller + 2 framework operations, 55 paths, 100 schemas, 522 resolved local references, 77 current Java DTO shapes and 96 checked examples**, with 0 errors. It also checks unique operation IDs, path parameters, security scheme references, required/property consistency and bodyless 204 responses. DTO comparison excludes deliberate unwritable profile/review presence flags and the always-rejected profile email setter, and includes the nested Recommendations record.
+Run `python docs/validate_openapi.py` from the repository root. [openapi-validation.json](openapi-validation.json) records the current source/structure check: **61 controller + 2 framework operations, 57 paths, 109 schemas, 551 resolved local references, 85 current Java DTO shapes and 100 checked examples**, with 0 errors. It also checks unique operation IDs, path parameters, security scheme references, required/property consistency and bodyless 204 responses. DTO comparison excludes deliberate unwritable profile/review presence flags and the always-rejected profile email setter, and includes the nested Recommendations record.
 
-These are standard-library source/structural checks and a documented JSON Schema assertion subset, not external OpenAPI conformance validation. Existing SnakeYAML 2.6 from the Maven cache was used only to read the established search/behavior contracts; no dependency or tool was installed. No application source, runtime security, build configuration or application tests were changed/run for this documentation-only update. Historical feature contracts/evidence are preserved. The standalone OpenAPI and README are tracked; the validation helper/report remain local under the existing ignore rules. No commit or push is performed by this documentation update.
+These are standard-library source/structural checks and a documented JSON Schema assertion subset, not external OpenAPI conformance validation. Existing SnakeYAML 2.6 from the Maven cache was used only to read the established search/behavior contracts; no dependency or tool was installed. The brand/global-filter update includes application changes, targeted controller/service/validation and PostgreSQL integration checks, and local runtime verification. Seed scripts, migrations and bootstrap payloads are unchanged. Historical feature contracts/evidence are preserved. The standalone OpenAPI and README are tracked; the validation helper/report remain local under the existing ignore rules. Historical source-review commits identify the baseline used for documentation; the brand/global-filter changes are documented for publication to main.

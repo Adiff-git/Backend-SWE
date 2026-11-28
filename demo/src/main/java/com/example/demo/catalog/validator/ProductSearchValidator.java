@@ -13,7 +13,6 @@ public final class ProductSearchValidator {
         if(request.getMinPrice()!=null && request.getMaxPrice()!=null && request.getMinPrice().compareTo(request.getMaxPrice())>0){throw invalid();}
         if(request.getSort()==ProductSearchSort.RELEVANCE && new ProductSearchNormalizer().normalizeQuery(request.getQ()).getTokens().isEmpty()){throw invalid();}
         if(request.getSpecificationGroups()!=null){
-            if(request.getCategoryId()==null){throw invalid();}
             var keys=new HashSet<String>();
             for(var group:request.getSpecificationGroups()){
                 if(!keys.add(group.getKey())){throw invalid();}

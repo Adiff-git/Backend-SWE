@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.math.BigDecimal;
 
@@ -22,6 +21,12 @@ final class CatalogSearchSql {
     private final SpecificationFilterRegistry registry;
     CatalogSearchSql(SpecificationFilterRegistry registry){this.registry=registry;}
     Statement compile(ProductSearchCriteria c,double threshold,boolean fuzzy){
+        return compile(c, threshold, fuzzy, false);
+    }
+    Statement compileOptions(ProductSearchCriteria c) {
+        return compile(c, 0.32, false, true);
+    }
+    private Statement compile(ProductSearchCriteria c,double threshold,boolean fuzzy,boolean options){
         Map<String,Object> params=new LinkedHashMap<>();
         params.put("pricingAt",c.getPricingInstant());
         List<String> where=new ArrayList<>(List.of("p.status='PUBLISHED'"));
@@ -33,15 +38,7 @@ final class CatalogSearchSql {
             """);
         sql.append(categoryRoot).append(" UNION SELECT c.id FROM categories c JOIN category_scope s ON c.parent_category_id=s.id),");
         sql.append("""
-            registry_roots AS (
-                SELECT catalog_search_safe_normalize_v2(name) AS family,min(id::text)::uuid AS id FROM categories
-                WHERE catalog_search_safe_normalize_v2(name) IN ('laptop','tablet')
-                GROUP BY catalog_search_safe_normalize_v2(name) HAVING count(*)=1
-            ), registry_categories(family,id) AS (
-                SELECT family,id FROM registry_roots UNION
-                SELECT r.family,c.id FROM registry_categories r JOIN categories c ON c.parent_category_id=r.id
-                WHERE catalog_search_safe_normalize_v2(c.name)=r.family OR catalog_search_safe_normalize_v2(c.name) NOT IN ('laptop','tablet','smartphone','computer accessories','headphone & earbuds','charger & power bank','speaker','phone accessories','smartwatch')
-            ), selected_products AS MATERIALIZED (
+            selected_products AS MATERIALIZED (
                 SELECT p.id,p.category_id,p.name,catalog_search_safe_normalize_v2(p.name) AS normalized_name,
                     catalog_search_safe_normalize_v2(coalesce(b.name,'')) AS brand_name,
                     catalog_search_safe_normalize_v2(coalesce(b.code,'')) AS brand_code,p.description,p.catalog_description_tokens_v1,p.sale_percentage,p.sale_enabled,p.sale_starts_at,p.sale_ends_at
@@ -64,20 +61,22 @@ final class CatalogSearchSql {
             String text="CASE WHEN "+envelope+" AND jsonb_typeof("+raw+")='string' THEN catalog_search_safe_normalize_v2("+raw+"#>>'{}') END";
             String numVal=d.type().equals("quantity")?num:"NULL::numeric";
             String txtVal=d.type().equals("text")?text:"NULL::text";
-            List<String> families=d.categoryRoots().stream().map(x->literal(x.toLowerCase(Locale.ROOT))).toList();
             String quality=switch(d.key()){
                 case "display_diagonal" -> " AND f.amount IS DISTINCT FROM 6088";
                 case "installed_storage_gb" -> " AND NOT(coalesce(f.amount=65,false) AND p.normalized_name ~ '(^|[^[:alnum:]])64[ ]*gb([^[:alnum:]]|$)')";
                 case "display_resolution" -> " AND NOT(coalesce(f.text_value ~ '^1600[ ]*x[ ]*600$',false) AND strpos(p.normalized_name,'16:10')>0)";
                 default -> "";};
-            factViews.add("SELECT p.id AS product_id,v.id AS variant_id,:"+n+" AS key,f.amount,"+literal(d.unit())+"::text AS unit,f.text_value FROM selected_products p JOIN product_variants v ON v.product_id=p.id CROSS JOIN LATERAL(SELECT "+numVal+" AS amount,"+txtVal+" AS text_value) f WHERE EXISTS(SELECT 1 FROM registry_categories rc WHERE rc.id=p.category_id AND rc.family IN("+String.join(",",families)+")) AND (f.amount IS NOT NULL OR coalesce(f.text_value,'')<>'')"+quality);
+            factViews.add("SELECT p.id AS product_id,v.id AS variant_id,:"+n+" AS key,f.amount,"+literal(d.unit())+"::text AS unit,f.text_value FROM selected_products p JOIN product_variants v ON v.product_id=p.id CROSS JOIN LATERAL(SELECT "+numVal+" AS amount,"+txtVal+" AS text_value) f WHERE (f.amount IS NOT NULL OR coalesce(f.text_value,'')<>'')"+quality);
         }
         sql.append(", safe_facts AS MATERIALIZED (").append(String.join(" UNION ALL ",factViews)).append(")");
+        if (options) {
+            sql.append(" SELECT key,amount,text_value,unit,count(DISTINCT product_id) AS product_count FROM safe_facts GROUP BY key,amount,text_value,unit ORDER BY key,amount NULLS LAST,text_value");
+            return new Statement(sql.toString(), params);
+        }
         boolean keyword=c.getKeyword()!=null&&!c.getKeyword().getTokens().isEmpty();
         List<String> variantConditions=new ArrayList<>();
         if(c.getMinPrice()!=null){variantConditions.add("v.effective_price>=:minPrice");params.put("minPrice",c.getMinPrice());}
         if(c.getMaxPrice()!=null){variantConditions.add("v.effective_price<=:maxPrice");params.put("maxPrice",c.getMaxPrice());}
-        List<String> support=new ArrayList<>();
         if(c.getSpecificationGroups()!=null){int g=0;
             for(var group:c.getSpecificationGroups()){
                 var d=registry.get(group.getKey());String prefix="spec"+g++;params.put(prefix+"key",d.key());
@@ -89,7 +88,6 @@ final class CatalogSearchSql {
                     else if(a.getValue() instanceof TextValue text){params.put(p,new ProductSearchNormalizer().normalize(text.getText()));alternatives.add(switch(a.getOp()){case EQ->"f.text_value=:"+p;case PREFIX->"left(f.text_value,char_length(:"+p+"))=:"+p;case CONTAINS->"strpos(f.text_value,:"+p+")>0";default->throw new IllegalArgumentException("Unvalidated text operator");});}
                 }
                 variantConditions.add("EXISTS(SELECT 1 FROM safe_facts f WHERE f.variant_id=v.id AND f.key=:"+prefix+"key AND ("+String.join(" OR ",alternatives)+"))");
-                support.add("EXISTS(SELECT 1 FROM registry_categories rc WHERE rc.id=cs.id AND rc.family IN("+String.join(",",d.categoryRoots().stream().map(x->literal(x.toLowerCase(Locale.ROOT))).toList())+"))");
             }
         }
         if(keyword){
@@ -103,8 +101,7 @@ final class CatalogSearchSql {
                     +"OR EXISTS(SELECT 1 FROM safe_facts f WHERE f.variant_id=v.id AND (strpos(f.text_value,q.token)>0 OR f.amount=q.numeric_value OR lower(f.unit)=q.token))"
                     +fuzzyCandidate+"))");
         }
-        String unsupported=support.isEmpty()?"false":"EXISTS(SELECT 1 FROM categories WHERE id=:category) AND NOT EXISTS(SELECT 1 FROM category_scope cs WHERE "+String.join(" AND ",support)+")";
-        sql.append(", validation AS(SELECT ").append(unsupported).append(" AS unsupported),eligible_base AS MATERIALIZED(SELECT p.id AS product_id,v.id AS variant_id,v.effective_price AS display_amount,p.normalized_name FROM selected_products p LEFT JOIN priced_variants v ON v.product_id=p.id");
+        sql.append(", validation AS(SELECT false AS unsupported),eligible_base AS MATERIALIZED(SELECT p.id AS product_id,v.id AS variant_id,v.effective_price AS display_amount,p.normalized_name FROM selected_products p LEFT JOIN priced_variants v ON v.product_id=p.id");
         if(!variantConditions.isEmpty()){sql.append(" WHERE ").append(String.join(" AND ",variantConditions));}sql.append(")");
         if(keyword){
             params.put("phrase",c.getKeyword().getOriginalNormalized());params.put("phraseLength",c.getKeyword().getSequence().size());if(fuzzy){params.put("threshold",threshold);}

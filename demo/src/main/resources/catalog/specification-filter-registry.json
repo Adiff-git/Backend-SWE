@@ -4,13 +4,19 @@
   "documentSchemaVersion": 1,
   "definitions": [
     {
+      "key": "cpu_family",
+      "type": "text",
+      "unit": null,
+      "operators": ["eq", "prefix", "contains"],
+      "searchable": true,
+      "filterable": true,
+      "identifier": false,
+      "approval": "APPROVED_BY_PROJECT_OWNER"
+    },
+    {
       "key": "display_diagonal",
       "type": "quantity",
       "unit": "inch",
-      "categoryRoots": [
-        "Laptop",
-        "Tablet"
-      ],
       "operators": [
         "eq",
         "gt",
@@ -28,9 +34,6 @@
       "key": "physical_ram",
       "type": "quantity",
       "unit": "GB",
-      "categoryRoots": [
-        "Laptop"
-      ],
       "operators": [
         "eq",
         "gt",
@@ -48,9 +51,6 @@
       "key": "installed_storage_gb",
       "type": "quantity",
       "unit": "GB",
-      "categoryRoots": [
-        "Laptop"
-      ],
       "operators": [
         "eq",
         "gt",
@@ -68,9 +68,6 @@
       "key": "display_resolution",
       "type": "text",
       "unit": null,
-      "categoryRoots": [
-        "Laptop"
-      ],
       "operators": [
         "eq",
         "prefix",

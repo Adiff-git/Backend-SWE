@@ -17,12 +17,12 @@ public class CatalogSecurityConfiguration {
 			CatalogSecurityProblemHandler problemHandler,
             com.example.demo.auth.security.CurrentStateJwtConverter converter) throws Exception {
 		http
-			.securityMatcher("/api/products", "/api/products/**")
+			.securityMatcher("/api/products", "/api/products/**", "/api/brands", "/api/product-filter-options")
 			.cors(org.springframework.security.config.Customizer.withDefaults())
 			// The planned catalog API uses Bearer credentials, not cookie authentication.
 			.csrf(csrf -> csrf.ignoringRequestMatchers("/api/products/**"))
 			.authorizeHttpRequests(authorize -> authorize
-				.requestMatchers(HttpMethod.GET, "/api/products", "/api/products/{id}").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/products", "/api/products/{id}", "/api/brands", "/api/product-filter-options").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/products/{id}/reviews", "/api/products/{id}/rating-summary").permitAll()
 				.requestMatchers(HttpMethod.GET, "/api/products/{id}/similar").permitAll()
 				.requestMatchers(HttpMethod.POST, "/api/products/{id}/images").access((authentication, context) -> {

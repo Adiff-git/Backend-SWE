@@ -57,6 +57,18 @@ class ProductListingControllerTest {
         when(service.listProducts(any(ProductSearchRequest.class))).thenReturn(new ProductPage(List.of(), 0, 20, 0, 0));
     }
 
+    @Test
+    void anonymousListingCanFilterByBrandId() throws Exception {
+        String brandId = UUID.randomUUID().toString();
+        mvc.perform(get("/api/products").param("brandId", brandId).param("page", "1").param("size", "10"))
+                .andExpect(status().isOk());
+        var captured = ArgumentCaptor.forClass(ProductSearchRequest.class);
+        verify(service).listProducts(captured.capture());
+        assertThat(captured.getValue().getBrandIds()).containsExactly(brandId);
+        assertThat(captured.getValue().getPage()).isEqualTo(1);
+        assertThat(captured.getValue().getSize()).isEqualTo(10);
+    }
+
     @Test void listing_shouldExposePairedSaleEvidenceAndRangeEndpointIdentity() throws Exception {
         UUID product=UUID.randomUUID(),variant=UUID.randomUUID();
         var price=new com.example.demo.catalog.dto.response.VariantPricing(new SellingPrice(BigInteger.valueOf(1000),"VND"),

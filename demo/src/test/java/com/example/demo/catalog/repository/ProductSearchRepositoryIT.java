@@ -132,7 +132,7 @@ class ProductSearchRepositoryIT {
         seed("Device",null,"a",10,8,laptop);
         String valid="[{\"key\":\"physical_ram\",\"alternatives\":[{\"op\":\"eq\",\"value\":999,\"unit\":\"GB\"}]}]";
         assertThat(search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(valid))).getTotalElements()).isZero();
-        assertThatThrownBy(()->search(Map.of("categoryId",List.of(tablet.toString()),"specFilters",List.of(valid)))).isInstanceOf(InvalidCatalogRequestException.class);
+        assertThat(search(Map.of("categoryId",List.of(tablet.toString()),"specFilters",List.of(valid))).getTotalElements()).isZero();
         assertThat(search(Map.of("categoryId",List.of(UUID.randomUUID().toString()),"specFilters",List.of(valid))).getTotalElements()).isZero();
     }
     @Test void pagination_shouldKeepTotalsAndMatchingPriceOrder(){
@@ -192,13 +192,13 @@ class ProductSearchRepositoryIT {
         var exact=seed("Sony Sony",null,"a",10,8,laptop);var one=seed("Sony",null,"b",10,8,laptop);
         assertThat(ids(search(Map.of("q",List.of("sony sony"))))).containsExactly(exact.product(),one.product());
     }
-    @Test void ambiguousTaxonomy_shouldDisableOnlyThatBinding_notPlainSearch(){
+    @Test void duplicateCategoryNamesDoNotDisableSpecificationFilters(){
         seed("Laptop Device",null,"a",10,16,laptop);
         tx.executeWithoutResult(status->{var cat=CatalogFixtures.category();cat.setName("Laptop");em.persist(cat);});
         assertThat(search(Map.of("q",List.of("device"))).getTotalElements()).isOne();
         String json="[{\"key\":\"physical_ram\",\"alternatives\":[{\"op\":\"eq\",\"value\":16,\"unit\":\"GB\"}]}]";
-        assertThatThrownBy(()->search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(json)))).isInstanceOf(InvalidCatalogRequestException.class);
-        assertThat(search(Map.of("q",List.of("16 gb"))).getTotalElements()).isZero();
+        assertThat(search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(json))).getTotalElements()).isOne();
+        assertThat(search(Map.of("q",List.of("16 gb"))).getTotalElements()).isOne();
     }
 
     @Test void ranking_shouldPreferAllExactOverSkuPlusFuzzy_andBreakFullTiesByUuid(){
@@ -242,7 +242,7 @@ class ProductSearchRepositoryIT {
         assertThat(search(Map.of("q",List.of("missing"))).getTotalElements()).isZero();
         assertThat(jdbc.queryForObject("SELECT description FROM products WHERE id=?",String.class,p.product())).contains(String.valueOf((char)151));
     }
-    @Test void approvedBindings_shouldSupportTabletDiagonalAndLaptopStorage_withoutEnablingTabletRam(){
+    @Test void specificationsSupportTabletDiagonalAndLaptopStorage(){
         var tab=seed("Tablet Device",null,"tablet-good",10,8,tablet);
         var laptopProduct=seed("Laptop Device",null,"laptop-good",20,16,laptop);
         tx.executeWithoutResult(st->em.find(ProductVariant.class,laptopProduct.variant()).setTechnicalSpecifications(Map.of("schema_version",1,"values",Map.of("installed_storage_gb",Map.of("value",256,"unit","GB")))));
@@ -277,20 +277,20 @@ class ProductSearchRepositoryIT {
         }
         assertThat(search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(filter))).getTotalElements()).isOne();
     }
-    @Test void registryInheritance_shouldStopAtAnotherApprovedFamilyRoot(){
+    @Test void specificationsApplyAcrossCategoriesAndOptionalCategoryIncludesDescendants(){
         seed("Tablet Device",null,"tablet-owned",10,16,tablet);
         jdbc.update("UPDATE categories SET parent_category_id=? WHERE id=?",laptop,tablet);
         String ram="[{\"key\":\"physical_ram\",\"alternatives\":[{\"op\":\"eq\",\"value\":16,\"unit\":\"GB\"}]}]";
-        assertThatThrownBy(()->search(Map.of("categoryId",List.of(tablet.toString()),"specFilters",List.of(ram)))).isInstanceOf(InvalidCatalogRequestException.class);
-        assertThat(search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(ram))).getTotalElements()).isZero();
-        assertThat(search(Map.of("q",List.of("16 GB"))).getTotalElements()).isZero();
+        assertThat(search(Map.of("categoryId",List.of(tablet.toString()),"specFilters",List.of(ram))).getTotalElements()).isOne();
+        assertThat(search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(ram))).getTotalElements()).isOne();
+        assertThat(search(Map.of("q",List.of("16 GB"))).getTotalElements()).isOne();
         String diagonal="[{\"key\":\"display_diagonal\",\"alternatives\":[{\"op\":\"eq\",\"value\":15.6,\"unit\":\"inch\"}]}]";
         assertThat(search(Map.of("categoryId",List.of(tablet.toString()),"specFilters",List.of(diagonal))).getTotalElements()).isOne();
         UUID phone=tx.execute(st->{var c=CatalogFixtures.category(em.find(Category.class,laptop));c.setName("Smartphone");em.persist(c);return c.getId();});
         seed("Smartphone Device",null,"phone-owned",10,16,phone);
-        assertThatThrownBy(()->search(Map.of("categoryId",List.of(phone.toString()),"specFilters",List.of(diagonal)))).isInstanceOf(InvalidCatalogRequestException.class);
-        assertThat(search(Map.of("q",List.of("16 GB"))).getTotalElements()).isZero();
-        assertThat(search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(diagonal))).getTotalElements()).isOne();
+        assertThat(search(Map.of("categoryId",List.of(phone.toString()),"specFilters",List.of(diagonal))).getTotalElements()).isOne();
+        assertThat(search(Map.of("q",List.of("16 GB"))).getTotalElements()).isEqualTo(2);
+        assertThat(search(Map.of("categoryId",List.of(laptop.toString()),"specFilters",List.of(diagonal))).getTotalElements()).isEqualTo(2);
         assertThat(search(Map.of("categoryId",List.of(laptop.toString()))).getTotalElements()).isEqualTo(2);
     }
 }

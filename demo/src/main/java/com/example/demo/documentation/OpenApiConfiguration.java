@@ -63,6 +63,14 @@ public class OpenApiConfiguration {
     }
 
     private void documentQueries(OpenAPI openApi) {
+        PathItem filterOptions = openApi.getPaths().get("/api/product-filter-options");
+        if (filterOptions != null && filterOptions.getGet() != null) {
+            filterOptions.getGet().setParameters(List.of(
+                    query("categoryId", new StringSchema().format("uuid"), "Optional category identifier; includes descendants. Omit for global options."),
+                    query("brandId", new ArraySchema().items(new StringSchema().format("uuid")).maxItems(20),
+                            "Optional brand identifiers, sent as repeated brandId parameters.")
+                            .style(Parameter.StyleEnum.FORM).explode(true)));
+        }
         PathItem catalog = openApi.getPaths().get("/api/products");
         if (catalog != null && catalog.getGet() != null) {
             catalog.getGet().setParameters(List.of(page(), size(),
@@ -75,7 +83,7 @@ public class OpenApiConfiguration {
                     query("maxPrice", new StringSchema().pattern("^(0|[1-9][0-9]{0,29})$"), "Maximum whole VND price."),
                     query("sort", new StringSchema()._enum(Arrays.stream(ProductSearchSort.values())
                             .map(ProductSearchSort::getParameterValue).toList()), "Supported catalog sort."),
-                    query("specFilters", new StringSchema(), "JSON specification filter groups; requires categoryId.")));
+                    query("specFilters", new StringSchema().example("[{\"key\":\"physical_ram\",\"alternatives\":[{\"op\":\"eq\",\"value\":16,\"unit\":\"GB\"}]},{\"key\":\"cpu_family\",\"alternatives\":[{\"op\":\"eq\",\"value\":\"core i5\"}]}]"), "JSON specification filter groups across all categories; categoryId is optional. Keys: physical_ram (GB), installed_storage_gb (GB), cpu_family (text), display_diagonal (inch), display_resolution (text). Get selectable values from /api/product-filter-options. Alternatives within a group use OR; groups use AND on the same variant.")));
         }
         PathItem orders = openApi.getPaths().get("/api/me/orders");
         if (orders != null && orders.getGet() != null) {
